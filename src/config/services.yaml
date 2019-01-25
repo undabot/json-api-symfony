@@ -1,0 +1,27 @@
+services:
+
+  _defaults:
+    autowire: true      # Automatically injects dependencies in your services.
+    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+    public: false       # Allows optimizing the container by removing unused services; this also means
+
+  Undabot\SymfonyJsonApi\EventListener\:
+    resource: '../EventListener/*'
+
+  Undabot\SymfonyJsonApi\Pagination\:
+    resource: '../Pagination/*'
+
+  Undabot\SymfonyJsonApi\Sort\:
+    resource: '../Sort/*'
+
+  Undabot\SymfonyJsonApi\Resource\Factory\:
+    resource: '../Resource/Factory/*'
+
+  Undabot\SymfonyJsonApi\Request\Factory\:
+    resource: '../Request/Factory/*'
+
+  Undabot\SymfonyJsonApi\Request\Validation\:
+    resource: '../Request/Validation/*'
+
+  Undabot\SymfonyJsonApi\Response\Factory\:
+    resource: '../Response/Factory/*'

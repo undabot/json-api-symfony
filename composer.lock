@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da5ed00154501651510817a2574b05f7",
+    "content-hash": "9cc0276354ebbf33185867879da8bb3f",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2895,12 +2895,12 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:undabot/json-api-core.git",
-                "reference": "115607fba3c880bf4468592ab769c2cc828a04c9"
+                "reference": "f4ed14b79514a5f4972845916976cf39deb5ba93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=115607fba3c880bf4468592ab769c2cc828a04c9",
-                "reference": "115607fba3c880bf4468592ab769c2cc828a04c9",
+                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=f4ed14b79514a5f4972845916976cf39deb5ba93",
+                "reference": "f4ed14b79514a5f4972845916976cf39deb5ba93",
                 "shasum": ""
             },
             "require": {
@@ -2926,7 +2926,7 @@
             "license": [
                 "Apache-2.0"
             ],
-            "time": "2019-01-25T10:48:49+00:00"
+            "time": "2019-01-25T11:41:28+00:00"
         },
         {
             "name": "zendframework/zend-code",

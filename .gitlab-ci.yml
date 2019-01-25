@@ -26,6 +26,8 @@ before_script:
   - mkdir -p ~/.ssh
   - chmod 700 ~/.ssh
 
+  - ssh-add -l
+
 cache:
   key: "general"
   paths:

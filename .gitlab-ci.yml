@@ -7,12 +7,11 @@ cache:
     - .php_cs.cache
 
 stages:
-  - build
   - test
 
-build:
+test:
   stage: build
-  only: [merge_requests]
+  only: [merge_requests, "/master/"]
   image: zantolov/docker-symfony-php-fpm:7.3
   script:
     - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader

@@ -1,0 +1,22 @@
+variables:
+
+cache:
+  key: "general"
+  paths:
+    - vendor/
+    - .php_cs.cache
+
+stages:
+  - build
+  - test
+
+build:
+  stage: build
+  only: [merge_requests]
+  image: zantolov/docker-symfony-php-fpm:7.3
+  script:
+    - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+    - composer validate --no-check-publish --no-interaction --ansi
+    - ./vendor/bin/php-cs-fixer fix --diff --ansi --dry-run
+    - ./vendor/bin/phpstan analyse
+    - ./vendor/bin/phpunit

@@ -10,7 +10,7 @@ stages:
   - test
 
 test:
-  stage: build
+  stage: test
   only: [merge_requests, "/master/"]
   image: zantolov/docker-symfony-php-fpm:7.3
   script:

@@ -25,3 +25,6 @@ services:
 
   Undabot\SymfonyJsonApi\Response\Factory\:
     resource: '../Response/Factory/*'
+
+  Undabot\JsonApi\Encoding\:
+    resource: '../../../json-api-core/src/Encoding/*'

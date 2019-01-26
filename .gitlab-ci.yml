@@ -41,6 +41,7 @@ test:
   only: [merge_requests, "/master/"]
   image: zantolov/docker-symfony-php-fpm:7.3
   script:
+    - echo $SSH_PRIVATE_KEY
     - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
     - composer validate --no-check-publish --no-interaction --ansi
     - ./vendor/bin/php-cs-fixer fix --diff --ansi --dry-run

@@ -30,5 +30,16 @@
     "psr-4": {
       "Undabot\\SymfonyJsonApi\\Tests\\": "tests/"
     }
+  },
+  "scripts": {
+    "lint": [
+      "php-cs-fixer fix --diff --ansi --dry-run"
+    ],
+    "qc": [
+      "phpstan analyse -n --ansi --no-progress"
+    ],
+    "test": [
+      "phpunit"
+    ]
   }
 }

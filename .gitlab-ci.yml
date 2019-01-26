@@ -14,7 +14,6 @@ test:
   only: [merge_requests, "/master/"]
   image: zantolov/docker-symfony-php-fpm:7.3
   script:
-#    - which ssh-agent || ( apt-get update -y && apt-get install openssh-client -y )
     - eval $(ssh-agent -s)
     - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
     - mkdir -p ~/.ssh
@@ -23,6 +22,6 @@ test:
     - ssh-add -l
     - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
     - composer validate --no-check-publish --no-interaction --ansi
-    - ./vendor/bin/php-cs-fixer fix --diff --ansi --dry-run
-    - ./vendor/bin/phpstan analyse
-    - ./vendor/bin/phpunit
+    - composer run lint
+    - composer run qc
+    - composer run test

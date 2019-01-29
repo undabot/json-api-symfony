@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Error;
 
-use BadMethodCallException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Undabot\JsonApi\Model\Error\ErrorInterface;
 use Undabot\JsonApi\Model\Link\LinkInterface;
@@ -23,29 +22,24 @@ class ValidationViolationError implements ErrorInterface
         $this->violation = $violation;
     }
 
-    public static function fromViolation(ConstraintViolation $violation): self
-    {
-        return new self($violation);
-    }
-
     public function getId(): ?string
     {
-        throw new BadMethodCallException('Not allowed.');
+        return null;
     }
 
-    public function getAboutLink(): LinkInterface
+    public function getAboutLink(): ?LinkInterface
     {
-        throw new BadMethodCallException('Not allowed.');
+        return null;
     }
 
     public function getStatus(): ?string
     {
-        throw new BadMethodCallException('Not allowed.');
+        return null;
     }
 
     public function getCode(): ?string
     {
-        throw new BadMethodCallException('Not allowed.');
+        return null;
     }
 
     public function getTitle(): ?string
@@ -58,13 +52,19 @@ class ValidationViolationError implements ErrorInterface
         return $this->violation->getCause();
     }
 
-    public function getSource(): Source
+    public function getSource(): ?Source
     {
-        throw new BadMethodCallException('Not allowed.');
+        /** @var string|null $path */
+        $path = $this->violation->getPropertyPath();
+        if (null === $path) {
+            return null;
+        }
+
+        return new Source($path);
     }
 
-    public function getMeta(): Meta
+    public function getMeta(): ?Meta
     {
-        throw new BadMethodCallException('Not allowed.');
+        return null;
     }
 }

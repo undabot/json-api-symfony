@@ -2895,12 +2895,12 @@
             "source": {
                 "type": "git",
                 "url": "git@gitlab.com:undabot/json-api-core.git",
-                "reference": "f4ed14b79514a5f4972845916976cf39deb5ba93"
+                "reference": "4740b03a54693bd8f0ab94c2b1f08b5e1b46b9ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=f4ed14b79514a5f4972845916976cf39deb5ba93",
-                "reference": "f4ed14b79514a5f4972845916976cf39deb5ba93",
+                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=4740b03a54693bd8f0ab94c2b1f08b5e1b46b9ec",
+                "reference": "4740b03a54693bd8f0ab94c2b1f08b5e1b46b9ec",
                 "shasum": ""
             },
             "require": {
@@ -2923,10 +2923,21 @@
                     "Undabot\\JsonApi\\Tests\\": "tests/"
                 }
             },
+            "scripts": {
+                "lint": [
+                    "php-cs-fixer fix --diff --ansi --dry-run"
+                ],
+                "qc": [
+                    "phpstan analyse -n --ansi --no-progress"
+                ],
+                "test": [
+                    "phpunit"
+                ]
+            },
             "license": [
                 "Apache-2.0"
             ],
-            "time": "2019-01-25T11:41:28+00:00"
+            "time": "2019-01-29T09:25:47+00:00"
         },
         {
             "name": "zendframework/zend-code",

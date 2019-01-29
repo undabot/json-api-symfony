@@ -1,7 +1,7 @@
 variables:
 
 cache:
-  key: "general"
+  key: "$CI_PIPELINE_ID"
   paths:
     - vendor/
     - .php_cs.cache

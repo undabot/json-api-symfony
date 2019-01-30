@@ -13,6 +13,6 @@ class NotFoundJsonApiResponse extends Response
 {
     public function __construct(array $headers = [])
     {
-        parent::__construct(null, Response::HTTP_OK, $headers);
+        parent::__construct(null, Response::HTTP_NOT_FOUND, $headers);
     }
 }

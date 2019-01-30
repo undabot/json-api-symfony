@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Request\Factory;
 
 use InvalidArgumentException;
+use Undabot\JsonApi\Model\Request\Pagination\OffsetBasedPagination;
 use Undabot\JsonApi\Model\Request\Pagination\PageBasedPagination;
 use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
 
@@ -17,7 +18,10 @@ class PaginationFactory
             return $this->makePageBasedPagination($paginationParams);
         }
 
-        // @todo add support for offset based pagination
+        if (true == array_key_exists(OffsetBasedPagination::PARAM_PAGE_OFFSET, $paginationParams) &&
+            true == array_key_exists(OffsetBasedPagination::PARAM_PAGE_LIMIT, $paginationParams)) {
+            return $this->makeOffsetBasedPagination($paginationParams);
+        }
 
         $message = sprintf('Couldn\'t create pagination from given params: %s', json_encode($paginationParams));
         throw new InvalidArgumentException($message);
@@ -37,13 +41,29 @@ class PaginationFactory
 
     private function makePageBasedPagination(array $paginationParams): PageBasedPagination
     {
-        $this->makeSureOnlyRequiredParamsArePresent($paginationParams,
-            [PageBasedPagination::PARAM_PAGE_SIZE, PageBasedPagination::PARAM_PAGE_NUMBER]);
+        $this->makeSureOnlyRequiredParamsArePresent(
+            $paginationParams,
+            [PageBasedPagination::PARAM_PAGE_SIZE, PageBasedPagination::PARAM_PAGE_NUMBER]
+        );
         $this->makeSureParametersAreValidNonZeroIntegers($paginationParams);
 
         return new PageBasedPagination(
             (int) $paginationParams[PageBasedPagination::PARAM_PAGE_NUMBER],
             (int) $paginationParams[PageBasedPagination::PARAM_PAGE_SIZE]
+        );
+    }
+
+    private function makeOffsetBasedPagination(array $paginationParams): OffsetBasedPagination
+    {
+        $this->makeSureOnlyRequiredParamsArePresent(
+            $paginationParams,
+            [OffsetBasedPagination::PARAM_PAGE_OFFSET, OffsetBasedPagination::PARAM_PAGE_LIMIT]
+        );
+        $this->makeSureParametersAreValidNonZeroIntegers($paginationParams);
+
+        return new OffsetBasedPagination(
+            (int) $paginationParams[OffsetBasedPagination::PARAM_PAGE_OFFSET],
+            (int) $paginationParams[OffsetBasedPagination::PARAM_PAGE_LIMIT]
         );
     }
 

@@ -23,6 +23,7 @@ use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedQueryStringParameterGive
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSortRequestedException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSparseFieldsetRequestedException;
 use Undabot\SymfonyJsonApi\Request\GetSingleResourceRequest;
+use Undabot\SymfonyJsonApi\Request\UpdateResourceRequest;
 use Undabot\SymfonyJsonApi\Request\Validation\JsonApiRequestValidator;
 
 class JsonApiRequestFactory
@@ -215,5 +216,22 @@ class JsonApiRequestFactory
         }
 
         return GetResourceCollectionRequest::createFromRequest($request);
+    }
+
+    /**
+     * @throws InvalidRequestAcceptHeaderException
+     * @throws InvalidRequestContentTypeHeaderException
+     * @throws InvalidRequestDataException
+     * @throws PhpArrayDecodingException
+     * @throws UnsupportedQueryStringParameterGivenException
+     */
+    public function makeUpdateResourceRequest(Request $request, string $id): UpdateResourceRequest
+    {
+        $this->jsonApiRequestValidator->makeSureRequestIsValidJsonApiRequest($request);
+        $requestPrimaryData = $this->getRequestPrimaryData($request);
+        $resource = $this->getSingleResourceObjectFromRequest($requestPrimaryData);
+        $this->jsonApiRequestValidator->makeSureResourceHasTheSameId($id, $resource);
+
+        return new UpdateResourceRequest($resource);
     }
 }

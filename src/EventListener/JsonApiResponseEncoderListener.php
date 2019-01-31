@@ -19,6 +19,7 @@ use Undabot\SymfonyJsonApi\Response\JsonApiResponseInterface;
 use Undabot\SymfonyJsonApi\Response\ResourceCollectionJsonApiResponse;
 use Undabot\SymfonyJsonApi\Response\ResourceCreatedJsonApiResponse;
 use Undabot\SymfonyJsonApi\Response\ResourceJsonApiResponse;
+use Undabot\SymfonyJsonApi\Response\ResourceUpdatedJsonApiResponse;
 use Undabot\SymfonyJsonApi\Response\ValidationErrorsJsonApiResponse;
 
 class JsonApiResponseEncoderListener implements EventSubscriberInterface
@@ -60,6 +61,10 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
             $this->encodeResourceCreated($response);
         }
 
+        if (true === ($response instanceof ResourceUpdatedJsonApiResponse)) {
+            $this->encodeResourceUpdated($response);
+        }
+
         if (true === ($response instanceof ResourceCollectionJsonApiResponse)) {
             $this->encodeResourceCollection($response);
         }
@@ -92,6 +97,13 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
     }
 
     private function encodeResourceCreated(ResourceCreatedJsonApiResponse $response)
+    {
+        $document = $this->createResourceDocument($response->getJsonApiResource());
+        $content = $this->documentEncoder->encode($document);
+        $response->setContent(json_encode($content));
+    }
+
+    private function encodeResourceUpdated(ResourceUpdatedJsonApiResponse $response)
     {
         $document = $this->createResourceDocument($response->getJsonApiResource());
         $content = $this->documentEncoder->encode($document);

@@ -8,9 +8,11 @@ use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Model\Request\Sort\Sort;
 use Undabot\JsonApi\Model\Request\Sort\SortSet;
+use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Request\Exception\ClientGeneratedIdIsNotAllowedException;
 use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestAcceptHeaderException;
 use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestContentTypeHeaderException;
+use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestDataException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedFilterAttributeGivenException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedIncludeValuesGivenException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedPaginationRequestedException;
@@ -170,7 +172,7 @@ class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
     /**
      * @throws UnsupportedPaginationRequestedException
      */
-    public function makeSureRequestDoesntHavePaginationQueryParams(Request $request)
+    public function makeSureRequestDoesntHavePaginationQueryParams(Request $request): void
     {
         $requestedPagination = $request->query->get('page', null);
         if (null === $requestedPagination) {
@@ -178,5 +180,15 @@ class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
         }
 
         throw new UnsupportedPaginationRequestedException();
+    }
+
+    /**
+     * @throws InvalidRequestDataException
+     */
+    public function makeSureResourceHasTheSameId(string $id, ResourceInterface $resource): void
+    {
+        if ($resource->getId() !== $id) {
+            throw new InvalidRequestDataException('Resource with invalid ID given');
+        }
     }
 }

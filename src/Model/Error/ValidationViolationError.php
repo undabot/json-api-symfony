@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Error;
 
-use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationInterface;
 use Undabot\JsonApi\Model\Error\ErrorInterface;
 use Undabot\JsonApi\Model\Link\LinkInterface;
 use Undabot\JsonApi\Model\Meta\Meta;
@@ -13,11 +13,11 @@ use Undabot\JsonApi\Model\Source\Source;
 class ValidationViolationError implements ErrorInterface
 {
     /**
-     * @var ConstraintViolation
+     * @var ConstraintViolationInterface
      */
     private $violation;
 
-    public function __construct(ConstraintViolation $violation)
+    public function __construct(ConstraintViolationInterface $violation)
     {
         $this->violation = $violation;
     }
@@ -49,7 +49,11 @@ class ValidationViolationError implements ErrorInterface
 
     public function getDetail(): ?string
     {
-        return $this->violation->getCause();
+        if (null === $this->violation->getInvalidValue()) {
+            return null;
+        }
+
+        return (string) $this->violation->getInvalidValue();
     }
 
     public function getSource(): ?Source

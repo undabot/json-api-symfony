@@ -10,6 +10,7 @@ use Undabot\JsonApi\Model\Resource\Relationship\Relationship;
 use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollection;
 use Undabot\JsonApi\Model\Resource\ResourceIdentifier;
 use Undabot\JsonApi\Model\Resource\ResourceIdentifierCollection;
+use Undabot\JsonApi\Model\Resource\ResourceIdentifierInterface;
 
 class ResourceRelationshipsFactory
 {
@@ -28,8 +29,14 @@ class ResourceRelationshipsFactory
     {
     }
 
-    public function toOne(string $relationshipName, string $resourceType, string $id): self
+    public function toOne(string $relationshipName, string $resourceType, ?string $id): self
     {
+        if (null === $id) {
+            $this->toOne[$relationshipName] = null;
+
+            return $this;
+        }
+
         $this->toOne[$relationshipName] = new ResourceIdentifier($id, $resourceType);
 
         return $this;
@@ -49,11 +56,7 @@ class ResourceRelationshipsFactory
     {
         $relationships = [];
         foreach ($this->toOne as $relationshipName => $resourceIdentifier) {
-            $relationships[] = new Relationship(
-                $relationshipName,
-                null,
-                ToOneRelationshipData::make($resourceIdentifier)
-            );
+            $relationships[] = $this->makeToOneRelationship($relationshipName, $resourceIdentifier);
         }
 
         foreach ($this->toMany as $relationshipName => $resourceIdentifiers) {
@@ -67,5 +70,24 @@ class ResourceRelationshipsFactory
         }
 
         return new RelationshipCollection($relationships);
+    }
+
+    private function makeToOneRelationship(
+        string $relationshipName,
+        ?ResourceIdentifierInterface $resourceIdentifier
+    ): Relationship {
+        if (null === $resourceIdentifier) {
+            return new Relationship(
+                $relationshipName,
+                null,
+                ToOneRelationshipData::makeEmpty()
+            );
+        }
+
+        return new Relationship(
+            $relationshipName,
+            null,
+            ToOneRelationshipData::make($resourceIdentifier)
+        );
     }
 }

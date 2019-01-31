@@ -6,10 +6,10 @@ namespace Undabot\JsonApi\Tests\Unit\Pagination;
 
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use Undabot\JsonApi\Model\Request\Pagination\PageBasedPagination;
+use Undabot\JsonApi\Model\Request\Pagination\OffsetBasedPagination;
 use Undabot\SymfonyJsonApi\Request\Factory\PaginationFactory;
 
-class PaginationFactoryTest extends TestCase
+class OffsetBasedPaginationFactoryTest extends TestCase
 {
     /** @var PaginationFactory */
     private $paginationFactory;
@@ -20,11 +20,11 @@ class PaginationFactoryTest extends TestCase
     }
 
     /** @dataProvider validPageBasedPaginationParamsProvider */
-    public function testPaginationFactoryCanCreatePageBasedPaginationFromValidParams($params)
+    public function testPaginationFactoryCanCreateOffsetBasedPaginationFromValidParams($params)
     {
         $pagination = $this->paginationFactory->makeFromArray($params);
 
-        $this->assertInstanceOf(PageBasedPagination::class, $pagination);
+        $this->assertInstanceOf(OffsetBasedPagination::class, $pagination);
     }
 
     /** @dataProvider invalidPaginationParamsProvider */
@@ -41,39 +41,39 @@ class PaginationFactoryTest extends TestCase
                 [],
             ],
             [
-                ['size' => 10],
+                ['limit' => 10],
             ],
             [
-                ['number' => 2],
+                ['offset' => 2],
             ],
             [
                 [
-                    'size' => '0',
-                    'number' => '0',
+                    'limit' => '0',
+                    'offset' => '0',
                 ],
             ],
             [
                 [
-                    'size' => 0,
-                    'number' => 0,
+                    'limit' => 0,
+                    'offset' => 0,
                 ],
             ],
             [
                 [
-                    'size' => null,
-                    'number' => null,
+                    'limit' => null,
+                    'offset' => null,
                 ],
             ],
             [
                 [
-                    'size' => 10.1,
-                    'number' => 2.1,
+                    'limit' => 10.1,
+                    'offset' => 2.1,
                 ],
             ],
             [
                 [
-                    'size' => 10.0,
-                    'number' => 2.0,
+                    'limit' => 10.0,
+                    'offset' => 2.0,
                 ],
             ],
         ];
@@ -84,26 +84,26 @@ class PaginationFactoryTest extends TestCase
         return [
             [
                 [
-                    'size' => 10,
-                    'number' => 2,
+                    'limit' => 10,
+                    'offset' => 2,
                 ],
             ],
             [
                 [
-                    'size' => '10',
-                    'number' => '2',
+                    'limit' => '10',
+                    'offset' => '2',
                 ],
             ],
             [
                 [
-                    'size' => 10,
-                    'number' => '2',
+                    'limit' => 10,
+                    'offset' => '2',
                 ],
             ],
             [
                 [
-                    'size' => '10',
-                    'number' => 2,
+                    'limit' => '10',
+                    'offset' => 2,
                 ],
             ],
         ];
@@ -112,14 +112,14 @@ class PaginationFactoryTest extends TestCase
     public function testGetPageNumberWillReturnCorrectNumber()
     {
         $params = [
-            'number' => 3,
-            'size' => 10,
+            'offset' => 3,
+            'limit' => 10,
         ];
 
-        /** @var PageBasedPagination $pagination */
+        /** @var OffsetBasedPagination $pagination */
         $pagination = $this->paginationFactory->makeFromArray($params);
 
-        $this->assertSame(3, $pagination->getPageNumber());
+        $this->assertSame(3, $pagination->getOffset());
         $this->assertSame(10, $pagination->getSize());
     }
 }

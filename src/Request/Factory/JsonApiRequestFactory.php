@@ -156,7 +156,7 @@ class JsonApiRequestFactory
      * @throws UnsupportedQueryStringParameterGivenException
      * @throws UnsupportedIncludeValuesGivenException
      */
-    public function makeGetSingleResuorceRequest(
+    public function makeGetSingleResourceRequest(
         Request $request,
         string $id,
         array $whitelistedIncludeValues = []

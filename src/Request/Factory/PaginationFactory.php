@@ -59,7 +59,14 @@ class PaginationFactory
             $paginationParams,
             [OffsetBasedPagination::PARAM_PAGE_OFFSET, OffsetBasedPagination::PARAM_PAGE_LIMIT]
         );
-        $this->makeSureParametersAreValidNonZeroIntegers($paginationParams);
+
+        $this->makeSureParametersAreValidNonZeroIntegers([
+            $paginationParams[OffsetBasedPagination::PARAM_PAGE_LIMIT],
+        ]);
+
+        $this->makeSureParametersAreValidIntegers([
+            $paginationParams[OffsetBasedPagination::PARAM_PAGE_OFFSET],
+        ]);
 
         return new OffsetBasedPagination(
             (int) $paginationParams[OffsetBasedPagination::PARAM_PAGE_OFFSET],
@@ -67,7 +74,7 @@ class PaginationFactory
         );
     }
 
-    private function makeSureParametersAreValidNonZeroIntegers(array $paginationParams): void
+    private function makeSureParametersAreValidIntegers(array $paginationParams): void
     {
         $nonIntegerParams = array_keys(array_filter($paginationParams, function ($item) {
             if (true === is_int($item)) {
@@ -85,6 +92,11 @@ class PaginationFactory
             $message = sprintf('Non integer params given: %s', implode(', ', $nonIntegerParams));
             throw new InvalidArgumentException($message);
         }
+    }
+
+    private function makeSureParametersAreValidNonZeroIntegers(array $paginationParams): void
+    {
+        $this->makeSureParametersAreValidIntegers($paginationParams);
 
         $zeroParameters = array_keys(array_filter($paginationParams, function ($item) {
             if (0 == (int) $item) {

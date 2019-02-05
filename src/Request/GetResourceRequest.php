@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Request;
 
-class GetSingleResourceRequest
+use Undabot\JsonApi\Model\Request\GetResourceRequestInterface;
+
+class GetResourceRequest implements GetResourceRequestInterface
 {
     /** @var string */
     private $id;
@@ -13,13 +15,13 @@ class GetSingleResourceRequest
     private $include;
 
     /** @var array|null */
-    private $fields;
+    private $sparseFieldset;
 
-    public function __construct(string $id, ?array $include, ?array $fields)
+    public function __construct(string $id, ?array $include, ?array $sparseFieldset)
     {
         $this->id = $id;
         $this->include = $include;
-        $this->fields = $fields;
+        $this->sparseFieldset = $sparseFieldset;
     }
 
     public function getId(): string
@@ -32,11 +34,6 @@ class GetSingleResourceRequest
         return $this->include;
     }
 
-    public function getFields(): ?array
-    {
-        return $this->fields;
-    }
-
     public function isIncluded(string $name): bool
     {
         if (null === $this->include) {
@@ -44,5 +41,10 @@ class GetSingleResourceRequest
         }
 
         return in_array($name, $this->include);
+    }
+
+    public function getSparseFieldset(): ?array
+    {
+        return $this->sparseFieldset;
     }
 }

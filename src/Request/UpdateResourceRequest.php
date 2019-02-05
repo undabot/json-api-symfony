@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Request;
 
+use Undabot\JsonApi\Model\Request\UpdateResourceRequestInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 
-class UpdateResourceRequest
+class UpdateResourceRequest implements UpdateResourceRequestInterface
 {
     /** @var ResourceInterface */
     private $resource;

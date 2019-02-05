@@ -16,9 +16,11 @@ class ResourceJsonApiResponse extends Response implements JsonApiResponseInterfa
     /** @var ResourceCollection|null */
     private $includedResources;
 
-    public function __construct(ResourceInterface $resource, ?ResourceCollection $includedResources, array $headers =
-    [])
-    {
+    public function __construct(
+        ResourceInterface $resource,
+        ?ResourceCollection $includedResources = null,
+        array $headers = []
+    ) {
         parent::__construct(null, Response::HTTP_OK, $headers);
         $this->jsonApiResource = $resource;
         $this->includedResources = $includedResources;

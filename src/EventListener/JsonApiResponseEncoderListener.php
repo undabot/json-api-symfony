@@ -91,7 +91,17 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
 
     private function encodeResource(ResourceJsonApiResponse $response)
     {
-        $document = $this->createResourceDocument($response->getJsonApiResource());
+        $documentData = new DocumentData($response->getJsonApiResource());
+
+        $document = new Document(
+            $documentData,
+            null,
+            null,
+            null,
+            null,
+            $response->getIncludedResources()
+        );
+
         $content = $this->documentEncoder->encode($document);
         $response->setContent(json_encode($content));
     }

@@ -10,7 +10,6 @@ use Undabot\JsonApi\Encoding\PhpArray\Decode\ResourceJsonDecoderInterface;
 use Undabot\JsonApi\Encoding\PhpArray\Exception\PhpArrayDecodingException;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Util\Assert\Assert;
-use Undabot\SymfonyJsonApi\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Request\CreateResourceRequest;
 use Undabot\SymfonyJsonApi\Request\Exception\ClientGeneratedIdIsNotAllowedException;
 use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestAcceptHeaderException;
@@ -22,7 +21,8 @@ use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedPaginationRequestedExcep
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedQueryStringParameterGivenException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSortRequestedException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSparseFieldsetRequestedException;
-use Undabot\SymfonyJsonApi\Request\GetSingleResourceRequest;
+use Undabot\SymfonyJsonApi\Request\GetResourceCollectionRequest;
+use Undabot\SymfonyJsonApi\Request\GetResourceRequest;
 use Undabot\SymfonyJsonApi\Request\UpdateResourceRequest;
 use Undabot\SymfonyJsonApi\Request\Validation\JsonApiRequestValidator;
 
@@ -160,7 +160,7 @@ class JsonApiRequestFactory
         Request $request,
         string $id,
         array $whitelistedIncludeValues = []
-    ): GetSingleResourceRequest {
+    ): GetResourceRequest {
         $this->jsonApiRequestValidator->makeSureRequestIsValidJsonApiRequest($request);
 
         $this->jsonApiRequestValidator->makeSureRequestHasOnlyWhitelistedIncludeQueryParams(
@@ -168,7 +168,7 @@ class JsonApiRequestFactory
             $whitelistedIncludeValues
         );
 
-        return new GetSingleResourceRequest(
+        return new GetResourceRequest(
             $id,
             $request->query->get('include'),
             $request->query->get('fields')

@@ -36,4 +36,13 @@ class GetSingleResourceRequest
     {
         return $this->fields;
     }
+
+    public function isIncluded(string $name): bool
+    {
+        if (null === $this->include) {
+            return false;
+        }
+
+        return in_array($name, $this->include);
+    }
 }

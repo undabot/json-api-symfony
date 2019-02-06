@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
-use Undabot\JsonApi\Encoding\PhpArray\Decode\AttributeCollectionJsonDecoder;
-use Undabot\JsonApi\Encoding\PhpArray\Decode\LinkCollectionJsonDecoder;
-use Undabot\JsonApi\Encoding\PhpArray\Decode\MetaJsonDecoder;
-use Undabot\JsonApi\Encoding\PhpArray\Decode\RelationshipCollectionJsonDecoder;
-use Undabot\JsonApi\Encoding\PhpArray\Decode\ResourceJsonDecoder;
+use Undabot\JsonApi\Encoding\PhpArrayToAttributeCollectionEncoder;
+use Undabot\JsonApi\Encoding\PhpArrayToLinkCollectionEncoder;
+use Undabot\JsonApi\Encoding\PhpArrayToMetaEncoder;
+use Undabot\JsonApi\Encoding\PhpArrayToRelationshipCollectionEncoder;
+use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoder;
 use Undabot\JsonApi\Model\Resource\Relationship\Data\ToOneRelationshipData;
 use Undabot\JsonApi\Model\Resource\Relationship\Relationship;
 use Undabot\JsonApi\Model\Resource\Resource;
@@ -17,19 +17,19 @@ use Undabot\JsonApi\Model\Resource\ResourceIdentifier;
 
 class CreateResourceFromJsonInputTest extends TestCase
 {
-    /** @var ResourceJsonDecoder */
-    private $decoder;
+    /** @var PhpArrayToResourceEncoder */
+    private $phpArrayToResourceEncoder;
 
     protected function setUp()
     {
-        $linksDecoder = new LinkCollectionJsonDecoder();
-        $metaDecoder = new MetaJsonDecoder();
+        $phpArrayToLinkCollectionEncoder = new PhpArrayToLinkCollectionEncoder();
+        $phpArrayToMetaEncoder = new PhpArrayToMetaEncoder();
 
-        $this->decoder = new ResourceJsonDecoder(
-            new RelationshipCollectionJsonDecoder($metaDecoder, $linksDecoder),
-            new AttributeCollectionJsonDecoder(),
-            $linksDecoder,
-            $metaDecoder
+        $this->phpArrayToResourceEncoder = new PhpArrayToResourceEncoder(
+            new PhpArrayToRelationshipCollectionEncoder($phpArrayToMetaEncoder, $phpArrayToLinkCollectionEncoder),
+            new PhpArrayToAttributeCollectionEncoder(),
+            $phpArrayToLinkCollectionEncoder,
+            $phpArrayToMetaEncoder
         );
     }
 
@@ -54,7 +54,7 @@ class CreateResourceFromJsonInputTest extends TestCase
 }
 JSON;
 
-        $resource = $this->decoder->decode(json_decode($resourceJson, true));
+        $resource = $this->phpArrayToResourceEncoder->decode(json_decode($resourceJson, true));
         $this->assertInstanceOf(Resource::class, $resource);
         $this->assertNull($resource->getSelfUrl());
         $this->assertNull($resource->getMeta());

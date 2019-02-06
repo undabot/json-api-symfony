@@ -6,16 +6,15 @@ namespace Undabot\SymfonyJsonApi\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Event\FilterControllerEvent;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Undabot\JsonApi\Encoding\PhpArray\Encode\DocumentPhpArrayEncoderInterface;
+use Undabot\JsonApi\Encoding\DocumentToPhpArrayEncoderInterface;
 
 class JsonApiRequestListener implements EventSubscriberInterface
 {
-    /** @var DocumentPhpArrayEncoderInterface */
+    /** @var DocumentToPhpArrayEncoderInterface */
     private $documentEncoder;
 
-    public function __construct(DocumentPhpArrayEncoderInterface $documentEncoder)
+    public function __construct(DocumentToPhpArrayEncoderInterface $documentEncoder)
     {
         $this->documentEncoder = $documentEncoder;
     }
@@ -57,10 +56,5 @@ class JsonApiRequestListener implements EventSubscriberInterface
                 $event->setResponse(new Response(null, Response::HTTP_NOT_ACCEPTABLE));
             }
         }
-    }
-
-    public function beforeController(FilterControllerEvent $event)
-    {
-//        $event->getRequest()->attributes->se
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Response;
 
 use Symfony\Component\HttpFoundation\Response;
-use Undabot\JsonApi\Model\Resource\ResourceCollection;
+use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 
 class ResourceJsonApiResponse extends Response implements JsonApiResponseInterface
@@ -13,12 +13,12 @@ class ResourceJsonApiResponse extends Response implements JsonApiResponseInterfa
     /** @var ResourceInterface */
     private $jsonApiResource;
 
-    /** @var ResourceCollection|null */
+    /** @var ResourceCollectionInterface|null */
     private $includedResources;
 
     public function __construct(
         ResourceInterface $resource,
-        ?ResourceCollection $includedResources = null,
+        ?ResourceCollectionInterface $includedResources = null,
         array $headers = []
     ) {
         parent::__construct(null, Response::HTTP_OK, $headers);
@@ -31,7 +31,7 @@ class ResourceJsonApiResponse extends Response implements JsonApiResponseInterfa
         return $this->jsonApiResource;
     }
 
-    public function getIncludedResources(): ?ResourceCollection
+    public function getIncludedResources(): ?ResourceCollectionInterface
     {
         return $this->includedResources;
     }

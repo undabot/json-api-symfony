@@ -50,7 +50,7 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         $response->headers->set('Content-Type', 'application/vnd.api+json');
 
         if (true === ($response instanceof AbstractErrorJsonApiResponse)) {
-            $this->encodeErrorResponse($response);
+            $this->encodeErrorResponseContent($response);
         }
 
         if (true === ($response instanceof ResourceJsonApiResponse)) {
@@ -74,19 +74,11 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         }
     }
 
-    private function createErrorDocument(ErrorCollectionInterface $errorCollection)
+    private function encodeErrorResponseContent(AbstractErrorJsonApiResponse $response): void
     {
-        $document = new Document(null, $errorCollection);
-
-        return $document;
-    }
-
-    private function createResourceDocument(ResourceInterface $resource)
-    {
-        $documentData = new DocumentData($resource);
-        $document = new Document($documentData);
-
-        return $document;
+        $document = new Document(null, $response->getErrorCollection());
+        $encodedContent = $this->documentToPhpArrayEncoderInterface->encode($document);
+        $response->setContent(json_encode($encodedContent));
     }
 
     private function encodeResource(ResourceJsonApiResponse $response)
@@ -113,20 +105,18 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         $response->setContent(json_encode($content));
     }
 
+    private function createResourceDocument(ResourceInterface $resource)
+    {
+        $documentData = new DocumentData($resource);
+
+        return new Document($documentData);
+    }
+
     private function encodeResourceUpdated(ResourceUpdatedJsonApiResponse $response)
     {
         $document = $this->createResourceDocument($response->getJsonApiResource());
         $content = $this->documentToPhpArrayEncoderInterface->encode($document);
         $response->setContent(json_encode($content));
-    }
-
-    private function createMeta(array $metaData): ?MetaInterface
-    {
-        if (false === empty($metaData)) {
-            return new Meta($metaData);
-        }
-
-        return null;
     }
 
     private function encodeResourceCollection(ResourceCollectionJsonApiResponse $response)
@@ -151,6 +141,15 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         $response->setContent(json_encode($content));
     }
 
+    private function createMeta(array $metaData): ?MetaInterface
+    {
+        if (true === empty($metaData)) {
+            return null;
+        }
+
+        return new Meta($metaData);
+    }
+
     private function encodeValidationErrors(ValidationErrorsJsonApiResponse $response): void
     {
         if (null === $response->getErrorCollection()) {
@@ -162,14 +161,10 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         $response->setContent(json_encode($content));
     }
 
-    private function encodeErrorResponse(AbstractErrorJsonApiResponse $errorResponse)
+    private function createErrorDocument(ErrorCollectionInterface $errorCollection)
     {
-        if (null === $errorResponse->getErrorCollection()) {
-            throw new Exception('Couldn\'t encode response without error collection');
-        }
+        $document = new Document(null, $errorCollection);
 
-        $document = $this->createErrorDocument($errorResponse->getErrorCollection());
-        $content = $this->documentToPhpArrayEncoderInterface->encode($document);
-        $errorResponse->setContent(json_encode($content));
+        return $document;
     }
 }

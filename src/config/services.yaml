@@ -8,6 +8,9 @@ services:
   Undabot\SymfonyJsonApi\EventListener\:
     resource: '../EventListener/*'
 
+  Undabot\SymfonyJsonApi\ExceptionSubscriber\:
+      resource: '../ExceptionSubscriber/*'
+
   Undabot\SymfonyJsonApi\Pagination\:
     resource: '../Pagination/*'
 

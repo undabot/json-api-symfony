@@ -15,6 +15,7 @@ use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestContentTypeHeaderExce
 use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestDataException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedFilterAttributeGivenException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedIncludeValuesGivenException;
+use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedMediaTypeException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedPaginationRequestedException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedQueryStringParameterGivenException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSortRequestedException;
@@ -38,8 +39,18 @@ class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
          * Servers MUST respond with a 415 Unsupported Media Type status code if a request specifies the header
          * Content-Type: application/vnd.api+json with any media type parameters.
          */
-        if ('application/vnd.api+json' !== $request->headers->get('Content-Type')) {
-            throw new InvalidRequestContentTypeHeaderException();
+        if ($request->headers->has('Content-Type') && is_string($request->headers->get('Content-Type'))) {
+            $contentTypeHeader = explode(';', $request->headers->get('Content-Type'));
+
+            if (count($contentTypeHeader) > 1) {
+                $message = 'Media types are not allowed.';
+                throw new UnsupportedMediaTypeException($message);
+            }
+
+            if ('application/vnd.api+json' !== $contentTypeHeader[0]) {
+                $message = sprintf('Expected valid Json api content type, got %s', json_encode($contentTypeHeader));
+                throw new InvalidRequestContentTypeHeaderException($message);
+            }
         }
 
         /*
@@ -84,7 +95,7 @@ class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
     public function makeSureRequestResourceDoesntHaveClientGeneratedId(array $requestPrimaryData): void
     {
         if (true === array_key_exists('id', $requestPrimaryData)) {
-            throw new ClientGeneratedIdIsNotAllowedException();
+            throw new ClientGeneratedIdIsNotAllowedException('Client is not permitted to set ID value.');
         }
     }
 

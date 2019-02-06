@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Response\Factory;
 
-use Undabot\JsonApi\Encoding\PhpArray\Encode\DocumentPhpArrayEncoderInterface;
+use Undabot\JsonApi\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\JsonApi\Model\Document\Document;
 use Undabot\JsonApi\Model\Document\DocumentData;
 use Undabot\JsonApi\Model\Document\DocumentDataInterface;
@@ -16,10 +16,10 @@ use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
 
 class JsonApiHttpResponseFactory
 {
-    /** @var DocumentPhpArrayEncoderInterface */
+    /** @var DocumentToPhpArrayEncoderInterface */
     private $documentEncoder;
 
-    public function __construct(DocumentPhpArrayEncoderInterface $documentEncoder)
+    public function __construct(DocumentToPhpArrayEncoderInterface $documentEncoder)
     {
         $this->documentEncoder = $documentEncoder;
     }

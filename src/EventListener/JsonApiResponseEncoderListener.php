@@ -7,7 +7,7 @@ namespace Undabot\SymfonyJsonApi\EventListener;
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
-use Undabot\JsonApi\Encoding\PhpArray\Encode\DocumentPhpArrayEncoderInterface;
+use Undabot\JsonApi\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\JsonApi\Model\Document\Document;
 use Undabot\JsonApi\Model\Document\DocumentData;
 use Undabot\JsonApi\Model\Error\ErrorCollectionInterface;
@@ -24,12 +24,12 @@ use Undabot\SymfonyJsonApi\Response\ValidationErrorsJsonApiResponse;
 
 class JsonApiResponseEncoderListener implements EventSubscriberInterface
 {
-    /** @var DocumentPhpArrayEncoderInterface */
-    private $documentEncoder;
+    /** @var DocumentToPhpArrayEncoderInterface */
+    private $documentToPhpArrayEncoderInterface;
 
-    public function __construct(DocumentPhpArrayEncoderInterface $documentEncoder)
+    public function __construct(DocumentToPhpArrayEncoderInterface $documentToPhpArrayEncoderInterface)
     {
-        $this->documentEncoder = $documentEncoder;
+        $this->documentToPhpArrayEncoderInterface = $documentToPhpArrayEncoderInterface;
     }
 
     public static function getSubscribedEvents()
@@ -102,21 +102,21 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
             $response->getIncludedResources()
         );
 
-        $content = $this->documentEncoder->encode($document);
+        $content = $this->documentToPhpArrayEncoderInterface->encode($document);
         $response->setContent(json_encode($content));
     }
 
     private function encodeResourceCreated(ResourceCreatedJsonApiResponse $response)
     {
         $document = $this->createResourceDocument($response->getJsonApiResource());
-        $content = $this->documentEncoder->encode($document);
+        $content = $this->documentToPhpArrayEncoderInterface->encode($document);
         $response->setContent(json_encode($content));
     }
 
     private function encodeResourceUpdated(ResourceUpdatedJsonApiResponse $response)
     {
         $document = $this->createResourceDocument($response->getJsonApiResource());
-        $content = $this->documentEncoder->encode($document);
+        $content = $this->documentToPhpArrayEncoderInterface->encode($document);
         $response->setContent(json_encode($content));
     }
 
@@ -147,7 +147,7 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
             $response->getIncludedResourcesCollection()
         );
 
-        $content = $this->documentEncoder->encode($document);
+        $content = $this->documentToPhpArrayEncoderInterface->encode($document);
         $response->setContent(json_encode($content));
     }
 
@@ -158,7 +158,7 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         }
 
         $document = $this->createErrorDocument($response->getErrorCollection());
-        $content = $this->documentEncoder->encode($document);
+        $content = $this->documentToPhpArrayEncoderInterface->encode($document);
         $response->setContent(json_encode($content));
     }
 
@@ -169,7 +169,7 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         }
 
         $document = $this->createErrorDocument($errorResponse->getErrorCollection());
-        $content = $this->documentEncoder->encode($document);
+        $content = $this->documentToPhpArrayEncoderInterface->encode($document);
         $errorResponse->setContent(json_encode($content));
     }
 }

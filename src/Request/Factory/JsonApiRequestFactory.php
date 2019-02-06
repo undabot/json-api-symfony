@@ -6,8 +6,8 @@ namespace Undabot\SymfonyJsonApi\Request\Factory;
 
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\JsonApi\Encoding\PhpArray\Decode\ResourceJsonDecoderInterface;
-use Undabot\JsonApi\Encoding\PhpArray\Exception\PhpArrayDecodingException;
+use Undabot\JsonApi\Encoding\Exception\PhpArrayEncodingException;
+use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Util\Assert\Assert;
 use Undabot\SymfonyJsonApi\Request\CreateResourceRequest;
@@ -28,17 +28,17 @@ use Undabot\SymfonyJsonApi\Request\Validation\JsonApiRequestValidator;
 
 class JsonApiRequestFactory
 {
-    /** @var ResourceJsonDecoderInterface */
-    private $resourceDecoder;
+    /** @var PhpArrayToResourceEncoderInterface */
+    private $phpArrayToResourceEncoder;
 
     /** @var JsonApiRequestValidator */
     private $jsonApiRequestValidator;
 
     public function __construct(
-        ResourceJsonDecoderInterface $resourceDecoder,
+        PhpArrayToResourceEncoderInterface $phpArrayToResourceEncoder,
         JsonApiRequestValidator $jsonApiRequestValidator
     ) {
-        $this->resourceDecoder = $resourceDecoder;
+        $this->phpArrayToResourceEncoder = $phpArrayToResourceEncoder;
         $this->jsonApiRequestValidator = $jsonApiRequestValidator;
     }
 
@@ -72,7 +72,7 @@ class JsonApiRequestFactory
     }
 
     /**
-     * @throws PhpArrayDecodingException
+     * @throws PhpArrayEncodingException
      * @throws InvalidRequestDataException
      */
     private function getSingleResourceObjectFromRequestWithAssignedId(
@@ -84,17 +84,17 @@ class JsonApiRequestFactory
         }
 
         $requestPrimaryData['id'] = $id;
-        $resource = $this->resourceDecoder->decode($requestPrimaryData);
+        $resource = $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
 
         return $resource;
     }
 
     /**
-     * @throws PhpArrayDecodingException
+     * @throws PhpArrayEncodingException
      */
     private function getSingleResourceObjectFromRequest(array $requestPrimaryData): ResourceInterface
     {
-        $resource = $this->resourceDecoder->decode($requestPrimaryData);
+        $resource = $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
 
         return $resource;
     }
@@ -106,7 +106,7 @@ class JsonApiRequestFactory
      * @throws InvalidRequestAcceptHeaderException
      * @throws InvalidRequestContentTypeHeaderException
      * @throws InvalidRequestDataException
-     * @throws PhpArrayDecodingException
+     * @throws PhpArrayEncodingException
      */
     public function makeCreateResourceRequestWithServerGeneratedId(Request $request, string $id)
     {
@@ -120,7 +120,7 @@ class JsonApiRequestFactory
      * @throws InvalidRequestContentTypeHeaderException
      * @throws InvalidRequestDataException
      * @throws ClientGeneratedIdIsNotAllowedException
-     * @throws PhpArrayDecodingException
+     * @throws PhpArrayEncodingException
      * @throws UnsupportedQueryStringParameterGivenException
      */
     public function makeCreateResourceRequest(
@@ -222,7 +222,7 @@ class JsonApiRequestFactory
      * @throws InvalidRequestAcceptHeaderException
      * @throws InvalidRequestContentTypeHeaderException
      * @throws InvalidRequestDataException
-     * @throws PhpArrayDecodingException
+     * @throws PhpArrayEncodingException
      * @throws UnsupportedQueryStringParameterGivenException
      */
     public function makeUpdateResourceRequest(Request $request, string $id): UpdateResourceRequest

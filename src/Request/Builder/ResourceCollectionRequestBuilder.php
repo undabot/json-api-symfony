@@ -13,16 +13,20 @@ use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedPaginationRequestedExcep
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedQueryStringParameterGivenException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSortRequestedException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSparseFieldsetRequestedException;
+use Undabot\SymfonyJsonApi\Request\Factory\JsonApiRequestFactory;
 use Undabot\SymfonyJsonApi\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Request\Validation\JsonApiRequestValidatorInterface;
 
 class ResourceCollectionRequestBuilder
 {
-    /** @var Request */
-    private $request;
-
     /** @var JsonApiRequestValidatorInterface */
     private $requestValidator;
+
+    /** @var JsonApiRequestFactory */
+    private $requestFactory;
+
+    /** @var Request */
+    private $request;
 
     /** @var array */
     private $allowedFilters = [];
@@ -39,12 +43,15 @@ class ResourceCollectionRequestBuilder
     /** @var bool */
     private $paginationAllowed = true;
 
-    public function __construct(JsonApiRequestValidatorInterface $requestValidator)
+    public function __construct(JsonApiRequestFactory $requestFactory, JsonApiRequestValidatorInterface $requestValidator)
     {
+        $this->requestFactory = $requestFactory;
         $this->requestValidator = $requestValidator;
     }
 
     /**
+     * @return ResourceCollectionRequestBuilder
+     *
      * @throws InvalidRequestAcceptHeaderException
      * @throws InvalidRequestContentTypeHeaderException
      * @throws UnsupportedQueryStringParameterGivenException
@@ -93,28 +100,24 @@ class ResourceCollectionRequestBuilder
     }
 
     /**
+     * @throws InvalidRequestAcceptHeaderException
+     * @throws InvalidRequestContentTypeHeaderException
      * @throws UnsupportedFilterAttributeGivenException
      * @throws UnsupportedIncludeValuesGivenException
      * @throws UnsupportedPaginationRequestedException
+     * @throws UnsupportedQueryStringParameterGivenException
      * @throws UnsupportedSortRequestedException
      * @throws UnsupportedSparseFieldsetRequestedException
      */
     public function build(): GetResourceCollectionRequest
     {
-        $this->requestValidator->makeSureRequestHasOnlyWhitelistedFilterQueryParams($this->request, $this->allowedFilters);
-        $this->requestValidator->makeSureRequestHasOnlyWhitelistedIncludeQueryParams($this->request,
-            $this->allowedIncluded);
-        $this->requestValidator->makeSureRequestHasOnlyWhitelistedSortQueryParams($this->request,
-            $this->allowedSortables);
-
-        if (false === $this->sparseFieldsAllowed) {
-            $this->requestValidator->makeSureRequestDoesntHaveSparseFieldsetQueryParams($this->request);
-        }
-
-        if (false === $this->paginationAllowed) {
-            $this->requestValidator->makeSureRequestDoesntHavePaginationQueryParams($this->request);
-        }
-
-        return GetResourceCollectionRequest::createFromRequest($this->request);
+        return $this->requestFactory->makeGetResourceCollectionRequest(
+            $this->request,
+            $this->allowedIncluded,
+            $this->allowedSortables,
+            $this->allowedFilters,
+            $this->paginationAllowed,
+            $this->sparseFieldsAllowed
+            );
     }
 }

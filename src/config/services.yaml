@@ -31,3 +31,6 @@ services:
 
   Undabot\JsonApi\Encoding\:
     resource: '../../../json-api-core/src/Encoding/*'
+
+  Undabot\JsonApi\Request\Builder\ResourceCollectionRequestBuilder: ~
+    shared: false

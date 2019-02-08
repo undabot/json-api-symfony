@@ -11,7 +11,6 @@ use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
 use Undabot\JsonApi\Model\Request\CreateResourceRequestInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Util\Assert\Assert;
-use Undabot\SymfonyJsonApi\Request\Builder\ResourceCollectionRequestBuilder;
 use Undabot\SymfonyJsonApi\Request\CreateResourceRequest;
 use Undabot\SymfonyJsonApi\Request\Exception\ClientGeneratedIdIsNotAllowedException;
 use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestAcceptHeaderException;
@@ -216,14 +215,6 @@ class JsonApiRequestFactory
         }
 
         return GetResourceCollectionRequest::createFromRequest($request);
-    }
-
-    public function prepareGetResourceCollectionRequest(Request $request): ResourceCollectionRequestBuilder
-    {
-        $builder = new ResourceCollectionRequestBuilder($this->jsonApiRequestValidator);
-        $builder->setRequest($request);
-
-        return $builder;
     }
 
     /**

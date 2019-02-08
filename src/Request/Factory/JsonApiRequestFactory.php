@@ -86,7 +86,9 @@ class JsonApiRequestFactory
 
         $requestPrimaryData['id'] = $id;
 
-        return $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
+        $resource = $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
+
+        return $resource;
     }
 
     /**
@@ -94,7 +96,9 @@ class JsonApiRequestFactory
      */
     private function getSingleResourceObjectFromRequest(array $requestPrimaryData): ResourceInterface
     {
-        return $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
+        $resource = $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
+
+        return $resource;
     }
 
     /**

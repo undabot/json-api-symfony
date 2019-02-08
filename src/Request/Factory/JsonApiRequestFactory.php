@@ -8,6 +8,7 @@ use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Encoding\Exception\PhpArrayEncodingException;
 use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
+use Undabot\JsonApi\Model\Request\CreateResourceRequestInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Util\Assert\Assert;
 use Undabot\SymfonyJsonApi\Request\CreateResourceRequest;
@@ -84,9 +85,7 @@ class JsonApiRequestFactory
         }
 
         $requestPrimaryData['id'] = $id;
-        $resource = $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
-
-        return $resource;
+        return $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
     }
 
     /**
@@ -94,9 +93,7 @@ class JsonApiRequestFactory
      */
     private function getSingleResourceObjectFromRequest(array $requestPrimaryData): ResourceInterface
     {
-        $resource = $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
-
-        return $resource;
+        return $this->phpArrayToResourceEncoder->decode($requestPrimaryData);
     }
 
     /**
@@ -107,8 +104,9 @@ class JsonApiRequestFactory
      * @throws InvalidRequestContentTypeHeaderException
      * @throws InvalidRequestDataException
      * @throws PhpArrayEncodingException
+     * @throws UnsupportedQueryStringParameterGivenException
      */
-    public function makeCreateResourceRequestWithServerGeneratedId(Request $request, string $id)
+    public function makeCreateResourceRequestWithServerGeneratedId(Request $request, string $id): CreateResourceRequestInterface
     {
         return $this->makeCreateResourceRequest($request, false, $id);
     }
@@ -178,12 +176,12 @@ class JsonApiRequestFactory
     /**
      * @throws InvalidRequestAcceptHeaderException
      * @throws InvalidRequestContentTypeHeaderException
-     * @throws UnsupportedQueryStringParameterGivenException
-     * @throws UnsupportedIncludeValuesGivenException
      * @throws UnsupportedFilterAttributeGivenException
+     * @throws UnsupportedIncludeValuesGivenException
+     * @throws UnsupportedPaginationRequestedException
+     * @throws UnsupportedQueryStringParameterGivenException
      * @throws UnsupportedSortRequestedException
      * @throws UnsupportedSparseFieldsetRequestedException
-     * @throws UnsupportedPaginationRequestedException
      */
     public function makeGetResourceCollectionRequest(
         Request $request,

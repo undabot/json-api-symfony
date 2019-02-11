@@ -171,10 +171,19 @@ class JsonApiRequestFactory
             $whitelistedIncludeValues
         );
 
+        $includeString = $request->query->get('include', null);
+
+        $include = null;
+        if (null !== $includeString) {
+            $include = explode(',', $includeString);
+        }
+
+        $fields = $request->query->get('fields', null);
+
         return new GetResourceRequest(
             $id,
-            $request->query->get('include'),
-            $request->query->get('fields')
+            $include,
+            $fields
         );
     }
 

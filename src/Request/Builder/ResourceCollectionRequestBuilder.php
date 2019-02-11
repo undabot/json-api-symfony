@@ -52,28 +52,28 @@ class ResourceCollectionRequestBuilder
         return $this;
     }
 
-    public function withAllowedFilters(array $allowedFilters)
+    public function withAllowedFilters(array $allowedFilters): self
     {
         $this->allowedFilters = $allowedFilters;
 
         return $this;
     }
 
-    public function withAllowedIncludedResources(array $allowedIncluded)
+    public function withAllowedIncludedResources(array $allowedIncluded): self
     {
         $this->allowedIncluded = $allowedIncluded;
 
         return $this;
     }
 
-    public function withAllowedSortableFields(array $allowedSortables)
+    public function withAllowedSortableFields(array $allowedSortables): self
     {
         $this->allowedSortables = $allowedSortables;
 
         return $this;
     }
 
-    public function allowFieldSelection(bool $sparseFieldsAllowed)
+    public function allowFieldSelection(bool $sparseFieldsAllowed): self
     {
         $this->sparseFieldsAllowed = $sparseFieldsAllowed;
 

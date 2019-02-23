@@ -4,3 +4,4 @@
 /.php_cs.cache
 /phpunit.xml
 /ci_key*
+/tests/_reports

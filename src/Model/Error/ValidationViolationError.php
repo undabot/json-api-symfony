@@ -7,8 +7,9 @@ namespace Undabot\SymfonyJsonApi\Model\Error;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Undabot\JsonApi\Model\Error\ErrorInterface;
 use Undabot\JsonApi\Model\Link\LinkInterface;
-use Undabot\JsonApi\Model\Meta\Meta;
+use Undabot\JsonApi\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Model\Source\Source;
+use Undabot\JsonApi\Model\Source\SourceInterface;
 
 class ValidationViolationError implements ErrorInterface
 {
@@ -66,7 +67,7 @@ class ValidationViolationError implements ErrorInterface
         return null;
     }
 
-    public function getSource(): ?Source
+    public function getSource(): ?SourceInterface
     {
         /** @var string|null $path */
         $path = $this->violation->getPropertyPath();
@@ -77,7 +78,7 @@ class ValidationViolationError implements ErrorInterface
         return new Source($path);
     }
 
-    public function getMeta(): ?Meta
+    public function getMeta(): ?MetaInterface
     {
         return null;
     }

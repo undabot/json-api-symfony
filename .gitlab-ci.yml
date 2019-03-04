@@ -24,4 +24,5 @@ test:
     - composer validate --no-check-publish --no-interaction --ansi
     - composer run lint
     - composer run qc
-    - composer run test
+    - phpdbg -qrr ./vendor/bin/phpunit
+    - cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"

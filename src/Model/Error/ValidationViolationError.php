@@ -49,11 +49,21 @@ class ValidationViolationError implements ErrorInterface
 
     public function getDetail(): ?string
     {
-        if (null === $this->violation->getInvalidValue()) {
+        $invalidValue = $this->violation->getInvalidValue();
+
+        if (null === $invalidValue) {
             return null;
         }
 
-        return (string) $this->violation->getInvalidValue();
+        if (true === is_string($invalidValue)) {
+            return $invalidValue;
+        }
+
+        if (true === is_object($invalidValue) && true === method_exists($invalidValue, '__toString')) {
+            return (string) $invalidValue;
+        }
+
+        return null;
     }
 
     public function getSource(): ?Source

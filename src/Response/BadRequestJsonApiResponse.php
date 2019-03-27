@@ -13,4 +13,9 @@ class BadRequestJsonApiResponse extends AbstractErrorJsonApiResponse
         parent::__construct(null, Response::HTTP_BAD_REQUEST, $headers);
         $this->message = $message;
     }
+
+    public function getErrorTitle(): string
+    {
+        return 'Bad Request';
+    }
 }

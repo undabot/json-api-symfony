@@ -19,11 +19,20 @@ abstract class AbstractErrorJsonApiResponse extends Response implements JsonApiE
         return $this->message;
     }
 
+    abstract public function getErrorTitle(): string;
+
     public function getErrorCollection(): ?ErrorCollectionInterface
     {
         if (null !== $this->message) {
             return new ErrorCollection([
-                new Error(null, null, null, null, $this->message),
+                new Error(
+                    null,
+                    null,
+                    (string) $this->getStatusCode(),
+                    (string) $this->getStatusCode(),
+                    $this->getErrorTitle(),
+                    $this->message
+                ),
             ]);
         }
 

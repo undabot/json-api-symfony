@@ -14,10 +14,10 @@ use Undabot\JsonApi\Model\Error\ErrorCollectionInterface;
  */
 class NotFoundJsonApiResponse extends AbstractErrorJsonApiResponse
 {
-    /** @var string */
+    /** @var string|null */
     protected $message;
 
-    public function __construct(string $message, array $headers = [])
+    public function __construct(string $message = null, array $headers = [])
     {
         $this->message = $message;
         parent::__construct(null, Response::HTTP_NOT_FOUND, $headers);
@@ -25,13 +25,9 @@ class NotFoundJsonApiResponse extends AbstractErrorJsonApiResponse
 
     public function getErrorCollection(): ?ErrorCollectionInterface
     {
-        if (null !== $this->message) {
-            return new ErrorCollection([
+        return new ErrorCollection([
                 new Error(null, null, '404', '404', $this->getErrorTitle(), $this->message),
             ]);
-        }
-
-        return null;
     }
 
     public function getErrorTitle(): string

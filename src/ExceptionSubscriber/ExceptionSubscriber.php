@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\ExceptionSubscriber;
 
+use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -20,6 +21,7 @@ use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSortRequestedException;
 use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSparseFieldsetRequestedException;
 use Undabot\SymfonyJsonApi\Response\BadRequestJsonApiResponse;
 use Undabot\SymfonyJsonApi\Response\NotAcceptableJsonApiResponse;
+use Undabot\SymfonyJsonApi\Response\ServerErrorJsonApiResponse;
 use Undabot\SymfonyJsonApi\Response\UnsupportedMediaTypeJsonApiResponse;
 
 class ExceptionSubscriber implements EventSubscriberInterface
@@ -114,6 +116,13 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         if ($exception instanceof UnsupportedMediaTypeException) {
             $response = new UnsupportedMediaTypeJsonApiResponse($exception);
+            $event->setResponse($response);
+
+            return;
+        }
+
+        if ($exception instanceof Exception) {
+            $response = ServerErrorJsonApiResponse::fromException($exception);
             $event->setResponse($response);
 
             return;

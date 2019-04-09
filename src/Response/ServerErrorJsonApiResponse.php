@@ -9,6 +9,10 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ServerErrorJsonApiResponse extends AbstractErrorJsonApiResponse
 {
+    /**
+     * @var string
+     * Exception name that is used for building the Error title
+     */
     private $exceptionName;
 
     public function __construct(string $message, string $exceptionName, array $headers = [])

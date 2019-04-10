@@ -13,4 +13,9 @@ class NotAcceptableJsonApiResponse extends AbstractErrorJsonApiResponse
         parent::__construct(null, Response::HTTP_NOT_ACCEPTABLE, $headers);
         $this->message = $message;
     }
+
+    public function getErrorTitle(): string
+    {
+        return 'Not Acceptable';
+    }
 }

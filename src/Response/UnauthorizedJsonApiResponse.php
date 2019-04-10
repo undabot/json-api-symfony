@@ -16,4 +16,9 @@ class UnauthorizedJsonApiResponse extends AbstractErrorJsonApiResponse
         parent::__construct(null, Response::HTTP_UNAUTHORIZED, $headers);
         $this->message = $message;
     }
+
+    public function getErrorTitle(): string
+    {
+        return 'Access Denied';
+    }
 }

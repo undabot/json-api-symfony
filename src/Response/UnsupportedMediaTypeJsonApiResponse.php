@@ -14,4 +14,9 @@ class UnsupportedMediaTypeJsonApiResponse extends AbstractErrorJsonApiResponse
         parent::__construct(null, Response::HTTP_UNSUPPORTED_MEDIA_TYPE, $headers);
         $this->message = $exception->getMessage();
     }
+
+    public function getErrorTitle(): string
+    {
+        return 'Unsupported Media Type';
+    }
 }

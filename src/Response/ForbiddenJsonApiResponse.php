@@ -16,4 +16,9 @@ class ForbiddenJsonApiResponse extends AbstractErrorJsonApiResponse
         parent::__construct(null, Response::HTTP_FORBIDDEN, $headers);
         $this->message = $message;
     }
+
+    public function getErrorTitle(): string
+    {
+        return 'Access Denied';
+    }
 }

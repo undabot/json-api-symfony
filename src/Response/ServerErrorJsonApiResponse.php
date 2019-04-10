@@ -15,9 +15,10 @@ class ServerErrorJsonApiResponse extends AbstractErrorJsonApiResponse
      */
     private $exceptionName;
 
-    public function __construct(string $message, string $exceptionName, array $headers = [])
+    public function __construct(string $message, string $exceptionName, array $headers = [], ?int $statusCode = null)
     {
-        parent::__construct(null, Response::HTTP_INTERNAL_SERVER_ERROR, $headers);
+        $responseStatus = $statusCode ?? Response::HTTP_INTERNAL_SERVER_ERROR;
+        parent::__construct(null, $responseStatus, $headers);
         $this->message = $message;
         $this->exceptionName = $exceptionName;
     }
@@ -29,8 +30,17 @@ class ServerErrorJsonApiResponse extends AbstractErrorJsonApiResponse
 
     public static function fromException(Exception $exception): self
     {
-        $message = sprintf('%s : %s', $exception->getFile(), $exception->getLine());
+        $message = self::buildErrorMessageFromException($exception);
+        $responseStatus = $exception->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR;
 
-        return new self($message, get_class($exception));
+        return new self($message, get_class($exception), [], (int) $responseStatus);
+    }
+
+    private static function buildErrorMessageFromException(Exception $exception)
+    {
+        $message = null === $exception->getCode() ? sprintf('%s : %s', $exception->getFile(), $exception->getLine())
+            : $exception->getMessage();
+
+        return $message;
     }
 }

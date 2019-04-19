@@ -30,17 +30,9 @@ class ServerErrorJsonApiResponse extends AbstractErrorJsonApiResponse
 
     public static function fromException(Exception $exception): self
     {
-        $message = self::buildErrorMessageFromException($exception);
-        $responseStatus = $exception->getCode() ?? Response::HTTP_INTERNAL_SERVER_ERROR;
+        $message = $exception->getMessage() ?? 'Encountered Server Error';
+        $responseStatus = 0 !== $exception->getCode() ? $exception->getCode() : Response::HTTP_INTERNAL_SERVER_ERROR;
 
         return new self($message, get_class($exception), [], (int) $responseStatus);
-    }
-
-    private static function buildErrorMessageFromException(Exception $exception)
-    {
-        $message = null === $exception->getCode() ? sprintf('%s : %s', $exception->getFile(), $exception->getLine())
-            : $exception->getMessage();
-
-        return $message;
     }
 }

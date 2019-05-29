@@ -7,7 +7,10 @@
     "undabot/json-api-core": "dev-master@dev",
     "symfony/http-kernel": "^4.2",
     "symfony/validator": "^4.2",
-    "symfony/orm-pack": "^1.0"
+    "symfony/orm-pack": "^1.0",
+    "doctrine/annotations": "^1.6",
+    "symfony/property-access": "^4.2",
+    "symfony/serializer": "^4.2"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.14",

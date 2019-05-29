@@ -33,6 +33,7 @@ class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
 
     public function makeSureRequestIsValidJsonApiRequest(Request $request): void
     {
+        // @todo update this
         return;
 
         /*
@@ -65,7 +66,7 @@ class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
             }
 
             if (false === is_array($accepts)) {
-                throw new Exception('Coudldnt check headers');
+                throw new Exception('Couldn\'t check accept headers');
             }
 
             if (false === in_array('application/vnd.api+json', $accepts)) {

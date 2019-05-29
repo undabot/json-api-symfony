@@ -15,6 +15,7 @@ use Undabot\JsonApi\Model\Meta\Meta;
 use Undabot\JsonApi\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Response\AbstractErrorJsonApiResponse;
+use Undabot\SymfonyJsonApi\Response\JsonApiErrorResponseInterface;
 use Undabot\SymfonyJsonApi\Response\JsonApiResponseInterface;
 use Undabot\SymfonyJsonApi\Response\ResourceCollectionJsonApiResponse;
 use Undabot\SymfonyJsonApi\Response\ResourceCreatedJsonApiResponse;
@@ -48,6 +49,10 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         }
 
         $response->headers->set('Content-Type', 'application/vnd.api+json');
+
+        if (true === ($response instanceof JsonApiErrorResponseInterface)) {
+            $this->encodeErrorResponseContent($response);
+        }
 
         if (true === ($response instanceof AbstractErrorJsonApiResponse)) {
             $this->encodeErrorResponseContent($response);

@@ -75,6 +75,12 @@ class ValidationViolationError implements ErrorInterface
             return null;
         }
 
+        // Convert Symfony attribute notation [data][attributes][attribute] to Trim.js /data/attributes/attribute
+        preg_match_all('/\[(.*)\]/U', $path, $result);
+        if (isset($result[1])) {
+            $path = '/' . implode('/', $result[1]);
+        }
+
         return new Source($path);
     }
 

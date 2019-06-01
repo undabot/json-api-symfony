@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\Request\Factory;
+namespace Undabot\SymfonyJsonApi\Http\Service\Factory;
 
 use InvalidArgumentException;
 use Undabot\JsonApi\Model\Request\Pagination\OffsetBasedPagination;

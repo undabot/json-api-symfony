@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition;
 
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
 
 interface ResourceMetadataFactoryInterface
 {

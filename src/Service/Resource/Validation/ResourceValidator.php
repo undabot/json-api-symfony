@@ -2,16 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Validation;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Validation;
 
+use Doctrine\Common\Annotations\AnnotationException;
+use ReflectionException;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Resource\Model\FlatResource;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 class ResourceValidator
 {
@@ -27,6 +30,11 @@ class ResourceValidator
         $this->validator = $validator;
     }
 
+    /**
+     * @throws AnnotationException
+     * @throws ReflectionException
+     * @throws InvalidResourceMappingException
+     */
     public function validate(ResourceInterface $resource, string $class): ResourceValidationViolations
     {
         $metadata = $this->metadataFactory->getClassMetadata($class);

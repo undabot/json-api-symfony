@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Factory;
 
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
@@ -11,12 +11,13 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 use Symfony\Component\Validator\Constraint;
-use Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation as Annotation;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\AttributeMetadata;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Exception\InvalidResourceMappingException;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\RelationshipMetadata;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\ResourceMetadata;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint as JsonApiConstraint;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation as Annotation;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\AttributeMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\RelationshipMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataFactoryInterface;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint as JsonApiConstraint;
 
 class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
@@ -162,6 +163,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     ): RelationshipMetadata {
         // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
         $name = $relationshipAnnotation->name ?? $property->getName();
+        /** @var string|null $relatedResourceType */
         $relatedResourceType = $relationshipAnnotation->type;
 
         if (null === $relatedResourceType) {

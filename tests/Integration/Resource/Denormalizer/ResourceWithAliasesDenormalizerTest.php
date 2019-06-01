@@ -11,13 +11,13 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Undabot\JsonApi\Model\Resource\Resource;
-use Undabot\SymfonyJsonApi\Model\Attribute\ResourceAttributesFactory;
-use Undabot\SymfonyJsonApi\Model\Relationship\ResourceRelationshipsFactory;
-use Undabot\SymfonyJsonApi\Resource\Denormalizer\Exception\MissingDataValueResourceDenormalizationException;
-use Undabot\SymfonyJsonApi\Resource\Denormalizer\Exception\ResourceDenormalizationException;
-use Undabot\SymfonyJsonApi\Resource\Denormalizer\ResourceDenormalizer;
-use Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation as JsonApi;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\MissingDataValueResourceDenormalizationException;
+use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\ResourceDenormalizationException;
+use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 class AliasedResourceDto
 {
@@ -97,11 +97,11 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $resource = new Resource(
             '1',
             'type',
-            ResourceAttributesFactory::make()
+            ResourceAttributesBuilder::make()
                 ->add('name', 'This is my title')
                 ->add('summary', 'This is my summary')
                 ->get(),
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('owner', 'people', 'p1')
                 ->toMany('tags', 'tags', ['t1', 't2', 't3'])
                 ->get()
@@ -122,11 +122,11 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $resource = new Resource(
             '1',
             'type',
-            ResourceAttributesFactory::make()
+            ResourceAttributesBuilder::make()
                 ->add('foo', 'This is my title')
                 ->add('bar', 'This is my summary')
                 ->get(),
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('baz', 'people', 'p1')
                 ->toMany('bash', 'tags', ['t1', 't2', 't3'])
                 ->get()
@@ -141,12 +141,12 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $resource = new Resource(
             '1',
             'type',
-            ResourceAttributesFactory::make()
+            ResourceAttributesBuilder::make()
                 ->add('name', 'This is my title')
                 ->add('summary', 'This is my summary')
                 ->add('extra', 'extra')
                 ->get(),
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('owner', 'people', 'p1')
                 ->toMany('tags', 'tags', ['t1', 't2', 't3'])
                 ->get()
@@ -161,11 +161,11 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $resource = new Resource(
             '1',
             'type',
-            ResourceAttributesFactory::make()
+            ResourceAttributesBuilder::make()
                 ->add('name', 'This is my title')
                 ->add('summary', 'This is my summary')
                 ->get(),
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('owner', 'people', 'p1')
                 ->toMany('tags', 'tags', ['t1', 't2', 't3'])
                 ->toMany('extras', 'extra', ['e1', 'e2', 'e3'])

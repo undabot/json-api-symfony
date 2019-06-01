@@ -11,7 +11,7 @@ use Undabot\JsonApi\Model\Resource\Attribute\AttributeCollection;
 use Undabot\JsonApi\Model\Resource\Relationship\Relationship;
 use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollection;
 use Undabot\JsonApi\Model\Resource\Resource;
-use Undabot\SymfonyJsonApi\Resource\FlatResource;
+use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 
 class FlatResourceTest extends TestCase
 {

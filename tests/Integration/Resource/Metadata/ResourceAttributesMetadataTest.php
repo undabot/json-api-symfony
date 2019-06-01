@@ -10,11 +10,11 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
-use Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation as JsonApi;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\AttributeMetadata;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Exception\InvalidResourceMappingException;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\AttributeMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 class ResourceAttributesMetadataTest extends TestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Denormalizer\Exception;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception;
 
 use Exception;
 

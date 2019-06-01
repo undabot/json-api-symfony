@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation;
+namespace Undabot\SymfonyJsonApi\Model\Resource\Annotation;
 
 use Doctrine\Common\Annotations\Annotation;
 

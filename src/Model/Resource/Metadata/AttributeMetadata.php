@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Model\Metadata;
+namespace Undabot\SymfonyJsonApi\Model\Resource\Metadata;
 
 use Assert\Assertion;
 use Symfony\Component\Validator\Constraint;

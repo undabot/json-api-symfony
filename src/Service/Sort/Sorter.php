@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Sort;
+namespace Undabot\SymfonyJsonApi\Service\Sort;
 
 use Doctrine\ORM\QueryBuilder;
 use Undabot\JsonApi\Model\Request\Sort\Sort;

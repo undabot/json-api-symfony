@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\Request\Exception;
+namespace Undabot\SymfonyJsonApi\Http\Exception\Request;
 
-use Exception;
-
-class ClientGeneratedIdIsNotAllowedException extends Exception
+class ClientGeneratedIdIsNotAllowedException extends JsonApiRequestException
 {
 }

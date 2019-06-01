@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Validation\ConstraintValidator;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator;
 
 use Assert\Assertion;
 use Symfony\Component\Validator\Constraint;
@@ -12,7 +12,7 @@ use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Model\Resource\ResourceIdentifierCollectionInterface;
 use Undabot\JsonApi\Model\Resource\ResourceIdentifierInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ResourceType;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
 class ResourceTypeValidator extends ConstraintValidator
 {
@@ -25,7 +25,7 @@ class ResourceTypeValidator extends ConstraintValidator
         Assertion::isInstanceOf($constraint, ResourceType::class);
 
         // If the given value is RelationshipInterface, validate its end data - either a single or multiple resource identifiers
-        if ($value instanceof RelationshipInterface) {
+        if ($value instanceof RelationshipInterface && null !== $value->getData()) {
             $value = $value->getData()->getData();
         }
 

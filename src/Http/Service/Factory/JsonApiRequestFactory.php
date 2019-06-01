@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\Request\Factory;
+namespace Undabot\SymfonyJsonApi\Http\Service\Factory;
 
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,21 +11,13 @@ use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
 use Undabot\JsonApi\Model\Request\CreateResourceRequestInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Util\Assert\Assert;
-use Undabot\SymfonyJsonApi\Http\Request\CreateResourceRequest;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\ClientGeneratedIdIsNotAllowedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestAcceptHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestContentTypeHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestDataException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedFilterAttributeGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedIncludeValuesGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedPaginationRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedQueryStringParameterGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSortRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSparseFieldsetRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\GetResourceCollectionRequest;
-use Undabot\SymfonyJsonApi\Http\Request\GetResourceRequest;
-use Undabot\SymfonyJsonApi\Http\Request\UpdateResourceRequest;
-use Undabot\SymfonyJsonApi\Http\Request\Validation\JsonApiRequestValidator;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestDataException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\JsonApiRequestException;
+use Undabot\SymfonyJsonApi\Http\Model\Request\CreateResourceRequest;
+use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
+use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest;
+use Undabot\SymfonyJsonApi\Http\Model\Request\UpdateResourceRequest;
+use Undabot\SymfonyJsonApi\Http\Service\Validation\JsonApiRequestValidator;
 
 class JsonApiRequestFactory
 {
@@ -104,27 +96,21 @@ class JsonApiRequestFactory
     /**
      * @see https://jsonapi.org/format/#crud-creating
      *
-     * @throws ClientGeneratedIdIsNotAllowedException
-     * @throws InvalidRequestAcceptHeaderException
-     * @throws InvalidRequestContentTypeHeaderException
-     * @throws InvalidRequestDataException
+     * @throws JsonApiRequestException
      * @throws PhpArrayEncodingException
-     * @throws UnsupportedQueryStringParameterGivenException
      */
-    public function makeCreateResourceRequestWithServerGeneratedId(Request $request, string $id): CreateResourceRequestInterface
-    {
+    public function makeCreateResourceRequestWithServerGeneratedId(
+        Request $request,
+        string $id
+    ): CreateResourceRequestInterface {
         return $this->makeCreateResourceRequest($request, false, $id);
     }
 
     /**
      * @see https://jsonapi.org/format/#crud-creating
      *
-     * @throws InvalidRequestAcceptHeaderException
-     * @throws InvalidRequestContentTypeHeaderException
-     * @throws InvalidRequestDataException
-     * @throws ClientGeneratedIdIsNotAllowedException
+     * @throws JsonApiRequestException
      * @throws PhpArrayEncodingException
-     * @throws UnsupportedQueryStringParameterGivenException
      */
     public function makeCreateResourceRequest(
         Request $request,
@@ -154,10 +140,7 @@ class JsonApiRequestFactory
     }
 
     /**
-     * @throws InvalidRequestAcceptHeaderException
-     * @throws InvalidRequestContentTypeHeaderException
-     * @throws UnsupportedQueryStringParameterGivenException
-     * @throws UnsupportedIncludeValuesGivenException
+     * @throws JsonApiRequestException
      */
     public function makeGetSingleResourceRequest(
         Request $request,
@@ -188,14 +171,7 @@ class JsonApiRequestFactory
     }
 
     /**
-     * @throws InvalidRequestAcceptHeaderException
-     * @throws InvalidRequestContentTypeHeaderException
-     * @throws UnsupportedFilterAttributeGivenException
-     * @throws UnsupportedIncludeValuesGivenException
-     * @throws UnsupportedPaginationRequestedException
-     * @throws UnsupportedQueryStringParameterGivenException
-     * @throws UnsupportedSortRequestedException
-     * @throws UnsupportedSparseFieldsetRequestedException
+     * @throws JsonApiRequestException
      */
     public function makeGetResourceCollectionRequest(
         Request $request,
@@ -231,11 +207,8 @@ class JsonApiRequestFactory
     }
 
     /**
-     * @throws InvalidRequestAcceptHeaderException
-     * @throws InvalidRequestContentTypeHeaderException
-     * @throws InvalidRequestDataException
+     * @throws JsonApiRequestException
      * @throws PhpArrayEncodingException
-     * @throws UnsupportedQueryStringParameterGivenException
      */
     public function makeUpdateResourceRequest(Request $request, string $id): UpdateResourceRequest
     {

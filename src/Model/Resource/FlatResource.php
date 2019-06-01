@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Model;
+namespace Undabot\SymfonyJsonApi\Model\Resource;
 
 use RuntimeException;
 use Undabot\JsonApi\Model\Resource\Attribute\AttributeInterface;
@@ -69,7 +69,9 @@ class FlatResource
             }
 
             if ($relationshipData instanceof ToOneRelationshipData && false === $relationshipData->isEmpty()) {
-                $flatRelationships[$relationship->getName()] = $relationshipData->getData()->getId();
+                /** @var ResourceIdentifierInterface $data */
+                $data = $relationshipData->getData();
+                $flatRelationships[$relationship->getName()] = $data->getId();
                 continue;
             }
 

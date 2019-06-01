@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Model\Request;
+namespace Undabot\SymfonyJsonApi\Http\Model\Request;
 
 use Undabot\JsonApi\Model\Request\GetResourceRequestInterface;
 

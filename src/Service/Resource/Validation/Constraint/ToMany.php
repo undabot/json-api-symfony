@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Validation\Constraint;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint;
 
 use Symfony\Component\Validator\Constraint;
-use Undabot\SymfonyJsonApi\Resource\Validation\ConstraintValidator\ToManyValidator;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\ToManyValidator;
 
 /**
  * @Annotation

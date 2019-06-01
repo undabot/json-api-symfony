@@ -2,19 +2,20 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\Request\Builder;
+namespace Undabot\SymfonyJsonApi\Http\Service\Builder;
 
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestAcceptHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestContentTypeHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedFilterAttributeGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedIncludeValuesGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedPaginationRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedQueryStringParameterGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSortRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSparseFieldsetRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Factory\JsonApiRequestFactory;
-use Undabot\SymfonyJsonApi\Http\Request\GetResourceCollectionRequest;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestAcceptHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestContentTypeHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\JsonApiRequestException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedFilterAttributeGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedPaginationRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParameterGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSortRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSparseFieldsetRequestedException;
+use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
+use Undabot\SymfonyJsonApi\Http\Service\Factory\JsonApiRequestFactory;
 
 class ResourceCollectionRequestBuilder
 {
@@ -88,14 +89,7 @@ class ResourceCollectionRequestBuilder
     }
 
     /**
-     * @throws InvalidRequestAcceptHeaderException
-     * @throws InvalidRequestContentTypeHeaderException
-     * @throws UnsupportedFilterAttributeGivenException
-     * @throws UnsupportedIncludeValuesGivenException
-     * @throws UnsupportedPaginationRequestedException
-     * @throws UnsupportedQueryStringParameterGivenException
-     * @throws UnsupportedSortRequestedException
-     * @throws UnsupportedSparseFieldsetRequestedException
+     * @throws JsonApiRequestException
      */
     public function build(): GetResourceCollectionRequest
     {

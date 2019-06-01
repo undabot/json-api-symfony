@@ -9,12 +9,10 @@ use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validation;
 use Undabot\JsonApi\Model\Resource\Resource;
-use Undabot\SymfonyJsonApi\Model\Relationship\ResourceRelationshipsFactory;
-use Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation as JsonApi;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ToMany;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ToOne;
-use Undabot\SymfonyJsonApi\Resource\Validation\ResourceValidator;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 class ResourceRelationshipsValidationTest extends KernelTestCase
 {
@@ -51,7 +49,7 @@ class ResourceRelationshipsValidationTest extends KernelTestCase
             '1',
             'resource',
             null,
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('relationship', 'type', '1')
                 ->get()
         );
@@ -77,7 +75,7 @@ class ResourceRelationshipsValidationTest extends KernelTestCase
             '1',
             'resource',
             null,
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('relationship', 'type', null)
                 ->get()
         );
@@ -102,7 +100,7 @@ class ResourceRelationshipsValidationTest extends KernelTestCase
             '1',
             'resource',
             null,
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toMany('relationship', 'type', ['1', '2'])
                 ->get()
         );

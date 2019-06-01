@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Factory;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Factory;
 
 use Assert\Assertion;
 use Doctrine\Common\Annotations\AnnotationException;
@@ -14,11 +14,10 @@ use Undabot\JsonApi\Model\Resource\Resource;
 use Undabot\JsonApi\Model\Resource\ResourceCollection;
 use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Resource\Builder\ResourceAttributesBuilder;
-use Undabot\SymfonyJsonApi\Resource\Builder\ResourceRelationshipsBuilder;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Exception\InvalidResourceMappingException;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
 
 class ResourceFactory
 {

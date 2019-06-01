@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\RequestHandler;
+namespace Undabot\SymfonyJsonApi\Service\RequestHandler;
 
 use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
-use Undabot\SymfonyJsonApi\Response\JsonApiResponseInterface;
+use Undabot\SymfonyJsonApi\Http\Model\Response\JsonApiResponseInterface;
 
 interface GetResourceCollectionRequestHandlerInterface
 {

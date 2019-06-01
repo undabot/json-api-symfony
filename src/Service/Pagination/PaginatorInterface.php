@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Pagination;
+namespace Undabot\SymfonyJsonApi\Service\Pagination;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;

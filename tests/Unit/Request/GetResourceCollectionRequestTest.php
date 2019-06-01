@@ -7,7 +7,7 @@ namespace Undabot\JsonApi\Tests\Unit\Request;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\SymfonyJsonApi\Request\GetResourceCollectionRequest;
+use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 
 class GetResourceCollectionRequestTest extends TestCase
 {

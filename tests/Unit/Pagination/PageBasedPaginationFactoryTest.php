@@ -7,7 +7,7 @@ namespace Undabot\JsonApi\Tests\Unit\Pagination;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Model\Request\Pagination\PageBasedPagination;
-use Undabot\SymfonyJsonApi\Request\Factory\PaginationFactory;
+use Undabot\SymfonyJsonApi\Http\Service\Factory\PaginationFactory;
 
 class PageBasedPaginationFactoryTest extends TestCase
 {

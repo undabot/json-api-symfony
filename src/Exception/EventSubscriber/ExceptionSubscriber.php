@@ -2,25 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\ExceptionSubscriber;
+namespace Undabot\SymfonyJsonApi\Exception\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Undabot\SymfonyJsonApi\Request\Exception\ClientGeneratedIdIsNotAllowedException;
-use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestAcceptHeaderException;
-use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestContentTypeHeaderException;
-use Undabot\SymfonyJsonApi\Request\Exception\InvalidRequestDataException;
-use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedFilterAttributeGivenException;
-use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedIncludeValuesGivenException;
-use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedMediaTypeException;
-use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedPaginationRequestedException;
-use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedQueryStringParameterGivenException;
-use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSortRequestedException;
-use Undabot\SymfonyJsonApi\Request\Exception\UnsupportedSparseFieldsetRequestedException;
-use Undabot\SymfonyJsonApi\Response\BadRequestJsonApiResponse;
-use Undabot\SymfonyJsonApi\Response\NotAcceptableJsonApiResponse;
-use Undabot\SymfonyJsonApi\Response\UnsupportedMediaTypeJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\ClientGeneratedIdIsNotAllowedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestAcceptHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestContentTypeHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestDataException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedFilterAttributeGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedMediaTypeException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedPaginationRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParameterGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSortRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSparseFieldsetRequestedException;
+use Undabot\SymfonyJsonApi\Http\Model\Response\BadRequestJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\NotAcceptableJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\UnsupportedMediaTypeJsonApiResponse;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {

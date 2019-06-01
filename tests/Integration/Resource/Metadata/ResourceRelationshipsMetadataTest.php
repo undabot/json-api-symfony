@@ -8,15 +8,14 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Constraints as Assert;
-use Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation as JsonApi;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Exception\InvalidResourceMappingException;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\RelationshipMetadata;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\ResourceMetadata;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ResourceType;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ToMany;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ToOne;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\RelationshipMetadata;
+use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToMany;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
 
 class ResourceRelationshipsMetadataTest extends TestCase
 {

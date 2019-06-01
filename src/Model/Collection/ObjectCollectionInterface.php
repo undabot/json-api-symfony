@@ -8,7 +8,7 @@ use ArrayAccess;
 use Countable;
 use IteratorAggregate;
 
-interface ObjectListCollectionInterface extends Countable, IteratorAggregate, ArrayAccess
+interface ObjectCollectionInterface extends Countable, IteratorAggregate, ArrayAccess
 {
     public function count(): int;
 

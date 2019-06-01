@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\EventListener;
+namespace Undabot\SymfonyJsonApi\Http\Service\EventSubscriber;
 
 use Exception;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -14,14 +14,13 @@ use Undabot\JsonApi\Model\Error\ErrorCollectionInterface;
 use Undabot\JsonApi\Model\Meta\Meta;
 use Undabot\JsonApi\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Http\Response\AbstractErrorJsonApiResponse;
-use Undabot\SymfonyJsonApi\Http\Response\JsonApiErrorResponseInterface;
-use Undabot\SymfonyJsonApi\Http\Response\JsonApiResponseInterface;
-use Undabot\SymfonyJsonApi\Http\Response\ResourceCollectionJsonApiResponse;
-use Undabot\SymfonyJsonApi\Http\Response\ResourceCreatedJsonApiResponse;
-use Undabot\SymfonyJsonApi\Http\Response\ResourceJsonApiResponse;
-use Undabot\SymfonyJsonApi\Http\Response\ResourceUpdatedJsonApiResponse;
-use Undabot\SymfonyJsonApi\Http\Response\ValidationErrorsJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\JsonApiErrorResponseInterface;
+use Undabot\SymfonyJsonApi\Http\Model\Response\JsonApiResponseInterface;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedJsonApiResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ValidationErrorsJsonApiResponse;
 
 class JsonApiResponseEncoderListener implements EventSubscriberInterface
 {
@@ -75,7 +74,7 @@ class JsonApiResponseEncoderListener implements EventSubscriberInterface
         }
     }
 
-    private function encodeErrorResponseContent(AbstractErrorJsonApiResponse $response): void
+    private function encodeErrorResponseContent(JsonApiErrorResponseInterface $response): void
     {
         $document = new Document(null, $response->getErrorCollection());
         $encodedContent = $this->documentToPhpArrayEncoderInterface->encode($document);

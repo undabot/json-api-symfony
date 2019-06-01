@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Denormalizer;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Denormalizer;
 
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Throwable;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Resource\Denormalizer\Exception\MissingDataValueResourceDenormalizationException;
-use Undabot\SymfonyJsonApi\Resource\Denormalizer\Exception\ResourceDenormalizationException;
-use Undabot\SymfonyJsonApi\Resource\Model\FlatResource;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactoryInterface;
+use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
+use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\MissingDataValueResourceDenormalizationException;
+use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\ResourceDenormalizationException;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataFactoryInterface;
 
 class ResourceDenormalizer
 {

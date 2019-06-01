@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Model\Metadata\Exception;
+namespace Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception;
 
 use Exception;
 

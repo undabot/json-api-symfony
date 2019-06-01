@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Model\Metadata;
+namespace Undabot\SymfonyJsonApi\Model\Resource\Metadata;
 
 use Assert\Assertion;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraint;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint as JsonApiConstraint;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint as JsonApiConstraint;
 
 class ResourceMetadata
 {
@@ -90,9 +90,9 @@ class ResourceMetadata
     }
 
     /**
-     * Returns array of constraints that operate on RelationshipInterface objects
+     * Returns map of relationship names and constraints that operate on RelationshipInterface objects
      *
-     * @return Constraint[]
+     * @return array
      */
     public function getRelationshipsObjectConstraints(): array
     {
@@ -111,9 +111,9 @@ class ResourceMetadata
     }
 
     /**
-     * Returns array of constraints that operate on raw relationship values (string or string[])
+     * Returns map of relationship names and constraints that operate on raw relationship values (string or string[])
      *
-     * @return Constraint[]
+     * @return array
      */
     public function getRelationshipsValueConstraints(): array
     {

@@ -11,11 +11,11 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Undabot\JsonApi\Model\Resource\Resource;
-use Undabot\SymfonyJsonApi\Model\Attribute\ResourceAttributesFactory;
-use Undabot\SymfonyJsonApi\Model\Relationship\ResourceRelationshipsFactory;
-use Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation as JsonApi;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
-use Undabot\SymfonyJsonApi\Resource\Denormalizer\ResourceDenormalizer;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 class ResourceDto
 {
@@ -95,11 +95,11 @@ class ResourceDenormalizerTest extends TestCase
         $resource = new Resource(
             '1',
             'type',
-            ResourceAttributesFactory::make()
+            ResourceAttributesBuilder::make()
                 ->add('title', 'This is my title')
                 ->add('summary', 'This is my summary')
                 ->get(),
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('owner', 'people', 'p1')
                 ->toMany('tags', 'tags', ['t1', 't2', 't3'])
                 ->get()

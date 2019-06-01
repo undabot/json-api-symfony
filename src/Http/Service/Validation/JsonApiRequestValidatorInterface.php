@@ -2,18 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\Request\Validation;
+namespace Undabot\SymfonyJsonApi\Http\Service\Validation;
 
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\ClientGeneratedIdIsNotAllowedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestAcceptHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestContentTypeHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedFilterAttributeGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedIncludeValuesGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedPaginationRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedQueryStringParameterGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSortRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSparseFieldsetRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestAcceptHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestContentTypeHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\JsonApiRequestException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParameterGivenException;
 
 interface JsonApiRequestValidatorInterface
 {
@@ -23,21 +18,19 @@ interface JsonApiRequestValidatorInterface
      * - Content type header
      * - Support for given query params
      *
-     * @throws InvalidRequestAcceptHeaderException
-     * @throws InvalidRequestContentTypeHeaderException
-     * @throws UnsupportedQueryStringParameterGivenException
+     * @throws JsonApiRequestException
      */
     public function makeSureRequestIsValidJsonApiRequest(Request $request): void;
 
     /**
      * Validates that HTTP request doesn't have Client-generated ID assigned to the resource
      *
-     * @throws ClientGeneratedIdIsNotAllowedException
+     * @throws JsonApiRequestException
      */
     public function makeSureRequestResourceDoesntHaveClientGeneratedId(array $requestPrimaryData): void;
 
     /**
-     * @throws UnsupportedIncludeValuesGivenException
+     * @throws JsonApiRequestException
      */
     public function makeSureRequestHasOnlyWhitelistedIncludeQueryParams(
         Request $request,
@@ -45,7 +38,7 @@ interface JsonApiRequestValidatorInterface
     ): void;
 
     /**
-     * @throws UnsupportedSortRequestedException
+     * @throws JsonApiRequestException
      */
     public function makeSureRequestHasOnlyWhitelistedFilterQueryParams(
         Request $request,
@@ -53,7 +46,7 @@ interface JsonApiRequestValidatorInterface
     ): void;
 
     /**
-     * @throws UnsupportedFilterAttributeGivenException
+     * @throws JsonApiRequestException
      */
     public function makeSureRequestHasOnlyWhitelistedSortQueryParams(
         Request $request,
@@ -61,12 +54,12 @@ interface JsonApiRequestValidatorInterface
     ): void;
 
     /**
-     * @throws UnsupportedSparseFieldsetRequestedException
+     * @throws JsonApiRequestException
      */
     public function makeSureRequestDoesntHaveSparseFieldsetQueryParams(Request $request): void;
 
     /**
-     * @throws UnsupportedPaginationRequestedException
+     * @throws JsonApiRequestException
      */
     public function makeSureRequestDoesntHavePaginationQueryParams(Request $request);
 }

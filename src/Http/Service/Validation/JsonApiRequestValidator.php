@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\Request\Validation;
+namespace Undabot\SymfonyJsonApi\Http\Service\Validation;
 
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Model\Request\Sort\Sort;
 use Undabot\JsonApi\Model\Request\Sort\SortSet;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\ClientGeneratedIdIsNotAllowedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestAcceptHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestContentTypeHeaderException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\InvalidRequestDataException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedFilterAttributeGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedIncludeValuesGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedMediaTypeException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedPaginationRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedQueryStringParameterGivenException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSortRequestedException;
-use Undabot\SymfonyJsonApi\Http\Request\Exception\UnsupportedSparseFieldsetRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\ClientGeneratedIdIsNotAllowedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestAcceptHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestContentTypeHeaderException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestDataException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedFilterAttributeGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedMediaTypeException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedPaginationRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParameterGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSortRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSparseFieldsetRequestedException;
 
 class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
 {
@@ -33,9 +33,8 @@ class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
 
     public function makeSureRequestIsValidJsonApiRequest(Request $request): void
     {
-        // @todo update this
-        return;
 
+        return;
         /*
          * Servers MUST respond with a 415 Unsupported Media Type status code if a request specifies the header
          * Content-Type: application/vnd.api+json with any media type parameters.

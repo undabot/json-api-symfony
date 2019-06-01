@@ -16,6 +16,9 @@ services:
   Undabot\SymfonyJsonApi\Sort\:
     resource: '../Sort/*'
 
+  Undabot\SymfonyJsonApi\Resource\Builder\:
+    resource: '../Resource/Builder/*'
+
   Undabot\SymfonyJsonApi\Resource\Factory\:
     resource: '../Resource/Factory/*'
 

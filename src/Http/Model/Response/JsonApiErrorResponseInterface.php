@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\Response;
+namespace Undabot\SymfonyJsonApi\Http\Model\Response;
 
 use Undabot\JsonApi\Model\Error\ErrorCollectionInterface;
 

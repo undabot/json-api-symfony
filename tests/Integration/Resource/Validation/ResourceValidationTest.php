@@ -10,12 +10,12 @@ use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 use Undabot\JsonApi\Model\Resource\Resource;
-use Undabot\SymfonyJsonApi\Model\Attribute\ResourceAttributesFactory;
-use Undabot\SymfonyJsonApi\Model\Relationship\ResourceRelationshipsFactory;
-use Undabot\SymfonyJsonApi\Resource\Model\AnnotatedResource\Annotation as JsonApi;
-use Undabot\SymfonyJsonApi\Resource\Model\Metadata\Factory\ResourceMetadataFactory;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ResourceType;
-use Undabot\SymfonyJsonApi\Resource\Validation\ResourceValidator;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
  * @ResourceType(type="articles")
@@ -96,12 +96,12 @@ class ResourceValidationTest extends KernelTestCase
         return new Resource(
             $id,
             $type,
-            ResourceAttributesFactory::make()
+            ResourceAttributesBuilder::make()
                 ->add('title', $data['title'])
                 ->add('date', $data['date'])
                 ->add('summary', $data['summary'])
                 ->get(),
-            ResourceRelationshipsFactory::make()
+            ResourceRelationshipsBuilder::make()
                 ->toOne('author', 'people', $data['author'])
                 ->toMany('comments', 'comments', $data['comments'])
                 ->toMany('tags', 'tags', $data['tags'])

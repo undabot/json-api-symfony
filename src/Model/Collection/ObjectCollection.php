@@ -6,7 +6,7 @@ namespace Undabot\SymfonyJsonApi\Model\Collection;
 
 use ArrayIterator;
 
-class ObjectListCollection implements ObjectListCollectionInterface
+class ObjectCollection implements ObjectCollectionInterface
 {
     /** @var array */
     private $collection;

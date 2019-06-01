@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Resource\Validation\ConstraintValidator;
+namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator;
 
 use Assert\Assertion;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Undabot\SymfonyJsonApi\Resource\Validation\Constraint\ToMany;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToMany;
 
 class ToManyValidator extends ConstraintValidator
 {

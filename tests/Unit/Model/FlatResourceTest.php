@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Resource;
+namespace Undabot\JsonApi\Tests\Unit\Model\Resource;
 
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Factory\RelationshipDataFactory;

@@ -68,7 +68,9 @@ class ResourceDenormalizer
     {
         $flatResource = new FlatResource($resource);
 
-        $data = [];
+        $data = [
+            'id' => $resource->getId(),
+        ];
         $data = array_merge($data, $flatResource->getAttributes());
         $data = array_merge($data, $flatResource->getRelationships());
 

@@ -144,7 +144,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
         $name = $attributeAnnotation->name ?? $property->getName();
 
-        // @todo add attribute type validation constraint based on the property type (docblock)?
+        // @todo Idea: add attribute type validation constraint based on the property type (docblock)?
 
         return new AttributeMetadata(
             $name,

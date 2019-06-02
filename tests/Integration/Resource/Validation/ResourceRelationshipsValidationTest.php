@@ -12,6 +12,8 @@ use Undabot\JsonApi\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToMany;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 class ResourceRelationshipsValidationTest extends KernelTestCase

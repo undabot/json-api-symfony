@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Model\Resource;
 
 use Assert\Assertion;
+use InvalidArgumentException;
 use Undabot\JsonApi\Model\Link\LinkInterface;
 use Undabot\JsonApi\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Model\Resource\Attribute\AttributeCollection;
@@ -18,48 +19,67 @@ use Undabot\JsonApi\Model\Resource\ResourceInterface;
 class CombinedResource implements ResourceInterface
 {
     /** @var ResourceInterface */
-    private $primaryResource;
+    private $baseResource;
 
     /** @var ResourceInterface */
-    private $secondaryResource;
+    private $updateResource;
 
-    public function __construct(ResourceInterface $baseResource, ResourceInterface $overlayedResource)
+    public function __construct(ResourceInterface $baseResource, ResourceInterface $updateResource)
     {
-        Assertion::same($baseResource->getId(), $overlayedResource->getId());
-        Assertion::same($baseResource->getType(), $overlayedResource->getType());
+        Assertion::same($baseResource->getId(), $updateResource->getId());
+        Assertion::same($baseResource->getType(), $updateResource->getType());
 
-        $this->primaryResource = $baseResource;
-        $this->secondaryResource = $overlayedResource;
+        $flatBaseResource = new FlatResource($baseResource);
+        $flatUpdateResource = new FlatResource($updateResource);
+
+        $unsupportedAttributes = array_diff(
+            array_keys($flatUpdateResource->getAttributes()),
+            array_keys($flatBaseResource->getAttributes()));
+        if (0 !== count($unsupportedAttributes)) {
+            $message = sprintf('Unsupported attributes found: `%s`', implode(', ', $unsupportedAttributes));
+            throw new InvalidArgumentException($message);
+        }
+
+        $unsupportedRelationships = array_diff(
+            array_keys($flatUpdateResource->getRelationships()),
+            array_keys($flatBaseResource->getRelationships()));
+        if (0 !== count($unsupportedRelationships)) {
+            $message = sprintf('Unsupported relationships found: `%s`', implode(', ', $unsupportedRelationships));
+            throw new InvalidArgumentException($message);
+        }
+
+        $this->baseResource = $baseResource;
+        $this->updateResource = $updateResource;
     }
 
     public function getId(): string
     {
-        return $this->primaryResource->getId();
+        return $this->baseResource->getId();
     }
 
     public function getType(): string
     {
-        return $this->primaryResource->getType();
+        return $this->baseResource->getType();
     }
 
     public function getSelfUrl(): ?LinkInterface
     {
-        return $this->primaryResource->getSelfUrl();
+        return $this->baseResource->getSelfUrl();
     }
 
     public function getMeta(): ?MetaInterface
     {
-        return $this->primaryResource->getMeta();
+        return $this->baseResource->getMeta();
     }
 
     public function getAttributes(): ?AttributeCollectionInterface
     {
-        $primaryAttributes = $this->primaryResource->getAttributes();
+        $primaryAttributes = $this->baseResource->getAttributes();
         if (null === $primaryAttributes) {
             return null;
         }
 
-        $secondaryAttributes = $this->secondaryResource->getAttributes();
+        $secondaryAttributes = $this->updateResource->getAttributes();
         if (null === $secondaryAttributes) {
             return $primaryAttributes;
         }
@@ -82,12 +102,12 @@ class CombinedResource implements ResourceInterface
 
     public function getRelationships(): ?RelationshipCollectionInterface
     {
-        $primaryRelationships = $this->primaryResource->getRelationships();
+        $primaryRelationships = $this->baseResource->getRelationships();
         if (null === $primaryRelationships) {
             return null;
         }
 
-        $secondaryRelationships = $this->secondaryResource->getRelationships();
+        $secondaryRelationships = $this->updateResource->getRelationships();
         if (null === $secondaryRelationships) {
             return $primaryRelationships;
         }

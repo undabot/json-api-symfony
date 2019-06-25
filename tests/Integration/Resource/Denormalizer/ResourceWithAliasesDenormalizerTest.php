@@ -23,6 +23,11 @@ class AliasedResourceDto
 {
     /**
      * @var string
+     */
+    private $id;
+
+    /**
+     * @var string
      * @JsonApi\Attribute(name="name")
      */
     private $title;
@@ -45,12 +50,18 @@ class AliasedResourceDto
      */
     private $ownerId;
 
-    public function __construct(string $title, ?string $summary, array $tagIds, ?string $ownerId)
+    public function __construct(string $id, string $title, ?string $summary, array $tagIds, ?string $ownerId)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->summary = $summary;
         $this->tagIds = $tagIds;
         $this->ownerId = $ownerId;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getTitle(): string
@@ -174,5 +185,26 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
 
         $this->expectException(ResourceDenormalizationException::class);
         $this->serializer->denormalize($resource, AliasedResourceDto::class);
+    }
+
+    public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized()
+    {
+        $resource = new Resource(
+            '1',
+            'type',
+            ResourceAttributesBuilder::make()
+                ->add('name', 'This is my title')
+                ->add('summary', 'This is my summary')
+                ->get(),
+            ResourceRelationshipsBuilder::make()
+                ->toOne('owner', 'people', null)
+                ->toMany('tags', 'tags', ['t1', 't2', 't3'])
+                ->get()
+        );
+
+        /** @var AliasedResourceDto $dto */
+        $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        $this->assertInstanceOf(AliasedResourceDto::class, $dto);
+        $this->assertNull($dto->getOwnerId());
     }
 }

@@ -21,6 +21,11 @@ class ResourceDto
 {
     /**
      * @var string
+     */
+    private $id;
+
+    /**
+     * @var string
      * @JsonApi\Attribute()
      */
     private $title;
@@ -43,12 +48,18 @@ class ResourceDto
      */
     private $owner;
 
-    public function __construct(string $title, ?string $summary, array $tags, ?string $owner)
+    public function __construct(string $id, string $title, ?string $summary, array $tags, ?string $owner)
     {
+        $this->id = $id;
         $this->title = $title;
         $this->summary = $summary;
         $this->tags = $tags;
         $this->owner = $owner;
+    }
+
+    public function getId(): string
+    {
+        return $this->id;
     }
 
     public function getTitle(): string

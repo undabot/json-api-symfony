@@ -60,6 +60,11 @@ class ResourceFactory
         return $resource;
     }
 
+    /**
+     * @throws AnnotationException
+     * @throws InvalidResourceMappingException
+     * @throws ReflectionException
+     */
     public function makeCollection(array $resources): ResourceCollectionInterface
     {
         $resourceObjects = [];

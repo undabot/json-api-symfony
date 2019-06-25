@@ -6,7 +6,6 @@ namespace Undabot\SymfonyJsonApi\Service\Pagination;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
 use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollectionInterface;
 use Undabot\SymfonyJsonApi\Model\Collection\PaginatedObjectCollection;
 
@@ -14,22 +13,24 @@ class Paginator implements PaginatorInterface
 {
     public function paginate(
         QueryBuilder $queryBuilder,
-        PaginationInterface $pagination,
+        int $offset,
+        int $size,
         $fetchJoinCollection = true
     ): DoctrinePaginator {
         $queryBuilder
-            ->setFirstResult($pagination->getOffset())
-            ->setMaxResults($pagination->getSize());
+            ->setFirstResult($offset)
+            ->setMaxResults($size);
 
         return new DoctrinePaginator($queryBuilder, $fetchJoinCollection);
     }
 
-    public function createPaginatedListCollection(
+    public function createPaginatedCollection(
         QueryBuilder $queryBuilder,
-        PaginationInterface $pagination,
+        int $offset,
+        int $size,
         $fetchJoinCollection = true
     ): ObjectCollectionInterface {
-        $doctrinePaginator = $this->paginate($queryBuilder, $pagination, $fetchJoinCollection);
+        $doctrinePaginator = $this->paginate($queryBuilder, $offset, $size, $fetchJoinCollection);
 
         return PaginatedObjectCollection::createFromDoctrinePaginator($doctrinePaginator);
     }

@@ -86,7 +86,7 @@ class ResourceDenormalizer
         $aliasMap = array_merge($aliasMap, $metadata->getRelationshipsAliasMap());
 
         foreach ($aliasMap as $alias => $propertyName) {
-            if (false === isset($data[$alias])) {
+            if (false === array_key_exists($alias, $data)) {
                 continue;
             }
 

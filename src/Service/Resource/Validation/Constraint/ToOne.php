@@ -13,7 +13,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\ToOne
  */
 class ToOne extends Constraint
 {
-    public const MESSAGE = 'This value must string or null.';
+    public const MESSAGE = 'This value must be string or null.';
 
     public function validatedBy()
     {

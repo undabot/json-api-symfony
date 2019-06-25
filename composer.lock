@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9ed8a78f8d1c8fd0f7dfaca644f07416",
+    "content-hash": "5cf709f2778faf895fe59b5205d2469d",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3282,16 +3282,16 @@
         },
         {
             "name": "undabot/json-api-core",
-            "version": "dev-master",
+            "version": "dev-v2-rc",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/undabot/json-api-core.git",
-                "reference": "a4aefaa8cc82565e2f9001605e3374a583e4d892"
+                "reference": "18174302661e1fac79c78b499756d217ef1cf304"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=a4aefaa8cc82565e2f9001605e3374a583e4d892",
-                "reference": "a4aefaa8cc82565e2f9001605e3374a583e4d892",
+                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=18174302661e1fac79c78b499756d217ef1cf304",
+                "reference": "18174302661e1fac79c78b499756d217ef1cf304",
                 "shasum": ""
             },
             "require": {
@@ -3329,7 +3329,7 @@
             "license": [
                 "Apache-2.0"
             ],
-            "time": "2019-03-30T18:33:36+00:00"
+            "time": "2019-06-25T13:32:13+00:00"
         },
         {
             "name": "zendframework/zend-code",

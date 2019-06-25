@@ -295,7 +295,7 @@ class ResourceValidationTest extends KernelTestCase
         $this->assertSame(1, $violations->count());
 
         $this->assertSame(
-            'Invalid resource type invalidTypes given; articles expected.',
+            'Invalid resource type `invalidTypes` given; `articles` expected.',
             $violations[0]->getMessage()
         );
         $this->assertSame('', $violations[0]->getPropertyPath());

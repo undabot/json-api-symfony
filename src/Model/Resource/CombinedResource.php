@@ -34,7 +34,9 @@ class CombinedResource implements ResourceInterface
 
         $unsupportedAttributes = array_diff(
             array_keys($flatUpdateResource->getAttributes()),
-            array_keys($flatBaseResource->getAttributes()));
+            array_keys($flatBaseResource->getAttributes())
+        );
+
         if (0 !== count($unsupportedAttributes)) {
             $message = sprintf('Unsupported attributes found: `%s`', implode(', ', $unsupportedAttributes));
             throw new InvalidArgumentException($message);

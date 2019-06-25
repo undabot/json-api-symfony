@@ -9,23 +9,23 @@ use ArrayIterator;
 class ObjectCollection implements ObjectCollectionInterface
 {
     /** @var array */
-    private $collection;
+    private $items;
 
     /** @var int */
     private $count;
 
-    public function __construct(array $collection, int $count = null)
+    public function __construct(array $items, int $count = null)
     {
-        $this->collection = $collection;
+        $this->items = $items;
         if (null === $count) {
-            $count = count($collection);
+            $count = count($items);
         }
         $this->count = $count;
     }
 
-    public function getCollection(): array
+    public function getItems(): array
     {
-        return $this->collection;
+        return $this->items;
     }
 
     public function count(): int
@@ -35,26 +35,26 @@ class ObjectCollection implements ObjectCollectionInterface
 
     public function getIterator()
     {
-        return new ArrayIterator($this->getCollection());
+        return new ArrayIterator($this->getItems());
     }
-
-    public function offsetExists($offset): bool
-    {
-        return array_key_exists($offset, $this->collection[$offset]);
-    }
-
-    public function offsetGet($offset)
-    {
-        return $this->collection[$offset];
-    }
-
-    public function offsetSet($offset, $value): void
-    {
-        $this->collection[$offset] = $value;
-    }
-
-    public function offsetUnset($offset): void
-    {
-        unset($this->collection[$offset]);
-    }
+//
+//    public function offsetExists($offset): bool
+//    {
+//        return array_key_exists($offset, $this->items[$offset]);
+//    }
+//
+//    public function offsetGet($offset)
+//    {
+//        return $this->items[$offset];
+//    }
+//
+//    public function offsetSet($offset, $value): void
+//    {
+//        $this->items[$offset] = $value;
+//    }
+//
+//    public function offsetUnset($offset): void
+//    {
+//        unset($this->items[$offset]);
+//    }
 }

@@ -8,6 +8,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
+use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\RelationshipMetadata;
@@ -32,7 +33,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
 
     private function getResource()
     {
-        return new class
+        return new class implements ApiModel
         {
             /**
              * @var array
@@ -142,7 +143,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
 
     public function testMetadataFactoryThrowsAnExceptionWhenSinglePropertyHasMultipleRelationshipAnnotations()
     {
-        $resource = new class
+        $resource = new class implements ApiModel
         {
             /**
              * @JsonApi\ToMany(name="tag")
@@ -157,7 +158,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
 
     public function testRelatioinshipNameCanBeOveridden()
     {
-        $resource = new class
+        $resource = new class implements ApiModel
         {
             /** @JsonApi\ToOne(type="resource") */
             public $defaultName;
@@ -179,7 +180,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
 
     public function testRelationshipMetadataIsEmptyWhenNoRelationshipsAnnotated()
     {
-        $resource = new class
+        $resource = new class implements ApiModel
         {
         };
 

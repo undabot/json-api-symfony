@@ -12,6 +12,7 @@ use Undabot\JsonApi\Model\Resource\Relationship\Data\ToOneRelationshipDataInterf
 use Undabot\JsonApi\Model\Resource\Relationship\RelationshipInterface;
 use Undabot\JsonApi\Model\Resource\ResourceIdentifier;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
@@ -21,7 +22,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 /**
  * @ResourceType(type="resource")
  */
-class ResourceDto
+class ResourceDto implements ApiModel
 {
     /** @var string */
     public $id;

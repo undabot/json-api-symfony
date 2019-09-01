@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Exception;
+use Undabot\JsonApi\Model\Meta\Meta;
 use Undabot\JsonApi\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
@@ -16,9 +17,9 @@ final class ModelResponder extends AbstractResponder
     /**
      * @throws Exception
      */
-    public function resourceCollectionResponse(
+    public function resourceCollection(
         array $primaryModels,
-        array $includedModels = null,
+        array $included = null,
         array $meta = null,
         array $links = null
     ): ResourceCollectionResponse {
@@ -26,37 +27,37 @@ final class ModelResponder extends AbstractResponder
 
         return new ResourceCollectionResponse(
             new ResourceCollection($primaryResources),
-            $this->buildIncluded($includedModels),
-            $this->buildMeta($meta),
-            $this->buildLinks($links)
+            null === $included ? null : $this->buildIncluded($included),
+            null === $meta ? null : new Meta($meta),
+            null === $links ? null : $this->buildLinks($links)
         );
     }
 
     /**
      * @throws Exception
      */
-    public function resourceResponse(
-        $model,
-        array $includedModels = null,
+    public function resource(
+        $data,
+        array $included = null,
         array $meta = null,
         array $links = null
     ): ResourceResponse {
-        $resource = $this->encoder->encodeModel($model);
+        $resource = $this->encoder->encodeModel($data);
 
         return new ResourceResponse(
             $resource,
-            $this->buildIncluded($includedModels),
-            $this->buildMeta($meta),
-            $this->buildLinks($links)
+            null === $included ? null : $this->buildIncluded($included),
+            null === $meta ? null : new Meta($meta),
+            null === $links ? null : $this->buildLinks($links)
         );
     }
 
     /**
      * @throws Exception
      */
-    public function resourceCreatedResponse(
+    public function resourceCreated(
         $model,
-        array $includedModels = null,
+        array $included = null,
         array $meta = null,
         array $links = null
     ): ResourceCreatedResponse {
@@ -64,28 +65,28 @@ final class ModelResponder extends AbstractResponder
 
         return new ResourceCreatedResponse(
             $resource,
-            $this->buildIncluded($includedModels),
-            $this->buildMeta($meta),
-            $this->buildLinks($links)
+            null === $included ? null : $this->buildIncluded($included),
+            null === $meta ? null : new Meta($meta),
+            null === $links ? null : $this->buildLinks($links)
         );
     }
 
     /**
      * @throws Exception
      */
-    public function resourceUpdatedResponse(
-        $model,
-        array $includedModels = null,
+    public function resourceUpdated(
+        $data,
+        array $included = null,
         array $meta = null,
         array $links = null
     ): ResourceUpdatedResponse {
-        $resource = $this->encoder->encodeModel($model);
+        $resource = $this->encoder->encodeModel($data);
 
         return new ResourceUpdatedResponse(
             $resource,
-            $this->buildIncluded($includedModels),
-            $this->buildMeta($meta),
-            $this->buildLinks($links)
+            null === $included ? null : $this->buildIncluded($included),
+            null === $meta ? null : new Meta($meta),
+            null === $links ? null : $this->buildLinks($links)
         );
     }
 }

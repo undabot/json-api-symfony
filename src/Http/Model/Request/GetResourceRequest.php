@@ -47,4 +47,22 @@ class GetResourceRequest implements GetResourceRequestInterface
     {
         return $this->sparseFieldset;
     }
+
+    public function allowIncludes(array $includes): self
+    {
+        return new self(
+            $this->id,
+            $includes,
+            $this->sparseFieldset
+        );
+    }
+
+    public function allowFields(array $fields): self
+    {
+        return new self(
+            $this->id,
+            $this->sparseFieldset,
+            $fields
+        );
+    }
 }

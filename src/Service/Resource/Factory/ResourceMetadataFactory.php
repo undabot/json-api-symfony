@@ -11,6 +11,7 @@ use ReflectionClass;
 use ReflectionException;
 use ReflectionProperty;
 use Symfony\Component\Validator\Constraint;
+use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as Annotation;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\AttributeMetadata;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
@@ -50,9 +51,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
      * @throws ReflectionException
      * @throws InvalidResourceMappingException
      */
-    public function getResourceMetadata($resource): ResourceMetadata
+    public function getInstanceMetadata(ApiModel $apiModel): ResourceMetadata
     {
-        $reflection = new ReflectionClass($resource);
+        $reflection = new ReflectionClass($apiModel);
 
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
 

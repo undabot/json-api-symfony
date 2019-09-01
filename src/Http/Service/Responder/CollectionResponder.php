@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Exception;
+use Undabot\JsonApi\Model\Meta\Meta;
 use Undabot\JsonApi\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
-use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollectionInterface;
+use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
-final class ObjectCollectionResponder extends AbstractResponder
+/**
+ * Opinionated collection responder that adds meta information about total count of models, used for pagination.
+ */
+final class CollectionResponder extends AbstractResponder
 {
     /**
      * @throws Exception
      */
-    public function resourceCollectionResponse(
-        ObjectCollectionInterface $primaryModels,
-        array $includedModels = null,
+    public function resourceCollection(
+        ObjectCollection $primaryModels,
+        array $included = null,
         array $meta = null,
         array $links = null
     ): ResourceCollectionResponse {
@@ -25,9 +29,9 @@ final class ObjectCollectionResponder extends AbstractResponder
 
         return new ResourceCollectionResponse(
             new ResourceCollection($primaryResources),
-            $this->buildIncluded($includedModels),
-            $this->buildMeta($meta),
-            $this->buildLinks($links)
+            null === $included ? null : $this->buildIncluded($included),
+            null === $meta ? null : new Meta($meta),
+            null === $links ? null : $this->buildLinks($links)
         );
     }
 }

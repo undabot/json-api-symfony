@@ -14,10 +14,11 @@ use Undabot\JsonApi\Model\Resource\Resource;
 use Undabot\JsonApi\Model\Resource\ResourceCollection;
 use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
-use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 
 class ResourceFactory
 {
@@ -34,30 +35,30 @@ class ResourceFactory
      * @throws ReflectionException
      * @throws InvalidResourceMappingException
      */
-    public function make($resource): ResourceInterface
+    public function make(ApiModel $apiModel): ResourceInterface
     {
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($apiModel);
 
         $propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
             ->enableExceptionOnInvalidIndex()
             ->getPropertyAccessor();
 
-        $id = $propertyAccessor->getValue($resource, 'id');
+        $id = $propertyAccessor->getValue($apiModel, 'id');
         $type = $metadata->getType();
 
         // If the resource type is not defined in the resource metadata, try to access the `type` property directly.
         // If the type property is not accessible, throw an exception since Resource without type definition cannot be created
-        if (null === $type && true === $propertyAccessor->isReadable($resource, 'type')) {
-            $type = $propertyAccessor->getValue($resource, 'type');
+        if (null === $type && true === $propertyAccessor->isReadable($apiModel, 'type')) {
+            $type = $propertyAccessor->getValue($apiModel, 'type');
         }
 
         Assertion::notNull($type, 'Resource type cannot be inhered neither from the annotation nor `type` property');
 
-        $attributes = $this->makeAttributeCollection($resource, $metadata);
-        $relationships = $this->makeRelationshipsCollection($resource, $metadata);
-        $resource = new Resource($id, $type, $attributes, $relationships);
+        $attributes = $this->makeAttributeCollection($apiModel, $metadata);
+        $relationships = $this->makeRelationshipsCollection($apiModel, $metadata);
+        $apiModel = new Resource($id, $type, $attributes, $relationships);
 
-        return $resource;
+        return $apiModel;
     }
 
     /**

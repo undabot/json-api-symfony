@@ -21,7 +21,7 @@ use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParamete
 use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSortRequestedException;
 use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSparseFieldsetRequestedException;
 
-class JsonApiRequestValidator implements JsonApiRequestValidatorInterface
+class RequestValidator implements RequestValidatorInterface
 {
     private $supportedQueryParamNames = [
         'include',

@@ -22,7 +22,7 @@ class GetResourceCollectionRequestTest extends TestCase
         $this->assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
         $this->assertNull($getResourceCollectionRequest->getPagination());
-        $this->assertNull($getResourceCollectionRequest->getInclude());
+        $this->assertNull($getResourceCollectionRequest->getIncludes());
         $this->assertNull($getResourceCollectionRequest->getFilterSet());
         $this->assertNull($getResourceCollectionRequest->getSortSet());
         $this->assertNull($getResourceCollectionRequest->getSparseFieldset());
@@ -68,7 +68,7 @@ class GetResourceCollectionRequestTest extends TestCase
         $this->assertSame($sorts[2]->getAttribute(), 'author.name');
         $this->assertTrue($sorts[2]->isAsc());
 
-        $includes = $getResourceCollectionRequest->getInclude();
+        $includes = $getResourceCollectionRequest->getIncludes();
         $this->assertEquals(['category', 'history', 'purchases'], $includes);
 
         $fields = $getResourceCollectionRequest->getSparseFieldset();

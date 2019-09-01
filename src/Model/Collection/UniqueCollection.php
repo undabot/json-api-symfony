@@ -6,11 +6,10 @@ namespace Undabot\SymfonyJsonApi\Model\Collection;
 
 use ArrayIterator;
 
-class UniqueObjectsCollection implements ObjectCollectionInterface
+class UniqueCollection implements ObjectCollection
 {
     /** @var array */
-    private $items = []
-    ;
+    private $items = [];
 
     public function __construct(array $items = [])
     {

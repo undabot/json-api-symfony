@@ -9,7 +9,7 @@ use Assert\Assertion;
 use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 
-class UniqueResourcesCollection implements ResourceCollectionInterface
+class UniqueResourceCollection implements ResourceCollectionInterface
 {
     /** @var ResourceInterface[] */
     private $items;

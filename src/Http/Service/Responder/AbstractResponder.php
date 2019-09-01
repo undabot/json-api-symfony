@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
-use Exception;
 use Undabot\JsonApi\Model\Link\Link;
 use Undabot\JsonApi\Model\Link\LinkCollection;
-use Undabot\JsonApi\Model\Meta\Meta;
 use Undabot\JsonApi\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\MappedModelEncoder;
 
@@ -21,40 +19,20 @@ abstract class AbstractResponder
         $this->encoder = $encoder;
     }
 
-    protected function buildLinks(?array $links): ?LinkCollection
+    protected function buildLinks(array $links): LinkCollection
     {
-        if (null !== $links) {
-            $constructedLinks = [];
-            foreach ($links as $linkName => $linkValue) {
-                $constructedLinks[] = new Link($linkName, $linkValue);
-            }
-
-            return new LinkCollection($constructedLinks);
+        $constructedLinks = [];
+        foreach ($links as $linkName => $linkValue) {
+            $constructedLinks[] = new Link($linkName, $linkValue);
         }
 
-        return null;
+        return new LinkCollection($constructedLinks);
     }
 
-    /**
-     * @throws Exception
-     */
-    protected function buildIncluded(?array $models): ?ResourceCollection
+    protected function buildIncluded(array $models): ResourceCollection
     {
-        if (null !== $models) {
-            $includedResources = $this->encoder->encodeModels($models);
+        $includedResources = $this->encoder->encodeModels($models);
 
-            return new ResourceCollection($includedResources);
-        }
-
-        return null;
-    }
-
-    protected function buildMeta(?array $meta): ?Meta
-    {
-        if (null !== $meta) {
-            return new Meta($meta);
-        }
-
-        return null;
+        return new ResourceCollection($includedResources);
     }
 }

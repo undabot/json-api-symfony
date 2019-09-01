@@ -18,8 +18,8 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\JsonApiRequestFactory;
 use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\MappedModelEncoder;
 use Undabot\SymfonyJsonApi\Http\Service\Responder\ModelResponder;
-use Undabot\SymfonyJsonApi\Http\Service\Responder\ObjectCollectionResponder;
-use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollectionInterface;
+use Undabot\SymfonyJsonApi\Http\Service\Responder\CollectionResponder;
+use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 use Undabot\SymfonyJsonApi\Model\Resource\CombinedResource;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
@@ -44,7 +44,7 @@ class AbstractResourceController
     /** @var ModelResponder */
     protected $modelResponder;
 
-    /** @var ObjectCollectionResponder */
+    /** @var CollectionResponder */
     protected $objectCollectionResponder;
 
     /** @var MappedModelEncoder */
@@ -57,7 +57,7 @@ class AbstractResourceController
         CommandBus $commandBus,
         QueryBus $queryBus,
         ModelResponder $modelResponder,
-        ObjectCollectionResponder $objectCollectionResponder,
+        CollectionResponder $objectCollectionResponder,
         MappedModelEncoder $modelEncoder
     ) {
         $this->requestFactory = $requestFactory;
@@ -112,7 +112,7 @@ class AbstractResourceController
     }
 
     /**
-     * @param $data array|ObjectCollectionInterface|mixed
+     * @param $data array|ObjectCollection|mixed
      * @param array|null $includedModels
      * @param array|null $meta
      * @param array|null $links
@@ -121,27 +121,27 @@ class AbstractResourceController
      */
     protected function jsonApiResponse($data, array $includedModels = null, array $meta = null, array $links = null)
     {
-        if ($data instanceof ObjectCollectionInterface) {
-            return $this->objectCollectionResponder->resourceCollectionResponse($data, $includedModels, $meta, $links);
+        if ($data instanceof ObjectCollection) {
+            return $this->objectCollectionResponder->resourceCollection($data, $includedModels, $meta, $links);
         }
 
         if (true === is_array($data)) {
-            return $this->modelResponder->resourceCollectionResponse($data, $includedModels, $meta, $links);
+            return $this->modelResponder->resourceCollection($data, $includedModels, $meta, $links);
         }
 
-        return $this->modelResponder->resourceResponse($data, $includedModels, $meta, $links);
+        return $this->modelResponder->resource($data, $includedModels, $meta, $links);
     }
 
     /**
      * @throws Exception
      */
-    protected function resourceCreatedResponse(
+    protected function resourceCreated(
         $entity,
         array $includedModels = null,
         array $meta = null,
         array $links = null
     ): ResourceCreatedResponse {
-        return $this->modelResponder->resourceCreatedResponse($entity, $includedModels, $meta, $links);
+        return $this->modelResponder->resourceCreated($entity, $includedModels, $meta, $links);
     }
 
     /**
@@ -153,7 +153,7 @@ class AbstractResourceController
         array $meta = null,
         array $links = null
     ): ResourceUpdatedResponse {
-        return $this->modelResponder->resourceUpdatedResponse($entity, $includedModels, $meta, $links);
+        return $this->modelResponder->resourceUpdated($entity, $includedModels, $meta, $links);
     }
 
     /**

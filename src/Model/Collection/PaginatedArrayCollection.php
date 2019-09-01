@@ -6,7 +6,7 @@ namespace Undabot\SymfonyJsonApi\Model\Collection;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
-class PaginatedObjectCollection extends ObjectCollection
+class PaginatedArrayCollection extends ArrayCollection
 {
     public static function createFromDoctrinePaginator(Paginator $paginator)
     {

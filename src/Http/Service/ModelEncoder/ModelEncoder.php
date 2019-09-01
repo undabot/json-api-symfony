@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Service\ModelEncoder;
 
+use Assert\Assertion;
 use Exception;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
 final class ModelEncoder
@@ -24,21 +26,24 @@ final class ModelEncoder
      *
      * @throws Exception
      */
-    public function encodeModel($model, callable $modelTransformer): ResourceInterface
+    public function encodeModel($data, callable $modelTransformer): ResourceInterface
     {
-        $resource = $modelTransformer($model);
+        $apiModel = $modelTransformer($data);
 
-        return $this->resourceFactory->make($resource);
+        return $this->resourceFactory->make($apiModel);
     }
 
     /**
      * Converts given entities first to JSON:API resource model classes by using provided $modelTransformer callable,
      * and then to the ResourceInterface instances by using ResourceFactory
      *
+     * @param ApiModel[] $models
      * @throws Exception
      */
     public function encodeModels(array $models, callable $modelTransformer): array
     {
+        Assertion::allIsInstanceOf($models, ApiModel::class);
+
         return array_map(
             function ($resource) use ($modelTransformer) {
                 return $this->encodeModel($resource, $modelTransformer);

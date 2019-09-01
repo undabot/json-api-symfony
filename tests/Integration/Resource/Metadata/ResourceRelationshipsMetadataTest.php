@@ -64,7 +64,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
     {
         $resource = $this->getResource();
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
 
@@ -81,7 +81,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
     public function testResourceMetadataContainsValidTagsRelationshipMetadata()
     {
         $resource = $this->getResource();
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
 
         $tagsMetadata = $metadata->getRelationshipMetadata('tags');
@@ -112,7 +112,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
     public function testResourceMetadataContainsValidOwnerRelationshipMetadata()
     {
         $resource = $this->getResource();
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
 
         $tagsMetadata = $metadata->getRelationshipMetadata('owner');
@@ -152,7 +152,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
         };
 
         $this->expectException(InvalidResourceMappingException::class);
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testRelatioinshipNameCanBeOveridden()
@@ -166,7 +166,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
             public $defaultName2;
         };
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
         $this->assertCount(2, $metadata->getRelationshipsMetadata());
@@ -183,7 +183,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
         {
         };
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
         $this->assertTrue($metadata->getRelationshipsMetadata()->isEmpty());
     }
 }

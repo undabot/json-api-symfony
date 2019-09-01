@@ -19,7 +19,7 @@ final class MappedModelEncoder
     protected $modelEncoder;
 
     /** @var array */
-    private $encodersMap = [];
+    private $dataTransformersMap = [];
 
     public function __construct(EntityManagerInterface $entityManager, ModelEncoder $modelEncoder)
     {
@@ -27,30 +27,32 @@ final class MappedModelEncoder
         $this->modelEncoder = $modelEncoder;
     }
 
-    private function getModelEncoder($model): callable
+    private function getDataTransformer($model): callable
     {
         $modelClass = get_class($model);
+
+        // Support Doctrine Entities that are usually represented as Proxy classes.
+        // Resolve exact class name before looking up in the encoders map.
         if ($model instanceof Proxy) {
             $modelClass = $this->entityManager->getClassMetadata($modelClass)->name;
         }
 
-        $transformer = $this->encodersMap[$modelClass] ?? null;
-        if (null === $transformer) {
+        $encoder = $this->dataTransformersMap[$modelClass] ?? null;
+        if (null === $encoder) {
             throw new RuntimeException(sprintf('Unsupported class `%s` given', $modelClass));
-
         }
 
-        return $transformer;
+        return $encoder;
     }
 
     /**
      * @throws Exception
      */
-    public function encodeModel($model): ResourceInterface
+    public function encodeModel($data): ResourceInterface
     {
-        $modelEncoder = $this->getModelEncoder($model);
+        $dataTransformer = $this->getDataTransformer($data);
 
-        return $this->modelEncoder->encodeModel($model, $modelEncoder);
+        return $this->modelEncoder->encodeModel($data, $dataTransformer);
     }
 
     /**
@@ -63,7 +65,7 @@ final class MappedModelEncoder
 
     public function addEncoder(string $modelClass, callable $encoder): void
     {
-        $this->encodersMap[$modelClass] = $encoder;
+        $this->dataTransformersMap[$modelClass] = $encoder;
     }
 
     public function addEncodingMap(ModelEncoderMapInterface $encoderMap): void

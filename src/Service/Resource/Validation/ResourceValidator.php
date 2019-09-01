@@ -15,6 +15,7 @@ use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
 class ResourceValidator
 {
@@ -49,6 +50,22 @@ class ResourceValidator
             $attributesValidationViolations,
             $relationshipValidationViolations
         );
+    }
+
+    /**
+     * @throws AnnotationException
+     * @throws ReflectionException
+     * @throws InvalidResourceMappingException
+     * @throws ModelInvalid
+     */
+    public function assertValid(ResourceInterface $resource, string $class): void
+    {
+        $errors = $this->validate($resource, $class);
+        if (0 === $errors->count()) {
+            return;
+        }
+
+        throw new ModelInvalid($resource, $errors);
     }
 
     /**

@@ -10,7 +10,7 @@ use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestContentTypeHeade
 use Undabot\SymfonyJsonApi\Http\Exception\Request\JsonApiRequestException;
 use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParameterGivenException;
 
-interface JsonApiRequestValidatorInterface
+interface RequestValidatorInterface
 {
     /**
      * Validates HTTP request against general JSON:API specification rules:

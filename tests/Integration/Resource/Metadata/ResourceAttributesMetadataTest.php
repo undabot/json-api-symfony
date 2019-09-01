@@ -78,7 +78,7 @@ class ResourceAttributesMetadataTest extends TestCase
     {
         $resource = $this->getResource();
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
 
@@ -96,7 +96,7 @@ class ResourceAttributesMetadataTest extends TestCase
     {
         $resource = $this->getResource();
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
 
@@ -113,7 +113,7 @@ class ResourceAttributesMetadataTest extends TestCase
     {
         $resource = $this->getResource();
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
 
@@ -150,7 +150,7 @@ class ResourceAttributesMetadataTest extends TestCase
     {
         $resource = $this->getResource();
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
 
@@ -189,7 +189,7 @@ class ResourceAttributesMetadataTest extends TestCase
         };
 
         $this->expectException(InvalidResourceMappingException::class);
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testAttributeNameCanBeOveridden()
@@ -203,7 +203,7 @@ class ResourceAttributesMetadataTest extends TestCase
             public $defaultName2;
         };
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
         $this->assertInstanceOf(ResourceMetadata::class, $metadata);
         $this->assertCount(2, $metadata->getAttributesMetadata());
@@ -220,7 +220,7 @@ class ResourceAttributesMetadataTest extends TestCase
         {
         };
 
-        $metadata = $this->metadataFactory->getResourceMetadata($resource);
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
         $this->assertTrue($metadata->getAttributesMetadata()->isEmpty());
     }
 }

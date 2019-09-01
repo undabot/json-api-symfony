@@ -46,13 +46,13 @@ class ResourceDenormalizer
             throw new MissingDataValueResourceDenormalizationException(
                 $e->getMessage(),
                 $e->getCode(),
-                $e->getPrevious()
+                $e
             );
         } catch (Throwable $e) {
             throw new ResourceDenormalizationException(
                 $e->getMessage(),
                 $e->getCode(),
-                $e->getPrevious()
+                $e
             );
         }
 

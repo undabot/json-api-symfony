@@ -37,7 +37,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Property `name` can\'t be attribute and relationship in the same time');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothAttributeAndToManyRelationship()
@@ -53,7 +53,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Property `name` can\'t be attribute and relationship in the same time');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothToOneAndToManyRelationship()
@@ -69,7 +69,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('More than 1 Relationship Annotation found for property `name`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsAttributeAndRelationshipWithSameNames()
@@ -89,7 +89,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource already has attribute or relationship named `test`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsRelationshipsWithSameNames()
@@ -109,7 +109,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource already has attribute or relationship named `test`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsAttributesWithSameNames()
@@ -129,7 +129,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource already has attribute or relationship named `test`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionWhenTwoPropertyIsMappedWithTwoAttributeAnnotations()
@@ -145,7 +145,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('More than 1 Attribute Annotation found for property `name`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionForToOneRelationshipWithoutType()
@@ -160,7 +160,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource type for `rel` is not defined');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionForToManyRelationshipWithoutType()
@@ -175,7 +175,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource type for `rel` is not defined');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionForReservedIdAttribute()
@@ -188,7 +188,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource can\'t use reserved attribute or relationship name `id`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionForReservedIdToOneRelationship()
@@ -201,7 +201,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource can\'t use reserved attribute or relationship name `id`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
     public function testMetadataFactoryThrowsAnExceptionForReservedIdToManyRelationship()
@@ -214,7 +214,7 @@ class MetadataFactoryTest extends TestCase
 
         $this->expectException(InvalidResourceMappingException::class);
         $this->expectExceptionMessage('Resource can\'t use reserved attribute or relationship name `id`');
-        $this->metadataFactory->getResourceMetadata($resource);
+        $this->metadataFactory->getInstanceMetadata($resource);
     }
 
 }

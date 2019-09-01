@@ -13,7 +13,7 @@ use Undabot\JsonApi\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Model\Resource\ResourceCollection;
 use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollectionInterface;
+use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 final class ResourceCollectionResponse
 {
@@ -30,7 +30,7 @@ final class ResourceCollectionResponse
     private $links;
 
     public static function fromObjectCollection(
-        ObjectCollectionInterface $primaryResources,
+        ObjectCollection $primaryResources,
         ?ResourceCollectionInterface $includedResources = null,
         ?MetaInterface $meta = null,
         ?LinkCollectionInterface $links = null

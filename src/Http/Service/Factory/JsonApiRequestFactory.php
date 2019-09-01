@@ -17,19 +17,19 @@ use Undabot\SymfonyJsonApi\Http\Model\Request\CreateResourceRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\UpdateResourceRequest;
-use Undabot\SymfonyJsonApi\Http\Service\Validation\JsonApiRequestValidator;
+use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
 class JsonApiRequestFactory
 {
     /** @var PhpArrayToResourceEncoderInterface */
     private $phpArrayToResourceEncoder;
 
-    /** @var JsonApiRequestValidator */
+    /** @var RequestValidator */
     private $jsonApiRequestValidator;
 
     public function __construct(
         PhpArrayToResourceEncoderInterface $phpArrayToResourceEncoder,
-        JsonApiRequestValidator $jsonApiRequestValidator
+        RequestValidator $jsonApiRequestValidator
     ) {
         $this->phpArrayToResourceEncoder = $phpArrayToResourceEncoder;
         $this->jsonApiRequestValidator = $jsonApiRequestValidator;
@@ -142,7 +142,7 @@ class JsonApiRequestFactory
     /**
      * @throws JsonApiRequestException
      */
-    public function makeGetSingleResourceRequest(
+    public function singleResourceRequest(
         Request $request,
         string $id,
         array $whitelistedIncludeValues = []

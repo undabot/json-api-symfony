@@ -6,8 +6,8 @@ namespace Undabot\SymfonyJsonApi\Service\Pagination;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
-use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollectionInterface;
-use Undabot\SymfonyJsonApi\Model\Collection\PaginatedObjectCollection;
+use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
+use Undabot\SymfonyJsonApi\Model\Collection\PaginatedArrayCollection;
 
 class Paginator implements PaginatorInterface
 {
@@ -29,9 +29,9 @@ class Paginator implements PaginatorInterface
         int $offset,
         int $size,
         $fetchJoinCollection = true
-    ): ObjectCollectionInterface {
+    ): ObjectCollection {
         $doctrinePaginator = $this->paginate($queryBuilder, $offset, $size, $fetchJoinCollection);
 
-        return PaginatedObjectCollection::createFromDoctrinePaginator($doctrinePaginator);
+        return PaginatedArrayCollection::createFromDoctrinePaginator($doctrinePaginator);
     }
 }

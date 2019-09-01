@@ -9,6 +9,10 @@ use Undabot\JsonApi\Model\Request\Filter\FilterSet;
 use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
 use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
 use Undabot\JsonApi\Model\Request\Sort\SortSet;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedFilterAttributeGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedPaginationRequestedException;
+use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSortRequestedException;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\PaginationFactory;
 
 class GetResourceCollectionRequest implements GetResourceCollectionRequestInterface
@@ -29,7 +33,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     private $sortSet;
 
     /** @var array|null */
-    private $include;
+    private $includes;
 
     /** @var array|null */
     private $fields;
@@ -89,7 +93,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
         $this->pagination = $pagination;
         $this->filterSet = $filterSet;
         $this->sortSet = $sortSet;
-        $this->include = $include;
+        $this->includes = $include;
         $this->fields = $fields;
     }
 
@@ -108,9 +112,9 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
         return $this->sortSet;
     }
 
-    public function getInclude(): ?array
+    public function getIncludes(): ?array
     {
-        return $this->include;
+        return $this->includes;
     }
 
     public function getSparseFieldset(): ?array
@@ -120,10 +124,71 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
 
     public function isIncluded(string $name): bool
     {
-        if (null === $this->include) {
+        if (null === $this->includes) {
             return false;
         }
 
-        return in_array($name, $this->include);
+        return in_array($name, $this->includes);
+    }
+
+    /**
+     * @throws UnsupportedPaginationRequestedException
+     */
+    public function disablePagination(): self
+    {
+        if (null !== $this->pagination) {
+            throw new UnsupportedPaginationRequestedException();
+        }
+
+        return $this;
+    }
+
+    /**
+     * @throws UnsupportedFilterAttributeGivenException
+     */
+    public function allowFilters(array $allowedFilters): self
+    {
+        $filters = null === $this->filterSet
+            ? []
+            : $filters = $this->filterSet->getFilterNames();
+
+        $unsupportedFilters = array_diff($filters, $allowedFilters);
+        if (0 !== count($unsupportedFilters)) {
+            throw new UnsupportedFilterAttributeGivenException($unsupportedFilters);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $includes
+     * @throws UnsupportedIncludeValuesGivenException
+     */
+    public function allowIncluded(array $allowedIncludes): self
+    {
+        $unsupportedIncludes = array_diff($this->includes ?: [], $allowedIncludes);
+        if (0 !== count($unsupportedIncludes)) {
+            throw new UnsupportedIncludeValuesGivenException($unsupportedIncludes);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param string[] $sorts
+     * @throws UnsupportedSortRequestedException
+     */
+    public function allowSorting(array $allowedSorts): self
+    {
+        $sorts = null === $this->sortSet
+            ? []
+            : array_keys($this->sortSet->getSortsArray());
+
+        $unsupportedSorts = array_diff($sorts ?: [], $allowedSorts);
+        if (0 !== count($unsupportedSorts)) {
+            throw new UnsupportedSortRequestedException($unsupportedSorts);
+        }
+
+        return $this;
     }
 }

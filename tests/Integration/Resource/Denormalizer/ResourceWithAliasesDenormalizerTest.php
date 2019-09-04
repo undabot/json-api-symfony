@@ -34,7 +34,7 @@ class AliasedResourceDto implements ApiModel
     private $title;
 
     /**
-     * @var string|null
+     * @var null|string
      * @JsonApi\Attribute(name="description")
      */
     private $summary;
@@ -46,7 +46,7 @@ class AliasedResourceDto implements ApiModel
     private $tagIds;
 
     /**
-     * @var string|null
+     * @var null|string
      * @JsonApi\ToOne(name="owner", type="person")
      */
     private $ownerId;
@@ -86,12 +86,18 @@ class AliasedResourceDto implements ApiModel
     }
 }
 
-class ResourceWithAliasesDenormalizerTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class ResourceWithAliasesDenormalizerTest extends TestCase
 {
     /** @var ResourceDenormalizer */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         AnnotationRegistry::registerLoader('class_exists');
@@ -104,7 +110,7 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $this->serializer = new ResourceDenormalizer($resourceMetadataFactory, $normalizer);
     }
 
-    public function testSimpleResourceCanBeDenormalized()
+    public function testSimpleResourceCanBeDenormalized(): void
     {
         $resource = new Resource(
             '1',
@@ -121,15 +127,15 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
 
         /** @var AliasedResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        $this->assertInstanceOf(AliasedResourceDto::class, $dto);
+        static::assertInstanceOf(AliasedResourceDto::class, $dto);
 
-        $this->assertSame('This is my title', $dto->getTitle());
-        $this->assertSame('This is my summary', $dto->getSummary());
-        $this->assertSame('p1', $dto->getOwnerId());
-        $this->assertSame(['t1', 't2', 't3'], $dto->getTagIds());
+        static::assertSame('This is my title', $dto->getTitle());
+        static::assertSame('This is my summary', $dto->getSummary());
+        static::assertSame('p1', $dto->getOwnerId());
+        static::assertSame(['t1', 't2', 't3'], $dto->getTagIds());
     }
 
-    public function testDenormalizationOfInvalidResourceResultsWithException()
+    public function testDenormalizationOfInvalidResourceResultsWithException(): void
     {
         $resource = new Resource(
             '1',
@@ -148,7 +154,7 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $this->serializer->denormalize($resource, AliasedResourceDto::class);
     }
 
-    public function testDenormalizationOfResourceWithExtraAttributeResultsWithException()
+    public function testDenormalizationOfResourceWithExtraAttributeResultsWithException(): void
     {
         $resource = new Resource(
             '1',
@@ -168,7 +174,7 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $this->serializer->denormalize($resource, AliasedResourceDto::class);
     }
 
-    public function testDenormalizationOfResourceWithExtraRelationshipResultsWithException()
+    public function testDenormalizationOfResourceWithExtraRelationshipResultsWithException(): void
     {
         $resource = new Resource(
             '1',
@@ -188,7 +194,7 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
         $this->serializer->denormalize($resource, AliasedResourceDto::class);
     }
 
-    public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized()
+    public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized(): void
     {
         $resource = new Resource(
             '1',
@@ -205,7 +211,7 @@ class ResourceWithAliasesDenormalizerTest extends TestCase
 
         /** @var AliasedResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        $this->assertInstanceOf(AliasedResourceDto::class, $dto);
-        $this->assertNull($dto->getOwnerId());
+        static::assertInstanceOf(AliasedResourceDto::class, $dto);
+        static::assertNull($dto->getOwnerId());
     }
 }

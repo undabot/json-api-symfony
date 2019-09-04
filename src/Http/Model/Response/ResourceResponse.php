@@ -14,13 +14,13 @@ final class ResourceResponse
     /** @var ResourceInterface */
     private $primaryResource;
 
-    /** @var ResourceCollectionInterface|null */
+    /** @var null|ResourceCollectionInterface */
     private $includedResources;
 
-    /** @var MetaInterface|null */
+    /** @var null|MetaInterface */
     private $meta;
 
-    /** @var LinkCollectionInterface|null */
+    /** @var null|LinkCollectionInterface */
     private $links;
 
     public function __construct(

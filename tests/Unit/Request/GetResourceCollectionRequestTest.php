@@ -13,18 +13,24 @@ use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory;
 use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
-class GetResourceCollectionRequestTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class GetResourceCollectionRequestTest extends TestCase
 {
-    /** @var RequestFactory|MockObject */
+    /** @var MockObject|RequestFactory */
     private $requestFactoryMock;
 
-    /** @var Request|MockObject */
+    /** @var MockObject|Request */
     private $requestMock;
 
-    /** @var ParameterBag|MockObject */
+    /** @var MockObject|ParameterBag */
     private $parameterBagMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->createMock(Request::class);
         $this->parameterBagMock = $this->createMock(ParameterBag::class);
@@ -38,24 +44,23 @@ class GetResourceCollectionRequestTest extends TestCase
         );
     }
 
-
-    public function testRequestWithoutAnyParametersCanBeConstructed()
+    public function testRequestWithoutAnyParametersCanBeConstructed(): void
     {
 //        $parameterBagMock = $this->createMock(ParameterBag::class);
 //        $requestMock = $this->createMock(Request::class);
         $this->parameterBagMock->method('get')->willReturn(null);
 
         $getResourceCollectionRequest = $this->requestFactoryMock->getResourceCollectionRequest($this->requestMock);
-        $this->assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
+        static::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
-        $this->assertNull($getResourceCollectionRequest->getPagination());
-        $this->assertNull($getResourceCollectionRequest->getIncludes());
-        $this->assertNull($getResourceCollectionRequest->getFilterSet());
-        $this->assertNull($getResourceCollectionRequest->getSortSet());
-        $this->assertNull($getResourceCollectionRequest->getSparseFieldset());
+        static::assertNull($getResourceCollectionRequest->getPagination());
+        static::assertNull($getResourceCollectionRequest->getIncludes());
+        static::assertNull($getResourceCollectionRequest->getFilterSet());
+        static::assertNull($getResourceCollectionRequest->getSortSet());
+        static::assertNull($getResourceCollectionRequest->getSparseFieldset());
     }
 
-    public function testRequestWithAllValidParametersCanBeConstructed()
+    public function testRequestWithAllValidParametersCanBeConstructed(): void
     {
 //        $parameterBagMock = $this->createMock(ParameterBag::class);
 //        $requestMock = $this->createMock(Request::class);
@@ -68,43 +73,43 @@ class GetResourceCollectionRequestTest extends TestCase
             ['fields', null, ['author' => 'name,price,rating', 'book' => 'title,publisher']],
         ];
 
-        $this->parameterBagMock->method('get')->will($this->returnValueMap($queryParamsMap));
+        $this->parameterBagMock->method('get')->willReturnMap($queryParamsMap);
 
-        $this->parameterBagMock->method('has')->will($this->returnCallback(function ($param) use ($queryParamsMap) {
-            $filtered = array_filter($queryParamsMap, function ($item) use ($param) {
+        $this->parameterBagMock->method('has')->willReturnCallback(static function ($param) use ($queryParamsMap) {
+            $filtered = array_filter($queryParamsMap, static function ($item) use ($param) {
                 return ($item[0] ?? null) === $param;
             });
 
-            return count($filtered) === 1;
-        }));
+            return 1 === \count($filtered);
+        });
         $this->requestMock->query = $this->parameterBagMock;
 
         $getResourceCollectionRequest = $this->requestFactoryMock->getResourceCollectionRequest($this->requestMock);
-        $this->assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
+        static::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
-        $this->assertSame(10, $getResourceCollectionRequest->getPagination()->getSize());
-        $this->assertSame((3 - 1) * 10, $getResourceCollectionRequest->getPagination()->getOffset());
+        static::assertSame(10, $getResourceCollectionRequest->getPagination()->getSize());
+        static::assertSame((3 - 1) * 10, $getResourceCollectionRequest->getPagination()->getOffset());
 
         $filters = $getResourceCollectionRequest->getFilterSet();
-        $this->assertSame(3, $filters->getFilter('priceMin')->getValue());
-        $this->assertSame(10.5, $filters->getFilter('priceMax')->getValue());
-        $this->assertSame('John', $filters->getFilter('name')->getValue());
+        static::assertSame(3, $filters->getFilter('priceMin')->getValue());
+        static::assertSame(10.5, $filters->getFilter('priceMax')->getValue());
+        static::assertSame('John', $filters->getFilter('name')->getValue());
 
         $sorts = iterator_to_array($getResourceCollectionRequest->getSortSet());
 
-        $this->assertSame($sorts[0]->getAttribute(), 'name');
-        $this->assertTrue($sorts[0]->isAsc());
+        static::assertSame($sorts[0]->getAttribute(), 'name');
+        static::assertTrue($sorts[0]->isAsc());
 
-        $this->assertSame($sorts[1]->getAttribute(), 'price');
-        $this->assertTrue($sorts[1]->isDesc());
+        static::assertSame($sorts[1]->getAttribute(), 'price');
+        static::assertTrue($sorts[1]->isDesc());
 
-        $this->assertSame($sorts[2]->getAttribute(), 'author.name');
-        $this->assertTrue($sorts[2]->isAsc());
+        static::assertSame($sorts[2]->getAttribute(), 'author.name');
+        static::assertTrue($sorts[2]->isAsc());
 
         $includes = $getResourceCollectionRequest->getIncludes();
-        $this->assertEquals(['category', 'history', 'purchases'], $includes);
+        static::assertSame(['category', 'history', 'purchases'], $includes);
 
         $fields = $getResourceCollectionRequest->getSparseFieldset();
-        $this->assertEquals(['author' => 'name,price,rating', 'book' => 'title,publisher'], $fields);
+        static::assertSame(['author' => 'name,price,rating', 'book' => 'title,publisher'], $fields);
     }
 }

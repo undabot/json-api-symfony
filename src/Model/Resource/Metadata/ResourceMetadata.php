@@ -21,12 +21,12 @@ class ResourceMetadata
     /** @var Collection */
     private $relationshipsMetadata;
 
-    /** @var string|null */
+    /** @var null|string */
     private $type;
 
     /**
-     * @param Constraint[] $resourceConstraints
-     * @param AttributeMetadata[] $attributesMetadata
+     * @param Constraint[]           $resourceConstraints
+     * @param AttributeMetadata[]    $attributesMetadata
      * @param RelationshipMetadata[] $relationshipsMetadata
      *
      * @throws \Assert\AssertionFailedException
@@ -45,7 +45,7 @@ class ResourceMetadata
         $this->relationshipsMetadata = new ArrayCollection($relationshipsMetadata);
 
         /** @var JsonApiConstraint\ResourceType[] $resourceTypeConstraints */
-        $resourceTypeConstraints = array_filter($resourceConstraints, function (Constraint $constraint) {
+        $resourceTypeConstraints = array_filter($resourceConstraints, static function (Constraint $constraint) {
             return $constraint instanceof JsonApiConstraint\ResourceType;
         });
 
@@ -55,7 +55,7 @@ class ResourceMetadata
             'More than 1 ResourceType constraint found in the resource constraints (metadata)'
         );
 
-        if (count($resourceTypeConstraints) === 1) {
+        if (1 === \count($resourceTypeConstraints)) {
             $this->type = array_values($resourceTypeConstraints)[0]->type;
         }
     }
@@ -88,19 +88,7 @@ class ResourceMetadata
     }
 
     /**
-     * Does the $constraint operates on object? I.e. does the constraint validator needs full ResourceInterface
-     * object to perform the validation, or simply the value (string or string[]) is enough?
-     *
-     * @param Constraint $constraint
-     * @return bool
-     */
-    private function relationshipConstraintWorksOnObject(Constraint $constraint): bool
-    {
-        return $constraint instanceof JsonApiConstraint\ResourceType;
-    }
-
-    /**
-     * Returns map of relationship names and constraints that operate on RelationshipInterface objects
+     * Returns map of relationship names and constraints that operate on RelationshipInterface objects.
      *
      * @return array<string, Constraint[]>
      */
@@ -109,10 +97,12 @@ class ResourceMetadata
         $constraints = [];
         /** @var RelationshipMetadata $relationshipMetadatum */
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
-            $objectConstraints = array_filter($relationshipMetadatum->getConstraints(),
+            $objectConstraints = array_filter(
+                $relationshipMetadatum->getConstraints(),
                 function (Constraint $constraint) {
                     return true === $this->relationshipConstraintWorksOnObject($constraint);
-                });
+                }
+            );
 
             $constraints[$relationshipMetadatum->getName()] = array_values($objectConstraints);
         }
@@ -121,7 +111,7 @@ class ResourceMetadata
     }
 
     /**
-     * Returns map of relationship names and constraints that operate on raw relationship values (string or string[])
+     * Returns map of relationship names and constraints that operate on raw relationship values (string or string[]).
      *
      * @return array<string, Constraint[]>
      */
@@ -131,10 +121,12 @@ class ResourceMetadata
 
         /** @var RelationshipMetadata $relationshipMetadatum */
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
-            $valueConstraints = array_filter($relationshipMetadatum->getConstraints(),
+            $valueConstraints = array_filter(
+                $relationshipMetadatum->getConstraints(),
                 function (Constraint $constraint) {
                     return false === $this->relationshipConstraintWorksOnObject($constraint);
-                });
+                }
+            );
 
             $constraints[$relationshipMetadatum->getName()] = array_values($valueConstraints);
         }
@@ -143,7 +135,7 @@ class ResourceMetadata
     }
 
     /**
-     * @return Collection|AttributeMetadata[]
+     * @return AttributeMetadata[]|Collection
      */
     public function getAttributesMetadata(): Collection
     {
@@ -153,7 +145,7 @@ class ResourceMetadata
     public function getAttributeMetadata(string $name): ?AttributeMetadata
     {
         $metadata = $this->attributesMetadata
-            ->filter(function (AttributeMetadata $attributeMetadata) use ($name) {
+            ->filter(static function (AttributeMetadata $attributeMetadata) use ($name) {
                 return $attributeMetadata->getName() === $name;
             })
             ->first();
@@ -176,7 +168,7 @@ class ResourceMetadata
     public function getRelationshipMetadata(string $name): ?RelationshipMetadata
     {
         $metadata = $this->relationshipsMetadata
-            ->filter(function (RelationshipMetadata $relationshipMetadata) use ($name) {
+            ->filter(static function (RelationshipMetadata $relationshipMetadata) use ($name) {
                 return $relationshipMetadata->getName() === $name;
             })
             ->first();
@@ -196,10 +188,10 @@ class ResourceMetadata
         $map = [];
 
         $this->attributesMetadata
-            ->filter(function (AttributeMetadata $attributeMetadata) {
+            ->filter(static function (AttributeMetadata $attributeMetadata) {
                 return $attributeMetadata->getName() !== $attributeMetadata->getPropertyPath();
             })
-            ->map(function (AttributeMetadata $attributeMetadata) use (&$map) {
+            ->map(static function (AttributeMetadata $attributeMetadata) use (&$map) {
                 $map[$attributeMetadata->getName()] = $attributeMetadata->getPropertyPath();
 
                 return $attributeMetadata;
@@ -216,15 +208,24 @@ class ResourceMetadata
         $map = [];
 
         $this->relationshipsMetadata
-            ->filter(function (RelationshipMetadata $relationshipMetadata) {
+            ->filter(static function (RelationshipMetadata $relationshipMetadata) {
                 return $relationshipMetadata->getName() !== $relationshipMetadata->getPropertyPath();
             })
-            ->map(function (RelationshipMetadata $relationshipMetadata) use (&$map) {
+            ->map(static function (RelationshipMetadata $relationshipMetadata) use (&$map) {
                 $map[$relationshipMetadata->getName()] = $relationshipMetadata->getPropertyPath();
 
                 return $relationshipMetadata;
             });
 
         return $map;
+    }
+
+    /**
+     * Does the $constraint operates on object? I.e. does the constraint validator needs full ResourceInterface
+     * object to perform the validation, or simply the value (string or string[]) is enough?
+     */
+    private function relationshipConstraintWorksOnObject(Constraint $constraint): bool
+    {
+        return $constraint instanceof JsonApiConstraint\ResourceType;
     }
 }

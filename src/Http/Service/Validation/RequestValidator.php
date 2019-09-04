@@ -25,9 +25,8 @@ class RequestValidator implements RequestValidatorInterface
     ];
 
     /**
-     * Validates request according to JSON:API specification
+     * Validates request according to JSON:API specification.
      *
-     * @param Request $request
      * @throws InvalidRequestAcceptHeaderException
      * @throws InvalidRequestContentTypeHeaderException
      * @throws UnsupportedMediaTypeException
@@ -35,22 +34,23 @@ class RequestValidator implements RequestValidatorInterface
      */
     public function assertValidRequest(Request $request): void
     {
-
         return;
         /*
          * Servers MUST respond with a 415 Unsupported Media Type status code if a request specifies the header
          * Content-Type: application/vnd.api+json with any media type parameters.
          */
-        if ($request->headers->has('Content-Type') && is_string($request->headers->get('Content-Type'))) {
+        if ($request->headers->has('Content-Type') && \is_string($request->headers->get('Content-Type'))) {
             $contentTypeHeader = explode(';', $request->headers->get('Content-Type'));
 
-            if (count($contentTypeHeader) > 1) {
+            if (\count($contentTypeHeader) > 1) {
                 $message = 'Media types are not allowed.';
+
                 throw new UnsupportedMediaTypeException($message);
             }
 
             if ('application/vnd.api+json' !== $contentTypeHeader[0]) {
                 $message = sprintf('Expected valid Json api content type, got %s', json_encode($contentTypeHeader));
+
                 throw new InvalidRequestContentTypeHeaderException($message);
             }
         }
@@ -62,20 +62,20 @@ class RequestValidator implements RequestValidatorInterface
         if (true === $request->headers->has('Accept')) {
             $accepts = $request->headers->get('Accept');
 
-            if (true === is_string($accepts)) {
+            if (true === \is_string($accepts)) {
                 $accepts = explode(',', $accepts);
             }
 
-            if (false === is_array($accepts)) {
+            if (false === \is_array($accepts)) {
                 throw new InvalidRequestAcceptHeaderException('Couldn\'t check accept headers');
             }
 
-            if (false === in_array('application/vnd.api+json', $accepts)) {
+            if (false === \in_array('application/vnd.api+json', $accepts, true)) {
                 throw new InvalidRequestAcceptHeaderException();
             }
         }
 
-        /*
+        /**
          * If a server encounters a query parameter that does not follow the naming conventions above, and the server
          * does not know how to process it as a query parameter from this specification, it MUST return 400 Bad Request.
          *
@@ -85,8 +85,9 @@ class RequestValidator implements RequestValidatorInterface
         $queryParamNames = array_keys($queryParams);
         $unsupportedQueryParams = array_diff($queryParamNames, $this->supportedQueryParamNames);
 
-        if (0 !== count($unsupportedQueryParams)) {
+        if (0 !== \count($unsupportedQueryParams)) {
             $message = sprintf('Unsupported query params given: %s', implode(', ', $unsupportedQueryParams));
+
             throw new UnsupportedQueryStringParameterGivenException($message);
         }
     }
@@ -96,15 +97,16 @@ class RequestValidator implements RequestValidatorInterface
      */
     public function assertResourceIsWithoutClientGeneratedId(array $requestPrimaryData): void
     {
-        if (true === array_key_exists('id', $requestPrimaryData)) {
+        if (true === \array_key_exists('id', $requestPrimaryData)) {
             throw new ClientGeneratedIdIsNotAllowedException('Client is not permitted to set ID value.');
         }
     }
 
     /**
+     * @param array<string, mixed> $data
+     *
      * @throws InvalidRequestDataException
      * @throws AssertionFailedException
-     * @param array<string, mixed> $data
      */
     public function assertValidUpdateRequestData(array $data, string $id): void
     {

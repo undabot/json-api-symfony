@@ -37,29 +37,6 @@ class RequestFactory
     }
 
     /**
-     * @param Request $request
-     * @return array<string, mixed>
-     * @throws AssertionFailedException
-     */
-    private function getRequestPrimaryData(Request $request): array
-    {
-        /** @var string $rawRequestData */
-        $rawRequestData = $request->getContent(false);
-        Assertion::isJsonString($rawRequestData, 'Request data must be valid JSON');
-        $requestData = json_decode($rawRequestData, true);
-
-        if (null === $requestData) {
-            throw new InvalidRequestDataException('Request data must be valid JSON');
-        }
-
-        if (false === Assert::arrayHasRequiredKeys($requestData, ['data'])) {
-            throw new InvalidRequestDataException('The request MUST include a single resource object as primary data.');
-        }
-
-        return $requestData['data'];
-    }
-
-    /**
      * @see https://jsonapi.org/format/#crud-creating
      *
      * @throws RequestException
@@ -89,7 +66,7 @@ class RequestFactory
     {
         $requestPrimaryData = $this->getRequestPrimaryData($request);
 
-        return array_key_exists('id', $requestPrimaryData);
+        return \array_key_exists('id', $requestPrimaryData);
     }
 
     /**
@@ -151,5 +128,28 @@ class RequestFactory
         $resource = $this->resourceEncoder->decode($requestPrimaryData);
 
         return new UpdateResourceRequest($resource);
+    }
+
+    /**
+     * @throws AssertionFailedException
+     *
+     * @return array<string, mixed>
+     */
+    private function getRequestPrimaryData(Request $request): array
+    {
+        /** @var string $rawRequestData */
+        $rawRequestData = $request->getContent(false);
+        Assertion::isJsonString($rawRequestData, 'Request data must be valid JSON');
+        $requestData = json_decode($rawRequestData, true);
+
+        if (null === $requestData) {
+            throw new InvalidRequestDataException('Request data must be valid JSON');
+        }
+
+        if (false === Assert::arrayHasRequiredKeys($requestData, ['data'])) {
+            throw new InvalidRequestDataException('The request MUST include a single resource object as primary data.');
+        }
+
+        return $requestData['data'];
     }
 }

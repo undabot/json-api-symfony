@@ -29,24 +29,24 @@ class ResourceDto implements ApiModel
 
     /**
      * @var string
-     * @JsonApi\Attribute()
+     * @JsonApi\Attribute
      */
     public $title;
 
     /**
      * @var string
-     * @JsonApi\Attribute()
+     * @JsonApi\Attribute
      */
     public $date;
 
     /**
      * @var string
-     * @JsonApi\Attribute()
+     * @JsonApi\Attribute
      */
     public $summary;
 
     /**
-     * @var string|null
+     * @var null|string
      * @JsonApi\ToOne(type="people")
      */
     public $author;
@@ -64,12 +64,18 @@ class ResourceDto implements ApiModel
     public $comments = [];
 }
 
-class ResourceFactoryTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class ResourceFactoryTest extends TestCase
 {
     /** @var ResourceFactory */
     private $resourceFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         AnnotationRegistry::registerLoader('class_exists');
@@ -78,20 +84,20 @@ class ResourceFactoryTest extends TestCase
         $this->resourceFactory = new ResourceFactory($metadataFactory);
     }
 
-    public function testResourceFactoryCreatesValidResourceWithoutAttributesOrRelationshipsValues()
+    public function testResourceFactoryCreatesValidResourceWithoutAttributesOrRelationshipsValues(): void
     {
         $resourceDto = new ResourceDto();
         $resourceDto->id = '1';
 
         $resource = $this->resourceFactory->make($resourceDto);
-        $this->assertInstanceOf(ResourceInterface::class, $resource);
-        $this->assertSame('1', $resource->getId());
-        $this->assertSame('resource', $resource->getType());
-        $this->assertCount(3, $resource->getAttributes());
-        $this->assertCount(3, $resource->getRelationships());
+        static::assertInstanceOf(ResourceInterface::class, $resource);
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
+        static::assertCount(3, $resource->getAttributes());
+        static::assertCount(3, $resource->getRelationships());
     }
 
-    public function testResourceFactoryCreatesValidResourceWithValues()
+    public function testResourceFactoryCreatesValidResourceWithValues(): void
     {
         $resourceDto = new ResourceDto();
         $resourceDto->id = '1';
@@ -103,85 +109,85 @@ class ResourceFactoryTest extends TestCase
         $resourceDto->author = 'a1';
 
         $resource = $this->resourceFactory->make($resourceDto);
-        $this->assertInstanceOf(ResourceInterface::class, $resource);
-        $this->assertSame('1', $resource->getId());
-        $this->assertSame('resource', $resource->getType());
-        $this->assertCount(3, $resource->getAttributes());
-        $this->assertCount(3, $resource->getRelationships());
+        static::assertInstanceOf(ResourceInterface::class, $resource);
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
+        static::assertCount(3, $resource->getAttributes());
+        static::assertCount(3, $resource->getRelationships());
 
         $flatResource = new FlatResource($resource);
-        $this->assertSame('Resource title', $flatResource->getAttributes()['title']);
-        $this->assertSame('Resource summary', $flatResource->getAttributes()['summary']);
-        $this->assertSame('2018-01-01', $flatResource->getAttributes()['date']);
-        $this->assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
-        $this->assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
-        $this->assertSame('a1', $flatResource->getRelationships()['author']);
+        static::assertSame('Resource title', $flatResource->getAttributes()['title']);
+        static::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
+        static::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
+        static::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
+        static::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
+        static::assertSame('a1', $flatResource->getRelationships()['author']);
     }
 
-    public function testResourceFactoryCreatesValidTagsRelationship()
+    public function testResourceFactoryCreatesValidTagsRelationship(): void
     {
         $resourceDto = new ResourceDto();
         $resourceDto->id = '1';
         $resourceDto->tags = ['t1', 't2', 't3'];
 
         $resource = $this->resourceFactory->make($resourceDto);
-        $this->assertInstanceOf(ResourceInterface::class, $resource);
-        $this->assertSame('1', $resource->getId());
-        $this->assertSame('resource', $resource->getType());
+        static::assertInstanceOf(ResourceInterface::class, $resource);
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
 
         $tagsRelationship = $resource->getRelationships()->getRelationshipByName('tags');
-        $this->assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
-        $this->assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
+        static::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
+        static::assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
 
-        $this->assertEquals(
+        static::assertEquals(
             new ResourceIdentifier('t1', 'tags'),
             $tagsRelationship->getData()->getData()->getResourceIdentifiers()[0]
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             new ResourceIdentifier('t2', 'tags'),
             $tagsRelationship->getData()->getData()->getResourceIdentifiers()[1]
         );
 
-        $this->assertEquals(
+        static::assertEquals(
             new ResourceIdentifier('t3', 'tags'),
             $tagsRelationship->getData()->getData()->getResourceIdentifiers()[2]
         );
     }
 
-    public function testResourceFactoryCreatesValidEmptyTagsRelationshipFromEmptyArray()
+    public function testResourceFactoryCreatesValidEmptyTagsRelationshipFromEmptyArray(): void
     {
         $resourceDto = new ResourceDto();
         $resourceDto->id = '1';
         $resourceDto->tags = [];
 
         $resource = $this->resourceFactory->make($resourceDto);
-        $this->assertInstanceOf(ResourceInterface::class, $resource);
-        $this->assertSame('1', $resource->getId());
-        $this->assertSame('resource', $resource->getType());
+        static::assertInstanceOf(ResourceInterface::class, $resource);
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
 
         $tagsRelationship = $resource->getRelationships()->getRelationshipByName('tags');
-        $this->assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
-        $this->assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
-        $this->assertTrue($tagsRelationship->getData()->isEmpty());
+        static::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
+        static::assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
+        static::assertTrue($tagsRelationship->getData()->isEmpty());
     }
 
-    public function testResourceFactoryCreatesValidAuthorRelationship()
+    public function testResourceFactoryCreatesValidAuthorRelationship(): void
     {
         $resourceDto = new ResourceDto();
         $resourceDto->id = '1';
         $resourceDto->author = 'a1';
 
         $resource = $this->resourceFactory->make($resourceDto);
-        $this->assertInstanceOf(ResourceInterface::class, $resource);
-        $this->assertSame('1', $resource->getId());
-        $this->assertSame('resource', $resource->getType());
+        static::assertInstanceOf(ResourceInterface::class, $resource);
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
 
         $authorRelationship = $resource->getRelationships()->getRelationshipByName('author');
-        $this->assertInstanceOf(RelationshipInterface::class, $authorRelationship);
-        $this->assertInstanceOf(ToOneRelationshipDataInterface::class, $authorRelationship->getData());
+        static::assertInstanceOf(RelationshipInterface::class, $authorRelationship);
+        static::assertInstanceOf(ToOneRelationshipDataInterface::class, $authorRelationship->getData());
 
-        $this->assertEquals(
+        static::assertEquals(
             new ResourceIdentifier('a1', 'people'),
             $authorRelationship->getData()->getData()
         );

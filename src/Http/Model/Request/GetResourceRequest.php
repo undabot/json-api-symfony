@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Model\Request;
 
-use Undabot\JsonApi\Exception\Request\RequestException;
-use Undabot\JsonApi\Model\Request\GetResourceRequestInterface;
 use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
 use Undabot\JsonApi\Exception\Request\UnsupportedSparseFieldsetRequestedException;
+use Undabot\JsonApi\Model\Request\GetResourceRequestInterface;
 
 class GetResourceRequest implements GetResourceRequestInterface
 {
@@ -17,10 +16,10 @@ class GetResourceRequest implements GetResourceRequestInterface
     /** @var string */
     private $id;
 
-    /** @var array|null */
+    /** @var null|array */
     private $include;
 
-    /** @var array|null */
+    /** @var null|array */
     private $sparseFieldset;
 
     public function __construct(string $id, ?array $include, ?array $sparseFieldset)
@@ -46,7 +45,7 @@ class GetResourceRequest implements GetResourceRequestInterface
             return false;
         }
 
-        return in_array($name, $this->include);
+        return \in_array($name, $this->include, true);
     }
 
     public function getSparseFieldset(): ?array
@@ -60,7 +59,7 @@ class GetResourceRequest implements GetResourceRequestInterface
     public function allowIncludes(array $includes): GetResourceRequestInterface
     {
         $unsupportedIncludes = array_diff($this->include ?: [], $includes);
-        if (0 !== count($unsupportedIncludes)) {
+        if (0 !== \count($unsupportedIncludes)) {
             throw new UnsupportedIncludeValuesGivenException($unsupportedIncludes);
         }
 
@@ -77,7 +76,7 @@ class GetResourceRequest implements GetResourceRequestInterface
     public function allowFields(array $fields): GetResourceRequestInterface
     {
         $unsupportedFields = array_diff($this->sparseFieldset ?: [], $fields);
-        if (0 !== count($unsupportedFields)) {
+        if (0 !== \count($unsupportedFields)) {
             throw new UnsupportedSparseFieldsetRequestedException($unsupportedFields);
         }
 

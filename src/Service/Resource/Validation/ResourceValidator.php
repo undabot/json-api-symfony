@@ -69,7 +69,7 @@ class ResourceValidator
     }
 
     /**
-     * Relationships need two levels of validation:
+     * Relationships need two levels of validation:.
      *
      * 1. Value-level validation performed on the raw relationship values (string or string[]) against the
      *    Collection of standard value constraints (e.g. NotEmpty, custom constraints validating that IDs actually exist)
@@ -122,7 +122,7 @@ class ResourceValidator
         FlatResource $flatResource,
         ResourceMetadata $metadata
     ): ConstraintViolationListInterface {
-        $attributesValidationViolations = $this->validator->validate(
+        return $this->validator->validate(
             ['data' => ['attributes' => $flatResource->getAttributes()]],
             new Collection([
                 'data' => new Collection([
@@ -134,7 +134,5 @@ class ResourceValidator
                 ]),
             ])
         );
-
-        return $attributesValidationViolations;
     }
 }

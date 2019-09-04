@@ -12,14 +12,14 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToMany;
 class ToManyValidator extends ConstraintValidator
 {
     /**
-     * @param mixed $value
      * @param ToMany $constraint
+     * @param mixed  $value
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         Assertion::isInstanceOf($constraint, ToMany::class);
 
-        if (false === is_array($value)) {
+        if (false === \is_array($value)) {
             $this->context->buildViolation(ToMany::MESSAGE)
                 ->addViolation();
         }

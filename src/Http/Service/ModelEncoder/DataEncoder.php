@@ -13,7 +13,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 final class DataEncoder
 {
     /** @var ResourceFactory */
-    protected $resourceFactory;
+    private $resourceFactory;
 
     public function __construct(ResourceFactory $resourceFactory)
     {
@@ -22,9 +22,10 @@ final class DataEncoder
 
     /**
      * Converts given entity first to the JSON:API resource model class by using provided $modelTransformer callable,
-     * and then to the ResourceInterface by using ResourceFactory
+     * and then to the ResourceInterface by using ResourceFactory.
      *
      * @param mixed $data
+     *
      * @throws Exception
      */
     public function encodeData($data, callable $modelTransformer): ResourceInterface
@@ -33,7 +34,7 @@ final class DataEncoder
         Assertion::isInstanceOf(
             $apiModel,
             ApiModel::class,
-            sprintf('Invalid data conversion occured. Expected instance of ApiModel, got %s', get_class($apiModel))
+            sprintf('Invalid data conversion occured. Expected instance of ApiModel, got %s', \get_class($apiModel))
         );
 
         return $this->resourceFactory->make($apiModel);
@@ -41,10 +42,10 @@ final class DataEncoder
 
     /**
      * Converts given entities first to JSON:API resource model classes by using provided $modelTransformer callable,
-     * and then to the ResourceInterface instances by using ResourceFactory
+     * and then to the ResourceInterface instances by using ResourceFactory.
      *
      * @param mixed[] $dataset
-     * @param callable $modelTransformer
+     *
      * @return ResourceInterface[]
      */
     public function encodeDataset(array $dataset, callable $modelTransformer): array

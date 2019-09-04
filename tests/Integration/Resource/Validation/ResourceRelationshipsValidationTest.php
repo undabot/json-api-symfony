@@ -16,12 +16,18 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToMany;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
-class ResourceRelationshipsValidationTest extends KernelTestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class ResourceRelationshipsValidationTest extends KernelTestCase
 {
     /** @var ResourceValidator */
     private $validator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -36,10 +42,9 @@ class ResourceRelationshipsValidationTest extends KernelTestCase
         $this->validator = new ResourceValidator($metadataFactory, $validator);
     }
 
-    public function testValidatorRecognizesSingleIdAsInvalidToManyRelationshipValue()
+    public function testValidatorRecognizesSingleIdAsInvalidToManyRelationshipValue(): void
     {
-        $resourceDto = new class
-        {
+        $resourceDto = new class() {
             /**
              * @var string[]
              * @JsonApi\ToMany(type="type")
@@ -56,16 +61,14 @@ class ResourceRelationshipsValidationTest extends KernelTestCase
                 ->get()
         );
 
-        $violations = $this->validator->validate($resource, get_class($resourceDto));
-        $this->assertSame(1, $violations->count());
-        $this->assertSame($violations[0]->getMessageTemplate(), ToMany::MESSAGE);
-
+        $violations = $this->validator->validate($resource, \get_class($resourceDto));
+        static::assertSame(1, $violations->count());
+        static::assertSame($violations[0]->getMessageTemplate(), ToMany::MESSAGE);
     }
 
-    public function testValidatorRecognizesNullAsInvalidToManyRelationshipValue()
+    public function testValidatorRecognizesNullAsInvalidToManyRelationshipValue(): void
     {
-        $resourceDto = new class
-        {
+        $resourceDto = new class() {
             /**
              * @var string[]
              * @JsonApi\ToMany(type="type")
@@ -82,15 +85,14 @@ class ResourceRelationshipsValidationTest extends KernelTestCase
                 ->get()
         );
 
-        $violations = $this->validator->validate($resource, get_class($resourceDto));
-        $this->assertSame(1, $violations->count());
-        $this->assertSame($violations[0]->getMessageTemplate(), ToMany::MESSAGE);
+        $violations = $this->validator->validate($resource, \get_class($resourceDto));
+        static::assertSame(1, $violations->count());
+        static::assertSame($violations[0]->getMessageTemplate(), ToMany::MESSAGE);
     }
 
-    public function testValidatorRecognizesArrayAsInvalidToOneRelationshipValue()
+    public function testValidatorRecognizesArrayAsInvalidToOneRelationshipValue(): void
     {
-        $resourceDto = new class
-        {
+        $resourceDto = new class() {
             /**
              * @var string[]
              * @JsonApi\ToOne(type="type")
@@ -107,8 +109,8 @@ class ResourceRelationshipsValidationTest extends KernelTestCase
                 ->get()
         );
 
-        $violations = $this->validator->validate($resource, get_class($resourceDto));
-        $this->assertSame(1, $violations->count());
-        $this->assertSame($violations[0]->getMessageTemplate(), ToOne::MESSAGE);
+        $violations = $this->validator->validate($resource, \get_class($resourceDto));
+        static::assertSame(1, $violations->count());
+        static::assertSame($violations[0]->getMessageTemplate(), ToOne::MESSAGE);
     }
 }

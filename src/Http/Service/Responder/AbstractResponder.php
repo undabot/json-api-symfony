@@ -37,6 +37,7 @@ abstract class AbstractResponder
 
     /**
      * @param mixed[] $dataSet
+     *
      * @throws \Exception
      */
     protected function buildIncluded(array $dataSet): ResourceCollection

@@ -21,7 +21,7 @@ class ArrayCollection implements ObjectCollection
     {
         $this->items = $items;
         if (null === $count) {
-            $count = count($items);
+            $count = \count($items);
         }
         $this->count = $count;
     }

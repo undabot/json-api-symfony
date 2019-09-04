@@ -17,12 +17,18 @@ use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMapp
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
-class ResourceAttributesMetadataTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class ResourceAttributesMetadataTest extends TestCase
 {
     /** @var ResourceMetadataFactory */
     private $metadataFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         AnnotationRegistry::registerLoader('class_exists');
@@ -30,97 +36,52 @@ class ResourceAttributesMetadataTest extends TestCase
         $this->metadataFactory = new ResourceMetadataFactory($annotationReader);
     }
 
-    private function getResource()
-    {
-        return new class implements ApiModel
-        {
-            /**
-             * @var string
-             * @JsonApi\Attribute()
-             * @Assert\NotBlank()
-             * @Assert\Length(min="100", max="200")
-             * @Assert\Type(type="string")
-             */
-            public $name;
-
-            /**
-             * @var string|null
-             * @JsonApi\Attribute()
-             * @Assert\Type(type="string")
-             */
-            public $summary;
-
-            /**
-             * @var DateTimeImmutable
-             * @JsonApi\Attribute()
-             * @Assert\NotBlank()
-             * @Assert\Type(type="datetime")
-             */
-            public $publishedAt;
-
-            /**
-             * @var bool
-             * @JsonApi\Attribute()
-             * @Assert\NotBlank()
-             * @Assert\Type(type="bool")
-             */
-            public $active;
-
-            /**
-             * @JsonApi\Attribute()
-             */
-            public $emptyAttribute;
-
-            public $notAnAttribute;
-        };
-    }
-
-    public function testResourceMetadataContainsAllAnnotatedAttributes()
+    public function testResourceMetadataContainsAllAnnotatedAttributes(): void
     {
         $resource = $this->getResource();
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
 
-        $this->assertCount(5, $metadata->getAttributesMetadata());
-        $this->assertContainsOnlyInstancesOf(AttributeMetadata::class, $metadata->getAttributesMetadata());
+        static::assertCount(5, $metadata->getAttributesMetadata());
+        static::assertContainsOnlyInstancesOf(AttributeMetadata::class, $metadata->getAttributesMetadata());
 
-        $this->assertNotNull($metadata->getAttributeMetadata('name'));
-        $this->assertNotNull($metadata->getAttributeMetadata('summary'));
-        $this->assertNotNull($metadata->getAttributeMetadata('publishedAt'));
-        $this->assertNotNull($metadata->getAttributeMetadata('active'));
-        $this->assertNotNull($metadata->getAttributeMetadata('emptyAttribute'));
+        static::assertNotNull($metadata->getAttributeMetadata('name'));
+        static::assertNotNull($metadata->getAttributeMetadata('summary'));
+        static::assertNotNull($metadata->getAttributeMetadata('publishedAt'));
+        static::assertNotNull($metadata->getAttributeMetadata('active'));
+        static::assertNotNull($metadata->getAttributeMetadata('emptyAttribute'));
     }
 
-    public function testResourceMetadataContainsValidAttributeConstraintsCount()
+    public function testResourceMetadataContainsValidAttributeConstraintsCount(): void
     {
         $resource = $this->getResource();
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
 
-        $this->assertCount(5, $metadata->getAttributesMetadata());
+        static::assertCount(5, $metadata->getAttributesMetadata());
 
-        $this->assertNotEmpty($metadata->getAttributeMetadata('name')->getConstraints());
-        $this->assertNotEmpty($metadata->getAttributeMetadata('summary')->getConstraints());
-        $this->assertNotEmpty($metadata->getAttributeMetadata('publishedAt')->getConstraints());
-        $this->assertNotEmpty($metadata->getAttributeMetadata('active')->getConstraints());
-        $this->assertEmpty($metadata->getAttributeMetadata('emptyAttribute')->getConstraints());
+        static::assertNotEmpty($metadata->getAttributeMetadata('name')->getConstraints());
+        static::assertNotEmpty($metadata->getAttributeMetadata('summary')->getConstraints());
+        static::assertNotEmpty($metadata->getAttributeMetadata('publishedAt')->getConstraints());
+        static::assertNotEmpty($metadata->getAttributeMetadata('active')->getConstraints());
+        static::assertEmpty($metadata->getAttributeMetadata('emptyAttribute')->getConstraints());
     }
 
-    public function testResourceMetadataContainsValidNameAttributeConstraints()
+    public function testResourceMetadataContainsValidNameAttributeConstraints(): void
     {
         $resource = $this->getResource();
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
 
         $nameConstraints = $metadata->getAttributeMetadata('name')->getConstraints();
-        $this->assertNotEmpty($nameConstraints);
-        $this->assertCount(3, $nameConstraints);
+        static::assertNotEmpty($nameConstraints);
+        static::assertCount(3, $nameConstraints);
 
         $nameConstraintExpectations = [
             Assert\NotBlank::class => 0,
@@ -129,35 +90,35 @@ class ResourceAttributesMetadataTest extends TestCase
         ];
 
         foreach ($nameConstraints as $constraint) {
-            $this->assertInstanceOf(Constraint::class, $constraint);
-            $nameConstraintExpectations[get_class($constraint)]++;
+            static::assertInstanceOf(Constraint::class, $constraint);
+            ++$nameConstraintExpectations[\get_class($constraint)];
 
             if ($constraint instanceof Assert\Length) {
-                $this->assertEquals(100, $constraint->min);
-                $this->assertEquals(200, $constraint->max);
+                static::assertSame(100, $constraint->min);
+                static::assertSame(200, $constraint->max);
             }
 
             if ($constraint instanceof Assert\Type) {
-                $this->assertEquals('string', $constraint->type);
+                static::assertSame('string', $constraint->type);
             }
         }
 
         foreach ($nameConstraintExpectations as $constraintClass => $expectationCount) {
-            $this->assertEquals(1, $expectationCount, $constraintClass);
+            static::assertSame(1, $expectationCount, $constraintClass);
         }
     }
 
-    public function testResourceMetadataContainsValidPublishedAtAttributeConstraints()
+    public function testResourceMetadataContainsValidPublishedAtAttributeConstraints(): void
     {
         $resource = $this->getResource();
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
 
         $publishedAtConstraints = $metadata->getAttributeMetadata('publishedAt')->getConstraints();
-        $this->assertNotEmpty($publishedAtConstraints);
-        $this->assertCount(2, $publishedAtConstraints);
+        static::assertNotEmpty($publishedAtConstraints);
+        static::assertCount(2, $publishedAtConstraints);
 
         $nameConstraintExpectations = [
             Assert\NotBlank::class => 0,
@@ -165,23 +126,22 @@ class ResourceAttributesMetadataTest extends TestCase
         ];
 
         foreach ($publishedAtConstraints as $constraint) {
-            $this->assertInstanceOf(Constraint::class, $constraint);
-            $nameConstraintExpectations[get_class($constraint)]++;
+            static::assertInstanceOf(Constraint::class, $constraint);
+            ++$nameConstraintExpectations[\get_class($constraint)];
 
             if ($constraint instanceof Assert\Type) {
-                $this->assertEquals('datetime', $constraint->type);
+                static::assertSame('datetime', $constraint->type);
             }
         }
 
         foreach ($nameConstraintExpectations as $constraintClass => $expectationCount) {
-            $this->assertEquals(1, $expectationCount, $constraintClass);
+            static::assertSame(1, $expectationCount, $constraintClass);
         }
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenSinglePropertyHasMultipleAttributeAnnotations()
+    public function testMetadataFactoryThrowsAnExceptionWhenSinglePropertyHasMultipleAttributeAnnotations(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute(name="tag")
              * @JsonApi\Attribute(name="tag2")
@@ -193,11 +153,10 @@ class ResourceAttributesMetadataTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testAttributeNameCanBeOveridden()
+    public function testAttributeNameCanBeOveridden(): void
     {
-        $resource = new class implements ApiModel
-        {
-            /** @JsonApi\Attribute() */
+        $resource = new class() implements ApiModel {
+            /** @JsonApi\Attribute */
             public $defaultName;
 
             /** @JsonApi\Attribute(name="overridenAttributeName") */
@@ -206,22 +165,65 @@ class ResourceAttributesMetadataTest extends TestCase
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
-        $this->assertCount(2, $metadata->getAttributesMetadata());
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+        static::assertCount(2, $metadata->getAttributesMetadata());
 
-        $this->assertInstanceOf(AttributeMetadata::class, $metadata->getAttributeMetadata('defaultName'));
+        static::assertInstanceOf(AttributeMetadata::class, $metadata->getAttributeMetadata('defaultName'));
 
-        $this->assertNull($metadata->getAttributeMetadata('defaultName2'));
-        $this->assertInstanceOf(AttributeMetadata::class, $metadata->getAttributeMetadata('overridenAttributeName'));
+        static::assertNull($metadata->getAttributeMetadata('defaultName2'));
+        static::assertInstanceOf(AttributeMetadata::class, $metadata->getAttributeMetadata('overridenAttributeName'));
     }
 
-    public function testAttributeMetadataIsEmptyWhenNoAttributesAnnotated()
+    public function testAttributeMetadataIsEmptyWhenNoAttributesAnnotated(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
         };
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-        $this->assertTrue($metadata->getAttributesMetadata()->isEmpty());
+        static::assertTrue($metadata->getAttributesMetadata()->isEmpty());
+    }
+
+    private function getResource()
+    {
+        return new class() implements ApiModel {
+            /**
+             * @var string
+             * @JsonApi\Attribute
+             * @Assert\NotBlank
+             * @Assert\Length(min=100, max=200)
+             * @Assert\Type(type="string")
+             */
+            public $name;
+
+            /**
+             * @var null|string
+             * @JsonApi\Attribute
+             * @Assert\Type(type="string")
+             */
+            public $summary;
+
+            /**
+             * @var DateTimeImmutable
+             * @JsonApi\Attribute
+             * @Assert\NotBlank
+             * @Assert\Type(type="datetime")
+             */
+            public $publishedAt;
+
+            /**
+             * @var bool
+             * @JsonApi\Attribute
+             * @Assert\NotBlank
+             * @Assert\Type(type="bool")
+             */
+            public $active;
+
+            /**
+             * @JsonApi\Attribute
+             */
+            public $emptyAttribute;
+
+            public $notAnAttribute;
+        };
     }
 }

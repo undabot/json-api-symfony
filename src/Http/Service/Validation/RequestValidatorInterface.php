@@ -13,14 +13,14 @@ interface RequestValidatorInterface
      * Validates HTTP request against general JSON:API specification rules:
      * - Accept header
      * - Content type header
-     * - Support for given query params
+     * - Support for given query params.
      *
      * @throws RequestException
      */
     public function assertValidRequest(Request $request): void;
 
     /**
-     * Validates that HTTP request doesn't have Client-generated ID assigned to the resource
+     * Validates that HTTP request doesn't have Client-generated ID assigned to the resource.
      *
      * @param array<string, mixed> $requestPrimaryData
      */

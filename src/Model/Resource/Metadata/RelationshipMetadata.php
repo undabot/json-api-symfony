@@ -9,6 +9,8 @@ use Symfony\Component\Validator\Constraint;
 
 class RelationshipMetadata
 {
+    /** @var bool */
+    protected $isToMany;
     /** @var string */
     private $name;
 
@@ -20,9 +22,6 @@ class RelationshipMetadata
 
     /** @var array */
     private $constraints;
-
-    /** @var bool */
-    protected $isToMany;
 
     /**
      * @param Constraint[] $constraints

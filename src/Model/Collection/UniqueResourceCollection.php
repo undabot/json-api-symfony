@@ -24,11 +24,11 @@ class UniqueResourceCollection implements ResourceCollectionInterface
     }
 
     /**
-     * Add Resource to the collection and check whether the same combination of `id` and `type` already exists
+     * Add Resource to the collection and check whether the same combination of `id` and `type` already exists.
      */
     public function addResourceIfItDoesntExist(ResourceInterface $resource): void
     {
-        $key = $resource->getId() . $resource->getType();
+        $key = $resource->getId().$resource->getType();
         if (false === isset($this->items[$key])) {
             $this->items[$key] = $resource;
         }

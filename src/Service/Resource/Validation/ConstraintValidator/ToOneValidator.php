@@ -12,14 +12,14 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
 class ToOneValidator extends ConstraintValidator
 {
     /**
-     * @param mixed $value
      * @param ToOne $constraint
+     * @param mixed $value
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         Assertion::isInstanceOf($constraint, ToOne::class);
 
-        if (false === is_string($value) && null !== $value) {
+        if (false === \is_string($value) && null !== $value) {
             $this->context->buildViolation(ToOne::MESSAGE)
                 ->addViolation();
         }

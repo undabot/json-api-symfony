@@ -13,9 +13,15 @@ use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollection;
 use Undabot\JsonApi\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 
-class FlatResourceTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class FlatResourceTest extends TestCase
 {
-    public function testFlatResourceCorrectlyFlattensAttributes()
+    public function testFlatResourceCorrectlyFlattensAttributes(): void
     {
         $resource = new Resource('id', 'resource', new AttributeCollection([
             new Attribute('attribute1', 'string'),
@@ -27,7 +33,7 @@ class FlatResourceTest extends TestCase
 
         $flatResource = new FlatResource($resource);
 
-        $this->assertEquals([
+        static::assertSame([
             'attribute1' => 'string',
             'attribute2' => 1,
             'attribute3' => 2.0,
@@ -36,9 +42,8 @@ class FlatResourceTest extends TestCase
         ], $flatResource->getAttributes());
     }
 
-    public function testFlatResourceCorrectlyFlattensRelationships()
+    public function testFlatResourceCorrectlyFlattensRelationships(): void
     {
-
         $relationshipDataFactory = new RelationshipDataFactory();
         $resource = new Resource('id', 'resource', null, new RelationshipCollection([
             new Relationship('empty2many', null, $relationshipDataFactory->make('empty2many', true, [])),
@@ -49,7 +54,7 @@ class FlatResourceTest extends TestCase
 
         $flatResource = new FlatResource($resource);
 
-        $this->assertEquals([
+        static::assertSame([
             'empty2many' => [],
             'empty2one' => null,
             '2many' => ['1', '2', '3'],

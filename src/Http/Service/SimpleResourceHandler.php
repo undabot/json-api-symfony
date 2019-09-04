@@ -36,9 +36,7 @@ final class SimpleResourceHandler
         }
 
         $this->validator->assertValid($resource, $class);
-        $model = $this->denormalizer->denormalize($resource, $class);
 
-        return $model;
+        return $this->denormalizer->denormalize($resource, $class);
     }
-
 }

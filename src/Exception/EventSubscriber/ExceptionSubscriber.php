@@ -34,21 +34,6 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ];
     }
 
-    private function buildError(\Exception $exception): Error
-    {
-        $e = FlattenException::create($exception);
-
-        return new Error(
-            null,
-            null,
-            null,
-            null,
-            $e->getMessage(),
-            sprintf('Exception %s: "%s"', $e->getClass(), $e->getMessage()
-            )
-        );
-    }
-
     public function buildErrorResponse(ExceptionEvent $event): void
     {
         $exception = $event->getException();
@@ -170,5 +155,23 @@ class ExceptionSubscriber implements EventSubscriberInterface
 //
 //            return;
 //        }
+    }
+
+    private function buildError(\Exception $exception): Error
+    {
+        $e = FlattenException::create($exception);
+
+        return new Error(
+            null,
+            null,
+            null,
+            null,
+            $e->getMessage(),
+            sprintf(
+                'Exception %s: "%s"',
+                $e->getClass(),
+                $e->getMessage()
+            )
+        );
     }
 }

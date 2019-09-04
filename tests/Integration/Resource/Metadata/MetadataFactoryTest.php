@@ -12,12 +12,18 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
-class MetadataFactoryTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class MetadataFactoryTest extends TestCase
 {
     /** @var ResourceMetadataFactory */
     private $metadataFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         AnnotationRegistry::registerLoader('class_exists');
@@ -25,13 +31,12 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory = new ResourceMetadataFactory($annotationReader);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothAttributeAndToOneRelationship()
+    public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothAttributeAndToOneRelationship(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
-             * @JsonApi\Attribute()
-             * @JsonApi\ToOne()
+             * @JsonApi\Attribute
+             * @JsonApi\ToOne
              */
             public $name;
         };
@@ -41,13 +46,12 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothAttributeAndToManyRelationship()
+    public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothAttributeAndToManyRelationship(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
-             * @JsonApi\Attribute()
-             * @JsonApi\ToMany()
+             * @JsonApi\Attribute
+             * @JsonApi\ToMany
              */
             public $name;
         };
@@ -57,13 +61,12 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothToOneAndToManyRelationship()
+    public function testMetadataFactoryThrowsAnExceptionWhenPropertyIsMappedAsBothToOneAndToManyRelationship(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
-             * @JsonApi\ToMany()
-             * @JsonApi\ToOne()
+             * @JsonApi\ToMany
+             * @JsonApi\ToOne
              */
             public $name;
         };
@@ -73,10 +76,9 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsAttributeAndRelationshipWithSameNames()
+    public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsAttributeAndRelationshipWithSameNames(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute(name="test")
              */
@@ -93,10 +95,9 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsRelationshipsWithSameNames()
+    public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsRelationshipsWithSameNames(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
              * @JsonApi\ToMany(name="test", type="test")
              */
@@ -113,10 +114,9 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsAttributesWithSameNames()
+    public function testMetadataFactoryThrowsAnExceptionWhenResourceContainsAttributesWithSameNames(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute(name="test")
              */
@@ -133,10 +133,9 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionWhenTwoPropertyIsMappedWithTwoAttributeAnnotations()
+    public function testMetadataFactoryThrowsAnExceptionWhenTwoPropertyIsMappedWithTwoAttributeAnnotations(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute(name="1")
              * @JsonApi\Attribute(name="2")
@@ -149,12 +148,11 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionForToOneRelationshipWithoutType()
+    public function testMetadataFactoryThrowsAnExceptionForToOneRelationshipWithoutType(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
-             * @JsonApi\ToOne()
+             * @JsonApi\ToOne
              */
             public $rel;
         };
@@ -164,12 +162,11 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionForToManyRelationshipWithoutType()
+    public function testMetadataFactoryThrowsAnExceptionForToManyRelationshipWithoutType(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
-             * @JsonApi\ToMany()
+             * @JsonApi\ToMany
              */
             public $rel;
         };
@@ -179,11 +176,10 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionForReservedIdAttribute()
+    public function testMetadataFactoryThrowsAnExceptionForReservedIdAttribute(): void
     {
-        $resource = new class implements ApiModel
-        {
-            /** @JsonApi\Attribute() */
+        $resource = new class() implements ApiModel {
+            /** @JsonApi\Attribute */
             public $id;
         };
 
@@ -192,10 +188,9 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionForReservedIdToOneRelationship()
+    public function testMetadataFactoryThrowsAnExceptionForReservedIdToOneRelationship(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /** @JsonApi\ToOne(type="test") */
             public $id;
         };
@@ -205,10 +200,9 @@ class MetadataFactoryTest extends TestCase
         $this->metadataFactory->getInstanceMetadata($resource);
     }
 
-    public function testMetadataFactoryThrowsAnExceptionForReservedIdToManyRelationship()
+    public function testMetadataFactoryThrowsAnExceptionForReservedIdToManyRelationship(): void
     {
-        $resource = new class implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /** @JsonApi\ToMany(type="test") */
             public $id;
         };

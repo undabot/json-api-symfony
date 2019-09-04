@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Exception;
+use Undabot\JsonApi\Model\Link\LinkMemberInterface;
 use Undabot\JsonApi\Model\Meta\Meta;
 use Undabot\JsonApi\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
@@ -15,76 +16,94 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 final class ModelResponder extends AbstractResponder
 {
     /**
+     * @param mixed[] $primaryData
+     * @param mixed[]|null $includedData
+     * @param array<string, mixed>|null $meta
+     * @param array<string, LinkMemberInterface>|null $links
+     * @return ResourceCollectionResponse
      * @throws Exception
      */
     public function resourceCollection(
-        array $primaryModels,
-        array $included = null,
+        array $primaryData,
+        array $includedData = null,
         array $meta = null,
         array $links = null
     ): ResourceCollectionResponse {
-        $primaryResources = $this->encoder->encodeModels($primaryModels);
+        $primaryResources = $this->encoder->encodeDataset($primaryData);
 
         return new ResourceCollectionResponse(
             new ResourceCollection($primaryResources),
-            null === $included ? null : $this->buildIncluded($included),
+            null === $includedData ? null : $this->buildIncluded($includedData),
             null === $meta ? null : new Meta($meta),
             null === $links ? null : $this->buildLinks($links)
         );
     }
 
     /**
+     * @param mixed $primaryData
+     * @param mixed[]|null $includedData
+     * @param array<string, mixed>|null $meta
+     * @param array<string, LinkMemberInterface>|null $links
+     * @return ResourceResponse
      * @throws Exception
      */
     public function resource(
-        $data,
-        array $included = null,
+        $primaryData,
+        array $includedData = null,
         array $meta = null,
         array $links = null
     ): ResourceResponse {
-        $resource = $this->encoder->encodeModel($data);
+        $resource = $this->encoder->encodeData($primaryData);
 
         return new ResourceResponse(
             $resource,
-            null === $included ? null : $this->buildIncluded($included),
+            null === $includedData ? null : $this->buildIncluded($includedData),
             null === $meta ? null : new Meta($meta),
             null === $links ? null : $this->buildLinks($links)
         );
     }
 
     /**
+     * @param mixed $primaryData
+     * @param mixed[]|null $includedData
+     * @param array<string, mixed>|null $meta
+     * @param array<string, LinkMemberInterface>|null $links
      * @throws Exception
      */
     public function resourceCreated(
-        $model,
-        array $included = null,
+        $primaryData,
+        array $includedData = null,
         array $meta = null,
         array $links = null
     ): ResourceCreatedResponse {
-        $resource = $this->encoder->encodeModel($model);
+        $resource = $this->encoder->encodeData($primaryData);
 
         return new ResourceCreatedResponse(
             $resource,
-            null === $included ? null : $this->buildIncluded($included),
+            null === $includedData ? null : $this->buildIncluded($includedData),
             null === $meta ? null : new Meta($meta),
             null === $links ? null : $this->buildLinks($links)
         );
     }
 
     /**
+     * @param mixed $primaryData
+     * @param mixed[]|null $includedData
+     * @param array<string, mixed>|null $meta
+     * @param array<string, LinkMemberInterface>|null $links
      * @throws Exception
      */
     public function resourceUpdated(
-        $data,
-        array $included = null,
+        $primaryData,
+        array $includedData = null,
         array $meta = null,
         array $links = null
     ): ResourceUpdatedResponse {
-        $resource = $this->encoder->encodeModel($data);
+        $resource = $this->encoder->encodeData($primaryData);
 
         return new ResourceUpdatedResponse(
             $resource,
-            null === $included ? null : $this->buildIncluded($included),
+            null === $includedData ? null : $this->buildIncluded($includedData),
             null === $meta ? null : new Meta($meta),
             null === $links ? null : $this->buildLinks($links)
         );

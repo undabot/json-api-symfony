@@ -8,7 +8,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
 
 class PaginatedArrayCollection extends ArrayCollection
 {
-    public static function createFromDoctrinePaginator(Paginator $paginator)
+    public static function createFromDoctrinePaginator(Paginator $paginator): self
     {
         $count = $paginator->count();
         $entities = $paginator->getQuery()->getResult();

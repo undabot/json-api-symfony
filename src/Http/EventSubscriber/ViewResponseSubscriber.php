@@ -36,7 +36,7 @@ class ViewResponseSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function buildView(ViewEvent $event)
+    public function buildView(ViewEvent $event): void
     {
         $data = $event->getControllerResult();
 

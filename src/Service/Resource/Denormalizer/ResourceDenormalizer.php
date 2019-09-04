@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Service\Resource\Denormalizer;
 
+use Assert\Assertion;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Throwable;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\MissingDataValueResourceDenormalizationException;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\ResourceDenormalizationException;
@@ -31,14 +33,23 @@ class ResourceDenormalizer
     /**
      * Creates new instance of $class and populates it with values from the provided $resource
      *
+     * @param ResourceInterface $resource
      * @throws MissingDataValueResourceDenormalizationException
      * @throws ResourceDenormalizationException
+     * @throws \Assert\AssertionFailedException
      */
-    public function denormalize(ResourceInterface $resource, string $class)
+    public function denormalize(ResourceInterface $resource, string $class): ApiModel
     {
+        Assertion::classExists($class);
+        Assertion::subclassOf(
+            $class,
+            ApiModel::class,
+            sprintf('%s is not instance of %s', $class, ApiModel::class)
+        );
         $data = $this->prepareData($resource, $class);
 
         try {
+            /** @var ApiModel $result */
             $result = $this->denormalizer->denormalize($data, $class, null, [
                 AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
             ]);
@@ -60,9 +71,11 @@ class ResourceDenormalizer
     }
 
     /**
-     * Prepares data forthe incoming resource as key - value map.
+     * Prepares data for the incoming resource as key - value map.
      * For properties that are aliased (i.e. class property name is not the same as resource attribute / relationship)
      * change the key to match class property name.
+     *
+     * @return array<string, string|string[]|null>
      */
     private function prepareData(ResourceInterface $resource, string $class): array
     {

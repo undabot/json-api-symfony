@@ -4,21 +4,48 @@ declare(strict_types=1);
 
 namespace Undabot\JsonApi\Tests\Unit\Request;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
+use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
+use Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory;
+use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
 class GetResourceCollectionRequestTest extends TestCase
 {
+    /** @var RequestFactory|MockObject */
+    private $requestFactoryMock;
+
+    /** @var Request|MockObject */
+    private $requestMock;
+
+    /** @var ParameterBag|MockObject */
+    private $parameterBagMock;
+
+    protected function setUp()
+    {
+        $this->requestMock = $this->createMock(Request::class);
+        $this->parameterBagMock = $this->createMock(ParameterBag::class);
+        $this->requestMock->query = $this->parameterBagMock;
+
+        $resourceEncoder = $this->createMock(PhpArrayToResourceEncoderInterface::class);
+        $requestValidatorMock = $this->createMock(RequestValidator::class);
+        $this->requestFactoryMock = new RequestFactory(
+            $resourceEncoder,
+            $requestValidatorMock
+        );
+    }
+
+
     public function testRequestWithoutAnyParametersCanBeConstructed()
     {
-        $parameterBagMock = $this->createMock(ParameterBag::class);
-        $requestMock = $this->createMock(Request::class);
-        $requestMock->query = $parameterBagMock;
-        $parameterBagMock->method('get')->willReturn(null);
+//        $parameterBagMock = $this->createMock(ParameterBag::class);
+//        $requestMock = $this->createMock(Request::class);
+        $this->parameterBagMock->method('get')->willReturn(null);
 
-        $getResourceCollectionRequest = GetResourceCollectionRequest::createFromRequest($requestMock);
+        $getResourceCollectionRequest = $this->requestFactoryMock->getResourceCollectionRequest($this->requestMock);
         $this->assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
         $this->assertNull($getResourceCollectionRequest->getPagination());
@@ -30,10 +57,10 @@ class GetResourceCollectionRequestTest extends TestCase
 
     public function testRequestWithAllValidParametersCanBeConstructed()
     {
-        $parameterBagMock = $this->createMock(ParameterBag::class);
-        $requestMock = $this->createMock(Request::class);
+//        $parameterBagMock = $this->createMock(ParameterBag::class);
+//        $requestMock = $this->createMock(Request::class);
 
-        $map = [
+        $queryParamsMap = [
             ['page', null, ['number' => 3, 'size' => 10]],
             ['filter', null, ['priceMin' => 3, 'priceMax' => 10.5, 'name' => 'John']],
             ['sort', null, 'name,-price,author.name'],
@@ -41,12 +68,18 @@ class GetResourceCollectionRequestTest extends TestCase
             ['fields', null, ['author' => 'name,price,rating', 'book' => 'title,publisher']],
         ];
 
-        $parameterBagMock->method('get')
-            ->will($this->returnValueMap($map));
+        $this->parameterBagMock->method('get')->will($this->returnValueMap($queryParamsMap));
 
-        $requestMock->query = $parameterBagMock;
+        $this->parameterBagMock->method('has')->will($this->returnCallback(function ($param) use ($queryParamsMap) {
+            $filtered = array_filter($queryParamsMap, function ($item) use ($param) {
+                return ($item[0] ?? null) === $param;
+            });
 
-        $getResourceCollectionRequest = GetResourceCollectionRequest::createFromRequest($requestMock);
+            return count($filtered) === 1;
+        }));
+        $this->requestMock->query = $this->parameterBagMock;
+
+        $getResourceCollectionRequest = $this->requestFactoryMock->getResourceCollectionRequest($this->requestMock);
         $this->assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
         $this->assertSame(10, $getResourceCollectionRequest->getPagination()->getSize());

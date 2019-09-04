@@ -11,6 +11,9 @@ use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
 
 class PaginationFactory
 {
+    /**
+     * @param array<string, int> $paginationParams
+     */
     public function fromArray(array $paginationParams): PaginationInterface
     {
         if (true == array_key_exists(PageBasedPagination::PARAM_PAGE_SIZE, $paginationParams) &&
@@ -30,7 +33,7 @@ class PaginationFactory
     /**
      * Is given string param castable to integer?
      */
-    private function isIntString(string $value)
+    private function isIntString(string $value): bool
     {
         if (false === is_numeric($value)) {
             return false;
@@ -39,6 +42,9 @@ class PaginationFactory
         return $value === (string) ((int) $value);
     }
 
+    /**
+     * @param array<string, int> $paginationParams
+     */
     private function makePageBasedPagination(array $paginationParams): PageBasedPagination
     {
         $this->makeSureOnlyRequiredParamsArePresent(
@@ -53,6 +59,9 @@ class PaginationFactory
         );
     }
 
+    /**
+     * @param array<string, int> $paginationParams
+     */
     private function makeOffsetBasedPagination(array $paginationParams): OffsetBasedPagination
     {
         $this->makeSureOnlyRequiredParamsArePresent(
@@ -74,6 +83,9 @@ class PaginationFactory
         );
     }
 
+    /**
+     * @param int[] $paginationParams
+     */
     private function makeSureParametersAreValidIntegers(array $paginationParams): void
     {
         $nonIntegerParams = array_keys(array_filter($paginationParams, function ($item) {
@@ -94,6 +106,9 @@ class PaginationFactory
         }
     }
 
+    /**
+     * @param int[] $paginationParams
+     */
     private function makeSureParametersAreValidNonZeroIntegers(array $paginationParams): void
     {
         $this->makeSureParametersAreValidIntegers($paginationParams);
@@ -112,7 +127,11 @@ class PaginationFactory
         }
     }
 
-    private function makeSureOnlyRequiredParamsArePresent(array $paginationParams, array $requiredParams)
+    /**
+     * @param array<string, int> $paginationParams
+     * @param string[] $requiredParams
+     */
+    private function makeSureOnlyRequiredParamsArePresent(array $paginationParams, array $requiredParams): void
     {
         $givenParams = array_keys($paginationParams);
         $unsupportedParams = array_diff($givenParams, $requiredParams);

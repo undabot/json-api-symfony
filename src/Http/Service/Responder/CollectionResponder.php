@@ -24,13 +24,13 @@ final class CollectionResponder extends AbstractResponder
         array $meta = null,
         array $links = null
     ): ResourceCollectionResponse {
-        $primaryResources = $this->encoder->encodeModels($primaryModels->getItems());
+        $primaryResources = $this->encoder->encodeDataset($primaryModels->getItems());
         $meta = $meta ?? ['total' => $primaryModels->count()];
 
         return new ResourceCollectionResponse(
             new ResourceCollection($primaryResources),
             null === $included ? null : $this->buildIncluded($included),
-            null === $meta ? null : new Meta($meta),
+            new Meta($meta),
             null === $links ? null : $this->buildLinks($links)
         );
     }

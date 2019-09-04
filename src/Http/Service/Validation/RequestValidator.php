@@ -6,21 +6,13 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Validation;
 
 use Assert\Assertion;
 use Assert\AssertionFailedException;
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\JsonApi\Model\Request\Sort\Sort;
-use Undabot\JsonApi\Model\Request\Sort\SortSet;
 use Undabot\JsonApi\Exception\Request\ClientGeneratedIdIsNotAllowedException;
 use Undabot\JsonApi\Exception\Request\InvalidRequestAcceptHeaderException;
 use Undabot\JsonApi\Exception\Request\InvalidRequestContentTypeHeaderException;
 use Undabot\JsonApi\Exception\Request\InvalidRequestDataException;
-use Undabot\JsonApi\Exception\Request\UnsupportedFilterAttributeGivenException;
-use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
 use Undabot\JsonApi\Exception\Request\UnsupportedMediaTypeException;
-use Undabot\JsonApi\Exception\Request\UnsupportedPaginationRequestedException;
 use Undabot\JsonApi\Exception\Request\UnsupportedQueryStringParameterGivenException;
-use Undabot\JsonApi\Exception\Request\UnsupportedSortRequestedException;
-use Undabot\JsonApi\Exception\Request\UnsupportedSparseFieldsetRequestedException;
 
 class RequestValidator implements RequestValidatorInterface
 {
@@ -75,7 +67,7 @@ class RequestValidator implements RequestValidatorInterface
             }
 
             if (false === is_array($accepts)) {
-                throw new Exception('Couldn\'t check accept headers');
+                throw new InvalidRequestAcceptHeaderException('Couldn\'t check accept headers');
             }
 
             if (false === in_array('application/vnd.api+json', $accepts)) {
@@ -110,104 +102,9 @@ class RequestValidator implements RequestValidatorInterface
     }
 
     /**
-     * @throws UnsupportedIncludeValuesGivenException
-     */
-    public function makeSureRequestHasOnlyWhitelistedIncludeQueryParams(
-        Request $request,
-        array $whitelistedIncludeValues
-    ): void {
-        $requestedIncludeString = $request->query->get('include', null);
-        if (null === $requestedIncludeString) {
-            return;
-        }
-
-        $includes = explode(',', $requestedIncludeString);
-        $unsupportedIncludeValues = array_diff($includes, $whitelistedIncludeValues);
-
-        if (0 !== count($unsupportedIncludeValues)) {
-            $message = sprintf('Unsupported include query params given: %s', implode(', ', $unsupportedIncludeValues));
-            throw new UnsupportedIncludeValuesGivenException($message);
-        }
-    }
-
-    /**
-     * @throws UnsupportedSortRequestedException
-     */
-    public function makeSureRequestHasOnlyWhitelistedSortQueryParams(
-        Request $request,
-        array $whitelistedSortValues
-    ): void {
-        $requestedSortString = $request->query->get('sort', null);
-        if (null === $requestedSortString) {
-            return;
-        }
-
-        $sortSet = SortSet::make($requestedSortString);
-        $unsupportedSorts = [];
-
-        /** @var Sort $sort */
-        foreach ($sortSet as $sort) {
-            if (false === in_array($sort->getAttribute(), $whitelistedSortValues)) {
-                $unsupportedSorts[] = $sort->getAttribute();
-            }
-        }
-
-        if (0 !== count($unsupportedSorts)) {
-            $message = sprintf('Unsupported sort query params given: %s', implode(', ', $unsupportedSorts));
-            throw new UnsupportedSortRequestedException($message);
-        }
-    }
-
-    /**
-     * @throws UnsupportedFilterAttributeGivenException
-     */
-    public function makeSureRequestHasOnlyWhitelistedFilterQueryParams(
-        Request $request,
-        array $filterableAttributes
-    ): void {
-        $requestedFilters = $request->query->get('filter', null);
-        if (null === $requestedFilters) {
-            return;
-        }
-
-        $requestedFilterAttributes = array_keys($requestedFilters);
-        $unsupportedFilterAttributes = array_diff($requestedFilterAttributes, $filterableAttributes);
-
-        if (0 !== count($unsupportedFilterAttributes)) {
-            $message = sprintf('Unsupported filter attributes given: %s', implode(', ', $unsupportedFilterAttributes));
-            throw new UnsupportedFilterAttributeGivenException($message);
-        }
-    }
-
-    /**
-     * @throws UnsupportedSparseFieldsetRequestedException
-     */
-    public function makeSureRequestDoesntHaveSparseFieldsetQueryParams(Request $request): void
-    {
-        $requestedFields = $request->query->get('fields', null);
-        if (null === $requestedFields) {
-            return;
-        }
-
-        throw new UnsupportedSparseFieldsetRequestedException();
-    }
-
-    /**
-     * @throws UnsupportedPaginationRequestedException
-     */
-    public function makeSureRequestDoesntHavePaginationQueryParams(Request $request): void
-    {
-        $requestedPagination = $request->query->get('page', null);
-        if (null === $requestedPagination) {
-            return;
-        }
-
-        throw new UnsupportedPaginationRequestedException();
-    }
-
-    /**
      * @throws InvalidRequestDataException
      * @throws AssertionFailedException
+     * @param array<string, mixed> $data
      */
     public function assertValidUpdateRequestData(array $data, string $id): void
     {
@@ -217,5 +114,4 @@ class RequestValidator implements RequestValidatorInterface
 
         Assertion::same($data['id'], $id, 'Resource with invalid ID given');
     }
-
 }

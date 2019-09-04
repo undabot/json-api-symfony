@@ -11,5 +11,8 @@ interface ObjectCollection extends Countable, IteratorAggregate
 {
     public function count(): int;
 
+    /**
+     * @return object[]
+     */
     public function getItems(): array;
 }

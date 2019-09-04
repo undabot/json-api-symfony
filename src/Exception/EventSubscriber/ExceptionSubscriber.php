@@ -34,7 +34,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         ];
     }
 
-    private function buildError(\Exception $exception)
+    private function buildError(\Exception $exception): Error
     {
         $e = FlattenException::create($exception);
 
@@ -49,7 +49,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
         );
     }
 
-    public function buildErrorResponse(ExceptionEvent $event)
+    public function buildErrorResponse(ExceptionEvent $event): void
     {
         $exception = $event->getException();
 

@@ -24,6 +24,13 @@ class ResourceMetadata
     /** @var string|null */
     private $type;
 
+    /**
+     * @param Constraint[] $resourceConstraints
+     * @param AttributeMetadata[] $attributesMetadata
+     * @param RelationshipMetadata[] $relationshipsMetadata
+     *
+     * @throws \Assert\AssertionFailedException
+     */
     public function __construct(
         array $resourceConstraints,
         array $attributesMetadata,
@@ -66,6 +73,9 @@ class ResourceMetadata
         return $this->resourceConstraints;
     }
 
+    /**
+     * @return array<string, Constraint[]>
+     */
     public function getAttributesConstraints(): array
     {
         $constraints = [];
@@ -92,7 +102,7 @@ class ResourceMetadata
     /**
      * Returns map of relationship names and constraints that operate on RelationshipInterface objects
      *
-     * @return array
+     * @return array<string, Constraint[]>
      */
     public function getRelationshipsObjectConstraints(): array
     {
@@ -113,7 +123,7 @@ class ResourceMetadata
     /**
      * Returns map of relationship names and constraints that operate on raw relationship values (string or string[])
      *
-     * @return array
+     * @return array<string, Constraint[]>
      */
     public function getRelationshipsValueConstraints(): array
     {
@@ -178,6 +188,9 @@ class ResourceMetadata
         return $metadata;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getAttributesAliasMap(): array
     {
         $map = [];
@@ -195,6 +208,9 @@ class ResourceMetadata
         return $map;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getRelationshipsAliasMap(): array
     {
         $map = [];

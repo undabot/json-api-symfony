@@ -18,6 +18,9 @@ class AttributeMetadata
     /** @var array */
     private $constraints;
 
+    /**
+     * @param Constraint[] $constraints
+     */
     public function __construct(string $name, string $propertyPath, array $constraints)
     {
         Assertion::allIsInstanceOf($constraints, Constraint::class);
@@ -32,6 +35,9 @@ class AttributeMetadata
         return $this->name;
     }
 
+    /**
+     * @return Constraint[]
+     */
     public function getConstraints(): array
     {
         return $this->constraints;

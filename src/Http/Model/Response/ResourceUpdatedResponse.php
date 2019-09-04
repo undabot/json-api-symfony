@@ -14,6 +14,9 @@ final class ResourceUpdatedResponse
     /** @var ResourceInterface */
     private $primaryResource;
 
+    /** @var ResourceCollectionInterface|null */
+    private $includedResources;
+
     /** @var MetaInterface|null */
     private $meta;
 
@@ -27,6 +30,7 @@ final class ResourceUpdatedResponse
         ?LinkCollectionInterface $links = null
     ) {
         $this->primaryResource = $primaryResource;
+        $this->includedResources = $includedResources;
         $this->meta = $meta;
         $this->links = $links;
     }
@@ -34,6 +38,11 @@ final class ResourceUpdatedResponse
     public function getPrimaryResource(): ResourceInterface
     {
         return $this->primaryResource;
+    }
+
+    public function getIncludedResources(): ?ResourceCollectionInterface
+    {
+        return $this->includedResources;
     }
 
     public function getMeta(): ?MetaInterface

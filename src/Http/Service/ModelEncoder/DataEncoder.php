@@ -10,7 +10,7 @@ use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
-final class ModelEncoder
+final class DataEncoder
 {
     /** @var ResourceFactory */
     protected $resourceFactory;
@@ -24,11 +24,17 @@ final class ModelEncoder
      * Converts given entity first to the JSON:API resource model class by using provided $modelTransformer callable,
      * and then to the ResourceInterface by using ResourceFactory
      *
+     * @param mixed $data
      * @throws Exception
      */
-    public function encodeModel($data, callable $modelTransformer): ResourceInterface
+    public function encodeData($data, callable $modelTransformer): ResourceInterface
     {
         $apiModel = $modelTransformer($data);
+        Assertion::isInstanceOf(
+            $apiModel,
+            ApiModel::class,
+            sprintf('Invalid data conversion occured. Expected instance of ApiModel, got %s', get_class($apiModel))
+        );
 
         return $this->resourceFactory->make($apiModel);
     }
@@ -37,18 +43,17 @@ final class ModelEncoder
      * Converts given entities first to JSON:API resource model classes by using provided $modelTransformer callable,
      * and then to the ResourceInterface instances by using ResourceFactory
      *
-     * @param ApiModel[] $models
-     * @throws Exception
+     * @param mixed[] $dataset
+     * @param callable $modelTransformer
+     * @return ResourceInterface[]
      */
-    public function encodeModels(array $models, callable $modelTransformer): array
+    public function encodeDataset(array $dataset, callable $modelTransformer): array
     {
-        Assertion::allIsInstanceOf($models, ApiModel::class);
-
         return array_map(
             function ($resource) use ($modelTransformer) {
-                return $this->encodeModel($resource, $modelTransformer);
+                return $this->encodeData($resource, $modelTransformer);
             },
-            $models
+            $dataset
         );
     }
 }

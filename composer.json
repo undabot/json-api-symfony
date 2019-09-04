@@ -2,6 +2,7 @@
   "name": "undabot/json-api-symfony",
   "description": "",
   "type": "library",
+  "license": "MIT",
   "require": {
     "php": "^7.3",
     "undabot/json-api-core": "dev-v2-rc@dev",

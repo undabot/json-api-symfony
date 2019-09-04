@@ -42,4 +42,15 @@ class JsonApiHttpResponse extends Response
             ]
         );
     }
+
+    public static function serverError($data)
+    {
+        return new self(
+            json_encode($data),
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            [
+                'Content-Type' => self::CONTENT_TYPE,
+            ]
+        );
+    }
 }

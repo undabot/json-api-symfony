@@ -7,31 +7,37 @@ namespace Undabot\JsonApi\Tests\Unit\Pagination;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Model\Request\Pagination\PageBasedPagination;
-use Undabot\SymfonyJsonApi\Request\Factory\PaginationFactory;
+use Undabot\SymfonyJsonApi\Http\Service\Factory\PaginationFactory;
 
-class PageBasedPaginationFactoryTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class PageBasedPaginationFactoryTest extends TestCase
 {
     /** @var PaginationFactory */
     private $paginationFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->paginationFactory = new PaginationFactory();
     }
 
     /** @dataProvider validPageBasedPaginationParamsProvider */
-    public function testPaginationFactoryCanCreatePageBasedPaginationFromValidParams($params)
+    public function testPaginationFactoryCanCreatePageBasedPaginationFromValidParams($params): void
     {
-        $pagination = $this->paginationFactory->makeFromArray($params);
+        $pagination = $this->paginationFactory->fromArray($params);
 
-        $this->assertInstanceOf(PageBasedPagination::class, $pagination);
+        static::assertInstanceOf(PageBasedPagination::class, $pagination);
     }
 
     /** @dataProvider invalidPaginationParamsProvider */
-    public function testPaginationFactoryWillThrowExceptionForInvalidParams(array $invalidParams)
+    public function testPaginationFactoryWillThrowExceptionForInvalidParams(array $invalidParams): void
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->paginationFactory->makeFromArray($invalidParams);
+        $this->paginationFactory->fromArray($invalidParams);
     }
 
     public function invalidPaginationParamsProvider()
@@ -109,7 +115,7 @@ class PageBasedPaginationFactoryTest extends TestCase
         ];
     }
 
-    public function testGetPageNumberWillReturnCorrectNumber()
+    public function testGetPageNumberWillReturnCorrectNumber(): void
     {
         $params = [
             'number' => 3,
@@ -117,9 +123,9 @@ class PageBasedPaginationFactoryTest extends TestCase
         ];
 
         /** @var PageBasedPagination $pagination */
-        $pagination = $this->paginationFactory->makeFromArray($params);
+        $pagination = $this->paginationFactory->fromArray($params);
 
-        $this->assertSame(3, $pagination->getPageNumber());
-        $this->assertSame(10, $pagination->getSize());
+        static::assertSame(3, $pagination->getPageNumber());
+        static::assertSame(10, $pagination->getSize());
     }
 }

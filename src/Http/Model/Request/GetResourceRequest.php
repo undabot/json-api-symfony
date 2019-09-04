@@ -4,10 +4,16 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Model\Request;
 
+use Undabot\JsonApi\Exception\Request\RequestException;
 use Undabot\JsonApi\Model\Request\GetResourceRequestInterface;
+use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\JsonApi\Exception\Request\UnsupportedSparseFieldsetRequestedException;
 
 class GetResourceRequest implements GetResourceRequestInterface
 {
+    public const INCLUDE_KEY = 'include';
+    public const FIELDS_KEY = 'fields';
+
     /** @var string */
     private $id;
 
@@ -48,8 +54,16 @@ class GetResourceRequest implements GetResourceRequestInterface
         return $this->sparseFieldset;
     }
 
-    public function allowIncludes(array $includes): self
+    /**
+     * @throws UnsupportedIncludeValuesGivenException
+     */
+    public function allowIncludes(array $includes): GetResourceRequestInterface
     {
+        $unsupportedIncludes = array_diff($this->include ?: [], $includes);
+        if (0 !== count($unsupportedIncludes)) {
+            throw new UnsupportedIncludeValuesGivenException($unsupportedIncludes);
+        }
+
         return new self(
             $this->id,
             $includes,
@@ -57,8 +71,16 @@ class GetResourceRequest implements GetResourceRequestInterface
         );
     }
 
-    public function allowFields(array $fields): self
+    /**
+     * @throws UnsupportedSparseFieldsetRequestedException
+     */
+    public function allowFields(array $fields): GetResourceRequestInterface
     {
+        $unsupportedFields = array_diff($this->sparseFieldset ?: [], $fields);
+        if (0 !== count($unsupportedFields)) {
+            throw new UnsupportedSparseFieldsetRequestedException($unsupportedFields);
+        }
+
         return new self(
             $this->id,
             $this->sparseFieldset,

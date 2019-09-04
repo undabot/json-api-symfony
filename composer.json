@@ -41,11 +41,16 @@
     "lint": [
       "php-cs-fixer fix --diff --ansi --dry-run"
     ],
-    "qc": [
+    "phpstan": [
       "phpstan analyse -n --ansi --no-progress"
     ],
     "test": [
       "phpunit"
+    ],
+    "qc": [
+      "@lint",
+      "@phpstan",
+      "@test"
     ]
   }
 }

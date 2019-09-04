@@ -6,6 +6,10 @@ namespace Undabot\SymfonyJsonApi\Model\Collection;
 
 use ArrayIterator;
 
+/**
+ * Collection of objects that assures only no duplicates will be added to it.
+ * One instance of object will be added, while all others will be silently ignored
+ */
 class UniqueCollection implements ObjectCollection
 {
     /** @var array */

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Service;
 
-use Assert\Assertion;
 use Undabot\JsonApi\Model\Request\ResourcePayloadRequest;
 use Undabot\JsonApi\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
@@ -27,18 +26,14 @@ final class SimpleResourceHandler
 
     public function getModelFromRequest(ResourcePayloadRequest $request, string $class): ApiModel
     {
-        Assertion::isInstanceOf($class, ApiModel::class, 'Given class is not instance of ApiModel');
-
-        $resource = $request->getResource();
-        $this->validator->assertValid($resource, $class);
-        $model = $this->denormalizer->denormalize($resource, $class);
-
-        return $model;
+        return $this->getModelFromResource($request->getResource(), $class);
     }
 
-    public function getModelFromResource(ResourceInterface $resource, string $class)
+    public function getModelFromResource(ResourceInterface $resource, string $class): ApiModel
     {
-        Assertion::isInstanceOf($class, ApiModel::class, 'Given class is not instance of ApiModel');
+        if (false === is_subclass_of($class, ApiModel::class)) {
+            throw new \InvalidArgumentException('Given class is not instance of ApiModel');
+        }
 
         $this->validator->assertValid($resource, $class);
         $model = $this->denormalizer->denormalize($resource, $class);

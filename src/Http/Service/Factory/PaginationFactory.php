@@ -11,7 +11,7 @@ use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
 
 class PaginationFactory
 {
-    public function makeFromArray(array $paginationParams): PaginationInterface
+    public function fromArray(array $paginationParams): PaginationInterface
     {
         if (true == array_key_exists(PageBasedPagination::PARAM_PAGE_SIZE, $paginationParams) &&
             true == array_key_exists(PageBasedPagination::PARAM_PAGE_NUMBER, $paginationParams)) {

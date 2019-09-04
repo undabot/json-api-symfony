@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Service\Validation;
 
+use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Model\Request\Sort\Sort;
 use Undabot\JsonApi\Model\Request\Sort\SortSet;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\ClientGeneratedIdIsNotAllowedException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestAcceptHeaderException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestContentTypeHeaderException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestDataException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedFilterAttributeGivenException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedIncludeValuesGivenException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedMediaTypeException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedPaginationRequestedException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParameterGivenException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSortRequestedException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSparseFieldsetRequestedException;
+use Undabot\JsonApi\Exception\Request\ClientGeneratedIdIsNotAllowedException;
+use Undabot\JsonApi\Exception\Request\InvalidRequestAcceptHeaderException;
+use Undabot\JsonApi\Exception\Request\InvalidRequestContentTypeHeaderException;
+use Undabot\JsonApi\Exception\Request\InvalidRequestDataException;
+use Undabot\JsonApi\Exception\Request\UnsupportedFilterAttributeGivenException;
+use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\JsonApi\Exception\Request\UnsupportedMediaTypeException;
+use Undabot\JsonApi\Exception\Request\UnsupportedPaginationRequestedException;
+use Undabot\JsonApi\Exception\Request\UnsupportedQueryStringParameterGivenException;
+use Undabot\JsonApi\Exception\Request\UnsupportedSortRequestedException;
+use Undabot\JsonApi\Exception\Request\UnsupportedSparseFieldsetRequestedException;
 
 class RequestValidator implements RequestValidatorInterface
 {
@@ -31,7 +32,16 @@ class RequestValidator implements RequestValidatorInterface
         'fields',
     ];
 
-    public function makeSureRequestIsValidJsonApiRequest(Request $request): void
+    /**
+     * Validates request according to JSON:API specification
+     *
+     * @param Request $request
+     * @throws InvalidRequestAcceptHeaderException
+     * @throws InvalidRequestContentTypeHeaderException
+     * @throws UnsupportedMediaTypeException
+     * @throws UnsupportedQueryStringParameterGivenException
+     */
+    public function assertValidRequest(Request $request): void
     {
 
         return;
@@ -92,7 +102,7 @@ class RequestValidator implements RequestValidatorInterface
     /**
      * @throws ClientGeneratedIdIsNotAllowedException
      */
-    public function makeSureRequestResourceDoesntHaveClientGeneratedId(array $requestPrimaryData): void
+    public function assertResourceIsWithoutClientGeneratedId(array $requestPrimaryData): void
     {
         if (true === array_key_exists('id', $requestPrimaryData)) {
             throw new ClientGeneratedIdIsNotAllowedException('Client is not permitted to set ID value.');
@@ -197,11 +207,15 @@ class RequestValidator implements RequestValidatorInterface
 
     /**
      * @throws InvalidRequestDataException
+     * @throws AssertionFailedException
      */
-    public function makeSureResourceHasTheSameId(string $id, ResourceInterface $resource): void
+    public function assertValidUpdateRequestData(array $data, string $id): void
     {
-        if ($resource->getId() !== $id) {
-            throw new InvalidRequestDataException('Resource with invalid ID given');
+        if (false === Assertion::notEmptyKey($data, 'id')) {
+            throw new InvalidRequestDataException('Update request must have resource ID');
         }
+
+        Assertion::same($data['id'], $id, 'Resource with invalid ID given');
     }
+
 }

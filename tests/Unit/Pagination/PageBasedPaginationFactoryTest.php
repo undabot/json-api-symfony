@@ -22,7 +22,7 @@ class PageBasedPaginationFactoryTest extends TestCase
     /** @dataProvider validPageBasedPaginationParamsProvider */
     public function testPaginationFactoryCanCreatePageBasedPaginationFromValidParams($params)
     {
-        $pagination = $this->paginationFactory->makeFromArray($params);
+        $pagination = $this->paginationFactory->fromArray($params);
 
         $this->assertInstanceOf(PageBasedPagination::class, $pagination);
     }
@@ -31,7 +31,7 @@ class PageBasedPaginationFactoryTest extends TestCase
     public function testPaginationFactoryWillThrowExceptionForInvalidParams(array $invalidParams)
     {
         $this->expectException(InvalidArgumentException::class);
-        $this->paginationFactory->makeFromArray($invalidParams);
+        $this->paginationFactory->fromArray($invalidParams);
     }
 
     public function invalidPaginationParamsProvider()
@@ -117,7 +117,7 @@ class PageBasedPaginationFactoryTest extends TestCase
         ];
 
         /** @var PageBasedPagination $pagination */
-        $pagination = $this->paginationFactory->makeFromArray($params);
+        $pagination = $this->paginationFactory->fromArray($params);
 
         $this->assertSame(3, $pagination->getPageNumber());
         $this->assertSame(10, $pagination->getSize());

@@ -12,11 +12,14 @@ class ResourceAttributesBuilder
     /** @var array */
     private $attributes = [];
 
-    public static function make()
+    public static function make(): self
     {
         return new self();
     }
 
+    /**
+     * @param mixed $value
+     */
     public function add(string $attributeName, $value): self
     {
         $this->attributes[$attributeName] = new Attribute($attributeName, $value);

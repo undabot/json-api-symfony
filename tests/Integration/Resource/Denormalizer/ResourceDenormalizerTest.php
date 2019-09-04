@@ -11,13 +11,14 @@ use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Undabot\JsonApi\Model\Resource\Resource;
+use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
-class ResourceDto
+class ResourceDto implements ApiModel
 {
     /**
      * @var string

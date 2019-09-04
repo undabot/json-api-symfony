@@ -86,7 +86,10 @@ class ResourceTypeValidator extends ConstraintValidator
         }
     }
 
-    private function validateArrayOfTypes(array $types, ResourceType $constraint)
+    /**
+     * @param string[] $types
+     */
+    private function validateArrayOfTypes(array $types, ResourceType $constraint): void
     {
         $invalidValues = [];
         foreach ($types as $type) {

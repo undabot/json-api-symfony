@@ -20,5 +20,8 @@ namespace Undabot\SymfonyJsonApi\Http\Service\ModelEncoder;
  */
 interface ModelEncoderMapInterface
 {
+    /**
+     * @return array<string, callable>
+     */
     public function getMap(): array;
 }

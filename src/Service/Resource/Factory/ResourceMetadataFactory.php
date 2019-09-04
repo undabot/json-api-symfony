@@ -63,6 +63,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
+     * @return mixed[]
      * @throws InvalidResourceMappingException
      */
     private function loadMetadata(ReflectionClass $reflection): array
@@ -137,6 +138,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         ];
     }
 
+    /**
+     * @param Constraint[] $constraintAnnotations
+     */
     private function buildAttributeMetadata(
         ReflectionProperty $property,
         Annotation\Attribute $attributeAnnotation,
@@ -155,6 +159,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
+     * @param Constraint[] $constraintAnnotations
      * @throws InvalidResourceMappingException
      */
     private function buildRelationshipMetadata(
@@ -188,9 +193,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
+     * @param AttributeMetadata[] $attributeMetadata
+     * @param RelationshipMetadata[] $relationshipMetadata
      * @throws InvalidResourceMappingException
      */
-    private function validate(array $attributeMetadata, array $relationshipMetadata)
+    private function validate(array $attributeMetadata, array $relationshipMetadata): void
     {
         /**
          * In other words, a resource can not have an attribute and relationship with the same name,

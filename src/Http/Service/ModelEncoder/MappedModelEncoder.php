@@ -15,16 +15,16 @@ final class MappedModelEncoder
     /** @var EntityManagerInterface */
     private $entityManager;
 
-    /** @var ModelEncoder */
-    protected $modelEncoder;
+    /** @var DataEncoder */
+    protected $dataEncoder;
 
     /** @var array */
     private $dataTransformersMap = [];
 
-    public function __construct(EntityManagerInterface $entityManager, ModelEncoder $modelEncoder)
+    public function __construct(EntityManagerInterface $entityManager, DataEncoder $modelEncoder)
     {
         $this->entityManager = $entityManager;
-        $this->modelEncoder = $modelEncoder;
+        $this->dataEncoder = $modelEncoder;
     }
 
     /**
@@ -32,6 +32,10 @@ final class MappedModelEncoder
      * encoding rules (encoding map).
      *
      * Supports resolving Doctrine proxy classes to actuall entity class names.
+     *
+     * @param object $data
+     *
+     * @return callable
      *
      * @see \Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ModelEncoderMapInterface
      */
@@ -57,21 +61,23 @@ final class MappedModelEncoder
     }
 
     /**
+     * @param object $data
      * @throws Exception
      */
-    public function encodeModel($data): ResourceInterface
+    public function encodeData($data): ResourceInterface
     {
         $dataTransformer = $this->getDataTransformer($data);
 
-        return $this->modelEncoder->encodeModel($data, $dataTransformer);
+        return $this->dataEncoder->encodeData($data, $dataTransformer);
     }
 
     /**
-     * @throws Exception
+     * @param object[] $data
+     * @return ResourceInterface[]
      */
-    public function encodeModels(array $data): array
+    public function encodeDataset(array $data): array
     {
-        return array_map([$this, 'encodeModel'], $data);
+        return array_map([$this, 'encodeData'], $data);
     }
 
     public function addEncoder(string $modelClass, callable $encoder): void

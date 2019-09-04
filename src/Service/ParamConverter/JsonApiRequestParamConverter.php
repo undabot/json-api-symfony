@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Encoding\Exception\PhpArrayEncodingException;
+use Undabot\JsonApi\Exception\Request\ClientGeneratedIdIsNotAllowedException;
 use Undabot\JsonApi\Exception\Request\RequestException;
 use Undabot\JsonApi\Model\Request\CreateResourceRequestInterface;
 use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
@@ -53,16 +54,27 @@ class JsonApiRequestParamConverter implements ParamConverterInterface
 
         if (GetResourceRequestInterface::class === $class) {
             $resourceId = $this->getResourceId($request, $configuration->getOptions());
-            $value = $this->requestFactory->getResourceRequest($request, $resourceId);
-            $request->attributes->set($name, $value);
+            if (null !== $resourceId) {
+                $value = $this->requestFactory->getResourceRequest($request, $resourceId);
+                $request->attributes->set($name, $value);
 
-            return true;
+                return true;
+            }
         }
 
         if (CreateResourceRequestInterface::class === $class) {
-            if ($configuration->getOptions()[self::OPTION_CLIENT_GENERATED_IDS] ?? null === true) {
-                $id = null;
-            } else {
+            /** @var bool $useClientGeneratedIDs */
+            $useClientGeneratedIDs = $configuration->getOptions()[self::OPTION_CLIENT_GENERATED_IDS] ?? false;
+            $id = null;
+
+            if (
+                $this->requestFactory->requestResourceHasClientSideGeneratedId($request)
+                && false === $useClientGeneratedIDs
+            ) {
+                throw new ClientGeneratedIdIsNotAllowedException();
+            }
+
+            if (false === $useClientGeneratedIDs) {
                 // @todo allow devs to choose ID generation strategy
                 $id = (string) Uuid::uuid4();
             }
@@ -75,10 +87,12 @@ class JsonApiRequestParamConverter implements ParamConverterInterface
 
         if (UpdateResourceRequestInterface::class === $class) {
             $resourceId = $this->getResourceId($request, $configuration->getOptions());
-            $value = $this->requestFactory->updateResourceRequest($request, $resourceId);
-            $request->attributes->set($name, $value);
+            if (null !== $resourceId) {
+                $value = $this->requestFactory->updateResourceRequest($request, $resourceId);
+                $request->attributes->set($name, $value);
 
-            return true;
+                return true;
+            }
         }
 
         return false;
@@ -98,13 +112,16 @@ class JsonApiRequestParamConverter implements ParamConverterInterface
         return in_array($class, $supportedClasses, true);
     }
 
+    /**
+     * @param mixed[] $options
+     */
     private function getResourceId(Request $request, array $options): ?string
     {
         // Which route attribute contains the ID (URL path param)?
         $idAttribute = $options['id'] ?? 'id';
 
         /** @var string|null $resourceId */
-        $resourceId = $request->attributes->all('_route_params')[$idAttribute] ?? null;
+        $resourceId = $request->attributes->get('_route_params')[$idAttribute] ?? null;
 
         return $resourceId;
     }

@@ -28,7 +28,7 @@ class Paginator implements PaginatorInterface
         QueryBuilder $queryBuilder,
         int $offset,
         int $size,
-        $fetchJoinCollection = true
+        bool $fetchJoinCollection = true
     ): ObjectCollection {
         $doctrinePaginator = $this->paginate($queryBuilder, $offset, $size, $fetchJoinCollection);
 

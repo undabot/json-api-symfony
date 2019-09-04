@@ -24,6 +24,9 @@ class RelationshipMetadata
     /** @var bool */
     protected $isToMany;
 
+    /**
+     * @param Constraint[] $constraints
+     */
     public function __construct(
         string $name,
         string $relatedResourceType,
@@ -45,6 +48,9 @@ class RelationshipMetadata
         return $this->name;
     }
 
+    /**
+     * @return Constraint[]
+     */
     public function getConstraints(): array
     {
         return $this->constraints;

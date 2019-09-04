@@ -14,6 +14,9 @@ class ArrayCollection implements ObjectCollection
     /** @var int */
     private $count;
 
+    /**
+     * @param mixed[] $items
+     */
     public function __construct(array $items, int $count = null)
     {
         $this->items = $items;
@@ -23,6 +26,9 @@ class ArrayCollection implements ObjectCollection
         $this->count = $count;
     }
 
+    /**
+     * @return mixed[] $items
+     */
     public function getItems(): array
     {
         return $this->items;

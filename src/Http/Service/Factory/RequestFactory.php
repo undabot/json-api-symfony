@@ -9,11 +9,11 @@ use Assert\AssertionFailedException;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Encoding\Exception\PhpArrayEncodingException;
 use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
+use Undabot\JsonApi\Exception\Request\InvalidRequestDataException;
 use Undabot\JsonApi\Exception\Request\RequestException;
 use Undabot\JsonApi\Model\Request\Filter\FilterSet;
 use Undabot\JsonApi\Model\Request\Sort\SortSet;
 use Undabot\JsonApi\Util\Assert\Assert;
-use Undabot\JsonApi\Exception\Request\InvalidRequestDataException;
 use Undabot\SymfonyJsonApi\Http\Model\Request\CreateResourceRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest;
@@ -37,11 +37,13 @@ class RequestFactory
     }
 
     /**
-     * @throws InvalidRequestDataException
+     * @param Request $request
+     * @return array<string, mixed>
      * @throws AssertionFailedException
      */
     private function getRequestPrimaryData(Request $request): array
     {
+        /** @var string $rawRequestData */
         $rawRequestData = $request->getContent(false);
         Assertion::isJsonString($rawRequestData, 'Request data must be valid JSON');
         $requestData = json_decode($rawRequestData, true);
@@ -81,6 +83,13 @@ class RequestFactory
         $resource = $this->resourceEncoder->decode($requestPrimaryData);
 
         return new CreateResourceRequest($resource);
+    }
+
+    public function requestResourceHasClientSideGeneratedId(Request $request): bool
+    {
+        $requestPrimaryData = $this->getRequestPrimaryData($request);
+
+        return array_key_exists('id', $requestPrimaryData);
     }
 
     /**

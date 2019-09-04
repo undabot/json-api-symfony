@@ -18,7 +18,7 @@ class ResourceType extends Constraint
     /** @var string */
     public $message = 'Invalid resource type `{{ given }}` given; `{{ expected }}` expected.';
 
-    public static function make(string $type)
+    public static function make(string $type): self
     {
         $resourceType = new self();
         $resourceType->type = $type;

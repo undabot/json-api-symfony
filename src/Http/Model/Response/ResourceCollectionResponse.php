@@ -34,7 +34,7 @@ final class ResourceCollectionResponse
         ?ResourceCollectionInterface $includedResources = null,
         ?MetaInterface $meta = null,
         ?LinkCollectionInterface $links = null
-    ) {
+    ): self {
         if ($meta === null) {
             $meta = new Meta(['total' => $primaryResources->count()]);
         }
@@ -59,12 +59,18 @@ final class ResourceCollectionResponse
         $this->links = $links;
     }
 
+    /**
+     * @param ResourceInterface[] $resources
+     * @param ResourceInterface[]|null $included
+     * @param array|null $meta
+     * @param LinkInterface[]|null $links
+     */
     public static function fromArray(
         array $resources,
         ?array $included = null,
         ?array $meta = null,
         ?array $links = null
-    ) {
+    ): ResourceCollectionResponse {
         Assertion::allIsInstanceOf($resources, ResourceInterface::class);
 
         $includedResources = null;
@@ -78,7 +84,7 @@ final class ResourceCollectionResponse
         }
 
         $linkCollection = null;
-        if (null !== $linkCollection) {
+        if (null !== $links) {
             Assertion::allIsInstanceOf($links, LinkInterface::class);
             $linkCollection = new LinkCollection($links);
         }

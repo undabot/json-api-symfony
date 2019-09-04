@@ -22,41 +22,7 @@ interface RequestValidatorInterface
     /**
      * Validates that HTTP request doesn't have Client-generated ID assigned to the resource
      *
-     * @throws RequestException
+     * @param array<string, mixed> $requestPrimaryData
      */
     public function assertResourceIsWithoutClientGeneratedId(array $requestPrimaryData): void;
-
-    /**
-     * @throws RequestException
-     */
-    public function makeSureRequestHasOnlyWhitelistedIncludeQueryParams(
-        Request $request,
-        array $whitelistedIncludeValues
-    ): void;
-
-    /**
-     * @throws RequestException
-     */
-    public function makeSureRequestHasOnlyWhitelistedFilterQueryParams(
-        Request $request,
-        array $filterableAttributes
-    ): void;
-
-    /**
-     * @throws RequestException
-     */
-    public function makeSureRequestHasOnlyWhitelistedSortQueryParams(
-        Request $request,
-        array $whitelistedSortValues
-    ): void;
-
-    /**
-     * @throws RequestException
-     */
-    public function makeSureRequestDoesntHaveSparseFieldsetQueryParams(Request $request): void;
-
-    /**
-     * @throws RequestException
-     */
-    public function makeSureRequestDoesntHavePaginationQueryParams(Request $request);
 }

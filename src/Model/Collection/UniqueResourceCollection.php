@@ -14,10 +14,13 @@ class UniqueResourceCollection implements ResourceCollectionInterface
     /** @var ResourceInterface[] */
     private $items;
 
-    public function __construct(array $items = [])
+    /**
+     * @param ResourceInterface[] $resource
+     */
+    public function __construct(array $resource = [])
     {
-        Assertion::allIsInstanceOf($items, ResourceInterface::class);
-        $this->items = $items;
+        Assertion::allIsInstanceOf($resource, ResourceInterface::class);
+        $this->items = $resource;
     }
 
     /**
@@ -31,8 +34,12 @@ class UniqueResourceCollection implements ResourceCollectionInterface
         }
     }
 
+    /**
+     * @param ResourceInterface[] $resources
+     */
     public function addResourcesIfTheyDontExist(array $resources): void
     {
+        Assertion::allIsInstanceOf($resources, ResourceInterface::class);
         foreach ($resources as $resource) {
             $this->addResourceIfItDoesntExist($resource);
         }

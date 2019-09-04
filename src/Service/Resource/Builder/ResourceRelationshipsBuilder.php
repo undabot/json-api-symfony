@@ -20,7 +20,7 @@ class ResourceRelationshipsBuilder
     /** @var array */
     private $toMany = [];
 
-    public static function make()
+    public static function make(): self
     {
         return new self();
     }
@@ -42,6 +42,9 @@ class ResourceRelationshipsBuilder
         return $this;
     }
 
+    /**
+     * @param string[] $ids
+     */
     public function toMany(string $relationshipName, string $resourceType, array $ids): self
     {
         $this->toMany[$relationshipName] = [];

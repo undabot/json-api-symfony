@@ -15,6 +15,10 @@ class UniqueCollection implements ObjectCollection
     /** @var array */
     private $items = [];
 
+    /**
+     *
+     * @param object[] $items
+     */
     public function __construct(array $items = [])
     {
         foreach ($items as $item) {
@@ -22,7 +26,7 @@ class UniqueCollection implements ObjectCollection
         }
     }
 
-    public function addObject($entity): void
+    public function addObject(object $entity): void
     {
         $key = spl_object_hash($entity);
         if (false === isset($this->items[$key])) {
@@ -30,6 +34,9 @@ class UniqueCollection implements ObjectCollection
         }
     }
 
+    /**
+     * @param object[] $entities
+     */
     public function addObjects(array $entities): void
     {
         foreach ($entities as $resource) {

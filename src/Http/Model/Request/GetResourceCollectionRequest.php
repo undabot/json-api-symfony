@@ -114,7 +114,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     }
 
     /**
-     * @param string[] $includes
+     * @param string[] $allowedIncludes
      *
      * @throws UnsupportedIncludeValuesGivenException
      */
@@ -129,7 +129,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     }
 
     /**
-     * @param string[] $sorts
+     * @param string[] $allowedSorts
      *
      * @throws UnsupportedSortRequestedException
      */

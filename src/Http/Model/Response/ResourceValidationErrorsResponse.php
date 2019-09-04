@@ -14,7 +14,7 @@ final class ResourceValidationErrorsResponse
     /** @var ErrorCollection */
     private $errorCollection;
 
-    public static function fromException(ModelInvalid $exception)
+    public static function fromException(ModelInvalid $exception): self
     {
         $errors = [];
 

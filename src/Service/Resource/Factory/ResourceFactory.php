@@ -62,22 +62,25 @@ class ResourceFactory
     }
 
     /**
+     * @param ApiModel[] $apiModels
+     * @return ResourceCollectionInterface
      * @throws AnnotationException
      * @throws InvalidResourceMappingException
      * @throws ReflectionException
      */
-    public function makeCollection(array $resources): ResourceCollectionInterface
+    public function makeCollection(array $apiModels): ResourceCollectionInterface
     {
+        Assertion::allIsInstanceOf($apiModels, ApiModel::class);
         $resourceObjects = [];
 
-        foreach ($resources as $resource) {
-            $resourceObjects[] = $this->make($resource);
+        foreach ($apiModels as $apiModel) {
+            $resourceObjects[] = $this->make($apiModel);
         }
 
         return new ResourceCollection($resourceObjects);
     }
 
-    private function makeAttributeCollection($resource, ResourceMetadata $metadata): ?AttributeCollection
+    private function makeAttributeCollection(ApiModel $apiModel, ResourceMetadata $metadata): ?AttributeCollection
     {
         if (true === empty($metadata->getAttributesMetadata())) {
             return null;
@@ -92,15 +95,17 @@ class ResourceFactory
         foreach ($metadata->getAttributesMetadata() as $attributesMetadatum) {
             $attributeBuilder->add(
                 $attributesMetadatum->getName(),
-                $propertyAccessor->getValue($resource, $attributesMetadatum->getPropertyPath())
+                $propertyAccessor->getValue($apiModel, $attributesMetadatum->getPropertyPath())
             );
         }
 
         return $attributeBuilder->get();
     }
 
-    private function makeRelationshipsCollection($resource, ResourceMetadata $metadata): ?RelationshipCollection
-    {
+    private function makeRelationshipsCollection(
+        ApiModel $apiModel,
+        ResourceMetadata $metadata
+    ): ?RelationshipCollection {
         if (true === empty($metadata->getRelationshipsMetadata())) {
             return null;
         }
@@ -117,13 +122,13 @@ class ResourceFactory
                 $relationshipBuilder->toMany(
                     $relationshipsMetadatum->getName(),
                     $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($resource, $relationshipsMetadatum->getPropertyPath())
+                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
                 );
             } else {
                 $relationshipBuilder->toOne(
                     $relationshipsMetadatum->getName(),
                     $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($resource, $relationshipsMetadatum->getPropertyPath())
+                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
                 );
             }
         }

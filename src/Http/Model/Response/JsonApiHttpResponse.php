@@ -10,6 +10,9 @@ class JsonApiHttpResponse extends Response
 {
     private const CONTENT_TYPE = 'application/vnd.api+json';
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function validationError(array $data): self
     {
         return new self(
@@ -32,7 +35,10 @@ class JsonApiHttpResponse extends Response
         );
     }
 
-    public static function badRequest($data)
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function badRequest(array $data): self
     {
         return new self(
             json_encode($data),
@@ -43,7 +49,10 @@ class JsonApiHttpResponse extends Response
         );
     }
 
-    public static function serverError($data)
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function serverError(array $data): self
     {
         return new self(
             json_encode($data),

@@ -30,6 +30,9 @@ class FlatResource
         $this->resource = $resource;
     }
 
+    /**
+     * @return array<string, string|null>
+     */
     public function getAttributes(): array
     {
         $flatAttributes = [];
@@ -46,6 +49,9 @@ class FlatResource
         return $flatAttributes;
     }
 
+    /**
+     * @return array<string, string|string[]|null>
+     */
     public function getRelationships(): array
     {
         $flatRelationships = [];
@@ -101,7 +107,7 @@ class FlatResource
      *
      * @return RelationshipInterface[]
      */
-    public function getIndexedRelationshipObjects()
+    public function getIndexedRelationshipObjects(): array
     {
         $flatRelationships = [];
 

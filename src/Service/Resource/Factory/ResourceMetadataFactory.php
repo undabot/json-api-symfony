@@ -63,8 +63,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
-     * @return mixed[]
      * @throws InvalidResourceMappingException
+     *
+     * @return mixed[]
      */
     private function loadMetadata(ReflectionClass $reflection): array
     {
@@ -75,7 +76,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
         $classAnnotations = $this->reader->getClassAnnotations($reflection);
         $classAnnotations = new ArrayCollection($classAnnotations);
-        $resourceConstraints = $classAnnotations->filter(function ($annotation) {
+        $resourceConstraints = $classAnnotations->filter(static function ($annotation) {
             return $annotation instanceof Constraint;
         })->getValues();
 
@@ -84,15 +85,15 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             $propertyAnnotations = $this->reader->getPropertyAnnotations($property);
             $propertyAnnotations = new ArrayCollection($propertyAnnotations);
 
-            $constraintAnnotations = $propertyAnnotations->filter(function ($annotation) {
+            $constraintAnnotations = $propertyAnnotations->filter(static function ($annotation) {
                 return $annotation instanceof Constraint;
             })->getValues();
 
-            $attributeAnnotations = $propertyAnnotations->filter(function ($annotation) {
+            $attributeAnnotations = $propertyAnnotations->filter(static function ($annotation) {
                 return $annotation instanceof Annotation\Attribute;
             });
 
-            $relationshipAnnotations = $propertyAnnotations->filter(function ($annotation) {
+            $relationshipAnnotations = $propertyAnnotations->filter(static function ($annotation) {
                 return $annotation instanceof Annotation\Relationship;
             });
 
@@ -101,16 +102,19 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
                     'Property `%s` can\'t be attribute and relationship in the same time',
                     $property->getName()
                 );
+
                 throw new InvalidResourceMappingException($message);
             }
 
             if ($attributeAnnotations->count() > 1) {
                 $message = sprintf('More than 1 Attribute Annotation found for property `%s`', $property->getName());
+
                 throw new InvalidResourceMappingException($message);
             }
 
             if ($relationshipAnnotations->count() > 1) {
                 $message = sprintf('More than 1 Relationship Annotation found for property `%s`', $property->getName());
+
                 throw new InvalidResourceMappingException($message);
             }
 
@@ -160,6 +164,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
     /**
      * @param Constraint[] $constraintAnnotations
+     *
      * @throws InvalidResourceMappingException
      */
     private function buildRelationshipMetadata(
@@ -169,14 +174,16 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     ): RelationshipMetadata {
         // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
         $name = $relationshipAnnotation->name ?? $property->getName();
-        /** @var string|null $relatedResourceType */
+        /** @var null|string $relatedResourceType */
         $relatedResourceType = $relationshipAnnotation->type;
 
         if (null === $relatedResourceType) {
-            // @todo Idea: if the type is not set, library could use "best effort" method and guess the type from the
-            // @todo property name. However, this behavior should be explicitly set by the dev to avoid confusion and voodoo magic
-
+            /**
+             * @todo Idea: if the type is not set, library could use "best effort" method and guess the type from the
+             * @todo property name. However, this behavior should be explicitly set by the dev to avoid confusion and voodoo magic
+             */
             $message = sprintf('Resource type for `%s` is not defined', $property->getName());
+
             throw new InvalidResourceMappingException($message);
         }
 
@@ -193,8 +200,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
-     * @param AttributeMetadata[] $attributeMetadata
+     * @param AttributeMetadata[]    $attributeMetadata
      * @param RelationshipMetadata[] $relationshipMetadata
+     *
      * @throws InvalidResourceMappingException
      */
     private function validate(array $attributeMetadata, array $relationshipMetadata): void
@@ -202,24 +210,26 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         /**
          * In other words, a resource can not have an attribute and relationship with the same name,
          * nor can it have an attribute or relationship named type or id.
-         * https://jsonapi.org/format/#document-resource-object-fields
+         * https://jsonapi.org/format/#document-resource-object-fields.
          */
         $reservedNames = ['id', 'type'];
         $names = [];
 
         $metadata = array_merge($attributeMetadata, $relationshipMetadata);
 
-        /** @var RelationshipMetadata|AttributeMetadata $metadatum */
+        /** @var AttributeMetadata|RelationshipMetadata $metadatum */
         foreach ($metadata as $metadatum) {
             $name = $metadatum->getName();
 
-            if (true === in_array($name, $reservedNames)) {
+            if (true === \in_array($name, $reservedNames, true)) {
                 $message = sprintf('Resource can\'t use reserved attribute or relationship name `%s`', $name);
+
                 throw new InvalidResourceMappingException($message);
             }
 
-            if (true === in_array($name, $names)) {
+            if (true === \in_array($name, $names, true)) {
                 $message = sprintf('Resource already has attribute or relationship named `%s`', $name);
+
                 throw new InvalidResourceMappingException($message);
             }
 

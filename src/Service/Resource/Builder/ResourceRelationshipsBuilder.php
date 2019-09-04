@@ -20,13 +20,13 @@ class ResourceRelationshipsBuilder
     /** @var array */
     private $toMany = [];
 
+    public function __construct()
+    {
+    }
+
     public static function make(): self
     {
         return new self();
-    }
-
-    public function __construct()
-    {
     }
 
     public function toOne(string $relationshipName, string $resourceType, ?string $id): self

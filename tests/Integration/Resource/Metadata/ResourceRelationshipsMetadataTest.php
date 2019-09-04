@@ -18,12 +18,18 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToMany;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
 
-class ResourceRelationshipsMetadataTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class ResourceRelationshipsMetadataTest extends TestCase
 {
     /** @var ResourceMetadataFactory */
     private $metadataFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         AnnotationRegistry::registerLoader('class_exists');
@@ -31,10 +37,133 @@ class ResourceRelationshipsMetadataTest extends TestCase
         $this->metadataFactory = new ResourceMetadataFactory($annotationReader);
     }
 
+    public function testResourceMetadataContainsAllAnnotatedRelationships(): void
+    {
+        $resource = $this->getResource();
+
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
+
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+
+        static::assertCount(4, $metadata->getRelationshipsMetadata());
+        static::assertContainsOnlyInstancesOf(RelationshipMetadata::class, $metadata->getRelationshipsMetadata());
+
+        static::assertNotNull($metadata->getRelationshipMetadata('tags'));
+        static::assertNotNull($metadata->getRelationshipMetadata('owner'));
+        static::assertNotNull($metadata->getRelationshipMetadata('emptyOne'));
+        static::assertNotNull($metadata->getRelationshipMetadata('emptyMany'));
+        static::assertNull($metadata->getRelationshipMetadata('notARelationship'));
+    }
+
+    public function testResourceMetadataContainsValidTagsRelationshipMetadata(): void
+    {
+        $resource = $this->getResource();
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+
+        $tagsMetadata = $metadata->getRelationshipMetadata('tags');
+
+        static::assertSame('tags', $tagsMetadata->getName());
+        static::assertSame('tag', $tagsMetadata->getRelatedResourceType());
+
+        static::assertCount(2, $tagsMetadata->getConstraints());
+        static::assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
+
+        $expectationMap = [
+            ResourceType::class => 0,
+            ToMany::class => 0,
+        ];
+
+        foreach ($tagsMetadata->getConstraints() as $constraint) {
+            ++$expectationMap[\get_class($constraint)];
+            if ($constraint instanceof ResourceType) {
+                static::assertSame('tag', $constraint->getType());
+            }
+        }
+
+        foreach ($expectationMap as $constraintClass => $expectationCount) {
+            static::assertSame(1, $expectationCount, $constraintClass);
+        }
+    }
+
+    public function testResourceMetadataContainsValidOwnerRelationshipMetadata(): void
+    {
+        $resource = $this->getResource();
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+
+        $tagsMetadata = $metadata->getRelationshipMetadata('owner');
+
+        static::assertSame('owner', $tagsMetadata->getName());
+        static::assertSame('person', $tagsMetadata->getRelatedResourceType());
+
+        static::assertCount(2, $tagsMetadata->getConstraints());
+        static::assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
+
+        $expectationMap = [
+            ResourceType::class => 0,
+            ToOne::class => 0,
+        ];
+
+        foreach ($tagsMetadata->getConstraints() as $constraint) {
+            ++$expectationMap[\get_class($constraint)];
+            if ($constraint instanceof ResourceType) {
+                static::assertSame('person', $constraint->getType());
+            }
+        }
+
+        foreach ($expectationMap as $constraintClass => $expectationCount) {
+            static::assertSame(1, $expectationCount, $constraintClass);
+        }
+    }
+
+    public function testMetadataFactoryThrowsAnExceptionWhenSinglePropertyHasMultipleRelationshipAnnotations(): void
+    {
+        $resource = new class() implements ApiModel {
+            /**
+             * @JsonApi\ToMany(name="tag")
+             * @JsonApi\ToOne(name="tag2")
+             */
+            public $tagId;
+        };
+
+        $this->expectException(InvalidResourceMappingException::class);
+        $this->metadataFactory->getInstanceMetadata($resource);
+    }
+
+    public function testRelatioinshipNameCanBeOveridden(): void
+    {
+        $resource = new class() implements ApiModel {
+            /** @JsonApi\ToOne(type="resource") */
+            public $defaultName;
+
+            /** @JsonApi\ToOne(name="overridenName", type="resource") */
+            public $defaultName2;
+        };
+
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
+
+        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+        static::assertCount(2, $metadata->getRelationshipsMetadata());
+
+        static::assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('defaultName'));
+
+        static::assertNull($metadata->getRelationshipMetadata('defaultName2'));
+        static::assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('overridenName'));
+    }
+
+    public function testRelationshipMetadataIsEmptyWhenNoRelationshipsAnnotated(): void
+    {
+        $resource = new class() implements ApiModel {
+        };
+
+        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
+        static::assertTrue($metadata->getRelationshipsMetadata()->isEmpty());
+    }
+
     private function getResource()
     {
-        return new class implements ApiModel
-        {
+        return new class() implements ApiModel {
             /**
              * @var array
              * @JsonApi\ToMany(name="tags", type="tag")
@@ -42,7 +171,7 @@ class ResourceRelationshipsMetadataTest extends TestCase
             public $tagIds;
 
             /**
-             * @var string|null
+             * @var null|string
              * @JsonApi\ToOne(name="owner", type="person")
              */
             public $ownerId;
@@ -59,132 +188,5 @@ class ResourceRelationshipsMetadataTest extends TestCase
 
             public $notARelationship;
         };
-    }
-
-    public function testResourceMetadataContainsAllAnnotatedRelationships()
-    {
-        $resource = $this->getResource();
-
-        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
-
-        $this->assertCount(4, $metadata->getRelationshipsMetadata());
-        $this->assertContainsOnlyInstancesOf(RelationshipMetadata::class, $metadata->getRelationshipsMetadata());
-
-        $this->assertNotNull($metadata->getRelationshipMetadata('tags'));
-        $this->assertNotNull($metadata->getRelationshipMetadata('owner'));
-        $this->assertNotNull($metadata->getRelationshipMetadata('emptyOne'));
-        $this->assertNotNull($metadata->getRelationshipMetadata('emptyMany'));
-        $this->assertNull($metadata->getRelationshipMetadata('notARelationship'));
-    }
-
-    public function testResourceMetadataContainsValidTagsRelationshipMetadata()
-    {
-        $resource = $this->getResource();
-        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
-
-        $tagsMetadata = $metadata->getRelationshipMetadata('tags');
-
-        $this->assertSame('tags', $tagsMetadata->getName());
-        $this->assertSame('tag', $tagsMetadata->getRelatedResourceType());
-
-        $this->assertCount(2, $tagsMetadata->getConstraints());
-        $this->assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
-
-        $expectationMap = [
-            ResourceType::class => 0,
-            ToMany::class => 0,
-        ];
-
-        foreach ($tagsMetadata->getConstraints() as $constraint) {
-            $expectationMap[get_class($constraint)]++;
-            if ($constraint instanceof ResourceType) {
-                $this->assertSame('tag', $constraint->getType());
-            }
-        }
-
-        foreach ($expectationMap as $constraintClass => $expectationCount) {
-            $this->assertSame(1, $expectationCount, $constraintClass);
-        }
-    }
-
-    public function testResourceMetadataContainsValidOwnerRelationshipMetadata()
-    {
-        $resource = $this->getResource();
-        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
-
-        $tagsMetadata = $metadata->getRelationshipMetadata('owner');
-
-        $this->assertSame('owner', $tagsMetadata->getName());
-        $this->assertSame('person', $tagsMetadata->getRelatedResourceType());
-
-        $this->assertCount(2, $tagsMetadata->getConstraints());
-        $this->assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
-
-        $expectationMap = [
-            ResourceType::class => 0,
-            ToOne::class => 0,
-        ];
-
-        foreach ($tagsMetadata->getConstraints() as $constraint) {
-            $expectationMap[get_class($constraint)]++;
-            if ($constraint instanceof ResourceType) {
-                $this->assertSame('person', $constraint->getType());
-            }
-        }
-
-        foreach ($expectationMap as $constraintClass => $expectationCount) {
-            $this->assertSame(1, $expectationCount, $constraintClass);
-        }
-    }
-
-    public function testMetadataFactoryThrowsAnExceptionWhenSinglePropertyHasMultipleRelationshipAnnotations()
-    {
-        $resource = new class implements ApiModel
-        {
-            /**
-             * @JsonApi\ToMany(name="tag")
-             * @JsonApi\ToOne(name="tag2")
-             */
-            public $tagId;
-        };
-
-        $this->expectException(InvalidResourceMappingException::class);
-        $this->metadataFactory->getInstanceMetadata($resource);
-    }
-
-    public function testRelatioinshipNameCanBeOveridden()
-    {
-        $resource = new class implements ApiModel
-        {
-            /** @JsonApi\ToOne(type="resource") */
-            public $defaultName;
-
-            /** @JsonApi\ToOne(name="overridenName", type="resource") */
-            public $defaultName2;
-        };
-
-        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-
-        $this->assertInstanceOf(ResourceMetadata::class, $metadata);
-        $this->assertCount(2, $metadata->getRelationshipsMetadata());
-
-        $this->assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('defaultName'));
-
-        $this->assertNull($metadata->getRelationshipMetadata('defaultName2'));
-        $this->assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('overridenName'));
-    }
-
-    public function testRelationshipMetadataIsEmptyWhenNoRelationshipsAnnotated()
-    {
-        $resource = new class implements ApiModel
-        {
-        };
-
-        $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-        $this->assertTrue($metadata->getRelationshipsMetadata()->isEmpty());
     }
 }

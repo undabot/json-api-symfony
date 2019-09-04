@@ -12,9 +12,7 @@ use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ModelEncoderMapInterface;
 
 class ModelEncoderMapRegistrationCompilerPass implements CompilerPassInterface
 {
-
-
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $tag = 'ub.jsonapi.model_encoder_map';
         $container->registerForAutoconfiguration(ModelEncoderMapInterface::class)->addTag($tag);

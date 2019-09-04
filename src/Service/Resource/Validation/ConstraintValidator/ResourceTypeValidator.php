@@ -17,10 +17,10 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 class ResourceTypeValidator extends ConstraintValidator
 {
     /**
-     * @param mixed $value
      * @param ResourceType $constraint
+     * @param mixed        $value
      */
-    public function validate($value, Constraint $constraint)
+    public function validate($value, Constraint $constraint): void
     {
         Assertion::isInstanceOf($constraint, ResourceType::class);
 
@@ -41,29 +41,27 @@ class ResourceTypeValidator extends ConstraintValidator
 
         // If the given value is ResourceCollectionInterface, validate array of its types
         if ($value instanceof ResourceCollectionInterface) {
-            $value = array_map(function (ResourceInterface $resource) {
+            $value = array_map(static function (ResourceInterface $resource) {
                 return $resource->getType();
             }, iterator_to_array($value));
         }
 
         // If the given value is ResourceIdentifierCollectionInterface, validate array of its types
         if ($value instanceof ResourceIdentifierCollectionInterface) {
-            $value = array_map(function (ResourceIdentifierInterface $resource) {
+            $value = array_map(static function (ResourceIdentifierInterface $resource) {
                 return $resource->getType();
             }, iterator_to_array($value));
         }
 
-        /**
-         * If array of values is given, validate that all elements in the array are of the same type.
-         */
-        if (true === is_array($value)) {
+        // If array of values is given, validate that all elements in the array are of the same type.
+        if (true === \is_array($value)) {
             $this->validateArrayOfTypes($value, $constraint);
 
             return;
         }
 
         if (null === $value) {
-            /**
+            /*
              * This validator can't validate null value since it doesn't know whether the value is optional or not.
              * If the value (e.g. for non-optional relationship) should not be empty, there should exist NotBlank
              * constraint on the relationship property
@@ -71,7 +69,7 @@ class ResourceTypeValidator extends ConstraintValidator
             return;
         }
 
-        if (false === is_string($value)) {
+        if (false === \is_string($value)) {
             $this->context->buildViolation('Resource type must be a string value.')
                 ->addViolation();
 
@@ -98,7 +96,7 @@ class ResourceTypeValidator extends ConstraintValidator
             }
         }
 
-        if (0 === count($invalidValues)) {
+        if (0 === \count($invalidValues)) {
             return;
         }
 

@@ -14,6 +14,11 @@ final class ResourceValidationErrorsResponse
     /** @var ErrorCollection */
     private $errorCollection;
 
+    public function __construct(ErrorCollection $errorCollection)
+    {
+        $this->errorCollection = $errorCollection;
+    }
+
     public static function fromException(ModelInvalid $exception): self
     {
         $errors = [];
@@ -24,11 +29,6 @@ final class ResourceValidationErrorsResponse
         }
 
         return new self(new ErrorCollection($errors));
-    }
-
-    public function __construct(ErrorCollection $errorCollection)
-    {
-        $this->errorCollection = $errorCollection;
     }
 
     public function getErrorCollection(): ErrorCollection

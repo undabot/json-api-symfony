@@ -21,5 +21,5 @@ abstract class Relationship
     /** @var string */
     public $description;
 
-    public abstract function isToMany(): bool;
+    abstract public function isToMany(): bool;
 }

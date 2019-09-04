@@ -37,16 +37,19 @@ class CombinedResource implements ResourceInterface
             array_keys($flatBaseResource->getAttributes())
         );
 
-        if (0 !== count($unsupportedAttributes)) {
+        if (0 !== \count($unsupportedAttributes)) {
             $message = sprintf('Unsupported attributes found: `%s`', implode(', ', $unsupportedAttributes));
+
             throw new InvalidArgumentException($message);
         }
 
         $unsupportedRelationships = array_diff(
             array_keys($flatUpdateResource->getRelationships()),
-            array_keys($flatBaseResource->getRelationships()));
-        if (0 !== count($unsupportedRelationships)) {
+            array_keys($flatBaseResource->getRelationships())
+        );
+        if (0 !== \count($unsupportedRelationships)) {
             $message = sprintf('Unsupported relationships found: `%s`', implode(', ', $unsupportedRelationships));
+
             throw new InvalidArgumentException($message);
         }
 
@@ -93,6 +96,7 @@ class CombinedResource implements ResourceInterface
             $secondaryAttribute = $secondaryAttributes->getAttributeByName($primaryAttribute->getName());
             if (null !== $secondaryAttribute) {
                 $attributes[] = $secondaryAttribute;
+
                 continue;
             }
 
@@ -122,6 +126,7 @@ class CombinedResource implements ResourceInterface
 
             if (null !== $secondaryRelationship) {
                 $relationships[] = $secondaryRelationship;
+
                 continue;
             }
 

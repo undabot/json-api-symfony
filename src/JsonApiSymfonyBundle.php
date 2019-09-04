@@ -10,7 +10,7 @@ use Undabot\SymfonyJsonApi\CompilerPass\ModelEncoderMapRegistrationCompilerPass;
 
 class JsonApiSymfonyBundle extends Bundle
 {
-    public function build(ContainerBuilder $container)
+    public function build(ContainerBuilder $container): void
     {
         parent::build($container);
         $container->addCompilerPass(new ModelEncoderMapRegistrationCompilerPass());

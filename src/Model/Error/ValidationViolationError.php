@@ -56,11 +56,11 @@ class ValidationViolationError implements ErrorInterface
             return null;
         }
 
-        if (true === is_string($invalidValue)) {
+        if (true === \is_string($invalidValue)) {
             return $invalidValue;
         }
 
-        if (true === is_object($invalidValue) && true === method_exists($invalidValue, '__toString')) {
+        if (true === \is_object($invalidValue) && true === method_exists($invalidValue, '__toString')) {
             return (string) $invalidValue;
         }
 
@@ -69,7 +69,7 @@ class ValidationViolationError implements ErrorInterface
 
     public function getSource(): ?SourceInterface
     {
-        /** @var string|null $path */
+        /** @var null|string $path */
         $path = $this->violation->getPropertyPath();
         if (null === $path) {
             return null;
@@ -78,7 +78,7 @@ class ValidationViolationError implements ErrorInterface
         // Convert Symfony attribute notation [data][attributes][attribute] to Trim.js /data/attributes/attribute
         preg_match_all('/\[(.*)\]/U', $path, $result);
         if (isset($result[1])) {
-            $path = '/' . implode('/', $result[1]);
+            $path = '/'.implode('/', $result[1]);
         }
 
         return new Source($path);

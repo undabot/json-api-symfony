@@ -56,14 +56,13 @@ class ResourceFactory
 
         $attributes = $this->makeAttributeCollection($apiModel, $metadata);
         $relationships = $this->makeRelationshipsCollection($apiModel, $metadata);
-        $apiModel = new Resource($id, $type, $attributes, $relationships);
 
-        return $apiModel;
+        return new Resource($id, $type, $attributes, $relationships);
     }
 
     /**
      * @param ApiModel[] $apiModels
-     * @return ResourceCollectionInterface
+     *
      * @throws AnnotationException
      * @throws InvalidResourceMappingException
      * @throws ReflectionException
@@ -117,7 +116,6 @@ class ResourceFactory
         $relationshipBuilder = ResourceRelationshipsBuilder::make();
 
         foreach ($metadata->getRelationshipsMetadata() as $relationshipsMetadatum) {
-
             if ($relationshipsMetadatum->isToMany()) {
                 $relationshipBuilder->toMany(
                     $relationshipsMetadatum->getName(),

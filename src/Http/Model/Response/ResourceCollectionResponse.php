@@ -20,32 +20,14 @@ final class ResourceCollectionResponse
     /** @var ResourceCollectionInterface */
     private $primaryResources;
 
-    /** @var ResourceCollectionInterface|null */
+    /** @var null|ResourceCollectionInterface */
     private $includedResources;
 
-    /** @var MetaInterface|null */
+    /** @var null|MetaInterface */
     private $meta;
 
-    /** @var LinkCollectionInterface|null */
+    /** @var null|LinkCollectionInterface */
     private $links;
-
-    public static function fromObjectCollection(
-        ObjectCollection $primaryResources,
-        ?ResourceCollectionInterface $includedResources = null,
-        ?MetaInterface $meta = null,
-        ?LinkCollectionInterface $links = null
-    ): self {
-        if ($meta === null) {
-            $meta = new Meta(['total' => $primaryResources->count()]);
-        }
-
-        return new self(
-            new ResourceCollection($primaryResources->getItems()),
-            $includedResources,
-            $meta,
-            $links
-        );
-    }
 
     public function __construct(
         ResourceCollectionInterface $primaryResources,
@@ -59,18 +41,35 @@ final class ResourceCollectionResponse
         $this->links = $links;
     }
 
+    public static function fromObjectCollection(
+        ObjectCollection $primaryResources,
+        ?ResourceCollectionInterface $includedResources = null,
+        ?MetaInterface $meta = null,
+        ?LinkCollectionInterface $links = null
+    ): self {
+        if (null === $meta) {
+            $meta = new Meta(['total' => $primaryResources->count()]);
+        }
+
+        return new self(
+            new ResourceCollection($primaryResources->getItems()),
+            $includedResources,
+            $meta,
+            $links
+        );
+    }
+
     /**
-     * @param ResourceInterface[] $resources
-     * @param ResourceInterface[]|null $included
-     * @param array|null $meta
-     * @param LinkInterface[]|null $links
+     * @param ResourceInterface[]      $resources
+     * @param null|ResourceInterface[] $included
+     * @param null|LinkInterface[]     $links
      */
     public static function fromArray(
         array $resources,
         ?array $included = null,
         ?array $meta = null,
         ?array $links = null
-    ): ResourceCollectionResponse {
+    ): self {
         Assertion::allIsInstanceOf($resources, ResourceInterface::class);
 
         $includedResources = null;

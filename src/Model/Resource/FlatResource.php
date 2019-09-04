@@ -31,7 +31,7 @@ class FlatResource
     }
 
     /**
-     * @return array<string, string|null>
+     * @return array<string, null|string>
      */
     public function getAttributes(): array
     {
@@ -50,7 +50,7 @@ class FlatResource
     }
 
     /**
-     * @return array<string, string|string[]|null>
+     * @return array<string, null|string|string[]>
      */
     public function getRelationships(): array
     {
@@ -66,11 +66,13 @@ class FlatResource
 
             if (null === $relationshipData) {
                 $flatRelationships[$relationship->getName()] = null;
+
                 continue;
             }
 
             if ($relationshipData instanceof ToOneRelationshipData && true === $relationshipData->isEmpty()) {
                 $flatRelationships[$relationship->getName()] = null;
+
                 continue;
             }
 
@@ -78,20 +80,23 @@ class FlatResource
                 /** @var ResourceIdentifierInterface $data */
                 $data = $relationshipData->getData();
                 $flatRelationships[$relationship->getName()] = $data->getId();
+
                 continue;
             }
 
             if ($relationshipData instanceof ToManyRelationshipData && true === $relationshipData->isEmpty()) {
                 $flatRelationships[$relationship->getName()] = [];
+
                 continue;
             }
 
             if ($relationshipData instanceof ToManyRelationshipData && false === $relationshipData->isEmpty()) {
-                $flatData = array_map(function (ResourceIdentifierInterface $resourceIdentifier) {
+                $flatData = array_map(static function (ResourceIdentifierInterface $resourceIdentifier) {
                     return $resourceIdentifier->getId();
                 }, iterator_to_array($relationshipData->getData()));
 
                 $flatRelationships[$relationship->getName()] = $flatData;
+
                 continue;
             }
 
@@ -103,7 +108,7 @@ class FlatResource
 
     /**
      * Unlike attributes, relationships are pairs of type and id values, and therefore cannot be simplified to a single
-     * dimension array. Use this method to get pairs of relationship name and RelationshipInterface object
+     * dimension array. Use this method to get pairs of relationship name and RelationshipInterface object.
      *
      * @return RelationshipInterface[]
      */

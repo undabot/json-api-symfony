@@ -31,9 +31,8 @@ class ResourceDenormalizer
     }
 
     /**
-     * Creates new instance of $class and populates it with values from the provided $resource
+     * Creates new instance of $class and populates it with values from the provided $resource.
      *
-     * @param ResourceInterface $resource
      * @throws MissingDataValueResourceDenormalizationException
      * @throws ResourceDenormalizationException
      * @throws \Assert\AssertionFailedException
@@ -75,7 +74,7 @@ class ResourceDenormalizer
      * For properties that are aliased (i.e. class property name is not the same as resource attribute / relationship)
      * change the key to match class property name.
      *
-     * @return array<string, string|string[]|null>
+     * @return array<string, null|string|string[]>
      */
     private function prepareData(ResourceInterface $resource, string $class): array
     {
@@ -99,7 +98,7 @@ class ResourceDenormalizer
         $aliasMap = array_merge($aliasMap, $metadata->getRelationshipsAliasMap());
 
         foreach ($aliasMap as $alias => $propertyName) {
-            if (false === array_key_exists($alias, $data)) {
+            if (false === \array_key_exists($alias, $data)) {
                 continue;
             }
 

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Model\Request;
 
-use Undabot\JsonApi\Model\Request\Filter\FilterSet;
-use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
-use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
-use Undabot\JsonApi\Model\Request\Sort\SortSet;
 use Undabot\JsonApi\Exception\Request\UnsupportedFilterAttributeGivenException;
 use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
 use Undabot\JsonApi\Exception\Request\UnsupportedPaginationRequestedException;
 use Undabot\JsonApi\Exception\Request\UnsupportedSortRequestedException;
+use Undabot\JsonApi\Model\Request\Filter\FilterSet;
+use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
+use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
+use Undabot\JsonApi\Model\Request\Sort\SortSet;
 
 class GetResourceCollectionRequest implements GetResourceCollectionRequestInterface
 {
@@ -21,19 +21,19 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     public const INCLUDE_KEY = 'include';
     public const FIELDS_KEY = 'fields';
 
-    /** @var PaginationInterface|null */
+    /** @var null|PaginationInterface */
     private $pagination;
 
-    /** @var FilterSet|null */
+    /** @var null|FilterSet */
     private $filterSet;
 
-    /** @var SortSet|null */
+    /** @var null|SortSet */
     private $sortSet;
 
-    /** @var array|null */
+    /** @var null|array */
     private $includes;
 
-    /** @var array|null */
+    /** @var null|array */
     private $fields;
 
     public function __construct(
@@ -81,7 +81,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
             return false;
         }
 
-        return in_array($name, $this->includes);
+        return \in_array($name, $this->includes, true);
     }
 
     /**
@@ -106,7 +106,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
             : $filters = $this->filterSet->getFilterNames();
 
         $unsupportedFilters = array_diff($filters, $allowedFilters);
-        if (0 !== count($unsupportedFilters)) {
+        if (0 !== \count($unsupportedFilters)) {
             throw new UnsupportedFilterAttributeGivenException($unsupportedFilters);
         }
 
@@ -121,7 +121,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     public function allowIncluded(array $allowedIncludes): GetResourceCollectionRequestInterface
     {
         $unsupportedIncludes = array_diff($this->includes ?: [], $allowedIncludes);
-        if (0 !== count($unsupportedIncludes)) {
+        if (0 !== \count($unsupportedIncludes)) {
             throw new UnsupportedIncludeValuesGivenException($unsupportedIncludes);
         }
 
@@ -140,7 +140,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
             : array_keys($this->sortSet->getSortsArray());
 
         $unsupportedSorts = array_diff($sorts ?: [], $allowedSorts);
-        if (0 !== count($unsupportedSorts)) {
+        if (0 !== \count($unsupportedSorts)) {
             throw new UnsupportedSortRequestedException($unsupportedSorts);
         }
 

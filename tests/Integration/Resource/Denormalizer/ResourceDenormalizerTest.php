@@ -27,13 +27,13 @@ class ResourceDto implements ApiModel
 
     /**
      * @var string
-     * @JsonApi\Attribute()
+     * @JsonApi\Attribute
      */
     private $title;
 
     /**
-     * @var string|null
-     * @JsonApi\Attribute()
+     * @var null|string
+     * @JsonApi\Attribute
      */
     private $summary;
 
@@ -44,7 +44,7 @@ class ResourceDto implements ApiModel
     private $tags;
 
     /**
-     * @var string|null
+     * @var null|string
      * @JsonApi\ToOne(type="person")
      */
     private $owner;
@@ -84,12 +84,18 @@ class ResourceDto implements ApiModel
     }
 }
 
-class ResourceDenormalizerTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class ResourceDenormalizerTest extends TestCase
 {
     /** @var ResourceDenormalizer */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         AnnotationRegistry::registerLoader('class_exists');
@@ -102,7 +108,7 @@ class ResourceDenormalizerTest extends TestCase
         $this->serializer = new ResourceDenormalizer($resourceMetadataFactory, $normalizer);
     }
 
-    public function testAliasedResourceCanBeDenormalized()
+    public function testAliasedResourceCanBeDenormalized(): void
     {
         $resource = new Resource(
             '1',
@@ -119,11 +125,11 @@ class ResourceDenormalizerTest extends TestCase
 
         /** @var ResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, ResourceDto::class);
-        $this->assertInstanceOf(ResourceDto::class, $dto);
+        static::assertInstanceOf(ResourceDto::class, $dto);
 
-        $this->assertSame('This is my title', $dto->getTitle());
-        $this->assertSame('This is my summary', $dto->getSummary());
-        $this->assertSame('p1', $dto->getOwner());
-        $this->assertSame(['t1', 't2', 't3'], $dto->getTags());
+        static::assertSame('This is my title', $dto->getTitle());
+        static::assertSame('This is my summary', $dto->getSummary());
+        static::assertSame('p1', $dto->getOwner());
+        static::assertSame(['t1', 't2', 't3'], $dto->getTags());
     }
 }

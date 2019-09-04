@@ -9,26 +9,32 @@ use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Model\Request\Pagination\OffsetBasedPagination;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\PaginationFactory;
 
-class OffsetBasedPaginationFactoryTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class OffsetBasedPaginationFactoryTest extends TestCase
 {
     /** @var PaginationFactory */
     private $paginationFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->paginationFactory = new PaginationFactory();
     }
 
     /** @dataProvider validPageBasedPaginationParamsProvider */
-    public function testPaginationFactoryCanCreateOffsetBasedPaginationFromValidParams($params)
+    public function testPaginationFactoryCanCreateOffsetBasedPaginationFromValidParams($params): void
     {
         $pagination = $this->paginationFactory->fromArray($params);
 
-        $this->assertInstanceOf(OffsetBasedPagination::class, $pagination);
+        static::assertInstanceOf(OffsetBasedPagination::class, $pagination);
     }
 
     /** @dataProvider invalidPaginationParamsProvider */
-    public function testPaginationFactoryWillThrowExceptionForInvalidParams(array $invalidParams)
+    public function testPaginationFactoryWillThrowExceptionForInvalidParams(array $invalidParams): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->paginationFactory->fromArray($invalidParams);
@@ -109,7 +115,7 @@ class OffsetBasedPaginationFactoryTest extends TestCase
         ];
     }
 
-    public function testGetPageNumberWillReturnCorrectNumber()
+    public function testGetPageNumberWillReturnCorrectNumber(): void
     {
         $params = [
             'offset' => 3,
@@ -119,7 +125,7 @@ class OffsetBasedPaginationFactoryTest extends TestCase
         /** @var OffsetBasedPagination $pagination */
         $pagination = $this->paginationFactory->fromArray($params);
 
-        $this->assertSame(3, $pagination->getOffset());
-        $this->assertSame(10, $pagination->getSize());
+        static::assertSame(3, $pagination->getOffset());
+        static::assertSame(10, $pagination->getSize());
     }
 }

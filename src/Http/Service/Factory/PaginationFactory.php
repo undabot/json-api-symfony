@@ -16,17 +16,18 @@ class PaginationFactory
      */
     public function fromArray(array $paginationParams): PaginationInterface
     {
-        if (true == array_key_exists(PageBasedPagination::PARAM_PAGE_SIZE, $paginationParams) &&
-            true == array_key_exists(PageBasedPagination::PARAM_PAGE_NUMBER, $paginationParams)) {
+        if (true === \array_key_exists(PageBasedPagination::PARAM_PAGE_SIZE, $paginationParams) &&
+            true === \array_key_exists(PageBasedPagination::PARAM_PAGE_NUMBER, $paginationParams)) {
             return $this->makePageBasedPagination($paginationParams);
         }
 
-        if (true == array_key_exists(OffsetBasedPagination::PARAM_PAGE_OFFSET, $paginationParams) &&
-            true == array_key_exists(OffsetBasedPagination::PARAM_PAGE_LIMIT, $paginationParams)) {
+        if (true === \array_key_exists(OffsetBasedPagination::PARAM_PAGE_OFFSET, $paginationParams) &&
+            true === \array_key_exists(OffsetBasedPagination::PARAM_PAGE_LIMIT, $paginationParams)) {
             return $this->makeOffsetBasedPagination($paginationParams);
         }
 
         $message = sprintf('Couldn\'t create pagination from given params: %s', json_encode($paginationParams));
+
         throw new InvalidArgumentException($message);
     }
 
@@ -89,19 +90,20 @@ class PaginationFactory
     private function makeSureParametersAreValidIntegers(array $paginationParams): void
     {
         $nonIntegerParams = array_keys(array_filter($paginationParams, function ($item) {
-            if (true === is_int($item)) {
+            if (true === \is_int($item)) {
                 return false;
             }
 
-            if (true === is_string($item)) {
+            if (true === \is_string($item)) {
                 return false === $this->isIntString($item);
             }
 
             return true;
         }));
 
-        if (0 !== count($nonIntegerParams)) {
+        if (0 !== \count($nonIntegerParams)) {
             $message = sprintf('Non integer params given: %s', implode(', ', $nonIntegerParams));
+
             throw new InvalidArgumentException($message);
         }
     }
@@ -113,31 +115,33 @@ class PaginationFactory
     {
         $this->makeSureParametersAreValidIntegers($paginationParams);
 
-        $zeroParameters = array_keys(array_filter($paginationParams, function ($item) {
-            if (0 == (int) $item) {
+        $zeroParameters = array_keys(array_filter($paginationParams, static function ($item) {
+            if (0 === (int) $item) {
                 return true;
             }
 
             return false;
         }));
 
-        if (0 !== count($zeroParameters)) {
+        if (0 !== \count($zeroParameters)) {
             $message = sprintf('Params can\'t be zero: %s', implode(', ', $zeroParameters));
+
             throw new InvalidArgumentException($message);
         }
     }
 
     /**
      * @param array<string, int> $paginationParams
-     * @param string[] $requiredParams
+     * @param string[]           $requiredParams
      */
     private function makeSureOnlyRequiredParamsArePresent(array $paginationParams, array $requiredParams): void
     {
         $givenParams = array_keys($paginationParams);
         $unsupportedParams = array_diff($givenParams, $requiredParams);
 
-        if (0 !== count($unsupportedParams)) {
+        if (0 !== \count($unsupportedParams)) {
             $message = sprintf('Missing required pagination parameters: %s', implode(', ', $unsupportedParams));
+
             throw new InvalidArgumentException($message);
         }
     }

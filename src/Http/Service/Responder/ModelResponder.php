@@ -16,11 +16,11 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 final class ModelResponder extends AbstractResponder
 {
     /**
-     * @param mixed[] $primaryData
-     * @param mixed[]|null $includedData
-     * @param array<string, mixed>|null $meta
-     * @param array<string, LinkMemberInterface>|null $links
-     * @return ResourceCollectionResponse
+     * @param mixed[]                                 $primaryData
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
+     * @param null|array<string, LinkMemberInterface> $links
+     *
      * @throws Exception
      */
     public function resourceCollection(
@@ -40,11 +40,11 @@ final class ModelResponder extends AbstractResponder
     }
 
     /**
-     * @param mixed $primaryData
-     * @param mixed[]|null $includedData
-     * @param array<string, mixed>|null $meta
-     * @param array<string, LinkMemberInterface>|null $links
-     * @return ResourceResponse
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
+     * @param null|array<string, LinkMemberInterface> $links
+     * @param mixed                                   $primaryData
+     *
      * @throws Exception
      */
     public function resource(
@@ -64,10 +64,11 @@ final class ModelResponder extends AbstractResponder
     }
 
     /**
-     * @param mixed $primaryData
-     * @param mixed[]|null $includedData
-     * @param array<string, mixed>|null $meta
-     * @param array<string, LinkMemberInterface>|null $links
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
+     * @param null|array<string, LinkMemberInterface> $links
+     * @param mixed                                   $primaryData
+     *
      * @throws Exception
      */
     public function resourceCreated(
@@ -87,10 +88,11 @@ final class ModelResponder extends AbstractResponder
     }
 
     /**
-     * @param mixed $primaryData
-     * @param mixed[]|null $includedData
-     * @param array<string, mixed>|null $meta
-     * @param array<string, LinkMemberInterface>|null $links
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
+     * @param null|array<string, LinkMemberInterface> $links
+     * @param mixed                                   $primaryData
+     *
      * @throws Exception
      */
     public function resourceUpdated(

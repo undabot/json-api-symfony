@@ -1,28 +1,16 @@
-variables:
-
 cache:
   key: "$CI_PIPELINE_ID"
   paths:
     - vendor/
-    - .php_cs.cache
 
 stages:
-  - test
+  - build
 
-test:
-  stage: test
+build:docker:
+  stage: build
   only: [merge_requests, "/master/"]
-  image: zantolov/docker-symfony-php-fpm:7.3
+  image: docker:latest
+  services:
+    - docker:dind
   script:
-    - eval $(ssh-agent -s)
-    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add - > /dev/null
-    - mkdir -p ~/.ssh
-    - echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config
-    - chmod 700 ~/.ssh
-    - ssh-add -l
-    - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
-    - composer validate --no-check-publish --no-interaction --ansi
-    - composer run lint
-    - composer run qc
-    - phpdbg -qrr ./vendor/bin/phpunit
-    - cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
+    - docker build -f docker/Dockerfile .

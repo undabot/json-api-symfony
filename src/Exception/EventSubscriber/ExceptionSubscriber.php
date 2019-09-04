@@ -9,13 +9,13 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Undabot\JsonApi\Encoding\DocumentToPhpArrayEncoderInterface;
+use Undabot\JsonApi\Exception\Request\RequestException;
 use Undabot\JsonApi\Model\Document\Document;
 use Undabot\JsonApi\Model\Error\Error;
 use Undabot\JsonApi\Model\Error\ErrorCollection;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\JsonApiRequestException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\ResourceValidationException;
 use Undabot\SymfonyJsonApi\Http\Model\Response\JsonApiHttpResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceValidationErrorsResponse;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
 class ExceptionSubscriber implements EventSubscriberInterface
 {
@@ -30,15 +30,30 @@ class ExceptionSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            KernelEvents::EXCEPTION => ['buildErrorResponse', -8],
+            KernelEvents::EXCEPTION => ['buildErrorResponse', -128],
         ];
+    }
+
+    private function buildError(\Exception $exception)
+    {
+        $e = FlattenException::create($exception);
+
+        return new Error(
+            null,
+            null,
+            null,
+            null,
+            $e->getMessage(),
+            sprintf('Exception %s: "%s"', $e->getClass(), $e->getMessage()
+            )
+        );
     }
 
     public function buildErrorResponse(ExceptionEvent $event)
     {
         $exception = $event->getException();
 
-        if ($exception instanceof ResourceValidationException) {
+        if ($exception instanceof ModelInvalid) {
             $responseModel = ResourceValidationErrorsResponse::fromException($exception);
             $document = new Document(null, $responseModel->getErrorCollection());
             $data = $this->documentToPhpArrayEncoderInterface->encode($document);
@@ -48,23 +63,25 @@ class ExceptionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        if ($exception instanceof JsonApiRequestException) {
-            $e = FlattenException::create($exception);
-
+        if ($exception instanceof RequestException) {
             $errorCollection = new ErrorCollection([
-                new Error(
-                    null,
-                    null,
-                    null,
-                    null,
-                    $e->getMessage(),
-                    sprintf('Exception %s: "%s"', $e->getClass(), $e->getMessage()
-                    )
-                ),
+                $this->buildError($exception),
             ]);
             $document = new Document(null, $errorCollection);
             $data = $this->documentToPhpArrayEncoderInterface->encode($document);
             $response = JsonApiHttpResponse::badRequest($data);
+            $event->setResponse($response);
+
+            return;
+        }
+
+        if ($exception instanceof \Exception) {
+            $errorCollection = new ErrorCollection([
+                $this->buildError($exception),
+            ]);
+            $document = new Document(null, $errorCollection);
+            $data = $this->documentToPhpArrayEncoderInterface->encode($document);
+            $response = JsonApiHttpResponse::serverError($data);
             $event->setResponse($response);
 
             return;

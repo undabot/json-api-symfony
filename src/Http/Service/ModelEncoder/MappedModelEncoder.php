@@ -27,19 +27,30 @@ final class MappedModelEncoder
         $this->modelEncoder = $modelEncoder;
     }
 
-    private function getDataTransformer($model): callable
+    /**
+     * Returns factory callable that will transform given $data object to ApiModel by following defined
+     * encoding rules (encoding map).
+     *
+     * Supports resolving Doctrine proxy classes to actuall entity class names.
+     *
+     * @see \Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ModelEncoderMapInterface
+     */
+    private function getDataTransformer($data): callable
     {
-        $modelClass = get_class($model);
+        $dataClass = get_class($data);
 
         // Support Doctrine Entities that are usually represented as Proxy classes.
         // Resolve exact class name before looking up in the encoders map.
-        if ($model instanceof Proxy) {
-            $modelClass = $this->entityManager->getClassMetadata($modelClass)->name;
+        if ($data instanceof Proxy) {
+            $dataClass = $this->entityManager->getClassMetadata($dataClass)->name;
         }
 
-        $encoder = $this->dataTransformersMap[$modelClass] ?? null;
+        $encoder = $this->dataTransformersMap[$dataClass] ?? null;
         if (null === $encoder) {
-            throw new RuntimeException(sprintf('Unsupported class `%s` given', $modelClass));
+            $message = sprintf(
+                'Couldn\'t resolve transformer class for object of class `%s` given. Have you defined data transformer for that data class?',
+                $dataClass);
+            throw new RuntimeException($message);
         }
 
         return $encoder;
@@ -58,9 +69,9 @@ final class MappedModelEncoder
     /**
      * @throws Exception
      */
-    public function encodeModels(array $models): array
+    public function encodeModels(array $data): array
     {
-        return array_map([$this, 'encodeModel'], $models);
+        return array_map([$this, 'encodeModel'], $data);
     }
 
     public function addEncoder(string $modelClass, callable $encoder): void

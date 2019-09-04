@@ -6,15 +6,15 @@ namespace Undabot\SymfonyJsonApi\Http\Model\Response;
 
 use Symfony\Component\Validator\ConstraintViolation;
 use Undabot\JsonApi\Model\Error\ErrorCollection;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\ResourceValidationException;
 use Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
 final class ResourceValidationErrorsResponse
 {
     /** @var ErrorCollection */
     private $errorCollection;
 
-    public static function fromException(ResourceValidationException $exception)
+    public static function fromException(ModelInvalid $exception)
     {
         $errors = [];
 

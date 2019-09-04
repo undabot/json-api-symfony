@@ -5,10 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Validation;
 
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestAcceptHeaderException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\InvalidRequestContentTypeHeaderException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\JsonApiRequestException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedQueryStringParameterGivenException;
+use Undabot\JsonApi\Exception\Request\RequestException;
 
 interface RequestValidatorInterface
 {
@@ -18,19 +15,19 @@ interface RequestValidatorInterface
      * - Content type header
      * - Support for given query params
      *
-     * @throws JsonApiRequestException
+     * @throws RequestException
      */
-    public function makeSureRequestIsValidJsonApiRequest(Request $request): void;
+    public function assertValidRequest(Request $request): void;
 
     /**
      * Validates that HTTP request doesn't have Client-generated ID assigned to the resource
      *
-     * @throws JsonApiRequestException
+     * @throws RequestException
      */
-    public function makeSureRequestResourceDoesntHaveClientGeneratedId(array $requestPrimaryData): void;
+    public function assertResourceIsWithoutClientGeneratedId(array $requestPrimaryData): void;
 
     /**
-     * @throws JsonApiRequestException
+     * @throws RequestException
      */
     public function makeSureRequestHasOnlyWhitelistedIncludeQueryParams(
         Request $request,
@@ -38,7 +35,7 @@ interface RequestValidatorInterface
     ): void;
 
     /**
-     * @throws JsonApiRequestException
+     * @throws RequestException
      */
     public function makeSureRequestHasOnlyWhitelistedFilterQueryParams(
         Request $request,
@@ -46,7 +43,7 @@ interface RequestValidatorInterface
     ): void;
 
     /**
-     * @throws JsonApiRequestException
+     * @throws RequestException
      */
     public function makeSureRequestHasOnlyWhitelistedSortQueryParams(
         Request $request,
@@ -54,12 +51,12 @@ interface RequestValidatorInterface
     ): void;
 
     /**
-     * @throws JsonApiRequestException
+     * @throws RequestException
      */
     public function makeSureRequestDoesntHaveSparseFieldsetQueryParams(Request $request): void;
 
     /**
-     * @throws JsonApiRequestException
+     * @throws RequestException
      */
     public function makeSureRequestDoesntHavePaginationQueryParams(Request $request);
 }

@@ -4,24 +4,22 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Model\Request;
 
-use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Model\Request\Filter\FilterSet;
 use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
 use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
 use Undabot\JsonApi\Model\Request\Sort\SortSet;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedFilterAttributeGivenException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedIncludeValuesGivenException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedPaginationRequestedException;
-use Undabot\SymfonyJsonApi\Http\Exception\Request\UnsupportedSortRequestedException;
-use Undabot\SymfonyJsonApi\Http\Service\Factory\PaginationFactory;
+use Undabot\JsonApi\Exception\Request\UnsupportedFilterAttributeGivenException;
+use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\JsonApi\Exception\Request\UnsupportedPaginationRequestedException;
+use Undabot\JsonApi\Exception\Request\UnsupportedSortRequestedException;
 
 class GetResourceCollectionRequest implements GetResourceCollectionRequestInterface
 {
-    const PAGINATION_KEY = 'page';
-    const SORT_KEY = 'sort';
-    const FILTER_KEY = 'filter';
-    const INCLUDE_KEY = 'include';
-    const FIELDS_KEY = 'fields';
+    public const PAGINATION_KEY = 'page';
+    public const SORT_KEY = 'sort';
+    public const FILTER_KEY = 'filter';
+    public const INCLUDE_KEY = 'include';
+    public const FIELDS_KEY = 'fields';
 
     /** @var PaginationInterface|null */
     private $pagination;
@@ -37,51 +35,6 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
 
     /** @var array|null */
     private $fields;
-
-    public static function createFromRequest(Request $request): self
-    {
-        $sortSet = null;
-        $filterSet = null;
-        $pagination = null;
-        $include = null;
-        $fields = null;
-
-        $sortParams = $request->get(self::SORT_KEY, null);
-        if (null !== $sortParams) {
-            $sortSet = SortSet::make($sortParams);
-        }
-
-        $paginationParams = $request->query->get(self::PAGINATION_KEY, null);
-        if (null !== $paginationParams) {
-            $paginationFactory = new PaginationFactory();
-            $pagination = $paginationFactory->makeFromArray($paginationParams);
-        }
-
-        $filterParams = $request->query->get(self::FILTER_KEY, null);
-        if (null !== $filterParams) {
-            $filterSet = FilterSet::createFromArray($filterParams);
-        }
-
-        $sortString = $request->query->get(self::SORT_KEY, null);
-        if (null !== $sortString) {
-            $sortSet = SortSet::make($sortString);
-        }
-
-        $includeString = $request->query->get(self::INCLUDE_KEY, null);
-        if (null !== $includeString) {
-            $include = explode(',', $includeString);
-        }
-
-        $fields = $request->query->get(self::FIELDS_KEY, null);
-
-        return new self(
-            $pagination,
-            $filterSet,
-            $sortSet,
-            $include,
-            $fields
-        );
-    }
 
     public function __construct(
         ?PaginationInterface $pagination,
@@ -134,7 +87,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     /**
      * @throws UnsupportedPaginationRequestedException
      */
-    public function disablePagination(): self
+    public function disablePagination(): GetResourceCollectionRequestInterface
     {
         if (null !== $this->pagination) {
             throw new UnsupportedPaginationRequestedException();
@@ -146,7 +99,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     /**
      * @throws UnsupportedFilterAttributeGivenException
      */
-    public function allowFilters(array $allowedFilters): self
+    public function allowFilters(array $allowedFilters): GetResourceCollectionRequestInterface
     {
         $filters = null === $this->filterSet
             ? []
@@ -162,9 +115,10 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
 
     /**
      * @param string[] $includes
+     *
      * @throws UnsupportedIncludeValuesGivenException
      */
-    public function allowIncluded(array $allowedIncludes): self
+    public function allowIncluded(array $allowedIncludes): GetResourceCollectionRequestInterface
     {
         $unsupportedIncludes = array_diff($this->includes ?: [], $allowedIncludes);
         if (0 !== count($unsupportedIncludes)) {
@@ -176,9 +130,10 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
 
     /**
      * @param string[] $sorts
+     *
      * @throws UnsupportedSortRequestedException
      */
-    public function allowSorting(array $allowedSorts): self
+    public function allowSorting(array $allowedSorts): GetResourceCollectionRequestInterface
     {
         $sorts = null === $this->sortSet
             ? []

@@ -52,6 +52,34 @@ class JsonApiHttpResponse extends Response
     /**
      * @param array<string, mixed> $data
      */
+    public static function forbidden(array $data): self
+    {
+        return new self(
+            json_encode($data),
+            Response::HTTP_FORBIDDEN,
+            [
+                'Content-Type' => self::CONTENT_TYPE,
+            ]
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
+    public static function unauthorized(array $data): self
+    {
+        return new self(
+            json_encode($data),
+            Response::HTTP_UNAUTHORIZED,
+            [
+                'Content-Type' => self::CONTENT_TYPE,
+            ]
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     */
     public static function serverError(array $data): self
     {
         return new self(

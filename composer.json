@@ -4,10 +4,10 @@
   "type": "library",
   "require": {
     "php": "^7.3",
-    "undabot/json-api-core": "dev-master@dev",
     "symfony/http-kernel": "^4.2",
     "symfony/validator": "^4.2",
-    "symfony/orm-pack": "^1.0"
+    "symfony/orm-pack": "^1.0",
+    "undabot/json-api-core": "^1.0"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^2.14",

@@ -1,10 +1,10 @@
 parameters:
-  paths:
-    - src/
-  level: max
+    paths:
+        - src/
+    level: max
 #  symfony:
 #    container_xml_path: '%rootDir%/../../../var/cache/dev/srcApp_KernelDevDebugContainer.xml'
-  ignoreErrors:
-    - '#Cannot cast Ramsey\\Uuid\\UuidInterface to string#'
+    ignoreErrors:
+        - '#Cannot cast Ramsey\\Uuid\\UuidInterface to string#'
 includes:
-  - vendor/ekino/phpstan-banned-code/extension.neon
+    - vendor/ekino/phpstan-banned-code/extension.neon

@@ -1,16 +1,16 @@
 cache:
-  key: "$CI_PIPELINE_ID"
-  paths:
-    - vendor/
+    key: "$CI_PIPELINE_ID"
+    paths:
+        - vendor/
 
 stages:
-  - build
+    - build
 
 build:docker:
-  stage: build
-  only: [merge_requests, "/master/"]
-  image: docker:latest
-  services:
-    - docker:dind
-  script:
-    - docker build -f docker/Dockerfile .
+    stage: build
+    only: [merge_requests, "/master/"]
+    image: docker:latest
+    services:
+        - docker:dind
+    script:
+        - docker build -f docker/Dockerfile .

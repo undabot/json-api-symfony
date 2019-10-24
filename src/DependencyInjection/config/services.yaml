@@ -1,63 +1,63 @@
 services:
-  _defaults:
-    autowire: true      # Automatically injects dependencies in your services.
-    autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
-    public: false       # Allows optimizing the container by removing unused services; this also means
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
 
-  #  Undabot\SymfonyJsonApi\EventListener\:
-  #    resource: '../EventListener/*'
-  #
-  #  Undabot\SymfonyJsonApi\ExceptionSubscriber\:
-  #      resource: '../ExceptionSubscriber/*'
-  #
-  #  Undabot\SymfonyJsonApi\Pagination\:
-  #    resource: '../Pagination/*'
-  #
-  #  Undabot\SymfonyJsonApi\Sort\:
-  #    resource: '../Sort/*'
-  #
-  #  Undabot\SymfonyJsonApi\Resource\Builder\:
-  #    resource: '../Resource/Builder/*'
-  #
-  #  Undabot\SymfonyJsonApi\Resource\Factory\:
-  #    resource: '../Resource/Factory/*'
-  #
-  #  Undabot\SymfonyJsonApi\Request\Factory\:
-  #    resource: '../Request/Factory/*'
-  #
-  #  Undabot\SymfonyJsonApi\Request\Validation\:
-  #    resource: '../Request/Validation/*'
-  #
-  #  Undabot\SymfonyJsonApi\Response\Factory\:
-  #    resource: '../Response/Factory/*'
+    #  Undabot\SymfonyJsonApi\EventListener\:
+    #    resource: '../EventListener/*'
+    #
+    #  Undabot\SymfonyJsonApi\ExceptionSubscriber\:
+    #      resource: '../ExceptionSubscriber/*'
+    #
+    #  Undabot\SymfonyJsonApi\Pagination\:
+    #    resource: '../Pagination/*'
+    #
+    #  Undabot\SymfonyJsonApi\Sort\:
+    #    resource: '../Sort/*'
+    #
+    #  Undabot\SymfonyJsonApi\Resource\Builder\:
+    #    resource: '../Resource/Builder/*'
+    #
+    #  Undabot\SymfonyJsonApi\Resource\Factory\:
+    #    resource: '../Resource/Factory/*'
+    #
+    #  Undabot\SymfonyJsonApi\Request\Factory\:
+    #    resource: '../Request/Factory/*'
+    #
+    #  Undabot\SymfonyJsonApi\Request\Validation\:
+    #    resource: '../Request/Validation/*'
+    #
+    #  Undabot\SymfonyJsonApi\Response\Factory\:
+    #    resource: '../Response/Factory/*'
 
-  Undabot\JsonApi\Encoding\:
-    resource: '../../../../json-api-core/src/Encoding/*'
+    Undabot\JsonApi\Encoding\:
+        resource: '../../../../json-api-core/src/Encoding/*'
 
-  Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator: ~
-  Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidatorInterface: '@Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator'
+    Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator: ~
+    Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidatorInterface: '@Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator'
 
-  Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory: ~
-  Undabot\SymfonyJsonApi\Http\Service\Builder\ResourceCollectionRequestBuilder:
-    shared: false
+    Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory: ~
+    Undabot\SymfonyJsonApi\Http\Service\Builder\ResourceCollectionRequestBuilder:
+        shared: false
 
-  Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory: ~
-  Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataFactoryInterface: '@Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory'
-  Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer: ~
-  Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator: ~
-  Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataFactoryInterface: '@Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory'
+    Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory: ~
 
-  Undabot\SymfonyJsonApi\Http\EventSubscriber\ViewResponseSubscriber: ~
-  Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionSubscriber: ~
+    Undabot\SymfonyJsonApi\Http\EventSubscriber\ViewResponseSubscriber: ~
+    Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionSubscriber: ~
 
-  Undabot\SymfonyJsonApi\Http\Service\Responder\:
-    resource: '../../Http/Service/Responder/*'
+    Undabot\SymfonyJsonApi\Http\Service\Responder\:
+        resource: '../../Http/Service/Responder/*'
 
-  Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\:
-    resource: '../../Http/Service/ModelEncoder/*'
+    Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\:
+        resource: '../../Http/Service/ModelEncoder/*'
 
-  Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\MappedModelEncoder:
-    shared: true
+    Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\MappedModelEncoder:
+        shared: true
 
-  Undabot\SymfonyJsonApi\Service\ParamConverter\JsonApiRequestParamConverter: ~
-  Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler: ~
+    Undabot\SymfonyJsonApi\Service\ParamConverter\JsonApiRequestParamConverter: ~
+    Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler: ~

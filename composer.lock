@@ -3755,12 +3755,12 @@
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/undabot/json-api-core.git",
-                "reference": "2b044c44d571b13d7a35f29c5a333395a9ece522"
+                "reference": "c07704bbc3b85217066e01854454b1f225eea99a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=2b044c44d571b13d7a35f29c5a333395a9ece522",
-                "reference": "2b044c44d571b13d7a35f29c5a333395a9ece522",
+                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=c07704bbc3b85217066e01854454b1f225eea99a",
+                "reference": "c07704bbc3b85217066e01854454b1f225eea99a",
                 "shasum": ""
             },
             "require": {
@@ -3803,7 +3803,7 @@
             "license": [
                 "Apache-2.0"
             ],
-            "time": "2019-10-24T12:31:12+00:00"
+            "time": "2019-10-25T08:25:01+00:00"
         },
         {
             "name": "zantolov/toolbelt",

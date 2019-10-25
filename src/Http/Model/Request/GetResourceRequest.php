@@ -34,7 +34,7 @@ class GetResourceRequest implements GetResourceRequestInterface
         return $this->id;
     }
 
-    public function getInclude(): ?array
+    public function getIncludes(): ?array
     {
         return $this->include;
     }
@@ -56,7 +56,7 @@ class GetResourceRequest implements GetResourceRequestInterface
     /**
      * @throws UnsupportedIncludeValuesGivenException
      */
-    public function allowIncludes(array $includes): GetResourceRequestInterface
+    public function allowIncluded(array $includes): GetResourceRequestInterface
     {
         $unsupportedIncludes = array_diff($this->include ?: [], $includes);
         if (0 !== \count($unsupportedIncludes)) {

@@ -48,7 +48,9 @@ services:
     Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory: ~
 
     Undabot\SymfonyJsonApi\Http\EventSubscriber\ViewResponseSubscriber: ~
-    Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionSubscriber: ~
+    Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }
 
     Undabot\SymfonyJsonApi\Http\Service\Responder\:
         resource: '../../Http/Service/Responder/*'

@@ -12,6 +12,13 @@
     }
   ],
 ```
+# Configuration
+Exception listener has default priority of -128 but it can be configured by creating `config/packages/json_api_symfony.yaml` with following parameters
+
+```yaml
+json_api_symfony:
+    exception_listener_priority: 100
+``` 
 
 # Naming
 

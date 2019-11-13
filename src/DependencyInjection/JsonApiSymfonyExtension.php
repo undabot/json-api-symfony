@@ -30,7 +30,7 @@ class JsonApiSymfonyExtension extends Extension
         $tag = $definition->getTag('kernel.event_listener');
         $tag[0]['priority'] = $config['exception_listener_priority'] ?? self::EXCEPTION_LISTENER_PRIORITY;
         $definition->setTags([
-            'kernel.event_listener' => $tag
+            'kernel.event_listener' => $tag,
         ]);
     }
 }

@@ -85,9 +85,9 @@ class ViewResponseSubscriber implements EventSubscriberInterface
             $document = new Document(
                 new DocumentData($data->getPrimaryResource()),
                 null,
-                $data->getMeta(),
-                $this->buildJsonApi(),
-                $data->getLinks()
+                null,
+                null,
+                null
             );
 
             $response = $this->buildDocumentResponse($document, Response::HTTP_NO_CONTENT);

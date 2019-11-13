@@ -15,6 +15,7 @@ use Undabot\JsonApi\Model\Meta\Meta;
 use Undabot\JsonApi\Model\Meta\MetaInterface;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceValidationErrorsResponse;
@@ -77,6 +78,19 @@ class ViewResponseSubscriber implements EventSubscriberInterface
             );
 
             $response = $this->buildDocumentResponse($document, Response::HTTP_OK);
+            $event->setResponse($response);
+        }
+
+        if ($data instanceof ResourceDeletedResponse) {
+            $document = new Document(
+                new DocumentData($data->getPrimaryResource()),
+                null,
+                $data->getMeta(),
+                $this->buildJsonApi(),
+                $data->getLinks()
+            );
+
+            $response = $this->buildDocumentResponse($document, Response::HTTP_NO_CONTENT);
             $event->setResponse($response);
         }
 

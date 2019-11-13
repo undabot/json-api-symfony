@@ -6,5 +6,4 @@ namespace Undabot\SymfonyJsonApi\Http\Model\Response;
 
 final class ResourceDeletedResponse
 {
-
 }

@@ -11,5 +11,5 @@ use Undabot\JsonApi\Model\Resource\ResourceInterface;
 
 final class ResourceDeletedResponse
 {
-    
+
 }

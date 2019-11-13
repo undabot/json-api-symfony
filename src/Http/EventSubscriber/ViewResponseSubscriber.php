@@ -83,7 +83,7 @@ class ViewResponseSubscriber implements EventSubscriberInterface
 
         if ($data instanceof ResourceDeletedResponse) {
             $document = new Document(
-                new DocumentData($data->getPrimaryResource()),
+                null,
                 null,
                 null,
                 null,
@@ -95,16 +95,13 @@ class ViewResponseSubscriber implements EventSubscriberInterface
         }
 
         if ($data instanceof ResourceResponse) {
-            $document = new Document(
-                new DocumentData($data->getPrimaryResource()),
-                null,
-                $data->getMeta(),
-                $this->buildJsonApi(),
-                $data->getLinks(),
-                $data->getIncludedResources()
+            $response = new Response(
+                '',
+                Response::HTTP_NO_CONTENT,
+                [
+                    'Content-Type' => 'application/vnd.api+json',
+                ]
             );
-
-            $response = $this->buildDocumentResponse($document);
             $event->setResponse($response);
         }
 

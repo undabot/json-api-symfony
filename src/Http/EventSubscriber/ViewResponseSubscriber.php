@@ -100,6 +100,7 @@ class ViewResponseSubscriber implements EventSubscriberInterface
                 $this->buildJsonApi(),
                 $data->getLinks(),
                 $data->getIncludedResources()
+            );
 
             $response = $this->buildDocumentResponse($document);
             $event->setResponse($response);

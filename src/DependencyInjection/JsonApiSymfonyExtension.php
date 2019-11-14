@@ -30,15 +30,15 @@ class JsonApiSymfonyExtension extends Extension
         $config = $this->processConfiguration($configuration, $configs);
 
         $definition = new Definition(ExceptionListener::class, [
-            new Reference(DocumentToPhpArrayEncoderInterface::class)
+            new Reference(DocumentToPhpArrayEncoderInterface::class),
         ]);
         $definition->setTags([
             'kernel.event_listener' => [
                 [
                     'event' => 'kernel.exception',
-                    'priority' => $config['exception_listener_priority'] ?? self::EXCEPTION_LISTENER_PRIORITY
-                ]
-            ]
+                    'priority' => $config['exception_listener_priority'] ?? self::EXCEPTION_LISTENER_PRIORITY,
+                ],
+            ],
         ]);
         $container->setDefinition('json_api_symfony.exception_listener', $definition);
     }

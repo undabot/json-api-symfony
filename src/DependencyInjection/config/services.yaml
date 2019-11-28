@@ -55,8 +55,5 @@ services:
     Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\:
         resource: '../../Http/Service/ModelEncoder/*'
 
-    Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\MappedModelEncoder:
-        shared: true
-
     Undabot\SymfonyJsonApi\Service\ParamConverter\JsonApiRequestParamConverter: ~
     Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler: ~

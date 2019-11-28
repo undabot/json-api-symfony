@@ -12,6 +12,60 @@
     }
   ],
 ```
+
+# Usage
+
+## Responder
+
+First create a Responder class that extends `AbstractResponder` and implement `getMap()` method. `getMap()` method should return array of classes mapped to callable
+
+```php
+<?php
+
+declare(strict_types=1);
+
+use Undabot\SymfonyJsonApi\Http\Service\Responder\AbstractResponder;
+
+class CmsResponder extends AbstractResponder
+{
+    /**
+     * @return array<string, callable>
+     */
+    public function getMap(): array
+    {
+        return [
+            Entity::class => [EntityReadModel::class, 'fromEntity'],
+        ];
+    }
+}
+
+```
+
+Once Responder has been created, it can be used this way
+
+```php
+<?php
+
+class Controller
+{
+    public function get(
+        CmsResponder $responder
+    ): ResourceCollectionResponse {
+        ... # fetch array of entities entities
+
+        return $responder->resourceCollection(
+            $entities
+        );
+    }
+```
+
+Here is the list of possible methods from AbstractResponder
+
+* resourceCollection
+* resource
+* resourceUpdated
+* resourceCreated
+
 # Configuration
 Exception listener has default priority of -128 but it can be configured by creating `config/packages/json_api_symfony.yaml` with following parameters
 

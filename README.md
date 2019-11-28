@@ -61,10 +61,10 @@ class Controller
 
 Here is the list of possible methods from AbstractResponder
 
-* resourceCollection
-* resource
-* resourceUpdated
-* resourceCreated
+* [resourceCollection](src/Http/Service/Responder/AbstractResponder.php#L47)
+* [resource](https://gitlab.com/undabot/json-api-symfony/blob/feature/custom-map/src/Http/Service/Responder/AbstractResponder.php#L71)
+* [resourceUpdated](https://gitlab.com/undabot/json-api-symfony/blob/feature/custom-map/src/Http/Service/Responder/AbstractResponder.php#L119)
+* [resourceCreated](https://gitlab.com/undabot/json-api-symfony/blob/feature/custom-map/src/Http/Service/Responder/AbstractResponder.php#L95)
 
 # Configuration
 Exception listener has default priority of -128 but it can be configured by creating `config/packages/json_api_symfony.yaml` with following parameters

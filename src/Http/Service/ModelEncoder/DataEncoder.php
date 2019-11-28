@@ -10,7 +10,7 @@ use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
-final class DataEncoder
+class DataEncoder
 {
     /** @var ResourceFactory */
     private $resourceFactory;

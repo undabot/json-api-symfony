@@ -16,6 +16,7 @@ use Exception;
 use RuntimeException;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\DataEncoder;
@@ -129,6 +130,11 @@ abstract class AbstractResponder
             null === $meta ? null : new Meta($meta),
             null === $links ? null : $this->buildLinks($links)
         );
+    }
+
+    public function resourceDeleted(): ResourceDeletedResponse
+    {
+        return new ResourceDeletedResponse();
     }
 
     /**

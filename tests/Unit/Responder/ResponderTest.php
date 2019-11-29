@@ -8,6 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\DataEncoder;
@@ -66,5 +67,17 @@ final class ResponderTest extends TestCase
         $result = $responder->resourceCreated(new \stdClass());
 
         static::assertInstanceOf(ResourceCreatedResponse::class, $result);
+    }
+
+    public function testReturnInstanceOfResourceDeletedResponse(): void
+    {
+        $emMock = $this->createMock(EntityManagerInterface::class);
+        $dataEncoderMock = $this->createMock(DataEncoder::class);
+
+        $responder = new TestResponder($emMock, $dataEncoderMock);
+
+        $result = $responder->resourceDeleted();
+
+        static::assertInstanceOf(ResourceDeletedResponse::class, $result);
     }
 }

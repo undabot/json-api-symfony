@@ -14,8 +14,8 @@ class TestResponder extends AbstractResponder
     protected function getMap(): array
     {
         return [
-            \stdClass::class => static function () {
-                return new \stdClass();
+            TestClass::class => static function (TestClass $object) {
+                return new TestApiModel($object->name);
             },
         ];
     }

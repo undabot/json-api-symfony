@@ -21,6 +21,14 @@ use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
  */
 final class ResponderTest extends TestCase
 {
+    /** @var TestClass */
+    private $testObject;
+
+    protected function setUp(): void
+    {
+        $this->testObject = new TestClass('test');
+    }
+
     public function testReturnInstanceOfResourceResponse(): void
     {
         $emMock = $this->createMock(EntityManagerInterface::class);
@@ -28,7 +36,7 @@ final class ResponderTest extends TestCase
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
-        $result = $responder->resource(new \stdClass());
+        $result = $responder->resource($this->testObject);
 
         static::assertInstanceOf(ResourceResponse::class, $result);
     }
@@ -40,7 +48,7 @@ final class ResponderTest extends TestCase
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
-        $result = $responder->resourceCollection([new \stdClass()]);
+        $result = $responder->resourceCollection([$this->testObject]);
 
         static::assertInstanceOf(ResourceCollectionResponse::class, $result);
     }
@@ -52,7 +60,7 @@ final class ResponderTest extends TestCase
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
-        $result = $responder->resourceUpdated(new \stdClass());
+        $result = $responder->resourceUpdated($this->testObject);
 
         static::assertInstanceOf(ResourceUpdatedResponse::class, $result);
     }
@@ -64,7 +72,7 @@ final class ResponderTest extends TestCase
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
-        $result = $responder->resourceCreated(new \stdClass());
+        $result = $responder->resourceCreated($this->testObject);
 
         static::assertInstanceOf(ResourceCreatedResponse::class, $result);
     }
@@ -79,5 +87,17 @@ final class ResponderTest extends TestCase
         $result = $responder->resourceDeleted();
 
         static::assertInstanceOf(ResourceDeletedResponse::class, $result);
+    }
+
+    public function testItThrowsExceptionIfNoMapDefined(): void
+    {
+        $this->expectException(\RuntimeException::class);
+
+        $emMock = $this->createMock(EntityManagerInterface::class);
+        $dataEncoderMock = $this->createMock(EncoderInterface::class);
+
+        $responder = new TestResponder($emMock, $dataEncoderMock);
+
+        $responder->resourceCreated(new \stdClass());
     }
 }

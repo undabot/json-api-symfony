@@ -138,6 +138,15 @@ abstract class AbstractResponder
     }
 
     /**
+     * This method allows for rapid development by providing mapping definition between data
+     * objects and their ApiModels.
+     *
+     * JSON:API Bundle will process the mappings and use it in Responder
+     * to determine the ApiModel class that should be constructed for given object.
+     *
+     * `getMap()` method should return array of elements: `data class => callable factory function`.
+     * The Factory function will be called with one argument, instance of data object.
+     *
      * @return array<string, callable>
      */
     abstract protected function getMap(): array;

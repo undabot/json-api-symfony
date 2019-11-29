@@ -11,7 +11,7 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
-use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\DataEncoder;
+use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
 
 /**
  * @internal
@@ -24,7 +24,7 @@ final class ResponderTest extends TestCase
     public function testReturnInstanceOfResourceResponse(): void
     {
         $emMock = $this->createMock(EntityManagerInterface::class);
-        $dataEncoderMock = $this->createMock(DataEncoder::class);
+        $dataEncoderMock = $this->createMock(EncoderInterface::class);
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
@@ -36,7 +36,7 @@ final class ResponderTest extends TestCase
     public function testReturnInstanceOfResourceCollectionResponse(): void
     {
         $emMock = $this->createMock(EntityManagerInterface::class);
-        $dataEncoderMock = $this->createMock(DataEncoder::class);
+        $dataEncoderMock = $this->createMock(EncoderInterface::class);
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
@@ -48,7 +48,7 @@ final class ResponderTest extends TestCase
     public function testReturnInstanceOfResourceUpdatedResponse(): void
     {
         $emMock = $this->createMock(EntityManagerInterface::class);
-        $dataEncoderMock = $this->createMock(DataEncoder::class);
+        $dataEncoderMock = $this->createMock(EncoderInterface::class);
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
@@ -60,7 +60,7 @@ final class ResponderTest extends TestCase
     public function testReturnInstanceOfResourceCreatedResponse(): void
     {
         $emMock = $this->createMock(EntityManagerInterface::class);
-        $dataEncoderMock = $this->createMock(DataEncoder::class);
+        $dataEncoderMock = $this->createMock(EncoderInterface::class);
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 
@@ -72,7 +72,7 @@ final class ResponderTest extends TestCase
     public function testReturnInstanceOfResourceDeletedResponse(): void
     {
         $emMock = $this->createMock(EntityManagerInterface::class);
-        $dataEncoderMock = $this->createMock(DataEncoder::class);
+        $dataEncoderMock = $this->createMock(EncoderInterface::class);
 
         $responder = new TestResponder($emMock, $dataEncoderMock);
 

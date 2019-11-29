@@ -19,18 +19,18 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
-use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\DataEncoder;
+use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
 
 abstract class AbstractResponder
 {
     /** @var EntityManagerInterface */
     private $entityManager;
-    /** @var DataEncoder */
+    /** @var EncoderInterface */
     private $dataEncoder;
 
     public function __construct(
         EntityManagerInterface $entityManager,
-        DataEncoder $modelEncoder
+        EncoderInterface $modelEncoder
     ) {
         $this->entityManager = $entityManager;
         $this->dataEncoder = $modelEncoder;

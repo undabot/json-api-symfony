@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\ModelEncoder;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Exception;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
-class DataEncoder
+final class ApiModelEncoder implements EncoderInterface
 {
     /** @var ResourceFactory */
     private $resourceFactory;
@@ -27,6 +28,7 @@ class DataEncoder
      * @param mixed $data
      *
      * @throws Exception
+     * @throws AssertionFailedException
      */
     public function encodeData($data, callable $modelTransformer): ResourceInterface
     {
@@ -34,7 +36,7 @@ class DataEncoder
         Assertion::isInstanceOf(
             $apiModel,
             ApiModel::class,
-            sprintf('Invalid data conversion occured. Expected instance of ApiModel, got %s', \get_class($apiModel))
+            sprintf('Invalid data conversion occurred. Expected instance of ApiModel, got %s', \get_class($apiModel))
         );
 
         return $this->resourceFactory->make($apiModel);

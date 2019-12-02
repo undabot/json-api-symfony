@@ -8,7 +8,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Proxy\Proxy;
 use Exception;
 use RuntimeException;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 final class MappedModelEncoder
 {
@@ -19,7 +19,11 @@ final class MappedModelEncoder
     private $dataEncoder;
 
     /** @var array */
-    private $dataTransformersMap = [];
+    private $dataTransformersMap = [
+        'cms' => [],
+        'web' => [],
+        'mobile' => [],
+    ];
 
     public function __construct(EntityManagerInterface $entityManager, DataEncoder $modelEncoder)
     {

@@ -8,7 +8,7 @@ use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validation;
-use Undabot\JsonApi\Model\Resource\Resource;
+use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;

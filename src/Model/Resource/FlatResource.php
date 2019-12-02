@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Model\Resource;
 
 use RuntimeException;
-use Undabot\JsonApi\Model\Resource\Attribute\AttributeInterface;
-use Undabot\JsonApi\Model\Resource\Relationship\Data\ToManyRelationshipData;
-use Undabot\JsonApi\Model\Resource\Relationship\Data\ToOneRelationshipData;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipInterface;
-use Undabot\JsonApi\Model\Resource\ResourceIdentifierInterface;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Attribute\AttributeInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToManyRelationshipDataInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToOneRelationshipDataInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Relationship\RelationshipInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceIdentifierInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 /**
  * FlatResource normalizes ResourceInterface attributes (AttributeCollectionInterface, AttributeInterface) and
@@ -70,13 +70,13 @@ class FlatResource
                 continue;
             }
 
-            if ($relationshipData instanceof ToOneRelationshipData && true === $relationshipData->isEmpty()) {
+            if ($relationshipData instanceof ToOneRelationshipDataInterface && true === $relationshipData->isEmpty()) {
                 $flatRelationships[$relationship->getName()] = null;
 
                 continue;
             }
 
-            if ($relationshipData instanceof ToOneRelationshipData && false === $relationshipData->isEmpty()) {
+            if ($relationshipData instanceof ToOneRelationshipDataInterface && false === $relationshipData->isEmpty()) {
                 /** @var ResourceIdentifierInterface $data */
                 $data = $relationshipData->getData();
                 $flatRelationships[$relationship->getName()] = $data->getId();
@@ -84,13 +84,13 @@ class FlatResource
                 continue;
             }
 
-            if ($relationshipData instanceof ToManyRelationshipData && true === $relationshipData->isEmpty()) {
+            if ($relationshipData instanceof ToManyRelationshipDataInterface && true === $relationshipData->isEmpty()) {
                 $flatRelationships[$relationship->getName()] = [];
 
                 continue;
             }
 
-            if ($relationshipData instanceof ToManyRelationshipData && false === $relationshipData->isEmpty()) {
+            if ($relationshipData instanceof ToManyRelationshipDataInterface && false === $relationshipData->isEmpty()) {
                 $flatData = array_map(static function (ResourceIdentifierInterface $resourceIdentifier) {
                     return $resourceIdentifier->getId();
                 }, iterator_to_array($relationshipData->getData()));

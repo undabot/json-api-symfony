@@ -7,18 +7,18 @@ namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator
 use Assert\Assertion;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipInterface;
-use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
-use Undabot\JsonApi\Model\Resource\ResourceIdentifierCollectionInterface;
-use Undabot\JsonApi\Model\Resource\ResourceIdentifierInterface;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Relationship\RelationshipInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceIdentifierCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceIdentifierInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
 class ResourceTypeValidator extends ConstraintValidator
 {
     /**
      * @param ResourceType $constraint
-     * @param mixed        $value
+     * @param mixed $value
      */
     public function validate($value, Constraint $constraint): void
     {

@@ -8,7 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
+use Undabot\JsonApi\Definition\Encoding\PhpArrayToResourceEncoderInterface;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory;
 use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
@@ -44,7 +44,7 @@ final class GetResourceCollectionRequestTest extends TestCase
         );
     }
 
-    public function testRequestWithoutAnyParametersCanBeConstructed(): void
+    public function testItWithoutAnyParametersCanBeConstructed(): void
     {
 //        $parameterBagMock = $this->createMock(ParameterBag::class);
 //        $requestMock = $this->createMock(Request::class);
@@ -60,7 +60,7 @@ final class GetResourceCollectionRequestTest extends TestCase
         static::assertNull($getResourceCollectionRequest->getSparseFieldset());
     }
 
-    public function testRequestWithAllValidParametersCanBeConstructed(): void
+    public function testItWithAllValidParametersCanBeConstructed(): void
     {
 //        $parameterBagMock = $this->createMock(ParameterBag::class);
 //        $requestMock = $this->createMock(Request::class);

@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Service;
 
-use Undabot\JsonApi\Model\Request\ResourcePayloadRequest;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Request\ResourcePayloadRequest;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
@@ -29,6 +29,9 @@ final class SimpleResourceHandler
         return $this->getModelFromResource($request->getResource(), $class);
     }
 
+    /**
+     * @throws \Exception
+     */
     public function getModelFromResource(ResourceInterface $resource, string $class): ApiModel
     {
         if (false === is_subclass_of($class, ApiModel::class)) {

@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Undabot\JsonApi\Tests\Unit\Model\Resource;
 
 use PHPUnit\Framework\TestCase;
-use Undabot\JsonApi\Factory\RelationshipDataFactory;
-use Undabot\JsonApi\Model\Resource\Attribute\Attribute;
-use Undabot\JsonApi\Model\Resource\Attribute\AttributeCollection;
-use Undabot\JsonApi\Model\Resource\Relationship\Relationship;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollection;
-use Undabot\JsonApi\Model\Resource\Resource;
+use Undabot\JsonApi\Implementation\Factory\RelationshipDataFactory;
+use Undabot\JsonApi\Implementation\Model\Resource\Attribute\Attribute;
+use Undabot\JsonApi\Implementation\Model\Resource\Attribute\AttributeCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\Relationship;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\RelationshipCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 
 /**

@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Assert\Assertion;
-use Undabot\JsonApi\Model\Link\Link;
-use Undabot\JsonApi\Model\Link\LinkCollection;
-use Undabot\JsonApi\Model\Link\LinkMemberInterface;
-use Undabot\JsonApi\Model\Resource\ResourceCollection;
+use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
+use Undabot\JsonApi\Implementation\Model\Link\Link;
+use Undabot\JsonApi\Implementation\Model\Link\LinkCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\MappedModelEncoder;
 
 abstract class AbstractResponder

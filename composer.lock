@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "710fb062a8f46cb2ece6c32a7c04f96c",
+    "content-hash": "edf16d3d7dff57c5035fe53b50c1da95",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3751,16 +3751,16 @@
         },
         {
             "name": "undabot/json-api-core",
-            "version": "dev-v2-rc",
+            "version": "dev-feature/v2-rc-cleanup",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/undabot/json-api-core.git",
-                "reference": "c07704bbc3b85217066e01854454b1f225eea99a"
+                "reference": "983d89132457d06b30f5b5f352e18c8f53b69da2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=c07704bbc3b85217066e01854454b1f225eea99a",
-                "reference": "c07704bbc3b85217066e01854454b1f225eea99a",
+                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=983d89132457d06b30f5b5f352e18c8f53b69da2",
+                "reference": "983d89132457d06b30f5b5f352e18c8f53b69da2",
                 "shasum": ""
             },
             "require": {
@@ -3803,7 +3803,7 @@
             "license": [
                 "Apache-2.0"
             ],
-            "time": "2019-10-25T08:25:01+00:00"
+            "time": "2019-12-02T20:48:40+00:00"
         },
         {
             "name": "zantolov/toolbelt",

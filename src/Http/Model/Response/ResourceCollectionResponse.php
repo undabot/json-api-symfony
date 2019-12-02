@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Model\Response;
 
 use Assert\Assertion;
-use Undabot\JsonApi\Model\Link\LinkCollection;
-use Undabot\JsonApi\Model\Link\LinkCollectionInterface;
-use Undabot\JsonApi\Model\Link\LinkInterface;
-use Undabot\JsonApi\Model\Meta\Meta;
-use Undabot\JsonApi\Model\Meta\MetaInterface;
-use Undabot\JsonApi\Model\Resource\ResourceCollection;
-use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Link\LinkCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
+use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Implementation\Model\Link\LinkCollection;
+use Undabot\JsonApi\Implementation\Model\Meta\Meta;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 final class ResourceCollectionResponse

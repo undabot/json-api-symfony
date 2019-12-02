@@ -6,8 +6,8 @@ namespace Undabot\SymfonyJsonApi\Model\Collection;
 
 use ArrayIterator;
 use Assert\Assertion;
-use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 class UniqueResourceCollection implements ResourceCollectionInterface
 {

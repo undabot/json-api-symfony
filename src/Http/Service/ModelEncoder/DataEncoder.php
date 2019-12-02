@@ -6,7 +6,7 @@ namespace Undabot\SymfonyJsonApi\Http\Service\ModelEncoder;
 
 use Assert\Assertion;
 use Exception;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 

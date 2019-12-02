@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Model\Response;
 
-use Undabot\JsonApi\Model\Link\LinkCollectionInterface;
-use Undabot\JsonApi\Model\Meta\MetaInterface;
-use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Link\LinkCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 final class ResourceCreatedResponse
 {

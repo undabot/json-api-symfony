@@ -7,13 +7,12 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Factory;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\JsonApi\Encoding\Exception\PhpArrayEncodingException;
-use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoderInterface;
-use Undabot\JsonApi\Exception\Request\InvalidRequestDataException;
-use Undabot\JsonApi\Exception\Request\RequestException;
-use Undabot\JsonApi\Model\Request\Filter\FilterSet;
-use Undabot\JsonApi\Model\Request\Sort\SortSet;
-use Undabot\JsonApi\Util\Assert\Assert;
+use Undabot\JsonApi\Definition\Encoding\PhpArrayToResourceEncoderInterface;
+use Undabot\JsonApi\Definition\Exception\Request\RequestException;
+use Undabot\JsonApi\Implementation\Encoding\Exception\JsonApiEncodingException;
+use Undabot\JsonApi\Implementation\Factory\PaginationFactory;
+use Undabot\JsonApi\Implementation\Model\Request\Filter\FilterSet;
+use Undabot\JsonApi\Implementation\Model\Request\Sort\SortSet;
 use Undabot\SymfonyJsonApi\Http\Model\Request\CreateResourceRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest;
@@ -40,8 +39,7 @@ class RequestFactory
      * @see https://jsonapi.org/format/#crud-creating
      *
      * @throws RequestException
-     * @throws PhpArrayEncodingException
-     * @throws AssertionFailedException
+     * @throws JsonApiEncodingException
      */
     public function createResourceRequest(
         Request $request,
@@ -117,7 +115,7 @@ class RequestFactory
 
     /**
      * @throws RequestException
-     * @throws PhpArrayEncodingException
+     * @throws JsonApiEncodingException
      * @throws AssertionFailedException
      */
     public function updateResourceRequest(Request $request, string $id): UpdateResourceRequest
@@ -131,9 +129,9 @@ class RequestFactory
     }
 
     /**
+     * @return array<string, mixed>
      * @throws AssertionFailedException
      *
-     * @return array<string, mixed>
      */
     private function getRequestPrimaryData(Request $request): array
     {
@@ -142,13 +140,9 @@ class RequestFactory
         Assertion::isJsonString($rawRequestData, 'Request data must be valid JSON');
         $requestData = json_decode($rawRequestData, true);
 
-        if (null === $requestData) {
-            throw new InvalidRequestDataException('Request data must be valid JSON');
-        }
-
-        if (false === Assert::arrayHasRequiredKeys($requestData, ['data'])) {
-            throw new InvalidRequestDataException('The request MUST include a single resource object as primary data.');
-        }
+        Assertion::notNull($requestData, 'Request data must be parsable to a valid array');
+        Assertion::isArray($requestData, 'Request data must be parsable to a valid array');
+        Assertion::keyExists('data', $requestData, 'The request MUST include a single resource object as primary data');
 
         return $requestData['data'];
     }

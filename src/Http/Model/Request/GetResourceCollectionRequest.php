@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Model\Request;
 
-use Undabot\JsonApi\Exception\Request\UnsupportedFilterAttributeGivenException;
-use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
-use Undabot\JsonApi\Exception\Request\UnsupportedPaginationRequestedException;
-use Undabot\JsonApi\Exception\Request\UnsupportedSortRequestedException;
-use Undabot\JsonApi\Model\Request\Filter\FilterSet;
-use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
-use Undabot\JsonApi\Model\Request\Pagination\PaginationInterface;
-use Undabot\JsonApi\Model\Request\Sort\SortSet;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedFilterAttributeGivenException;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedPaginationRequestedException;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedSortRequestedException;
+use Undabot\JsonApi\Definition\Model\Request\GetResourceCollectionRequestInterface;
+use Undabot\JsonApi\Definition\Model\Request\Pagination\PaginationInterface;
+use Undabot\JsonApi\Implementation\Model\Request\Filter\FilterSet;
+use Undabot\JsonApi\Implementation\Model\Request\Sort\SortSet;
 
 class GetResourceCollectionRequest implements GetResourceCollectionRequestInterface
 {

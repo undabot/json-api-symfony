@@ -8,18 +8,22 @@ use Assert\Assertion;
 use Doctrine\Common\Annotations\AnnotationException;
 use ReflectionException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
-use Undabot\JsonApi\Model\Resource\Attribute\AttributeCollection;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollection;
-use Undabot\JsonApi\Model\Resource\Resource;
-use Undabot\JsonApi\Model\Resource\ResourceCollection;
-use Undabot\JsonApi\Model\Resource\ResourceCollectionInterface;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Implementation\Model\Resource\Attribute\AttributeCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\RelationshipCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\Resource;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 
+/**
+ * Class responsible for creating a ResourceInterface instance out of given API model that is
+ * correctly annotated with library's annotations.
+ */
 class ResourceFactory
 {
     /** @var ResourceMetadataFactory */

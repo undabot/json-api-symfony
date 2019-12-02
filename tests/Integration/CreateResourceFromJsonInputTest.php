@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Integration;
 
 use PHPUnit\Framework\TestCase;
-use Undabot\JsonApi\Encoding\PhpArrayToAttributeCollectionEncoder;
-use Undabot\JsonApi\Encoding\PhpArrayToLinkCollectionEncoder;
-use Undabot\JsonApi\Encoding\PhpArrayToMetaEncoder;
-use Undabot\JsonApi\Encoding\PhpArrayToRelationshipCollectionEncoder;
-use Undabot\JsonApi\Encoding\PhpArrayToResourceEncoder;
-use Undabot\JsonApi\Model\Resource\Relationship\Data\ToOneRelationshipData;
-use Undabot\JsonApi\Model\Resource\Relationship\Relationship;
-use Undabot\JsonApi\Model\Resource\Resource;
-use Undabot\JsonApi\Model\Resource\ResourceIdentifier;
+use Undabot\JsonApi\Implementation\Encoding\PhpArrayToAttributeCollectionEncoder;
+use Undabot\JsonApi\Implementation\Encoding\PhpArrayToLinkCollectionEncoder;
+use Undabot\JsonApi\Implementation\Encoding\PhpArrayToMetaEncoder;
+use Undabot\JsonApi\Implementation\Encoding\PhpArrayToRelationshipCollectionEncoder;
+use Undabot\JsonApi\Implementation\Encoding\PhpArrayToResourceEncoder;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\Data\ToOneRelationshipData;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\Relationship;
+use Undabot\JsonApi\Implementation\Model\Resource\Resource;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceIdentifier;
 
 /**
  * @internal
@@ -34,7 +34,6 @@ final class CreateResourceFromJsonInputTest extends TestCase
         $this->phpArrayToResourceEncoder = new PhpArrayToResourceEncoder(
             new PhpArrayToRelationshipCollectionEncoder($phpArrayToMetaEncoder, $phpArrayToLinkCollectionEncoder),
             new PhpArrayToAttributeCollectionEncoder(),
-            $phpArrayToLinkCollectionEncoder,
             $phpArrayToMetaEncoder
         );
     }

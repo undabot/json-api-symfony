@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Service\Resource\Builder;
 
-use Undabot\JsonApi\Model\Resource\Attribute\Attribute;
-use Undabot\JsonApi\Model\Resource\Attribute\AttributeCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\Attribute\Attribute;
+use Undabot\JsonApi\Implementation\Model\Resource\Attribute\AttributeCollection;
 
 class ResourceAttributesBuilder
 {

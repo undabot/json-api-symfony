@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Service\Resource\Builder;
 
-use Undabot\JsonApi\Model\Resource\Relationship\Data\ToManyRelationshipData;
-use Undabot\JsonApi\Model\Resource\Relationship\Data\ToOneRelationshipData;
-use Undabot\JsonApi\Model\Resource\Relationship\Relationship;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollection;
-use Undabot\JsonApi\Model\Resource\ResourceIdentifier;
-use Undabot\JsonApi\Model\Resource\ResourceIdentifierCollection;
-use Undabot\JsonApi\Model\Resource\ResourceIdentifierInterface;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\Data\ToManyRelationshipData;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\Data\ToOneRelationshipData;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\Relationship;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\RelationshipCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceIdentifier;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceIdentifierCollection;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceIdentifierInterface;
 
 class ResourceRelationshipsBuilder
 {
@@ -19,10 +19,6 @@ class ResourceRelationshipsBuilder
 
     /** @var array */
     private $toMany = [];
-
-    public function __construct()
-    {
-    }
 
     public static function make(): self
     {

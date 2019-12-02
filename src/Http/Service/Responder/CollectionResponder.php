@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Exception;
-use Undabot\JsonApi\Model\Meta\Meta;
-use Undabot\JsonApi\Model\Resource\ResourceCollection;
+use Undabot\JsonApi\Implementation\Model\Meta\Meta;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Exception;
-use Undabot\JsonApi\Model\Link\LinkMemberInterface;
-use Undabot\JsonApi\Model\Meta\Meta;
-use Undabot\JsonApi\Model\Resource\ResourceCollection;
+use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
+use Undabot\JsonApi\Implementation\Model\Meta\Meta;
+use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
@@ -16,9 +16,9 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 final class ModelResponder extends AbstractResponder
 {
     /**
-     * @param mixed[]                                 $primaryData
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * @param mixed[] $primaryData
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
      * @throws Exception
@@ -40,10 +40,10 @@ final class ModelResponder extends AbstractResponder
     }
 
     /**
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
+     * @param mixed $primaryData
      *
      * @throws Exception
      */
@@ -64,10 +64,10 @@ final class ModelResponder extends AbstractResponder
     }
 
     /**
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
+     * @param mixed $primaryData
      *
      * @throws Exception
      */
@@ -88,10 +88,10 @@ final class ModelResponder extends AbstractResponder
     }
 
     /**
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
+     * @param mixed $primaryData
      *
      * @throws Exception
      */

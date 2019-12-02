@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception;
 
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolations;
 
 class ModelInvalid extends \Exception

@@ -6,15 +6,15 @@ namespace Undabot\SymfonyJsonApi\Model\Resource;
 
 use Assert\Assertion;
 use InvalidArgumentException;
-use Undabot\JsonApi\Model\Link\LinkInterface;
-use Undabot\JsonApi\Model\Meta\MetaInterface;
-use Undabot\JsonApi\Model\Resource\Attribute\AttributeCollection;
-use Undabot\JsonApi\Model\Resource\Attribute\AttributeCollectionInterface;
-use Undabot\JsonApi\Model\Resource\Attribute\AttributeInterface;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollection;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipCollectionInterface;
-use Undabot\JsonApi\Model\Resource\Relationship\RelationshipInterface;
-use Undabot\JsonApi\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
+use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Attribute\AttributeCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Attribute\AttributeInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Relationship\RelationshipCollectionInterface;
+use Undabot\JsonApi\Definition\Model\Resource\Relationship\RelationshipInterface;
+use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Implementation\Model\Resource\Attribute\AttributeCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\Relationship\RelationshipCollection;
 
 class CombinedResource implements ResourceInterface
 {

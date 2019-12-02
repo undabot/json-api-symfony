@@ -9,6 +9,9 @@ use Assert\Assertion;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
+/**
+ * Collection of resources that additionally takes care of duplicates and adds each resource only once.
+ */
 class UniqueResourceCollection implements ResourceCollectionInterface
 {
     /** @var ResourceInterface[] */
@@ -28,7 +31,7 @@ class UniqueResourceCollection implements ResourceCollectionInterface
      */
     public function addResourceIfItDoesntExist(ResourceInterface $resource): void
     {
-        $key = $resource->getId().$resource->getType();
+        $key = $resource->getId() . $resource->getType();
         if (false === isset($this->items[$key])) {
             $this->items[$key] = $resource;
         }

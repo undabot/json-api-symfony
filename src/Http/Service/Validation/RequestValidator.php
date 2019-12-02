@@ -7,12 +7,12 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Validation;
 use Assert\Assertion;
 use Assert\AssertionFailedException;
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\JsonApi\Exception\Request\ClientGeneratedIdIsNotAllowedException;
-use Undabot\JsonApi\Exception\Request\InvalidRequestAcceptHeaderException;
-use Undabot\JsonApi\Exception\Request\InvalidRequestContentTypeHeaderException;
-use Undabot\JsonApi\Exception\Request\InvalidRequestDataException;
-use Undabot\JsonApi\Exception\Request\UnsupportedMediaTypeException;
-use Undabot\JsonApi\Exception\Request\UnsupportedQueryStringParameterGivenException;
+use Undabot\JsonApi\Definition\Exception\Request\ClientGeneratedIdIsNotAllowedException;
+use Undabot\JsonApi\Definition\Exception\Request\InvalidRequestAcceptHeaderException;
+use Undabot\JsonApi\Definition\Exception\Request\InvalidRequestContentTypeHeaderException;
+use Undabot\JsonApi\Definition\Exception\Request\InvalidRequestDataException;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedMediaTypeException;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedQueryStringParameterGivenException;
 
 class RequestValidator implements RequestValidatorInterface
 {

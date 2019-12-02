@@ -129,9 +129,9 @@ class RequestFactory
     }
 
     /**
-     * @return array<string, mixed>
      * @throws AssertionFailedException
      *
+     * @return array<string, mixed>
      */
     private function getRequestPrimaryData(Request $request): array
     {
@@ -142,7 +142,7 @@ class RequestFactory
 
         Assertion::notNull($requestData, 'Request data must be parsable to a valid array');
         Assertion::isArray($requestData, 'Request data must be parsable to a valid array');
-        Assertion::keyExists('data', $requestData, 'The request MUST include a single resource object as primary data');
+        Assertion::keyExists($requestData, 'data', 'The request MUST include a single resource object as primary data');
 
         return $requestData['data'];
     }

@@ -56,6 +56,8 @@ return PhpCsFixer\Config::create()
             'php_unit_size_class' => true,
             'phpdoc_to_return_type' => true,
             'static_lambda' => true,
+            'phpdoc_align' => '',
+            'concat_space' => ['spacing' => 'one'],
         ]
     )
     ->setFinder($finder);

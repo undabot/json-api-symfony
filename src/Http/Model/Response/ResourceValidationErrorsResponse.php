@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Model\Response;
 
 use Symfony\Component\Validator\ConstraintViolation;
-use Undabot\JsonApi\Model\Error\ErrorCollection;
+use Undabot\JsonApi\Implementation\Model\Error\ErrorCollection;
 use Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 

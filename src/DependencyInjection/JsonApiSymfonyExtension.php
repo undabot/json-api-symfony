@@ -11,7 +11,7 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Extension\Extension;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
-use Undabot\JsonApi\Encoding\DocumentToPhpArrayEncoderInterface;
+use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener;
 
 class JsonApiSymfonyExtension extends Extension
@@ -23,7 +23,7 @@ class JsonApiSymfonyExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
         $loader->load('services.yaml');
 
         $configuration = new Configuration();

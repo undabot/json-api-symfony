@@ -6,11 +6,11 @@ namespace Undabot\SymfonyJsonApi\Exception\EventSubscriber;
 
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Undabot\JsonApi\Encoding\DocumentToPhpArrayEncoderInterface;
-use Undabot\JsonApi\Exception\Request\RequestException;
-use Undabot\JsonApi\Model\Document\Document;
-use Undabot\JsonApi\Model\Error\Error;
-use Undabot\JsonApi\Model\Error\ErrorCollection;
+use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
+use Undabot\JsonApi\Definition\Exception\Request\RequestException;
+use Undabot\JsonApi\Implementation\Model\Document\Document;
+use Undabot\JsonApi\Implementation\Model\Error\Error;
+use Undabot\JsonApi\Implementation\Model\Error\ErrorCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\JsonApiHttpResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceValidationErrorsResponse;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;

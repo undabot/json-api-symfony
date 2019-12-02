@@ -9,13 +9,13 @@ use Ramsey\Uuid\Uuid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\JsonApi\Encoding\Exception\PhpArrayEncodingException;
-use Undabot\JsonApi\Exception\Request\ClientGeneratedIdIsNotAllowedException;
-use Undabot\JsonApi\Exception\Request\RequestException;
-use Undabot\JsonApi\Model\Request\CreateResourceRequestInterface;
-use Undabot\JsonApi\Model\Request\GetResourceCollectionRequestInterface;
-use Undabot\JsonApi\Model\Request\GetResourceRequestInterface;
-use Undabot\JsonApi\Model\Request\UpdateResourceRequestInterface;
+use Undabot\JsonApi\Definition\Exception\Request\ClientGeneratedIdIsNotAllowedException;
+use Undabot\JsonApi\Definition\Exception\Request\RequestException;
+use Undabot\JsonApi\Definition\Model\Request\CreateResourceRequestInterface;
+use Undabot\JsonApi\Definition\Model\Request\GetResourceCollectionRequestInterface;
+use Undabot\JsonApi\Definition\Model\Request\GetResourceRequestInterface;
+use Undabot\JsonApi\Definition\Model\Request\UpdateResourceRequestInterface;
+use Undabot\JsonApi\Implementation\Encoding\Exception\JsonApiEncodingException;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory;
 
 class JsonApiRequestParamConverter implements ParamConverterInterface
@@ -37,7 +37,7 @@ class JsonApiRequestParamConverter implements ParamConverterInterface
      *
      * @throws RequestException
      * @throws AssertionFailedException
-     * @throws PhpArrayEncodingException
+     * @throws JsonApiEncodingException
      *
      * @return bool True if the object has been successfully set, else false
      */

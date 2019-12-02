@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Http\Model\Request;
 
-use Undabot\JsonApi\Exception\Request\UnsupportedIncludeValuesGivenException;
-use Undabot\JsonApi\Exception\Request\UnsupportedSparseFieldsetRequestedException;
-use Undabot\JsonApi\Model\Request\GetResourceRequestInterface;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedIncludeValuesGivenException;
+use Undabot\JsonApi\Definition\Exception\Request\UnsupportedSparseFieldsetRequestedException;
+use Undabot\JsonApi\Definition\Model\Request\GetResourceRequestInterface;
 
 class GetResourceRequest implements GetResourceRequestInterface
 {

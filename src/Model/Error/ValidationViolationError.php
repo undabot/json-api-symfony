@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Model\Error;
 
 use Symfony\Component\Validator\ConstraintViolationInterface;
-use Undabot\JsonApi\Model\Error\ErrorInterface;
-use Undabot\JsonApi\Model\Link\LinkInterface;
-use Undabot\JsonApi\Model\Meta\MetaInterface;
-use Undabot\JsonApi\Model\Source\Source;
-use Undabot\JsonApi\Model\Source\SourceInterface;
+use Undabot\JsonApi\Definition\Model\Error\ErrorInterface;
+use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
+use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
+use Undabot\JsonApi\Definition\Model\Source\SourceInterface;
+use Undabot\JsonApi\Implementation\Model\Source\Source;
 
 class ValidationViolationError implements ErrorInterface
 {
@@ -78,7 +78,7 @@ class ValidationViolationError implements ErrorInterface
         // Convert Symfony attribute notation [data][attributes][attribute] to Trim.js /data/attributes/attribute
         preg_match_all('/\[(.*)\]/U', $path, $result);
         if (isset($result[1])) {
-            $path = '/'.implode('/', $result[1]);
+            $path = '/' . implode('/', $result[1]);
         }
 
         return new Source($path);

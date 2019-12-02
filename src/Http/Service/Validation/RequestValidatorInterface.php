@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Service\Validation;
 
 use Symfony\Component\HttpFoundation\Request;
-use Undabot\JsonApi\Exception\Request\RequestException;
+use Undabot\JsonApi\Definition\Exception\Request\RequestException;
 
 interface RequestValidatorInterface
 {

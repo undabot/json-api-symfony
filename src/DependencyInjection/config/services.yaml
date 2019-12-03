@@ -31,8 +31,11 @@ services:
     #  Undabot\SymfonyJsonApi\Response\Factory\:
     #    resource: '../Response/Factory/*'
 
-    Undabot\JsonApi\Encoding\:
-        resource: '../../../../json-api-core/src/Encoding/*'
+    Undabot\JsonApi\Definition\Encoding\:
+        resource: '../../../../json-api-core/src/Definition/Encoding/*'
+
+    Undabot\JsonApi\Implementation\Encoding\:
+        resource: '../../../../json-api-core/src/Implementation/Encoding/*'
 
     Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator: ~
     Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidatorInterface: '@Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator'

@@ -27,7 +27,11 @@ class ExceptionListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        $exception = $event->getException();
+        if (method_exists($event, 'getThrowable')){
+            $exception = $event->getThrowable();
+        } else {
+            $exception = $event->getException();
+        }
 
         if ($exception instanceof ModelInvalid) {
             $responseModel = ResourceValidationErrorsResponse::fromException($exception);
@@ -66,7 +70,11 @@ class ExceptionListener
 
     private function buildError(\Exception $exception): Error
     {
-        $e = FlattenException::create($exception);
+        if (class_exists('\Symfony\Component\ErrorHandler\Exception\FlattenException')) {
+            $e = \Symfony\Component\ErrorHandler\Exception\FlattenException::create($exception);
+        } else {
+            $e = FlattenException::create($exception);
+        }
 
         return new Error(
             null,

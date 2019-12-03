@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "edf16d3d7dff57c5035fe53b50c1da95",
+    "content-hash": "710fb062a8f46cb2ece6c32a7c04f96c",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -3751,16 +3751,16 @@
         },
         {
             "name": "undabot/json-api-core",
-            "version": "dev-feature/v2-rc-cleanup",
+            "version": "dev-v2-rc",
             "source": {
                 "type": "git",
                 "url": "https://gitlab.com/undabot/json-api-core.git",
-                "reference": "983d89132457d06b30f5b5f352e18c8f53b69da2"
+                "reference": "43c49eab402dffcbffd1e758e4d0f916ba80d651"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=983d89132457d06b30f5b5f352e18c8f53b69da2",
-                "reference": "983d89132457d06b30f5b5f352e18c8f53b69da2",
+                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=43c49eab402dffcbffd1e758e4d0f916ba80d651",
+                "reference": "43c49eab402dffcbffd1e758e4d0f916ba80d651",
                 "shasum": ""
             },
             "require": {
@@ -3768,8 +3768,11 @@
                 "php": "^7.3"
             },
             "require-dev": {
+                "ekino/phpstan-banned-code": "^0.2.0",
                 "friendsofphp/php-cs-fixer": "^2.14",
+                "phpstan/extension-installer": "^1.0",
                 "phpstan/phpstan": "^0.11.1",
+                "phpstan/phpstan-beberlei-assert": "^0.11.2",
                 "phpstan/phpstan-phpunit": "^0.11.0",
                 "phpunit/phpunit": "^7.5"
             },
@@ -3803,7 +3806,7 @@
             "license": [
                 "Apache-2.0"
             ],
-            "time": "2019-12-02T20:48:40+00:00"
+            "time": "2019-12-03T13:21:11+00:00"
         },
         {
             "name": "zantolov/toolbelt",

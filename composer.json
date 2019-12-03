@@ -5,7 +5,7 @@
   "license": "MIT",
   "require": {
     "php": "^7.3",
-    "undabot/json-api-core": "dev-feature/v2-rc-cleanup@dev",
+    "undabot/json-api-core": "dev-v2-rc@dev",
     "symfony/http-kernel": "^4.2",
     "symfony/validator": "^4.2",
     "symfony/orm-pack": "^1.0",

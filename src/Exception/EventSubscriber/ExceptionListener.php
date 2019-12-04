@@ -27,7 +27,7 @@ class ExceptionListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (method_exists($event, 'getThrowable')){
+        if (method_exists($event, 'getThrowable')) {
             $exception = $event->getThrowable();
         } else {
             $exception = $event->getException();
@@ -71,7 +71,9 @@ class ExceptionListener
     private function buildError(\Exception $exception): Error
     {
         if (class_exists('\Symfony\Component\ErrorHandler\Exception\FlattenException')) {
-            $e = \Symfony\Component\ErrorHandler\Exception\FlattenException::create($exception);
+            /** @var callable $callable */
+            $callable = ['Symfony\Component\ErrorHandler\Exception\FlattenException', 'create'];
+            $e = \call_user_func($callable, $exception);
         } else {
             $e = FlattenException::create($exception);
         }

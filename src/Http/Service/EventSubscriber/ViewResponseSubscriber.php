@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Http\EventSubscriber;
+namespace Undabot\SymfonyJsonApi\Http\Service\EventSubscriber;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;

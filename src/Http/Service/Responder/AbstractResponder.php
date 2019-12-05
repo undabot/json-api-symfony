@@ -21,6 +21,7 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
+use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 abstract class AbstractResponder
 {
@@ -38,9 +39,9 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param mixed[]                                 $primaryData
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * @param mixed[] $primaryData
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
      * @throws Exception
@@ -62,10 +63,35 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * Opinionated collection responder that adds meta information about total count of models, used for pagination.
+     *
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
+     *
+     * @throws Exception
+     */
+    public function resourceObjectCollection(
+        ObjectCollection $primaryModels,
+        array $included = null,
+        array $meta = null,
+        array $links = null
+    ): ResourceCollectionResponse {
+        $primaryResources = $this->encodeDataset($primaryModels->getItems());
+        $meta = $meta ?? ['total' => $primaryModels->count()];
+
+        return new ResourceCollectionResponse(
+            new ResourceCollection($primaryResources),
+            null === $included ? null : $this->buildIncluded($included),
+            new Meta($meta),
+            null === $links ? null : $this->buildLinks($links)
+        );
+    }
+
+    /**
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
+     * @param null|array<string, LinkMemberInterface> $links
+     * @param mixed $primaryData
      *
      * @throws Exception
      */
@@ -86,10 +112,10 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
+     * @param mixed $primaryData
      *
      * @throws Exception
      */
@@ -110,10 +136,10 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param null|mixed[]                            $includedData
-     * @param null|array<string, mixed>               $meta
+     * @param null|mixed[] $includedData
+     * @param null|array<string, mixed> $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
+     * @param mixed $primaryData
      *
      * @throws Exception
      */
@@ -219,7 +245,7 @@ abstract class AbstractResponder
         }
 
         $map = $this->getMap();
-        if ( ! isset($map[$dataClass])) {
+        if (!isset($map[$dataClass])) {
             $message = sprintf(
                 'Couldn\'t resolve transformer class for object of class `%s` given. Have you defined data transformer for that data class?',
                 $dataClass

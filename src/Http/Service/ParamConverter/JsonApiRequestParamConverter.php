@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Service\ParamConverter;
+namespace Undabot\SymfonyJsonApi\Http\Service\ParamConverter;
 
 use Assert\AssertionFailedException;
 use Ramsey\Uuid\Uuid;

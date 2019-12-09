@@ -1,0 +1,280 @@
+<?php
+
+declare(strict_types=1);
+
+namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Service;
+
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Api;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\CreateResourceEndpoint;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\GetResourceEndpoint;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\ResourceCollectionEndpoint;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\UpdateResourceEndpoint;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\OffsetBasedPaginationQueryParam;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\PageBasedPaginationQueryParam;
+
+class ResourceApiEndpointsFactory
+{
+    /** @var ResourceSchemaFactory */
+    private $schemaFactory;
+
+    /** @var string */
+    private $resourceClassName;
+
+    /** @var string */
+    private $path;
+
+    /** @var bool */
+    private $getSingle;
+
+    /** @var bool */
+    private $getCollection;
+
+    /** @var bool */
+    private $create;
+
+    /** @var bool */
+    private $update;
+
+    /** @var bool */
+    private $delete;
+
+    /** @var array */
+    private $singleIncludes = [];
+
+    /** @var array */
+    private $singleFields = [];
+
+    /** @var array */
+    private $collectionIncludes = [];
+
+    /** @var array */
+    private $collectionFields = [];
+
+    /** @var array */
+    private $collectionFilters = [];
+
+    /** @var array */
+    private $collectionSorts = [];
+
+    /** @var Schema|null */
+    private $paginationSchema;
+
+    public function __construct(ResourceSchemaFactory $schemaFactory)
+    {
+        $this->schemaFactory = $schemaFactory;
+    }
+
+    public function new()
+    {
+        return new self($this->schemaFactory);
+    }
+
+    public function atPath(string $path): self
+    {
+        $this->path = $path;
+
+        return $this;
+    }
+
+    public function withSingleIncludes(array $singleIncludes): ResourceApiEndpointsFactory
+    {
+        if (false === $this->getSingle) {
+            throw new \Exception('Enable single endpoint before configuring single includes');
+        }
+        $this->singleIncludes = $singleIncludes;
+
+        return $this;
+    }
+
+    public function withSingleFields(array $singleFields): ResourceApiEndpointsFactory
+    {
+        if (false === $this->getSingle) {
+            throw new \Exception('Enable single endpoint before configuring single fields');
+        }
+        $this->singleFields = $singleFields;
+
+        return $this;
+    }
+
+    public function withCollectionIncludes(array $collectionIncludes): ResourceApiEndpointsFactory
+    {
+        if (false === $this->getCollection) {
+            throw new \Exception('Enable collection endpoint before configuring collection includes');
+        }
+        $this->collectionIncludes = $collectionIncludes;
+
+        return $this;
+    }
+
+    public function withCollectionFilters(array $collectionFilters): ResourceApiEndpointsFactory
+    {
+        if (false === $this->getCollection) {
+            throw new \Exception('Enable collection endpoint before configuring collection filters');
+        }
+        $this->collectionFilters = $collectionFilters;
+
+        return $this;
+    }
+
+    public function withCollectionSortableAttributes(array $collectionSorts): ResourceApiEndpointsFactory
+    {
+        if (false === $this->getCollection) {
+            throw new \Exception('Enable collection endpoint before configuring collection sortables');
+        }
+        $this->collectionSorts = $collectionSorts;
+
+        return $this;
+    }
+
+    public function withOffsetBasedPagination(): self
+    {
+        return $this->withCollectionPagination(new OffsetBasedPaginationQueryParam());
+    }
+
+    public function withPageBasedPagination(): self
+    {
+        return $this->withCollectionPagination(new PageBasedPaginationQueryParam());
+    }
+
+    public function withCollectionPagination(Schema $paginationSchema): self
+    {
+        if (false === $this->getCollection) {
+            throw new \Exception('Enable collection endpoint before configuring collection pagination');
+        }
+        $this->paginationSchema = $paginationSchema;
+
+        return $this;
+    }
+
+    public function withGetSingle(): ResourceApiEndpointsFactory
+    {
+        $this->getSingle = true;
+
+        return $this;
+    }
+
+    public function withGetCollection(): ResourceApiEndpointsFactory
+    {
+        $this->getCollection = true;
+
+        return $this;
+    }
+
+    public function withCreate(): ResourceApiEndpointsFactory
+    {
+        $this->create = true;
+
+        return $this;
+    }
+
+    public function withUpdate(): ResourceApiEndpointsFactory
+    {
+        $this->update = true;
+
+        return $this;
+    }
+
+    public function withDelete(): ResourceApiEndpointsFactory
+    {
+        $this->delete = true;
+
+        return $this;
+    }
+
+    /**
+     * @param Api $api
+     * @throws \Exception
+     */
+    public function addToApi(Api $api): void
+    {
+        $readSchema = $this->schemaFactory->readSchema($this->resourceClassName);
+        $createSchema = $this->schemaFactory->createSchema($this->resourceClassName);
+        $updateSchema = $this->schemaFactory->updateSchema($this->resourceClassName);
+        $relationshipsIdentifiers = $this->schemaFactory->relationshipsIdentifiers($this->resourceClassName);
+
+        if (true === $this->getCollection) {
+
+            /**
+             * To generate proper `included` section of the response, we need to add read schemas for all resources for
+             * which the inclusion is enabled. Therefore, we iterate over the passed array of `name` => `ApiModel` pairs
+             * and generate the readSchema. Below you can see that all these schemas are added to the $api, and in the
+             * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
+             */
+            $collectionIncludedSchemas = array_map(
+                [$this->schemaFactory, 'readSchema'],
+                $this->collectionIncludes
+            );
+
+            $getCollectionEndpoint = new ResourceCollectionEndpoint(
+                $readSchema,
+                $this->path,
+                $this->collectionFilters,
+                $this->collectionSorts,
+                $collectionIncludedSchemas,
+                $this->collectionFields,
+                $this->paginationSchema
+            // @todo Add error responses (e.g. validation errors)
+            );
+
+            $api->addSchemas($relationshipsIdentifiers);
+            $api->addEndpoint($getCollectionEndpoint);
+            $api->addSchema($readSchema);
+            $api->addSchemas($collectionIncludedSchemas);
+        }
+
+        if (true === $this->getSingle) {
+            /**
+             * To generate proper `included` section of the response, we need to add read schemas for all resources for
+             * which the inclusion is enabled. Therefore, we iterate over the passed array of `name` => `ApiModel` pairs
+             * and generate the readSchema. Below you can see that all these schemas are added to the $api, and in the
+             * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
+             */
+            $singleIncludedSchemas = array_map(
+                [$this->schemaFactory, 'readSchema'],
+                $this->singleIncludes
+            );
+
+            $getSingleResourceEndpoint = new GetResourceEndpoint(
+                $this->schemaFactory->readSchema($this->resourceClassName),
+                $this->path,
+                $singleIncludedSchemas,
+                $this->singleFields
+            // @todo error responses
+            );
+
+            $api->addEndpoint($getSingleResourceEndpoint);
+            $api->addSchema($readSchema);
+            $api->addSchemas($singleIncludedSchemas);
+        }
+
+        if (true === $this->create) {
+            $createResourceEndpoint = new CreateResourceEndpoint(
+                $readSchema,
+                $createSchema,
+                $this->path
+            );
+
+            $api->addSchema($createSchema);
+            $api->addEndpoint($createResourceEndpoint);
+        }
+
+        if (true === $this->update) {
+            $createResourceEndpoint = new UpdateResourceEndpoint(
+                $readSchema,
+                $updateSchema,
+                $this->path
+            );
+
+            $api->addSchema($updateSchema);
+            $api->addEndpoint($createResourceEndpoint);
+        }
+    }
+
+    public function forResource(string $class): self
+    {
+        $this->resourceClassName = $class;
+
+        return $this;
+    }
+}

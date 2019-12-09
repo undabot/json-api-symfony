@@ -6,11 +6,13 @@ namespace Undabot\SymfonyJsonApi\Model\Resource\Metadata;
 
 use Assert\Assertion;
 use Symfony\Component\Validator\Constraint;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Relationship;
 
 class RelationshipMetadata
 {
     /** @var bool */
     protected $isToMany;
+
     /** @var string */
     private $name;
 
@@ -23,6 +25,9 @@ class RelationshipMetadata
     /** @var array */
     private $constraints;
 
+    /** @var Relationship */
+    private $relationshipAnnotation;
+
     /**
      * @param Constraint[] $constraints
      */
@@ -31,7 +36,8 @@ class RelationshipMetadata
         string $relatedResourceType,
         string $propertyPath,
         array $constraints,
-        bool $isToMany
+        bool $isToMany,
+        Relationship $relationshipAnnotation
     ) {
         Assertion::allIsInstanceOf($constraints, Constraint::class);
 
@@ -40,6 +46,7 @@ class RelationshipMetadata
         $this->propertyPath = $propertyPath;
         $this->constraints = $constraints;
         $this->isToMany = $isToMany;
+        $this->relationshipAnnotation = $relationshipAnnotation;
     }
 
     public function getName(): string
@@ -68,5 +75,10 @@ class RelationshipMetadata
     public function isToMany(): bool
     {
         return $this->isToMany;
+    }
+
+    public function getRelationshipAnnotation(): Relationship
+    {
+        return $this->relationshipAnnotation;
     }
 }

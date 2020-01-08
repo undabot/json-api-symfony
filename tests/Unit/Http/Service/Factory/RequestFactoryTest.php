@@ -13,6 +13,12 @@ use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory;
 use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
+/**
+ * @internal
+ * @covers \Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory
+ *
+ * @small
+ */
 final class RequestFactoryTest extends TestCase
 {
     /** @var MockObject */
@@ -43,11 +49,11 @@ final class RequestFactoryTest extends TestCase
         $request = $this->createMock(Request::class);
         $query = new ParameterBag($queryParams);
         $request->query = $query;
-        $this->requestValidator->expects($this->once())->method('assertValidRequest');
+        $this->requestValidator->expects(static::once())->method('assertValidRequest');
 
         $getResourceRequest = $this->requestFactory->getResourceRequest($request, $id);
 
-        $this->assertEquals($resourceRequest, $getResourceRequest);
+        static::assertEquals($resourceRequest, $getResourceRequest);
     }
 
     public function requestParamsProvider(): \Generator

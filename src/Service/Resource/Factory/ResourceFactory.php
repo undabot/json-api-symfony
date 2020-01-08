@@ -56,7 +56,7 @@ class ResourceFactory
             $type = $propertyAccessor->getValue($apiModel, 'type');
         }
 
-        Assertion::notNull($type, 'Resource type cannot be inhered neither from the annotation nor `type` property');
+        Assertion::notNull($type, 'Resource type cannot be inferred neither from the annotation nor `type` property');
 
         $attributes = $this->makeAttributeCollection($apiModel, $metadata);
         $relationships = $this->makeRelationshipsCollection($apiModel, $metadata);

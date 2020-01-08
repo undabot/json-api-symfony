@@ -55,31 +55,31 @@ final class RequestFactoryTest extends TestCase
         yield 'No include and no fields in request get params' => [
             [],
             null,
-            null
+            null,
         ];
 
         yield 'No include and fields present in request get params' => [
             ['fields' => ['foo', 'bar']],
             null,
-            ['foo', 'bar']
+            ['foo', 'bar'],
         ];
 
         yield 'Include string provided with multiple values and no fields in request get params' => [
             ['include' => 'foo,bar,baz'],
             ['foo', 'bar', 'baz'],
-            null
+            null,
         ];
 
         yield 'Include string provided with single value and no fields in request get params' => [
             ['include' => 'foo'],
             ['foo'],
-            null
+            null,
         ];
 
         yield 'Both include and fields provided in request get params' => [
             ['include' => 'foo,bar,baz', 'fields' => ['foo', 'bar']],
             ['foo', 'bar', 'baz'],
-            ['foo', 'bar']
+            ['foo', 'bar'],
         ];
     }
 }

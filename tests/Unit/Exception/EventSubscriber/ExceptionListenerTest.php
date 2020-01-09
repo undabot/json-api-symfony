@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Http\Service\Factory;
+namespace Undabot\JsonApi\Tests\Unit\Exception\EventSubscriber;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;

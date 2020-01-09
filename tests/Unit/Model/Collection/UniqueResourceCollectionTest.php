@@ -35,6 +35,10 @@ final class UniqueResourceCollectionTest extends TestCase
         $class3 = $this->createMock(ResourceInterface::class);
         $class4 = $this->createMock(ResourceInterface::class);
 
+        $class1->expects(static::once())->method('getId')->willReturn('22');
+        $class2->expects(static::once())->method('getId')->willReturn('33');
+        $class1->expects(static::once())->method('getType')->willReturn('abc');
+        $class2->expects(static::once())->method('getType')->willReturn('cde');
         $class3->expects(static::exactly(2))->method('getId')->willReturn('1');
         $class3->expects(static::exactly(2))->method('getType')->willReturn('foo');
         $class4->expects(static::once())->method('getId')->willReturn('2');
@@ -47,5 +51,6 @@ final class UniqueResourceCollectionTest extends TestCase
         $uniqueResourceCollection->addResourceIfItDoesntExist($class4);
 
         static::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueResourceCollection->getResources()));
+        static::assertEquals(['22abc', '33cde', '1foo', '2bar'], array_keys($uniqueResourceCollection->getResources()));
     }
 }

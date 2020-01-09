@@ -18,12 +18,12 @@ class UniqueResourceCollection implements ResourceCollectionInterface
     private $items;
 
     /**
-     * @param ResourceInterface[] $resource
+     * @param ResourceInterface[] $resources
      */
-    public function __construct(array $resource = [])
+    public function __construct(array $resources = [])
     {
-        Assertion::allIsInstanceOf($resource, ResourceInterface::class);
-        $this->items = $resource;
+        Assertion::allIsInstanceOf($resources, ResourceInterface::class);
+        $this->addResourcesIfTheyDontExist($resources);
     }
 
     /**

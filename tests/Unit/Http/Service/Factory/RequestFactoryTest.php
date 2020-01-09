@@ -29,24 +29,24 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
  * @internal
  * @covers \Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory
  *
- * @small
+ * @medium
  */
 final class RequestFactoryTest extends TestCase
 {
     /** @var MockObject */
-    private $resourceEncoder;
+    private $resourceEncoderMock;
 
     /** @var MockObject */
-    private $requestValidator;
+    private $requestValidatorMock;
 
     /** @var RequestFactory */
     private $requestFactory;
 
     protected function setUp(): void
     {
-        $this->resourceEncoder = $this->createMock(PhpArrayToResourceEncoderInterface::class);
-        $this->requestValidator = $this->createMock(RequestValidator::class);
-        $this->requestFactory = new RequestFactory($this->resourceEncoder, $this->requestValidator);
+        $this->resourceEncoderMock = $this->createMock(PhpArrayToResourceEncoderInterface::class);
+        $this->requestValidatorMock = $this->createMock(RequestValidator::class);
+        $this->requestFactory = new RequestFactory($this->resourceEncoderMock, $this->requestValidatorMock);
     }
 
     /**
@@ -64,7 +64,7 @@ final class RequestFactoryTest extends TestCase
         $request = $this->createMock(Request::class);
         $query = new ParameterBag($queryParams);
         $request->query = $query;
-        $this->requestValidator->expects(static::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
 
         $getResourceRequest = $this->requestFactory->getResourceRequest($request, $id);
 
@@ -120,7 +120,7 @@ final class RequestFactoryTest extends TestCase
         $request = $this->createMock(Request::class);
         $query = new ParameterBag($queryParams);
         $request->query = $query;
-        $this->requestValidator->expects(static::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
 
         $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($request);
 
@@ -207,9 +207,9 @@ final class RequestFactoryTest extends TestCase
         $request->expects(static::once())->method('getContent')->willReturn('{"data": {"foo": "bar"}}');
 
         $resource = new Resource($id, 'type', new AttributeCollection([new Attribute('foo', 'bar')]), null, null, null);
-        $this->requestValidator->expects(static::once())->method('assertValidRequest');
-        $this->requestValidator->expects(static::once())->method('assertValidUpdateRequestData');
-        $this->resourceEncoder
+        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(static::once())->method('assertValidUpdateRequestData');
+        $this->resourceEncoderMock
             ->expects(static::once())
             ->method('decode')
             ->willReturn($resource);
@@ -232,9 +232,9 @@ final class RequestFactoryTest extends TestCase
         $request = $this->createMock(Request::class);
         $request->expects(static::once())->method('getContent')->willReturn($content);
 
-        $this->requestValidator->expects(static::once())->method('assertValidRequest');
-        $this->requestValidator->expects(static::never())->method('assertValidUpdateRequestData');
-        $this->resourceEncoder
+        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(static::never())->method('assertValidUpdateRequestData');
+        $this->resourceEncoderMock
             ->expects(static::never())
             ->method('decode');
 

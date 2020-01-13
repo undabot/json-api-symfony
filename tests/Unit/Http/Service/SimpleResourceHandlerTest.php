@@ -10,7 +10,6 @@ use Undabot\JsonApi\Definition\Model\Request\ResourcePayloadRequest;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
-use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolations;

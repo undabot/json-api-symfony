@@ -83,5 +83,4 @@ final class SimpleResourceHandlerTest extends TestCase
 
 class FooApiModel implements ApiModel
 {
-
 }

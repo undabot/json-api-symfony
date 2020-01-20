@@ -15,6 +15,8 @@ use Undabot\JsonApi\Implementation\Model\Resource\Attribute\Attribute;
 use Undabot\JsonApi\Implementation\Model\Resource\Attribute\AttributeCollection;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\Resource\CombinedResource;
+use Undabot\SymfonyJsonApi\Model\Resource\Exception\ResourceIdValueMismatch;
+use Undabot\SymfonyJsonApi\Model\Resource\Exception\ResourceTypeValueMismatch;
 use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 
@@ -37,12 +39,21 @@ final class CombinedResourceTest extends TestCase
         static::assertSame('resource', $combinedResource->getType());
     }
 
-    public function testItRaisesExceptionWhenCombinedFromDifferentResources(): void
+    public function testIncorrectResourceIdReferencesAreCaught(): void
     {
-        $resource1 = new Resource('id', 'resource');
-        $resource2 = new Resource('id2', 'resource2');
+        $resource1 = new Resource('id1', 'resource');
+        $resource2 = new Resource('id2', 'resource');
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(ResourceIdValueMismatch::class);
+        new CombinedResource($resource1, $resource2);
+    }
+
+    public function testIncorrectResourceTypeReferencesAreCaught(): void
+    {
+        $resource1 = new Resource('id1', 'apples');
+        $resource2 = new Resource('id1', 'oranges');
+
+        $this->expectException(ResourceTypeValueMismatch::class);
         new CombinedResource($resource1, $resource2);
     }
 

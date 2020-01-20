@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Resource;
 
-use Assert\Assertion;
 use InvalidArgumentException;
 use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
 use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
@@ -15,6 +14,8 @@ use Undabot\JsonApi\Definition\Model\Resource\Relationship\RelationshipInterface
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Resource\Attribute\AttributeCollection;
 use Undabot\JsonApi\Implementation\Model\Resource\Relationship\RelationshipCollection;
+use Undabot\SymfonyJsonApi\Model\Resource\Exception\ResourceIdValueMismatch;
+use Undabot\SymfonyJsonApi\Model\Resource\Exception\ResourceTypeValueMismatch;
 
 class CombinedResource implements ResourceInterface
 {
@@ -26,8 +27,20 @@ class CombinedResource implements ResourceInterface
 
     public function __construct(ResourceInterface $baseResource, ResourceInterface $updateResource)
     {
-        Assertion::same($baseResource->getId(), $updateResource->getId());
-        Assertion::same($baseResource->getType(), $updateResource->getType());
+        if ($baseResource->getId() !== $updateResource->getId()) {
+            throw ResourceIdValueMismatch::whenUpdatingResource(
+                $baseResource->getType(),
+                $baseResource->getId(),
+                $updateResource->getId()
+            );
+        }
+
+        if ($baseResource->getType() !== $updateResource->getType()) {
+            throw ResourceTypeValueMismatch::whenUpdatingResource(
+                $baseResource->getType(),
+                $updateResource->getType()
+            );
+        }
 
         $flatBaseResource = new FlatResource($baseResource);
         $flatUpdateResource = new FlatResource($updateResource);

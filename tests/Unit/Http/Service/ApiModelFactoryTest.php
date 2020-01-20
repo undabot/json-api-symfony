@@ -8,7 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Request\ResourcePayloadRequest;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
-use Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler;
+use Undabot\SymfonyJsonApi\Http\Service\ApiModelFactory;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
@@ -17,11 +17,11 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler
+ * @covers \Undabot\SymfonyJsonApi\Http\Service\ApiModelFactory
  *
  * @small
  */
-final class SimpleResourceHandlerTest extends TestCase
+final class ApiModelFactoryTest extends TestCase
 {
     /** @var MockObject */
     private $validator;
@@ -29,7 +29,7 @@ final class SimpleResourceHandlerTest extends TestCase
     /** @var MockObject */
     private $denormalizer;
 
-    /** @var SimpleResourceHandler */
+    /** @var ApiModelFactory */
     private $simpleResourceHandler;
 
     protected function setUp(): void
@@ -37,7 +37,7 @@ final class SimpleResourceHandlerTest extends TestCase
         $this->validator = $this->createMock(ResourceValidator::class);
         $this->denormalizer = $this->createMock(ResourceDenormalizer::class);
 
-        $this->simpleResourceHandler = new SimpleResourceHandler($this->validator, $this->denormalizer);
+        $this->simpleResourceHandler = new ApiModelFactory($this->validator, $this->denormalizer);
     }
 
     public function testGetModelFromRequestWillReturnValidModelGivenValidRequestAndClass(): void
@@ -54,7 +54,7 @@ final class SimpleResourceHandlerTest extends TestCase
 
         $this->denormalizer->expects(static::once())->method('denormalize')->willReturn($apiModel);
 
-        $this->simpleResourceHandler->getModelFromRequest($resourcePayloadRequest, FooApiModel::class);
+        $this->simpleResourceHandler->fromRequest($resourcePayloadRequest, FooApiModel::class);
     }
 
     public function testGetModelFromRequestWillThrowExceptionGivenClassIsNotInstanceOfApiModel(): void
@@ -77,7 +77,7 @@ final class SimpleResourceHandlerTest extends TestCase
 
         $this->denormalizer->expects(static::never())->method('denormalize');
 
-        $this->simpleResourceHandler->getModelFromRequest($resourcePayloadRequest, FooApiModel::class);
+        $this->simpleResourceHandler->fromRequest($resourcePayloadRequest, FooApiModel::class);
     }
 }
 

@@ -1,7 +1,7 @@
 {
   "name": "undabot/json-api-symfony",
   "description": "",
-  "type": "library",
+  "type": "symfony-bundle",
   "license": "MIT",
   "require": {
     "php": "^7.3",

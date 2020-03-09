@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Undabot\SymfonyJsonApi\Tests\Unit\Service\ParamConverter;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Http\Service\ParamConverter;
 
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\UuidInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\SymfonyJsonApi\Exception\ParamConverterInvalidUuidFormatException;
-use Undabot\SymfonyJsonApi\Service\ParamConverter\UuidConverter;
+use Undabot\SymfonyJsonApi\Http\Service\ParamConverter\UuidConverter;
 
 /**
  * @internal

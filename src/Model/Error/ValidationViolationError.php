@@ -45,7 +45,7 @@ class ValidationViolationError implements ErrorInterface
 
     public function getTitle(): ?string
     {
-        return $this->violation->getMessage();
+        return (string) $this->violation->getMessage();
     }
 
     public function getDetail(): ?string

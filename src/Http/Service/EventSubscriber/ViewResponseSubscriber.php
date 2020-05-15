@@ -124,10 +124,10 @@ class ViewResponseSubscriber implements EventSubscriberInterface
 
     private function buildDocumentResponse(Document $document, int $status = Response::HTTP_OK): Response
     {
-        $content = $this->documentEncoder->encode($document);
+        $content = json_encode($this->documentEncoder->encode($document), JSON_THROW_ON_ERROR);
 
         return new Response(
-            json_encode($content),
+            $content ?: null,
             $status,
             [
                 'Content-Type' => 'application/vnd.api+json',

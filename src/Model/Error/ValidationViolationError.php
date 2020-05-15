@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Model\Error;
 
 use Symfony\Component\Validator\ConstraintViolationInterface;
-use Undabot\JsonApi\Model\Error\ErrorInterface;
-use Undabot\JsonApi\Model\Link\LinkInterface;
-use Undabot\JsonApi\Model\Meta\MetaInterface;
-use Undabot\JsonApi\Model\Source\Source;
-use Undabot\JsonApi\Model\Source\SourceInterface;
+use Undabot\JsonApi\Definition\Model\Error\ErrorInterface;
+use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
+use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
+use Undabot\JsonApi\Definition\Model\Source\SourceInterface;
+use Undabot\JsonApi\Implementation\Model\Source\Source;
 
 class ValidationViolationError implements ErrorInterface
 {
@@ -45,7 +45,7 @@ class ValidationViolationError implements ErrorInterface
 
     public function getTitle(): ?string
     {
-        return $this->violation->getMessage();
+        return (string) $this->violation->getMessage();
     }
 
     public function getDetail(): ?string
@@ -56,11 +56,11 @@ class ValidationViolationError implements ErrorInterface
             return null;
         }
 
-        if (true === is_string($invalidValue)) {
+        if (true === \is_string($invalidValue)) {
             return $invalidValue;
         }
 
-        if (true === is_object($invalidValue) && true === method_exists($invalidValue, '__toString')) {
+        if (true === \is_object($invalidValue) && true === method_exists($invalidValue, '__toString')) {
             return (string) $invalidValue;
         }
 
@@ -69,10 +69,16 @@ class ValidationViolationError implements ErrorInterface
 
     public function getSource(): ?SourceInterface
     {
-        /** @var string|null $path */
+        /** @var null|string $path */
         $path = $this->violation->getPropertyPath();
         if (null === $path) {
             return null;
+        }
+
+        // Convert Symfony attribute notation [data][attributes][attribute] to Trim.js /data/attributes/attribute
+        preg_match_all('/\[(.*)\]/U', $path, $result);
+        if (isset($result[1])) {
+            $path = '/' . implode('/', $result[1]);
         }
 
         return new Source($path);

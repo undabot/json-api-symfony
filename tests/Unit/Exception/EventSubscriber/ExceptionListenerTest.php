@@ -44,7 +44,6 @@ final class ExceptionListenerTest extends TestCase
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupported(\Exception $exception): void
     {
         $event = $this->createMock(ExceptionEvent::class);
-        $event->expects(static::once())->method('getException')->willReturn($exception);
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
             ->expects(static::once())

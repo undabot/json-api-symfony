@@ -132,7 +132,7 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(1, $violations->count());
+        static::assertSame(2, $violations->count());
 
         static::assertSame('This value should not be blank.', $violations[0]->getMessage());
         static::assertSame('[data][attributes][title]', $violations[0]->getPropertyPath());

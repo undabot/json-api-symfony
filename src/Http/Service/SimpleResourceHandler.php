@@ -10,7 +10,7 @@ use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
-final class ApiModelFactory
+final class SimpleResourceHandler
 {
     /** @var ResourceValidator */
     private $validator;
@@ -24,15 +24,15 @@ final class ApiModelFactory
         $this->denormalizer = $denormalizer;
     }
 
-    public function fromRequest(ResourcePayloadRequest $request, string $class): ApiModel
+    public function getModelFromRequest(ResourcePayloadRequest $request, string $class): ApiModel
     {
-        return $this->fromResource($request->getResource(), $class);
+        return $this->getModelFromResource($request->getResource(), $class);
     }
 
     /**
      * @throws \Exception
      */
-    public function fromResource(ResourceInterface $resource, string $class): ApiModel
+    public function getModelFromResource(ResourceInterface $resource, string $class): ApiModel
     {
         if (false === is_subclass_of($class, ApiModel::class)) {
             throw new \InvalidArgumentException('Given class is not instance of ApiModel');

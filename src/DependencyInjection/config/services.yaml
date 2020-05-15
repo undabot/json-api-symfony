@@ -1,0 +1,60 @@
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+        public: false       # Allows optimizing the container by removing unused services; this also means
+
+    ## Core services / encoders
+    Undabot\JsonApi\Implementation\Encoding\AttributeCollectionToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\DocumentDataToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\DocumentToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\ErrorCollectionToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\ErrorToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\LinkCollectionToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\LinkToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\MetaToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\PhpArrayToAttributeCollectionEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\PhpArrayToLinkCollectionEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\PhpArrayToMetaEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\PhpArrayToRelationshipCollectionEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\PhpArrayToResourceEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\RelationshipCollectionToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\RelationshipToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\ResourceCollectionToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\ResourceIdentifierCollectionToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\ResourceIdentifierToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\ResourceToPhpArrayEncoder: ~
+    Undabot\JsonApi\Implementation\Encoding\SourceToPhpArrayEncoder: ~
+
+    Undabot\JsonApi\Definition\Encoding\AttributeCollectionToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\AttributeCollectionToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\DocumentDataToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\DocumentDataToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\DocumentToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\ErrorCollectionToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\ErrorCollectionToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\ErrorToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\ErrorToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\LinkCollectionToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\LinkCollectionToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\LinkToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\LinkToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\MetaToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\MetaToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\PhpArrayToAttributeCollectionEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\PhpArrayToAttributeCollectionEncoder'
+    Undabot\JsonApi\Definition\Encoding\PhpArrayToLinkCollectionEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\PhpArrayToLinkCollectionEncoder'
+    Undabot\JsonApi\Definition\Encoding\PhpArrayToMetaEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\PhpArrayToMetaEncoder'
+    Undabot\JsonApi\Definition\Encoding\PhpArrayToRelationshipCollectionEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\PhpArrayToRelationshipCollectionEncoder'
+    Undabot\JsonApi\Definition\Encoding\PhpArrayToResourceEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\PhpArrayToResourceEncoder'
+    Undabot\JsonApi\Definition\Encoding\RelationshipCollectionToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\RelationshipCollectionToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\RelationshipToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\RelationshipToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\ResourceCollectionToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\ResourceCollectionToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\ResourceIdentifierCollectionToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\ResourceIdentifierCollectionToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\ResourceIdentifierToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\ResourceIdentifierToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\ResourceToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\ResourceToPhpArrayEncoder'
+    Undabot\JsonApi\Definition\Encoding\SourceToPhpArrayEncoderInterface: '@Undabot\JsonApi\Implementation\Encoding\SourceToPhpArrayEncoder'
+
+    Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataFactoryInterface: '@Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory'
+    Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory: ~
+
+    Undabot\SymfonyJsonApi\Http\Service\:
+        resource: '../../Http/Service/*'
+
+    Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidatorInterface: '@Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator'
+    Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface: '@Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder'

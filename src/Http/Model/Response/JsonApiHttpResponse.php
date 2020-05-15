@@ -12,6 +12,7 @@ class JsonApiHttpResponse extends Response
 
     /**
      * @param array<string, mixed> $data
+     *
      * @throws \JsonException
      */
     public static function validationError(array $data): self
@@ -40,6 +41,7 @@ class JsonApiHttpResponse extends Response
 
     /**
      * @param array<string, mixed> $data
+     *
      * @throws \JsonException
      */
     public static function badRequest(array $data): self
@@ -57,6 +59,7 @@ class JsonApiHttpResponse extends Response
 
     /**
      * @param array<string, mixed> $data
+     *
      * @throws \JsonException
      */
     public static function forbidden(array $data): self
@@ -74,6 +77,7 @@ class JsonApiHttpResponse extends Response
 
     /**
      * @param array<string, mixed> $data
+     *
      * @throws \JsonException
      */
     public static function unauthorized(array $data): self
@@ -91,6 +95,7 @@ class JsonApiHttpResponse extends Response
 
     /**
      * @param array<string, mixed> $data
+     *
      * @throws \JsonException
      */
     public static function serverError(array $data): self

@@ -43,8 +43,11 @@ final class RelationshipsSchema implements Schema
             'type' => 'object',
             'nullable' => false,
             'properties' => $relationships,
-            'required' => $requiredRelationships,
         ];
+
+        if (false === empty($requiredRelationships)) {
+            $openApi['required'] = $requiredRelationships;
+        }
 
         /**
          * @todo Should we support optional relationships?

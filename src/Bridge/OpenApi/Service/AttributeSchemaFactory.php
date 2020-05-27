@@ -18,6 +18,7 @@ class AttributeSchemaFactory
         $type = 'string';
 
         $attributeAnnotation = $metadata->getAttributeAnnotation();
+        /** @var null|bool $nullable */
         $nullable = $attributeAnnotation->nullable;
 
         /** @var Constraint $constraint */
@@ -30,9 +31,13 @@ class AttributeSchemaFactory
                 $nullable = false;
             }
 
-            if ($constraint instanceof NotBlank && false === $nullable) {
+            if ($constraint instanceof NotBlank && null === $nullable) {
                 $nullable = $constraint->allowNull;
             }
+        }
+
+        if (null === $nullable) {
+            $nullable = false;
         }
 
         return new AttributeSchema(

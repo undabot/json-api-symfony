@@ -9,13 +9,16 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\AttributeSchema;
 
 /**
- * Partial that represents `attributes` section of the JSON:API resource response
+ * Partial that represents `attributes` section of the JSON:API resource response.
  */
 final class AttributesSchema implements Schema
 {
     /** @var AttributeSchema[] */
     private $attributes;
 
+    /**
+     * @param AttributeSchema[] $attributes
+     */
     public function __construct(array $attributes)
     {
         Assertion::allIsInstanceOf($attributes, AttributeSchema::class);
@@ -35,14 +38,14 @@ final class AttributesSchema implements Schema
             return [];
         }
 
-        $openApi = [
+        return [
             'type' => 'object',
             'nullable' => false,
             'properties' => $attributes,
             'required' => array_keys($attributes),
         ];
 
-        /**
+        /*
          * @todo Should we support optional attributes?
          *
          * Resource attributes are always required, and should not be ommited from the create or update request payload.
@@ -59,7 +62,5 @@ final class AttributesSchema implements Schema
          *   }
          * ```
          */
-
-        return $openApi;
     }
 }

@@ -12,5 +12,6 @@ interface Response
 
     public function getDescription(): ?string;
 
-    public function toOpenApi();
+    /** @return mixed[] */
+    public function toOpenApi(): array;
 }

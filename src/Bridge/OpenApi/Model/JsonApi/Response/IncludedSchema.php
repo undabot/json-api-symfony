@@ -18,12 +18,14 @@ final class IncludedSchema implements Schema
      */
     private $includes;
 
+    /**
+     * @param array<string, ReadSchema> $includes
+     */
     public function __construct(array $includes)
     {
         Assertion::allIsInstanceOf($includes, ReadSchema::class);
         $this->includes = $includes;
     }
-
 
     public function toOpenApi(): array
     {

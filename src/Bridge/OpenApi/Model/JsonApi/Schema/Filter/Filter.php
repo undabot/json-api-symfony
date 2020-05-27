@@ -19,12 +19,19 @@ final class Filter
     /** @var bool */
     private $required;
 
+    public function __construct(string $name, Schema $schema, bool $required = false)
+    {
+        $this->name = $name;
+        $this->schema = $schema;
+        $this->required = $required;
+    }
+
     public static function integer(
         string $name,
         bool $required = false,
         ?string $description = null,
         ?int $example = null
-    ) {
+    ): self {
         return new self($name, new IntegerSchema($example, $description), $required);
     }
 
@@ -33,15 +40,8 @@ final class Filter
         bool $required = false,
         ?string $description = null,
         ?string $example = null
-    ) {
+    ): self {
         return new self($name, new StringSchema($example, $description), $required);
-    }
-
-    public function __construct(string $name, Schema $schema, bool $required = false)
-    {
-        $this->name = $name;
-        $this->schema = $schema;
-        $this->required = $required;
     }
 
     public function getName(): string

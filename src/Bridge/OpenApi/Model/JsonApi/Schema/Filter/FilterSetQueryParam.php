@@ -14,6 +14,9 @@ class FilterSetQueryParam implements Schema
     /** @var Filter[] */
     private $filters;
 
+    /**
+     * @param Filter[] $filters
+     */
     public function __construct(string $name, array $filters)
     {
         $this->name = $name;

@@ -15,6 +15,7 @@ interface Endpoint extends Schema
 
     public function getPath(): string;
 
+    /** @return Response[] */
     public function getResponses(): array;
 
     public function getParams(): ?array;

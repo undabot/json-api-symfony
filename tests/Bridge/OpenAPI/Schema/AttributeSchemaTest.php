@@ -7,12 +7,18 @@ namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Schema;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\AttributeSchema;
 
-class AttributeSchemaTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class AttributeSchemaTest extends TestCase
 {
-    public function testItCanBeConstructedWithMinimalData()
+    public function testItCanBeConstructedWithMinimalData(): void
     {
         $schema = new AttributeSchema('name', 'type', false, null, null, null);
-        $this->assertSame(
+        static::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -22,7 +28,7 @@ class AttributeSchemaTest extends TestCase
         );
 
         $schema2 = new AttributeSchema('name', 'type', true, null, null, null);
-        $this->assertSame(
+        static::assertSame(
             $schema2->toOpenApi(),
             [
                 'title' => 'name',
@@ -32,7 +38,7 @@ class AttributeSchemaTest extends TestCase
         );
     }
 
-    public function testItCanBeConstructedWithDescription()
+    public function testItCanBeConstructedWithDescription(): void
     {
         $schema = new AttributeSchema(
             'name',
@@ -43,7 +49,7 @@ class AttributeSchemaTest extends TestCase
             null
         );
 
-        $this->assertSame(
+        static::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -54,7 +60,7 @@ class AttributeSchemaTest extends TestCase
         );
     }
 
-    public function testItCanBeConstructedWithDescriptionAndFormat()
+    public function testItCanBeConstructedWithDescriptionAndFormat(): void
     {
         $schema = new AttributeSchema(
             'name',
@@ -65,7 +71,7 @@ class AttributeSchemaTest extends TestCase
             null
         );
 
-        $this->assertSame(
+        static::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -77,7 +83,7 @@ class AttributeSchemaTest extends TestCase
         );
     }
 
-    public function testItCanBeConstructedWithDescriptionAndFormatAndExample()
+    public function testItCanBeConstructedWithDescriptionAndFormatAndExample(): void
     {
         $schema = new AttributeSchema(
             'name',
@@ -88,7 +94,7 @@ class AttributeSchemaTest extends TestCase
             'example'
         );
 
-        $this->assertSame(
+        static::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -101,7 +107,7 @@ class AttributeSchemaTest extends TestCase
         );
     }
 
-    public function testItWillConvertTypeToOpenApi()
+    public function testItWillConvertTypeToOpenApi(): void
     {
         $schema = new AttributeSchema(
             'name',
@@ -112,7 +118,7 @@ class AttributeSchemaTest extends TestCase
             'example'
         );
 
-        $this->assertSame(
+        static::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',

@@ -6,6 +6,7 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Service;
 
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Api;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Exception\ResourceApiEndpointsException;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\CreateResourceEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\GetResourceEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\ResourceCollectionEndpoint;
@@ -39,25 +40,25 @@ class ResourceApiEndpointsFactory
     /** @var bool */
     private $delete;
 
-    /** @var array */
+    /** @var mixed[] */
     private $singleIncludes = [];
 
-    /** @var array */
+    /** @var mixed[] */
     private $singleFields = [];
 
-    /** @var array */
+    /** @var mixed[] */
     private $collectionIncludes = [];
 
-    /** @var array */
+    /** @var mixed[] */
     private $collectionFields = [];
 
-    /** @var array */
+    /** @var mixed[] */
     private $collectionFilters = [];
 
-    /** @var array */
+    /** @var mixed[] */
     private $collectionSorts = [];
 
-    /** @var Schema|null */
+    /** @var null|Schema */
     private $paginationSchema;
 
     public function __construct(ResourceSchemaFactory $schemaFactory)
@@ -65,7 +66,7 @@ class ResourceApiEndpointsFactory
         $this->schemaFactory = $schemaFactory;
     }
 
-    public function new()
+    public function new(): self
     {
         return new self($this->schemaFactory);
     }
@@ -77,50 +78,65 @@ class ResourceApiEndpointsFactory
         return $this;
     }
 
-    public function withSingleIncludes(array $singleIncludes): ResourceApiEndpointsFactory
+    /**
+     * @param mixed[] $singleIncludes
+     */
+    public function withSingleIncludes(array $singleIncludes): self
     {
         if (false === $this->getSingle) {
-            throw new \Exception('Enable single endpoint before configuring single includes');
+            throw ResourceApiEndpointsException::singleNotEnabled();
         }
         $this->singleIncludes = $singleIncludes;
 
         return $this;
     }
 
-    public function withSingleFields(array $singleFields): ResourceApiEndpointsFactory
+    /**
+     * @param mixed[] $singleFields
+     */
+    public function withSingleFields(array $singleFields): self
     {
         if (false === $this->getSingle) {
-            throw new \Exception('Enable single endpoint before configuring single fields');
+            throw ResourceApiEndpointsException::singleNotEnabled();
         }
         $this->singleFields = $singleFields;
 
         return $this;
     }
 
-    public function withCollectionIncludes(array $collectionIncludes): ResourceApiEndpointsFactory
+    /**
+     * @param mixed[] $collectionIncludes
+     */
+    public function withCollectionIncludes(array $collectionIncludes): self
     {
         if (false === $this->getCollection) {
-            throw new \Exception('Enable collection endpoint before configuring collection includes');
+            throw ResourceApiEndpointsException::collectionNotEnabled();
         }
         $this->collectionIncludes = $collectionIncludes;
 
         return $this;
     }
 
-    public function withCollectionFilters(array $collectionFilters): ResourceApiEndpointsFactory
+    /**
+     * @param mixed[] $collectionFilters
+     */
+    public function withCollectionFilters(array $collectionFilters): self
     {
         if (false === $this->getCollection) {
-            throw new \Exception('Enable collection endpoint before configuring collection filters');
+            throw ResourceApiEndpointsException::collectionNotEnabled();
         }
         $this->collectionFilters = $collectionFilters;
 
         return $this;
     }
 
-    public function withCollectionSortableAttributes(array $collectionSorts): ResourceApiEndpointsFactory
+    /**
+     * @param mixed[] $collectionSorts
+     */
+    public function withCollectionSortableAttributes(array $collectionSorts): self
     {
         if (false === $this->getCollection) {
-            throw new \Exception('Enable collection endpoint before configuring collection sortables');
+            throw ResourceApiEndpointsException::collectionNotEnabled();
         }
         $this->collectionSorts = $collectionSorts;
 
@@ -140,42 +156,42 @@ class ResourceApiEndpointsFactory
     public function withCollectionPagination(Schema $paginationSchema): self
     {
         if (false === $this->getCollection) {
-            throw new \Exception('Enable collection endpoint before configuring collection pagination');
+            throw ResourceApiEndpointsException::collectionNotEnabled();
         }
         $this->paginationSchema = $paginationSchema;
 
         return $this;
     }
 
-    public function withGetSingle(): ResourceApiEndpointsFactory
+    public function withGetSingle(): self
     {
         $this->getSingle = true;
 
         return $this;
     }
 
-    public function withGetCollection(): ResourceApiEndpointsFactory
+    public function withGetCollection(): self
     {
         $this->getCollection = true;
 
         return $this;
     }
 
-    public function withCreate(): ResourceApiEndpointsFactory
+    public function withCreate(): self
     {
         $this->create = true;
 
         return $this;
     }
 
-    public function withUpdate(): ResourceApiEndpointsFactory
+    public function withUpdate(): self
     {
         $this->update = true;
 
         return $this;
     }
 
-    public function withDelete(): ResourceApiEndpointsFactory
+    public function withDelete(): self
     {
         $this->delete = true;
 
@@ -183,7 +199,6 @@ class ResourceApiEndpointsFactory
     }
 
     /**
-     * @param Api $api
      * @throws \Exception
      */
     public function addToApi(Api $api): void
@@ -194,7 +209,6 @@ class ResourceApiEndpointsFactory
         $relationshipsIdentifiers = $this->schemaFactory->relationshipsIdentifiers($this->resourceClassName);
 
         if (true === $this->getCollection) {
-
             /**
              * To generate proper `included` section of the response, we need to add read schemas for all resources for
              * which the inclusion is enabled. Therefore, we iterate over the passed array of `name` => `ApiModel` pairs

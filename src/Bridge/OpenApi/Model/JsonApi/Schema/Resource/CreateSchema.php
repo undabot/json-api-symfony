@@ -14,12 +14,16 @@ class CreateSchema implements ResourceSchema
     /** @var string */
     private $resourceType;
 
-    /** @var array */
+    /** @var AttributeSchema[] */
     private $attributes;
 
-    /** @var array */
+    /** @var RelationshipSchema[] */
     private $relationships;
 
+    /**
+     * @param AttributeSchema[] $attributes
+     * @param RelationshipSchema[] $relationships
+     */
     public function __construct(string $resourceType, array $attributes, array $relationships)
     {
         Assertion::allIsInstanceOf($attributes, AttributeSchema::class);
@@ -41,7 +45,7 @@ class CreateSchema implements ResourceSchema
 
     public function toOpenApi(): array
     {
-        // @todo add support for configurable client-side generated IDs
+        /** @todo add support for configurable client-side generated IDs */
         $required = [
             'type',
         ];

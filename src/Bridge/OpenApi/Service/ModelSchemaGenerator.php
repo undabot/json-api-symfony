@@ -6,5 +6,4 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Service;
 
 class ModelSchemaGenerator
 {
-
 }

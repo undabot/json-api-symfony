@@ -8,7 +8,6 @@ use Assert\Assertion;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Endpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\ResourceSchema;
-use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Server;
 
 class Api implements Contract\Api
@@ -31,11 +30,10 @@ class Api implements Contract\Api
     /** @var Server[] */
     private $servers = [];
 
-    /** @var Schema[] */
+    /** @var mixed[] */
     private $schemas = [];
 
-    // @todo add support for security schemas
-
+    /** @todo add support for security schemas */
     public function __construct(
         string $title,
         string $version,
@@ -48,12 +46,12 @@ class Api implements Contract\Api
         $this->email = $email;
     }
 
-    public function addEndpoint(Endpoint $endpoint)
+    public function addEndpoint(Endpoint $endpoint): void
     {
         $this->endpoints[] = $endpoint;
     }
 
-    public function addSchema(ResourceSchema $schema)
+    public function addSchema(ResourceSchema $schema): void
     {
         $this->schemas[$schema->getName()] = $schema->toOpenApi();
     }
@@ -61,7 +59,7 @@ class Api implements Contract\Api
     /**
      * @param ResourceSchema[] $includedSchemas
      */
-    public function addSchemas(array $includedSchemas)
+    public function addSchemas(array $includedSchemas): void
     {
         Assertion::allIsInstanceOf($includedSchemas, ResourceSchema::class);
         foreach ($includedSchemas as $includedSchema) {
@@ -69,7 +67,7 @@ class Api implements Contract\Api
         }
     }
 
-    public function addServer(Server $server)
+    public function addServer(Server $server): void
     {
         $this->servers[] = $server;
     }
@@ -104,6 +102,4 @@ class Api implements Contract\Api
 
         return $api;
     }
-
-
 }

@@ -24,16 +24,21 @@ class GetResourceEndpoint implements Endpoint
     /** @var Response[] */
     private $responses;
 
-    /** @var null|array */
+    /** @var ReadSchema[] */
     private $includes;
 
-    /** @var null|array */
+    /** @var null|mixed[] */
     private $fields;
 
+    /**
+     * @param ReadSchema[] $includes
+     * @param null|mixed[] $fields
+     * @param mixed[] $errorResponses
+     */
     public function __construct(
         ReadSchema $readSchema,
         string $path,
-        ?array $includes,
+        array $includes,
         ?array $fields,
         array $errorResponses = []
     ) {

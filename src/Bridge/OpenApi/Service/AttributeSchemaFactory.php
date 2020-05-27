@@ -30,13 +30,9 @@ class AttributeSchemaFactory
                 $nullable = false;
             }
 
-            if ($constraint instanceof NotBlank && null === $nullable) {
+            if ($constraint instanceof NotBlank && false === $nullable) {
                 $nullable = $constraint->allowNull;
             }
-        }
-
-        if (null === $nullable) {
-            $nullable = false;
         }
 
         return new AttributeSchema(

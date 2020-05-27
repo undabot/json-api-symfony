@@ -18,13 +18,13 @@ class AttributeSchema implements Schema
     /** @var bool */
     private $nullable;
 
-    /** @var string */
+    /** @var null|string */
     private $description;
 
-    /** @var string */
+    /** @var null|string */
     private $format;
 
-    /** @var string */
+    /** @var null|string */
     private $example;
 
     public function __construct(
@@ -45,7 +45,7 @@ class AttributeSchema implements Schema
 
     public function toOpenApi(): array
     {
-        // @todo add support for float and double formats
+        /** @todo add support for float and double formats */
         $schema = [
             'title' => $this->name,
             'type' => TypeHelper::resolve($this->type),

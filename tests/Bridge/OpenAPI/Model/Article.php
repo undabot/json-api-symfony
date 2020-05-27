@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Model;
 
+use Symfony\Component\Validator\Constraints as Assert;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Attribute;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToMany;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /** @ResourceType(type="article") */
 class Article implements ApiModel
@@ -72,12 +72,12 @@ class Article implements ApiModel
     /**
      * @var string
      * @Attribute(format="datetime", example="2001")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank
      */
     private $createdAt;
 
     /**
-     * @var string|null
+     * @var null|string
      * @Attribute
      */
     private $updatedAt;

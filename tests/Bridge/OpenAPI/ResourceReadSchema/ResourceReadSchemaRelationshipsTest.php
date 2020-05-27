@@ -15,12 +15,18 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
-final class ResourceReadSchemaAttributesTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class ResourceReadSchemaRelationshipsTest extends TestCase
 {
     /** @var ResourceSchemaFactory */
     private $resourceSchemaFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         AnnotationRegistry::registerLoader('class_exists');
         $metadataFactory = new ResourceMetadataFactory(new AnnotationReader());
@@ -36,18 +42,17 @@ final class ResourceReadSchemaAttributesTest extends TestCase
     public function testToOneRelationshipIsCorrectlyConverted(): void
     {
         /** @ResourceType(type="testResource") */
-        $resource = new class() implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
              * @JsonApi\ToOne(type="targetResource", description="Relationship description", name="target")
              */
             public $targetId;
         };
-        $className = get_class($resource);
+        $className = \get_class($resource);
         $resourceReadSchema = $this->resourceSchemaFactory->readSchema($className);
 
         $resourceSchema = $resourceReadSchema->toOpenApi();
-        $this->assertIsArray($resourceSchema);
+        static::assertIsArray($resourceSchema);
         var_dump($resourceSchema);
         exit;
     }

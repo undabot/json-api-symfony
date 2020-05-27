@@ -26,6 +26,9 @@ class CreateResourceEndpoint implements Endpoint
     /** @var Response[] */
     private $responses;
 
+    /**
+     * @param Response[] $errorResponses
+     */
     public function __construct(
         ReadSchema $readSchema,
         CreateSchema $createSchema,

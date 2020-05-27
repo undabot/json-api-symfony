@@ -8,7 +8,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class IncludeQueryParam implements Schema
 {
-    /** @var string|null */
+    /** @var null|string */
     private $description;
 
     /** @var string[] */
@@ -17,6 +17,10 @@ class IncludeQueryParam implements Schema
     /** @var null|string[] */
     private $default;
 
+    /**
+     * @param mixed[] $includes
+     * @param null|mixed[] $default
+     */
     public function __construct(array $includes, ?string $description = null, array $default = null)
     {
         $this->includes = $includes;

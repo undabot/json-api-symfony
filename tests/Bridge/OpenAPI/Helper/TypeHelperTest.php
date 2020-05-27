@@ -6,37 +6,42 @@ namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Helper;
 
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper\TypeHelper;
-use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\AttributeSchema;
 
-class TypeHelperTest extends TestCase
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
+final class TypeHelperTest extends TestCase
 {
-    public function testItResolvesBoolToBoolean()
+    public function testItResolvesBoolToBoolean(): void
     {
-        $this->assertSame(
+        static::assertSame(
             'boolean',
             TypeHelper::resolve('bool')
         );
     }
 
-    public function testItResolvesIntToInteger()
+    public function testItResolvesIntToInteger(): void
     {
-        $this->assertSame(
+        static::assertSame(
             'integer',
             TypeHelper::resolve('int')
         );
     }
 
-    public function testItResolvesFloatToNumber()
+    public function testItResolvesFloatToNumber(): void
     {
-        $this->assertSame(
+        static::assertSame(
             'number',
             TypeHelper::resolve('float')
         );
     }
 
-    public function testItReturnsPassedValueWhenUnsupported()
+    public function testItReturnsPassedValueWhenUnsupported(): void
     {
-        $this->assertSame(
+        static::assertSame(
             'somethingThatDoesntExist',
             TypeHelper::resolve('somethingThatDoesntExist')
         );

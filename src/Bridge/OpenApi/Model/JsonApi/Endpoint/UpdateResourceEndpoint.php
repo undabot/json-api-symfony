@@ -14,9 +14,6 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\UpdateSc
 
 class UpdateResourceEndpoint implements Endpoint
 {
-    /** @var ReadSchema */
-    private $resourceReadSchema;
-
     /** @var UpdateSchema */
     private $resourceUpdateSchema;
 
@@ -26,6 +23,9 @@ class UpdateResourceEndpoint implements Endpoint
     /** @var Response[] */
     private $responses;
 
+    /**
+     * @param Response[] $errorResponses
+     */
     public function __construct(
         ReadSchema $resourceReadSchema,
         UpdateSchema $resourceUpdateSchema,
@@ -96,7 +96,7 @@ class UpdateResourceEndpoint implements Endpoint
         return $this->path;
     }
 
-    // @todo add support for inclusion and sparse fieldset
+    /** @todo add support for inclusion and sparse fieldset */
     public function getParams(): ?array
     {
         return null;

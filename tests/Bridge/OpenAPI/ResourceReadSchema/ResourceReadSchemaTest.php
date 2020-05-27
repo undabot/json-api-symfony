@@ -16,12 +16,18 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
 final class ResourceReadSchemaTest extends TestCase
 {
     /** @var ResourceSchemaFactory */
     private $resourceSchemaFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         AnnotationRegistry::registerLoader('class_exists');
         $metadataFactory = new ResourceMetadataFactory(new AnnotationReader());
@@ -37,55 +43,54 @@ final class ResourceReadSchemaTest extends TestCase
     public function testResourceAttributesAreCorrectlyConverted(): void
     {
         /** @ResourceType(type="testResource") */
-        $resource = new class() implements ApiModel
-        {
+        $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute(name="name", description="The name", format="NAME", example="My Name")
              */
             public $nameProperty;
 
             /**
-             * @JsonApi\Attribute()
+             * @JsonApi\Attribute
              * @Assert\Type(type="integer")
              */
             public $integerProperty;
 
             /**
-             * @JsonApi\Attribute()
+             * @JsonApi\Attribute
              * @Assert\Type(type="boolean")
              */
             public $booleanProperty1;
 
             /**
-             * @JsonApi\Attribute()
+             * @JsonApi\Attribute
              * @Assert\Type(type="bool")
              */
             public $booleanProperty2;
 
             /**
-             * @JsonApi\Attribute()
+             * @JsonApi\Attribute
              * @Assert\Type(type="float")
              */
             public $floatProperty;
         };
-        $className = get_class($resource);
+        $className = \get_class($resource);
 
         $resourceReadSchema = $this->resourceSchemaFactory->readSchema($className);
 
         $resourceSchema = $resourceReadSchema->toOpenApi();
-        $this->assertIsArray($resourceSchema);
-        $this->assertSame($resourceSchema['type'], 'object');
-        $this->assertSame(
+        static::assertIsArray($resourceSchema);
+        static::assertSame($resourceSchema['type'], 'object');
+        static::assertSame(
             ['id', 'type', 'attributes'],
             $resourceSchema['required']
         );
 
-        $this->assertSame(
+        static::assertSame(
             ['type' => 'string'],
             $resourceSchema['properties']['id']
         );
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'title' => 'name',
                 'type' => 'string',
@@ -97,7 +102,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['name']
         );
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'title' => 'integerProperty',
                 'type' => 'integer',
@@ -106,7 +111,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['integerProperty']
         );
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'title' => 'booleanProperty1',
                 'type' => 'boolean',
@@ -115,7 +120,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['booleanProperty1']
         );
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'title' => 'booleanProperty2',
                 'type' => 'boolean',
@@ -124,7 +129,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['booleanProperty2']
         );
 
-        $this->assertSame(
+        static::assertSame(
             [
                 'title' => 'floatProperty',
                 'type' => 'number',

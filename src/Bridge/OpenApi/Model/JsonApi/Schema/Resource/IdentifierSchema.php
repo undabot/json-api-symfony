@@ -25,7 +25,8 @@ class IdentifierSchema implements ResourceSchema
     public function toOpenApi(): array
     {
         $uuidSchema = new UuidSchema();
-        $schema = [
+
+        return [
             'type' => 'object',
             'required' => [
                 'id',
@@ -42,8 +43,6 @@ class IdentifierSchema implements ResourceSchema
                 ],
             ],
         ];
-
-        return $schema;
     }
 
     public function getResourceType(): string

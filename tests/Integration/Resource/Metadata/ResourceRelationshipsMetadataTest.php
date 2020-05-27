@@ -119,6 +119,9 @@ final class ResourceRelationshipsMetadataTest extends TestCase
 
     public function testMetadataFactoryThrowsAnExceptionWhenSinglePropertyHasMultipleRelationshipAnnotations(): void
     {
+        /**
+         * @ResourceType(type="resource")
+         */
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\ToMany(name="tag")
@@ -133,6 +136,9 @@ final class ResourceRelationshipsMetadataTest extends TestCase
 
     public function testRelatioinshipNameCanBeOveridden(): void
     {
+        /**
+         * @ResourceType(type="resource")
+         */
         $resource = new class() implements ApiModel {
             /** @JsonApi\ToOne(type="resource") */
             public $defaultName;
@@ -154,6 +160,9 @@ final class ResourceRelationshipsMetadataTest extends TestCase
 
     public function testRelationshipMetadataIsEmptyWhenNoRelationshipsAnnotated(): void
     {
+        /**
+         * @ResourceType(type="resource")
+         */
         $resource = new class() implements ApiModel {
         };
 
@@ -163,6 +172,9 @@ final class ResourceRelationshipsMetadataTest extends TestCase
 
     private function getResource()
     {
+        /**
+         * @ResourceType(type="resource")
+         */
         return new class() implements ApiModel {
             /**
              * @var array

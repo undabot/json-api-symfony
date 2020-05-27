@@ -14,9 +14,12 @@ class ResourceResponse implements Response
     /** @var ReadSchema */
     private $readSchema;
 
-    /** @var ReadSchema[] */
+    /** @var array<string, ReadSchema> */
     private $includes;
 
+    /**
+     * @param array<string, ReadSchema> $includes
+     */
     public function __construct(ReadSchema $readSchema, array $includes = [])
     {
         Assertion::allIsInstanceOf($includes, ReadSchema::class);
@@ -39,7 +42,7 @@ class ResourceResponse implements Response
         return 'Successful response for getting the resource instance';
     }
 
-    public function toOpenApi()
+    public function toOpenApi(): array
     {
         $responseContentSchema = [
             'schema' => [
@@ -60,13 +63,11 @@ class ResourceResponse implements Response
             }
         }
 
-        $response = [
+        return [
             'description' => $this->getDescription(),
             'content' => [
                 $this->getContentType() => $responseContentSchema,
             ],
         ];
-
-        return $response;
     }
 }

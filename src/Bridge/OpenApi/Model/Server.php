@@ -11,7 +11,7 @@ class Server implements Contract\Server
     /** @var string */
     private $url;
 
-    /** @var string|null */
+    /** @var null|string */
     private $description;
 
     public function __construct(string $url, ?string $description = null)

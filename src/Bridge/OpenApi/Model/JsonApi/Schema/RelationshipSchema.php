@@ -13,7 +13,7 @@ class RelationshipSchema implements Schema
     /** @var string */
     private $name;
 
-    /** @var string|null */
+    /** @var null|string */
     private $description;
 
     /** @var bool */
@@ -77,7 +77,7 @@ class RelationshipSchema implements Schema
         ];
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }

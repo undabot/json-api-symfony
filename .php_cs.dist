@@ -58,6 +58,7 @@ return PhpCsFixer\Config::create()
             'static_lambda' => true,
             'phpdoc_align' => '',
             'concat_space' => ['spacing' => 'one'],
+            'phpdoc_to_comment' => false,
         ]
     )
     ->setFinder($finder);

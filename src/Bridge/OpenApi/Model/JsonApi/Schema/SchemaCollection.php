@@ -4,27 +4,18 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema;
 
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Exception\SchemaCollectionException;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ResourceSchemaSet;
 
 class SchemaCollection
 {
     private static $schemas = [];
 
-    private static function normalizeClassName(string $className)
-    {
-        $targetClassName = $className;
-        if ($targetClassName[0] === "\\") {
-            $targetClassName = substr($targetClassName, 1);
-        }
-
-        return $targetClassName;
-    }
-
-    public static function add(string $resourceClass, ResourceSchemaSet $resourceSchemaSet)
+    public static function add(string $resourceClass, ResourceSchemaSet $resourceSchemaSet): void
     {
         $resourceClass = static::normalizeClassName($resourceClass);
         if (true === self::exists($resourceClass)) {
-            throw new \Exception('Already exists');
+            throw SchemaCollectionException::resourceAlreadyExists();
         }
 
         static::$schemas[$resourceClass] = $resourceSchemaSet;
@@ -44,14 +35,17 @@ class SchemaCollection
         return static::$schemas[$className];
     }
 
-    public static function toOpenApi()
+    /**
+     * @return mixed[]
+     */
+    public static function toOpenApi(): array
     {
         $data = [];
 
         /** @var ResourceSchemaSet $schemaSet */
         foreach (static::$schemas as $schemaSet) {
             if (null !== $schemaSet->getIdentifier()) {
-                $data[$schemaSet->getIdentifier()->getReference()] = $schemaSet->getIdentifier()->toOpenApi();
+                $data[$schemaSet->getIdentifier()->getName()] = $schemaSet->getIdentifier()->toOpenApi();
             }
 
             if (null !== $schemaSet->getReadModel()) {
@@ -63,10 +57,20 @@ class SchemaCollection
             }
 
             if (null !== $schemaSet->getUpdateModel()) {
-                $data[$schemaSet->getUpdateModel()->getReference()] = $schemaSet->getUpdateModel()->toOpenApi();
+                $data[$schemaSet->getUpdateModel()->getName()] = $schemaSet->getUpdateModel()->toOpenApi();
             }
         }
 
         return $data;
+    }
+
+    private static function normalizeClassName(string $className): string
+    {
+        $targetClassName = $className;
+        if ('\\' === $targetClassName[0]) {
+            $targetClassName = mb_substr($targetClassName, 1);
+        }
+
+        return $targetClassName;
     }
 }

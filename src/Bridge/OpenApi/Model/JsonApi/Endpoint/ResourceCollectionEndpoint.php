@@ -23,21 +23,28 @@ class ResourceCollectionEndpoint implements Endpoint
     /** @var Response[] */
     private $responses;
 
-    /** @var array */
-    private $filters = [];
+    /** @var mixed[] */
+    private $filters;
 
-    /** @var array */
-    private $includes = [];
+    /** @var mixed[] */
+    private $includes;
 
-    /** @var array */
-    private $fields = [];
+    /** @var mixed[] */
+    private $fields;
 
-    /** @var array */
-    private $sorts = [];
+    /** @var mixed[] */
+    private $sorts;
 
     /** @var null|Schema */
     private $pagination;
 
+    /**
+     * @param mixed[] $filters
+     * @param mixed[] $sorts
+     * @param mixed[] $includes
+     * @param mixed[] $fields
+     * @param mixed[] $errorResponses
+     */
     public function __construct(
         ReadSchema $schema,
         string $path,
@@ -84,7 +91,7 @@ class ResourceCollectionEndpoint implements Endpoint
     {
         $queryParams = [];
 
-        if (0 !== count($this->includes)) {
+        if (0 !== \count($this->includes)) {
             $include = new IncludeQueryParam(array_keys($this->includes));
             $queryParams[] = $include->toOpenApi();
         }

@@ -19,7 +19,11 @@ use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\MissingDataVa
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\ResourceDenormalizationException;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
+/**
+ * @ResourceType(type="resources")
+ */
 class AliasedResourceDto implements ApiModel
 {
     /**

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Service;
 
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\AttributeSchema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\RelationshipSchema;
-use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSchema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\CreateSchema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\IdentifierSchema;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSchema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\UpdateSchema;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\AttributeMetadata;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\RelationshipMetadata;
@@ -45,27 +46,6 @@ class ResourceSchemaFactory
         return new IdentifierSchema($resourceMetadata->getType());
     }
 
-    private function getAttributes(ResourceMetadata $metadata): array
-    {
-        return $metadata->getAttributesMetadata()
-            ->map(function (AttributeMetadata $attributeMetadata) {
-                return $this->attributeSchemaFactory->make($attributeMetadata);
-            })
-            ->toArray();
-    }
-
-    /**
-     * @return RelationshipSchema[]
-     */
-    private function getRelationships(ResourceMetadata $metadata): array
-    {
-        return $metadata->getRelationshipsMetadata()
-            ->map(function (RelationshipMetadata $relationshipMetadata) {
-                return $this->relationshipSchemaFactory->make($relationshipMetadata);
-            })
-            ->toArray();
-    }
-
     /**
      * @throws \Exception
      */
@@ -81,9 +61,11 @@ class ResourceSchemaFactory
     }
 
     /**
-     * Returns array of schemas representing each resource identifier contained in the relationship
+     * Returns array of schemas representing each resource identifier contained in the relationship.
      *
      * @throws \Exception
+     *
+     * @return IdentifierSchema[]
      */
     public function relationshipsIdentifiers(string $resourceClass): array
     {
@@ -127,5 +109,29 @@ class ResourceSchemaFactory
             $this->getAttributes($resourceMetadata),
             $this->getRelationships($resourceMetadata)
         );
+    }
+
+    /**
+     * @return AttributeSchema[]
+     */
+    private function getAttributes(ResourceMetadata $metadata): array
+    {
+        return $metadata->getAttributesMetadata()
+            ->map(function (AttributeMetadata $attributeMetadata) {
+                return $this->attributeSchemaFactory->make($attributeMetadata);
+            })
+            ->toArray();
+    }
+
+    /**
+     * @return RelationshipSchema[]
+     */
+    private function getRelationships(ResourceMetadata $metadata): array
+    {
+        return $metadata->getRelationshipsMetadata()
+            ->map(function (RelationshipMetadata $relationshipMetadata) {
+                return $this->relationshipSchemaFactory->make($relationshipMetadata);
+            })
+            ->toArray();
     }
 }

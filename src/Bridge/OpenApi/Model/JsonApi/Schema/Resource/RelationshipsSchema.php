@@ -9,13 +9,16 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\RelationshipSchema;
 
 /**
- * Partial that represents `relationships` section of the JSON:API resource response
+ * Partial that represents `relationships` section of the JSON:API resource response.
  */
 final class RelationshipsSchema implements Schema
 {
     /** @var RelationshipSchema[] */
     private $relationships;
 
+    /**
+     * @param RelationshipSchema[] $relationships
+     */
     public function __construct(array $relationships)
     {
         Assertion::allIsInstanceOf($relationships, RelationshipSchema::class);
@@ -49,7 +52,7 @@ final class RelationshipsSchema implements Schema
             $openApi['required'] = $requiredRelationships;
         }
 
-        /**
+        /*
          * @todo Should we support optional relationships?
          *
          * Resource relationships should always be present and therefore are required in the generated schema. Should not

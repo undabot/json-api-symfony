@@ -21,7 +21,7 @@ class ResourceMetadata
     /** @var Collection */
     private $relationshipsMetadata;
 
-    /** @var null|string */
+    /** @var string */
     private $type;
 
     /**
@@ -49,18 +49,16 @@ class ResourceMetadata
             return $constraint instanceof JsonApiConstraint\ResourceType;
         });
 
-        Assertion::maxCount(
+        Assertion::count(
             $resourceTypeConstraints,
             1,
-            'More than 1 ResourceType constraint found in the resource constraints (metadata)'
+            'Exactly 1 resourceType constraint must be defined in the resource constraints (metadata)'
         );
 
-        if (1 === \count($resourceTypeConstraints)) {
-            $this->type = array_values($resourceTypeConstraints)[0]->type;
-        }
+        $this->type = array_values($resourceTypeConstraints)[0]->type;
     }
 
-    public function getType(): ?string
+    public function getType(): string
     {
         return $this->type;
     }

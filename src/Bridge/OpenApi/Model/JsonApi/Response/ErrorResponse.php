@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Response;
 
-use JsonApiOpenApi\Model\OpenApi\ResponseInterface;
-use JsonApiOpenApi\Model\OpenApi\SchemaInterface;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Response;
 
-class ErrorResponse implements ResponseInterface
+class ErrorResponse implements Response
 {
     public function getStatusCode(): int
     {
@@ -24,8 +23,8 @@ class ErrorResponse implements ResponseInterface
         // TODO: Implement getDescription() method.
     }
 
-    public function getResourceSchema(): SchemaInterface
+    public function toOpenApi(): array
     {
-        // TODO: Implement getSchema() method.
+        // TODO: Implement toOpenApi() method.
     }
 }

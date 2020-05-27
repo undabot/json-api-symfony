@@ -19,12 +19,18 @@ use Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Model\Article;
 use Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Model\Category;
 use Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Model\Tag;
 
+/**
+ * @internal
+ * @coversNothing
+ *
+ * @small
+ */
 final class ResourceApiDocumentationTest extends TestCase
 {
     /** @var ResourceSchemaFactory */
     private $resourceSchemaFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         AnnotationRegistry::registerLoader('class_exists');
         $metadataFactory = new ResourceMetadataFactory(new AnnotationReader());
@@ -77,7 +83,6 @@ final class ResourceApiDocumentationTest extends TestCase
                 ]
             )
             ->addToApi($api);
-
 
         echo json_encode($api->toOpenApi(), JSON_PRETTY_PRINT);
         exit;

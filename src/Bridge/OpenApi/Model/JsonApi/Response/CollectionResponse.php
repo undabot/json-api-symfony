@@ -14,9 +14,12 @@ class CollectionResponse implements Response
     /** @var ReadSchema */
     private $schema;
 
-    /** @var array */
+    /** @var array<string, ReadSchema> */
     private $includes;
 
+    /**
+     * @param array<string, ReadSchema> $includes
+     */
     public function __construct(ReadSchema $schema, array $includes)
     {
         $this->schema = $schema;
@@ -39,7 +42,7 @@ class CollectionResponse implements Response
         return 'Successful response for getting the collection of resources';
     }
 
-    public function toOpenApi()
+    public function toOpenApi(): array
     {
         $responseContentSchema = [
             'schema' => [
@@ -63,13 +66,11 @@ class CollectionResponse implements Response
             }
         }
 
-        $response = [
+        return [
             'description' => $this->getDescription(),
             'content' => [
                 $this->getContentType() => $responseContentSchema,
             ],
         ];
-
-        return $response;
     }
 }

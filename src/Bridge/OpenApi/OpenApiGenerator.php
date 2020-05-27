@@ -32,10 +32,12 @@ final class OpenApiGenerator
     public function generateApi(OpenApiDefinition $definition): Api
     {
         $api = $definition->getApi();
-        /** @var ResourceApiInterface $resource */
-        foreach ($this->resources[\get_class($definition)] as $resource) {
-            $resourceApiEndpoint = $resource->generateResourceApiEndpoints();
-            $resourceApiEndpoint->addToApi($api);
+        if (isset($this->resources[\get_class($definition)])) {
+            /** @var ResourceApiInterface $resource */
+            foreach ($this->resources[\get_class($definition)] as $resource) {
+                $resourceApiEndpoint = $resource->generateResourceApiEndpoints();
+                $resourceApiEndpoint->addToApi($api);
+            }
         }
 
         return $api;

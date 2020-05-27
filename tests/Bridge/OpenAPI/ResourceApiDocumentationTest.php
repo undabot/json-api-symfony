@@ -56,9 +56,7 @@ final class ResourceApiDocumentationTest extends TestCase
         $endpointFactory = new ResourceApiEndpointsFactory($this->resourceSchemaFactory);
 
         $endpointFactory
-            ->new()
-            ->atPath('/articles')
-            ->forResource(Article::class)
+            ->new('/articles', Article::class)
             ->withGetCollection()
             ->withCollectionIncludes(
                 [

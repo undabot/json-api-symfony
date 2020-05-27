@@ -66,16 +66,13 @@ class ResourceApiEndpointsFactory
         $this->schemaFactory = $schemaFactory;
     }
 
-    public function new(): self
+    public function new(string $path, string $resource): self
     {
-        return new self($this->schemaFactory);
-    }
+        $self = new self($this->schemaFactory);
+        $self->path = $path;
+        $this->resourceClassName = $resource;
 
-    public function atPath(string $path): self
-    {
-        $this->path = $path;
-
-        return $this;
+        return $self;
     }
 
     /**
@@ -283,12 +280,5 @@ class ResourceApiEndpointsFactory
             $api->addSchema($updateSchema);
             $api->addEndpoint($createResourceEndpoint);
         }
-    }
-
-    public function forResource(string $class): self
-    {
-        $this->resourceClassName = $class;
-
-        return $this;
     }
 }

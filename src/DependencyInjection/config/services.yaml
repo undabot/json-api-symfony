@@ -63,3 +63,5 @@ services:
     Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\RelationshipSchemaFactory: ~
     Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory: ~
     Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceApiEndpointsFactory: ~
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\ApiTransformer: ~
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiGenerator: ~

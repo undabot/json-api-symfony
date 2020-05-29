@@ -58,3 +58,10 @@ services:
 
     Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidatorInterface: '@Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator'
     Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface: '@Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder'
+
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\AttributeSchemaFactory: ~
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\RelationshipSchemaFactory: ~
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory: ~
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceApiEndpointsFactory: ~
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\ApiTransformer: ~
+    Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiGenerator: ~

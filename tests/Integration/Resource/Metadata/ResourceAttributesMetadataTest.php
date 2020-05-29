@@ -16,6 +16,7 @@ use Undabot\SymfonyJsonApi\Model\Resource\Metadata\AttributeMetadata;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
 /**
  * @internal
@@ -155,6 +156,9 @@ final class ResourceAttributesMetadataTest extends TestCase
 
     public function testAttributeNameCanBeOveridden(): void
     {
+        /**
+         * @ResourceType(type="resource")
+         */
         $resource = new class() implements ApiModel {
             /** @JsonApi\Attribute */
             public $defaultName;
@@ -176,6 +180,9 @@ final class ResourceAttributesMetadataTest extends TestCase
 
     public function testAttributeMetadataIsEmptyWhenNoAttributesAnnotated(): void
     {
+        /**
+         * @ResourceType(type="resource")
+         */
         $resource = new class() implements ApiModel {
         };
 
@@ -185,6 +192,9 @@ final class ResourceAttributesMetadataTest extends TestCase
 
     private function getResource()
     {
+        /**
+         * @ResourceType(type="resource")
+         */
         return new class() implements ApiModel {
             /**
              * @var string

@@ -12,6 +12,7 @@ use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToMany;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
@@ -44,13 +45,17 @@ final class ResourceRelationshipsValidationTest extends KernelTestCase
 
     public function testValidatorRecognizesSingleIdAsInvalidToManyRelationshipValue(): void
     {
-        $resourceDto = new class() {
+        $resourceDto =
             /**
-             * @var string[]
-             * @JsonApi\ToMany(type="type")
+             * @ResourceType(type="resource")
              */
-            public $relationship = [];
-        };
+            new class() {
+                /**
+                 * @var string[]
+                 * @JsonApi\ToMany(type="type")
+                 */
+                public $relationship = [];
+            };
 
         $resource = new Resource(
             '1',
@@ -68,13 +73,17 @@ final class ResourceRelationshipsValidationTest extends KernelTestCase
 
     public function testValidatorRecognizesNullAsInvalidToManyRelationshipValue(): void
     {
-        $resourceDto = new class() {
+        $resourceDto =
             /**
-             * @var string[]
-             * @JsonApi\ToMany(type="type")
+             * @ResourceType(type="resource")
              */
-            public $relationship = [];
-        };
+            new class() {
+                /**
+                 * @var string[]
+                 * @JsonApi\ToMany(type="type")
+                 */
+                public $relationship = [];
+            };
 
         $resource = new Resource(
             '1',
@@ -92,13 +101,17 @@ final class ResourceRelationshipsValidationTest extends KernelTestCase
 
     public function testValidatorRecognizesArrayAsInvalidToOneRelationshipValue(): void
     {
-        $resourceDto = new class() {
+        $resourceDto =
             /**
-             * @var string[]
-             * @JsonApi\ToOne(type="type")
+             * @ResourceType(type="resource")
              */
-            public $relationship;
-        };
+            new class() {
+                /**
+                 * @var string[]
+                 * @JsonApi\ToOne(type="type")
+                 */
+                public $relationship;
+            };
 
         $resource = new Resource(
             '1',

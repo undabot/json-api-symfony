@@ -153,12 +153,22 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
         $name = $attributeAnnotation->name ?? $property->getName();
 
+        // @todo should we infer nullability from typehint?
+//        $docComment = $property->getDocComment();
+//        $nullable = null;
+//        if (false === empty($docComment)) {
+//            preg_match_all('/@var (.*)/m', $docComment, $result);
+//            $nullable = strpos($result[1][0] ?? '', 'null') !== false;
+//        }
+        // @todo add support for PHP 7.4 types and nullability check
+
         // @todo Idea: add attribute type validation constraint based on the property type (docblock)?
 
         return new AttributeMetadata(
             $name,
             $property->getName(),
-            $constraintAnnotations
+            $constraintAnnotations,
+            $attributeAnnotation
         );
     }
 
@@ -195,12 +205,13 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             $relatedResourceType,
             $property->getName(),
             $constraintAnnotations,
-            $relationshipAnnotation->isToMany()
+            $relationshipAnnotation->isToMany(),
+            $relationshipAnnotation
         );
     }
 
     /**
-     * @param AttributeMetadata[]    $attributeMetadata
+     * @param AttributeMetadata[] $attributeMetadata
      * @param RelationshipMetadata[] $relationshipMetadata
      *
      * @throws InvalidResourceMappingException

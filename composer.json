@@ -13,6 +13,7 @@
     "doctrine/annotations": "^1.6",
     "symfony/property-access": "^4.2 || ^5.0",
     "symfony/serializer": "^4.2 || ^5.0",
+    "symfony/yaml": "^4.2 || ^5.0",
     "ramsey/uuid": "^3.8",
     "beberlei/assert": "^3.2",
     "zantolov/toolbelt": "^0.0.1",

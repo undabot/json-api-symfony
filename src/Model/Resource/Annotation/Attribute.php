@@ -17,4 +17,13 @@ class Attribute
 
     /** @var string */
     public $description;
+
+    /** @var string */
+    public $example;
+
+    /** @var string */
+    public $format;
+
+    /** @var bool */
+    public $nullable;
 }

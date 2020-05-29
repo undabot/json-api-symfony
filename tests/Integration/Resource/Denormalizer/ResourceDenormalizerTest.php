@@ -17,7 +17,11 @@ use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
+/**
+ * @ResourceType(type="resources")
+ */
 class ResourceDto implements ApiModel
 {
     /**

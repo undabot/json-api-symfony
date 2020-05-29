@@ -50,14 +50,6 @@ class ResourceFactory
         $id = $propertyAccessor->getValue($apiModel, 'id');
         $type = $metadata->getType();
 
-        // If the resource type is not defined in the resource metadata, try to access the `type` property directly.
-        // If the type property is not accessible, throw an exception since Resource without type definition cannot be created
-        if (null === $type && true === $propertyAccessor->isReadable($apiModel, 'type')) {
-            $type = $propertyAccessor->getValue($apiModel, 'type');
-        }
-
-        Assertion::notNull($type, 'Resource type cannot be inferred neither from the annotation nor `type` property');
-
         $attributes = $this->makeAttributeCollection($apiModel, $metadata);
         $relationships = $this->makeRelationshipsCollection($apiModel, $metadata);
 

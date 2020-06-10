@@ -70,7 +70,7 @@ class ResourceApiEndpointsFactory
     {
         $self = new self($this->schemaFactory);
         $self->path = $path;
-        $this->resourceClassName = $resource;
+        $self->resourceClassName = $resource;
 
         return $self;
     }

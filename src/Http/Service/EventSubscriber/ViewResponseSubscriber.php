@@ -61,7 +61,8 @@ class ViewResponseSubscriber implements EventSubscriberInterface
                 null,
                 $data->getMeta(),
                 $this->buildJsonApi(),
-                $data->getLinks()
+                $data->getLinks(),
+                $data->getIncludedResources()
             );
 
             $response = $this->buildDocumentResponse($document, Response::HTTP_CREATED);
@@ -74,7 +75,8 @@ class ViewResponseSubscriber implements EventSubscriberInterface
                 null,
                 $data->getMeta(),
                 $this->buildJsonApi(),
-                $data->getLinks()
+                $data->getLinks(),
+                $data->getIncludedResources()
             );
 
             $response = $this->buildDocumentResponse($document, Response::HTTP_OK);

@@ -112,17 +112,20 @@ class ResourceFactory
         $relationshipBuilder = ResourceRelationshipsBuilder::make();
 
         foreach ($metadata->getRelationshipsMetadata() as $relationshipsMetadatum) {
+            $value = $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath());
             if ($relationshipsMetadatum->isToMany()) {
-                $relationshipBuilder->toMany(
-                    $relationshipsMetadatum->getName(),
-                    $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
-                );
+                if (!empty($value)) {
+                    $relationshipBuilder->toMany(
+                        $relationshipsMetadatum->getName(),
+                        $relationshipsMetadatum->getRelatedResourceType(),
+                        $value
+                    );
+                }
             } else {
                 $relationshipBuilder->toOne(
                     $relationshipsMetadatum->getName(),
                     $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
+                    $value
                 );
             }
         }

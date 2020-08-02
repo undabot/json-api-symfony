@@ -6,6 +6,7 @@ namespace Undabot\SymfonyJsonApi\Exception\EventSubscriber;
 
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\JsonApi\Definition\Exception\Request\ClientGeneratedIdIsNotAllowedException;
 use Undabot\JsonApi\Definition\Exception\Request\RequestException;
@@ -69,6 +70,18 @@ class ExceptionListener
             $document = new Document(null, $errorCollection);
             $data = $this->documentToPhpArrayEncoderInterface->encode($document);
             $response = JsonApiHttpResponse::badRequest($data);
+            $event->setResponse($response);
+
+            return;
+        }
+
+        if ($exception instanceof HttpExceptionInterface) {
+            $errorCollection = new ErrorCollection([
+                $this->buildError($exception),
+            ]);
+            $document = new Document(null, $errorCollection);
+            $data = $this->documentToPhpArrayEncoderInterface->encode($document);
+            $response = JsonApiHttpResponse::fromSymfonyHttpException($data, $exception);
             $event->setResponse($response);
 
             return;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Http\Model\Response;
 
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class JsonApiHttpResponse extends Response
 {
@@ -105,6 +106,24 @@ class JsonApiHttpResponse extends Response
         return new self(
             $content ?: null,
             Response::HTTP_INTERNAL_SERVER_ERROR,
+            [
+                'Content-Type' => self::CONTENT_TYPE,
+            ]
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @throws \JsonException
+     */
+    public static function fromSymfonyHttpException(array $data, HttpExceptionInterface $exception): self
+    {
+        $content = json_encode($data, JSON_THROW_ON_ERROR);
+
+        return new self(
+            $content ?: null,
+            $exception->getStatusCode(),
             [
                 'Content-Type' => self::CONTENT_TYPE,
             ]

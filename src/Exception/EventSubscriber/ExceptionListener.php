@@ -100,14 +100,14 @@ class ExceptionListener
         }
     }
 
-    private function buildError(\Exception $exception): Error
+    private function buildError(\Throwable $exception): Error
     {
         if (class_exists('\Symfony\Component\ErrorHandler\Exception\FlattenException')) {
             /** @var callable $callable */
-            $callable = ['Symfony\Component\ErrorHandler\Exception\FlattenException', 'create'];
+            $callable = ['Symfony\Component\ErrorHandler\Exception\FlattenException', 'createFromThrowable'];
             $e = \call_user_func($callable, $exception);
         } else {
-            $e = FlattenException::create($exception);
+            $e = FlattenException::createFromThrowable($exception);
         }
 
         return new Error(

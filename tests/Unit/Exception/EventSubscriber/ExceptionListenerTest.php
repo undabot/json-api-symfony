@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
@@ -79,7 +80,7 @@ final class ExceptionListenerTest extends TestCase
 
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupportedAndEventHaveThrowableMethod(): void
     {
-        $event = new DummyThrowableEvent(
+        $event = new ExceptionEvent(
             $this->createMock(KernelInterface::class),
             $this->createMock(Request::class),
             KernelInterface::MASTER_REQUEST,
@@ -93,22 +94,41 @@ final class ExceptionListenerTest extends TestCase
 
         $this->exceptionListener->onKernelException($event);
         static::assertEquals(
-            $event->getResponse(),
             new JsonApiHttpResponse(
                 json_encode($data),
                 500,
                 [
                     'Content-Type' => 'application/vnd.api+json',
                 ],
-            )
+            ),
+            $event->getResponse()
         );
     }
-}
 
-class DummyThrowableEvent extends ExceptionEvent
-{
-    public function getThrowable(): \Throwable
+    public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenSymfonyHttpException(): void
     {
-        return new \LogicException();
+        $event = new ExceptionEvent(
+            $this->createMock(KernelInterface::class),
+            $this->createMock(Request::class),
+            KernelInterface::MASTER_REQUEST,
+            $e = new AccessDeniedHttpException()
+        );
+        $data = [];
+        $this->documentToPhpArrayEncoderInterfaceMock
+            ->expects(static::once())
+            ->method('encode')
+            ->willReturn($data);
+
+        $this->exceptionListener->onKernelException($event);
+        static::assertEquals(
+            new JsonApiHttpResponse(
+                json_encode($data),
+                $e->getStatusCode(),
+                [
+                    'Content-Type' => 'application/vnd.api+json',
+                ],
+            ),
+            $event->getResponse()
+        );
     }
 }

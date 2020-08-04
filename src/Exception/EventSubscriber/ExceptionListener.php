@@ -6,6 +6,7 @@ namespace Undabot\SymfonyJsonApi\Exception\EventSubscriber;
 
 use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\JsonApi\Definition\Exception\Request\ClientGeneratedIdIsNotAllowedException;
 use Undabot\JsonApi\Definition\Exception\Request\RequestException;
@@ -74,6 +75,18 @@ class ExceptionListener
             return;
         }
 
+        if ($exception instanceof HttpExceptionInterface) {
+            $errorCollection = new ErrorCollection([
+                $this->buildError($exception),
+            ]);
+            $document = new Document(null, $errorCollection);
+            $data = $this->documentToPhpArrayEncoderInterface->encode($document);
+            $response = JsonApiHttpResponse::fromSymfonyHttpException($data, $exception);
+            $event->setResponse($response);
+
+            return;
+        }
+
         if ($exception instanceof \Exception) {
             $errorCollection = new ErrorCollection([
                 $this->buildError($exception),
@@ -87,14 +100,14 @@ class ExceptionListener
         }
     }
 
-    private function buildError(\Exception $exception): Error
+    private function buildError(\Throwable $exception): Error
     {
         if (class_exists('\Symfony\Component\ErrorHandler\Exception\FlattenException')) {
             /** @var callable $callable */
-            $callable = ['Symfony\Component\ErrorHandler\Exception\FlattenException', 'create'];
+            $callable = ['Symfony\Component\ErrorHandler\Exception\FlattenException', 'createFromThrowable'];
             $e = \call_user_func($callable, $exception);
         } else {
-            $e = FlattenException::create($exception);
+            $e = FlattenException::createFromThrowable($exception);
         }
 
         return new Error(

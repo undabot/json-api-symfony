@@ -11,7 +11,7 @@ use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 final class ResourceResponse
 {
-    /** @var ResourceInterface */
+    /** @var null|ResourceInterface */
     private $primaryResource;
 
     /** @var null|ResourceCollectionInterface */
@@ -24,7 +24,7 @@ final class ResourceResponse
     private $links;
 
     public function __construct(
-        ResourceInterface $primaryResource,
+        ?ResourceInterface $primaryResource,
         ?ResourceCollectionInterface $includedResources = null,
         ?MetaInterface $meta = null,
         ?LinkCollectionInterface $links = null
@@ -35,7 +35,7 @@ final class ResourceResponse
         $this->links = $links;
     }
 
-    public function getPrimaryResource(): ResourceInterface
+    public function getPrimaryResource(): ?ResourceInterface
     {
         return $this->primaryResource;
     }

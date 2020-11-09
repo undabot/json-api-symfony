@@ -101,7 +101,12 @@ abstract class AbstractResponder
         array $meta = null,
         array $links = null
     ): ResourceResponse {
-        $resource = $this->encodeData($primaryData);
+        /**
+         * resource response can be single resource or null.
+         *
+         * @see https://jsonapi.org/format/#fetching-resources-responses-200
+         */
+        $resource = null === $primaryData ? null : $this->encodeData($primaryData);
 
         return new ResourceResponse(
             $resource,

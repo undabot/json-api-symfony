@@ -86,6 +86,11 @@ final class ViewResponseSubscriberTest extends TestCase
             true,
         ];
 
+        yield 'Null ResourceResponse returned by controller' => [
+            new ResourceResponse(null),
+            true,
+        ];
+
         yield 'ResourceValidationErrorsResponse returned by controller' => [
             new ResourceValidationErrorsResponse(new ErrorCollection([])),
             true,

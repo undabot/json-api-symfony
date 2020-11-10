@@ -15,7 +15,6 @@ ADD docker/install-composer.sh .
 RUN chmod u+x install-composer.sh
 RUN ./install-composer.sh
 RUN composer --version
-RUN composer global require hirak/prestissimo
 
 WORKDIR /opt/app
 

@@ -52,6 +52,7 @@ final class ExceptionListenerTest extends TestCase
             ->willReturn($data);
 
         $event->expects(static::once())->method('setResponse');
+        $event->expects(static::once())->method('getException')->willReturn($exception);
 
         $this->exceptionListener->onKernelException($event);
     }

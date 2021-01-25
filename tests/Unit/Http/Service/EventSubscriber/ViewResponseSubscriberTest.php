@@ -6,6 +6,8 @@ namespace Undabot\JsonApi\Tests\Unit\Http\Service\EventSubscriber;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
@@ -28,16 +30,14 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
  */
 final class ViewResponseSubscriberTest extends TestCase
 {
-    /** @var MockObject */
-    private $documentEncoder;
+    private MockObject $documentEncoderMock;
 
-    /** @var ViewResponseSubscriber */
-    private $viewResponseSubscriber;
+    private ViewResponseSubscriber $viewResponseSubscriber;
 
     protected function setUp(): void
     {
-        $this->documentEncoder = $this->createMock(DocumentToPhpArrayEncoderInterface::class);
-        $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoder);
+        $this->documentEncoderMock = $this->createMock(DocumentToPhpArrayEncoderInterface::class);
+        $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoderMock);
     }
 
     /**
@@ -51,9 +51,15 @@ final class ViewResponseSubscriberTest extends TestCase
         $event->expects(static::once())->method('getControllerResult')->willReturn($controllerResult);
         $event->expects(static::once())->method('setResponse');
         if ($shouldEncode) {
-            $this->documentEncoder->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
+            $this->documentEncoderMock->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
         } else {
-            $this->documentEncoder->expects(static::never())->method('encode');
+            $this->documentEncoderMock->expects(static::never())->method('encode');
+        }
+        if ($controllerResult instanceof ResourceCollectionResponse) {
+            $requestMock = $this->createMock(Request::class);
+            $queryMock = $this->createMock(ParameterBag::class);
+            $requestMock->query = $queryMock;
+            $event->expects(static::once())->method('getRequest')->willReturn($requestMock);
         }
 
         $this->viewResponseSubscriber->buildView($event);
@@ -102,7 +108,7 @@ final class ViewResponseSubscriberTest extends TestCase
         $event = $this->createMock(ViewEvent::class);
         $event->expects(static::once())->method('getControllerResult')->willReturn(new ResourceCollection([]));
         $event->expects(static::never())->method('setResponse');
-        $this->documentEncoder->expects(static::never())->method('encode');
+        $this->documentEncoderMock->expects(static::never())->method('encode');
 
         $this->viewResponseSubscriber->buildView($event);
     }

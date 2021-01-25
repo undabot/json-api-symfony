@@ -19,11 +19,11 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceValidationErrorsResponse;
+use Undabot\SymfonyJsonApi\Service\Pagination\PaginationLinkBuilder;
 
 class ViewResponseSubscriber implements EventSubscriberInterface
 {
-    /** @var DocumentToPhpArrayEncoderInterface */
-    private $documentEncoder;
+    private DocumentToPhpArrayEncoderInterface $documentEncoder;
 
     public function __construct(DocumentToPhpArrayEncoderInterface $documentEncoder)
     {
@@ -47,7 +47,7 @@ class ViewResponseSubscriber implements EventSubscriberInterface
                 null,
                 $data->getMeta(),
                 $this->buildJsonApi(),
-                $data->getLinks(),
+                (new PaginationLinkBuilder())->createLinks($event->getRequest(), $data),
                 $data->getIncludedResources()
             );
 

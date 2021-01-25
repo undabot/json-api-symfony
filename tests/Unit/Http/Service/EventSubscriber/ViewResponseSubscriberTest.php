@@ -8,6 +8,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
@@ -33,13 +34,13 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
  */
 final class ViewResponseSubscriberTest extends TestCase
 {
-    private MockObject $documentEncoder;
+    private MockObject $documentEncoderMock;
     private ViewResponseSubscriber$viewResponseSubscriber;
 
     protected function setUp(): void
     {
-        $this->documentEncoder = $this->createMock(DocumentToPhpArrayEncoderInterface::class);
-        $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoder);
+        $this->documentEncoderMock = $this->createMock(DocumentToPhpArrayEncoderInterface::class);
+        $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoderMock);
     }
 
     /**
@@ -52,13 +53,13 @@ final class ViewResponseSubscriberTest extends TestCase
         $event = new ViewEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             Request::create('http://localhost:8000/web/v1/posts'),
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $controllerResult,
         );
         if ($shouldEncode) {
-            $this->documentEncoder->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
+            $this->documentEncoderMock->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
         } else {
-            $this->documentEncoder->expects(static::never())->method('encode');
+            $this->documentEncoderMock->expects(static::never())->method('encode');
         }
 
         $this->viewResponseSubscriber->buildView($event);
@@ -107,11 +108,10 @@ final class ViewResponseSubscriberTest extends TestCase
         $event = new ViewEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             Request::create('http://localhost:8000/web/v1/posts'),
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             new ResourceCollection([]),
         );
-
-        $this->documentEncoder->expects(static::never())->method('encode');
+        $this->documentEncoderMock->expects(static::never())->method('encode');
 
         $this->viewResponseSubscriber->buildView($event);
     }

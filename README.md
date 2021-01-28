@@ -125,12 +125,17 @@ There isnt any syncing, the filesystem is pointed to the 2 locations at the same
 A script called dev.sh can be used to manage the image. Here are the avaliable commands:
 
 - ./dev.sh build
+
       used to build base dev docker image, and to install composer and dependencies at first run
 - ./dev.sh run
+
       starts the dev container
 - ./dev.sh stop
+
       stops the dev container
 - ./dev.sh ssh
+
       attaches the container shell to the terminal so that you can execute commands inside of the container
 - ./dev.sh test
+      
       run tests inside of the running container

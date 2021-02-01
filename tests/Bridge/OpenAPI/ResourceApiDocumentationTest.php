@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Filter\Filter;
@@ -21,18 +20,16 @@ use Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Model\Tag;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory
  *
  * @small
  */
 final class ResourceApiDocumentationTest extends TestCase
 {
-    /** @var ResourceSchemaFactory */
-    private $resourceSchemaFactory;
+    private ResourceSchemaFactory $resourceSchemaFactory;
 
     protected function setUp(): void
     {
-        AnnotationRegistry::registerLoader('class_exists');
         $metadataFactory = new ResourceMetadataFactory(new AnnotationReader());
         $attributeSchemaFactory = new AttributeSchemaFactory();
         $relationshipSchemaFactory = new RelationshipSchemaFactory();
@@ -82,7 +79,27 @@ final class ResourceApiDocumentationTest extends TestCase
             )
             ->addToApi($api);
 
-        echo json_encode($api->toOpenApi(), JSON_PRETTY_PRINT);
-        exit;
+        $documentation = $api->toOpenApi();
+
+        static::assertIsArray($documentation);
+        static::assertArrayHasKey('openapi', $documentation);
+        static::assertSame('3.0.0', $documentation['openapi']);
+        static::assertArrayHasKey('info', $documentation);
+        static::assertArrayHasKey('description', $documentation['info']);
+        static::assertArrayHasKey('version', $documentation['info']);
+        static::assertArrayHasKey('title', $documentation['info']);
+        static::assertSame('Example API documentation for JSON:API', $documentation['info']['description']);
+        static::assertSame('1.0.0', $documentation['info']['version']);
+        static::assertSame('Test API', $documentation['info']['title']);
+        static::assertArrayHasKey('paths', $documentation);
+        static::assertArrayHasKey('/articles', $documentation['paths']);
+        static::assertArrayHasKey('get', $documentation['paths']['/articles']);
+        static::assertArrayHasKey('summary', $documentation['paths']['/articles']['get']);
+        static::assertSame('List article', $documentation['paths']['/articles']['get']['summary']);
+        static::assertArrayHasKey('operationId', $documentation['paths']['/articles']['get']);
+        static::assertSame('listArticleCollection', $documentation['paths']['/articles']['get']['operationId']);
+        static::assertArrayHasKey('description', $documentation['paths']['/articles']['get']);
+        static::assertSame('List collection of article', $documentation['paths']['/articles']['get']['description']);
+        static::assertArrayHasKey('parameters', $documentation['paths']['/articles']['get']);
     }
 }

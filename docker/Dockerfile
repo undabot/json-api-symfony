@@ -1,10 +1,11 @@
-FROM php:7.4-fpm as build-stage
+FROM php:8.0.1-fpm as build-stage
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
     zip \
     wget \
     unzip \
+    nano \
     zlib1g-dev libicu-dev g++
 
 RUN docker-php-ext-configure intl

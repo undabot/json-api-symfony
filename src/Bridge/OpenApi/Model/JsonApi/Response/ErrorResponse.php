@@ -10,21 +10,29 @@ class ErrorResponse implements Response
 {
     public function getStatusCode(): int
     {
-        // TODO: Implement getStatusCode() method.
+        return 500;
     }
 
     public function getContentType(): string
     {
-        // TODO: Implement getContentType() method.
+        return 'application/vnd.api+json';
     }
 
     public function getDescription(): ?string
     {
-        // TODO: Implement getDescription() method.
+        return 'Error response';
     }
 
     public function toOpenApi(): array
     {
-        // TODO: Implement toOpenApi() method.
+        return [
+            'errors' => [
+                [
+                    'code' => 'Code',
+                    'title' => 'Error',
+                    'detail' => 'Error',
+                ],
+            ],
+        ];
     }
 }

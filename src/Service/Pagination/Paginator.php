@@ -15,7 +15,7 @@ class Paginator implements PaginatorInterface
         QueryBuilder $queryBuilder,
         int $offset,
         int $size,
-        $fetchJoinCollection = true
+        bool $fetchJoinCollection = true
     ): DoctrinePaginator {
         $queryBuilder
             ->setFirstResult($offset)

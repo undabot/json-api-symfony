@@ -6,7 +6,7 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper;
 
 class TypeHelper
 {
-    private static $map = [
+    private static array $map = [
         'bool' => 'boolean',
         'int' => 'integer',
         'float' => 'number',

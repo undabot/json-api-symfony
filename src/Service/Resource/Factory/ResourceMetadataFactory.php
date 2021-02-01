@@ -12,7 +12,7 @@ use ReflectionException;
 use ReflectionProperty;
 use Symfony\Component\Validator\Constraint;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
-use Undabot\SymfonyJsonApi\Model\Resource\Annotation as Annotation;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\AttributeMetadata;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMappingException;
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\RelationshipMetadata;
@@ -22,8 +22,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint as JsonApiCons
 
 class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
-    /** @var Reader */
-    private $reader;
+    private Reader $reader;
 
     public function __construct(Reader $reader)
     {
@@ -34,9 +33,14 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
      * @throws AnnotationException
      * @throws ReflectionException
      * @throws InvalidResourceMappingException
+     * @throws \InvalidArgumentException
      */
     public function getClassMetadata(string $class): ResourceMetadata
     {
+        if (false === class_exists($class)) {
+            throw new \InvalidArgumentException('Given class does not exists');
+        }
+
         $reflection = new ReflectionClass($class);
 
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
@@ -85,6 +89,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             $propertyAnnotations = $this->reader->getPropertyAnnotations($property);
             $propertyAnnotations = new ArrayCollection($propertyAnnotations);
 
+            /** @var array<int,Constraint> $constraintAnnotations */
             $constraintAnnotations = $propertyAnnotations->filter(static function ($annotation) {
                 return $annotation instanceof Constraint;
             })->getValues();
@@ -119,17 +124,21 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             }
 
             if (false === $attributeAnnotations->isEmpty()) {
+                /** @var Annotation\Attribute $attributeAnnotation */
+                $attributeAnnotation = $attributeAnnotations->first();
                 $attributeMetadata[] = $this->buildAttributeMetadata(
                     $property,
-                    $attributeAnnotations->first(),
+                    $attributeAnnotation,
                     $constraintAnnotations
                 );
             }
 
             if (false === $relationshipAnnotations->isEmpty()) {
+                /** @var Annotation\Relationship $relationshipAnnotation */
+                $relationshipAnnotation = $relationshipAnnotations->first();
                 $relationshipMetadata[] = $this->buildRelationshipMetadata(
                     $property,
-                    $relationshipAnnotations->first(),
+                    $relationshipAnnotation,
                     $constraintAnnotations
                 );
             }

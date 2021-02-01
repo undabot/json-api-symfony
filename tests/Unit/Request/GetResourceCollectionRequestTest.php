@@ -21,14 +21,9 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
  */
 final class GetResourceCollectionRequestTest extends TestCase
 {
-    /** @var MockObject|RequestFactory */
-    private $requestFactoryMock;
-
-    /** @var MockObject|Request */
-    private $requestMock;
-
-    /** @var MockObject|ParameterBag */
-    private $parameterBagMock;
+    private RequestFactory $requestFactory;
+    private MockObject $requestMock;
+    private MockObject $parameterBagMock;
 
     protected function setUp(): void
     {
@@ -38,7 +33,7 @@ final class GetResourceCollectionRequestTest extends TestCase
 
         $resourceEncoder = $this->createMock(PhpArrayToResourceEncoderInterface::class);
         $requestValidatorMock = $this->createMock(RequestValidator::class);
-        $this->requestFactoryMock = new RequestFactory(
+        $this->requestFactory = new RequestFactory(
             $resourceEncoder,
             $requestValidatorMock
         );
@@ -50,7 +45,7 @@ final class GetResourceCollectionRequestTest extends TestCase
 //        $requestMock = $this->createMock(Request::class);
         $this->parameterBagMock->method('get')->willReturn(null);
 
-        $getResourceCollectionRequest = $this->requestFactoryMock->getResourceCollectionRequest($this->requestMock);
+        $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($this->requestMock);
         static::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
         static::assertNull($getResourceCollectionRequest->getPagination());
@@ -62,9 +57,6 @@ final class GetResourceCollectionRequestTest extends TestCase
 
     public function testItWithAllValidParametersCanBeConstructed(): void
     {
-//        $parameterBagMock = $this->createMock(ParameterBag::class);
-//        $requestMock = $this->createMock(Request::class);
-
         $queryParamsMap = [
             ['page', null, ['number' => 3, 'size' => 10]],
             ['filter', null, ['priceMin' => 3, 'priceMax' => 10.5, 'name' => 'John']],
@@ -84,7 +76,7 @@ final class GetResourceCollectionRequestTest extends TestCase
         });
         $this->requestMock->query = $this->parameterBagMock;
 
-        $getResourceCollectionRequest = $this->requestFactoryMock->getResourceCollectionRequest($this->requestMock);
+        $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($this->requestMock);
         static::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
         static::assertSame(10, $getResourceCollectionRequest->getPagination()->getSize());

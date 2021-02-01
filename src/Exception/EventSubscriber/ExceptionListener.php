@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Exception\EventSubscriber;
 
-use Symfony\Component\Debug\Exception\FlattenException;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
@@ -31,11 +30,7 @@ class ExceptionListener
 
     public function onKernelException(ExceptionEvent $event): void
     {
-        if (method_exists($event, 'getThrowable')) {
-            $exception = $event->getThrowable();
-        } else {
-            $exception = $event->getException();
-        }
+        $exception = $event->getThrowable();
 
         if ($exception instanceof ModelInvalid) {
             $responseModel = ResourceValidationErrorsResponse::fromException($exception);
@@ -48,9 +43,9 @@ class ExceptionListener
         }
 
         if (
-            ($exception instanceof ClientGeneratedIdIsNotAllowedException) ||
-            ($exception instanceof ResourceIdValueMismatch) ||
-            ($exception instanceof ResourceTypeValueMismatch)
+            ($exception instanceof ClientGeneratedIdIsNotAllowedException)
+            || ($exception instanceof ResourceIdValueMismatch)
+            || ($exception instanceof ResourceTypeValueMismatch)
         ) {
             $errorCollection = new ErrorCollection([
                 $this->buildError($exception),
@@ -102,24 +97,16 @@ class ExceptionListener
 
     private function buildError(\Throwable $exception): Error
     {
-        if (class_exists('\Symfony\Component\ErrorHandler\Exception\FlattenException')) {
-            /** @var callable $callable */
-            $callable = ['Symfony\Component\ErrorHandler\Exception\FlattenException', 'createFromThrowable'];
-            $e = \call_user_func($callable, $exception);
-        } else {
-            $e = FlattenException::createFromThrowable($exception);
-        }
-
         return new Error(
             null,
             null,
             null,
             null,
-            $e->getMessage(),
+            $exception->getMessage(),
             sprintf(
                 'Exception %s: "%s"',
-                $e->getClass(),
-                $e->getMessage()
+                \get_class($exception),
+                $exception->getMessage()
             )
         );
     }

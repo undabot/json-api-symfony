@@ -17,18 +17,17 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory
  *
  * @small
  */
 final class ResourceReadSchemaRelationshipsTest extends TestCase
 {
     /** @var ResourceSchemaFactory */
-    private $resourceSchemaFactory;
+    private ResourceSchemaFactory $resourceSchemaFactory;
 
     protected function setUp(): void
     {
-        AnnotationRegistry::registerLoader('class_exists');
         $metadataFactory = new ResourceMetadataFactory(new AnnotationReader());
         $attributeSchemaFactory = new AttributeSchemaFactory();
         $relationshipSchemaFactory = new RelationshipSchemaFactory();
@@ -53,7 +52,8 @@ final class ResourceReadSchemaRelationshipsTest extends TestCase
 
         $resourceSchema = $resourceReadSchema->toOpenApi();
         static::assertIsArray($resourceSchema);
-        var_dump($resourceSchema);
-        exit;
+        //var_dump($resourceSchema);
+
+        //exit;
     }
 }

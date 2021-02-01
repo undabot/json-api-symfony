@@ -138,4 +138,10 @@ A script called dev.sh can be used to manage the image. Here are the avaliable c
       attaches the container shell to the terminal so that you can execute commands inside of the container
 - ./dev.sh test
       
-      run tests inside of the running container
+      run php unit tests inside of the running container
+- ./dev.sh qc
+
+      executes qc tests
+
+- ./dev.sh install
+      executes composer install --optimize-autoloader

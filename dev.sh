@@ -31,10 +31,17 @@ install_deps () {
 }
 
 run_tests () {
-  $EXEC -c "composer install --optimize-autoloader"
+#  $EXEC -c "phpdbg -qrr ./vendor/bin/phpunit"
+  $EXEC -c "vendor/bin/phpunit tests"
+}
+
+run_qc () {
   $EXEC -c "composer lint"
   $EXEC -c "composer phpstan"
-  $EXEC -c "phpdbg -qrr ./vendor/bin/phpunit"
+}
+
+run_install () {
+  $EXEC -c "composer install --optimize-autoloader"
 }
 
 case $1 in
@@ -48,4 +55,6 @@ case $1 in
       stop) stop_container ;;
       ssh) ssh_container ;;
       test) run_tests ;;
+      install) run_install ;;
+      qc) run_qc ;;
 esac

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
     ->exclude('vendor')
-    ->notPath('src/DependencyInjection/Configuration.php')
     ->in(__DIR__);
 
 return PhpCsFixer\Config::create()
@@ -35,7 +34,7 @@ return PhpCsFixer\Config::create()
                 'assertions' => [
                     'assertAttributeEquals',
                     'assertAttributeNotEquals',
-//                    'assertEquals',
+//                    'assertEquals', // This will replace all assertEquals with assertSame that can affect array comparisons
                     'assertNotEquals',
                 ],
             ],
@@ -56,9 +55,10 @@ return PhpCsFixer\Config::create()
             'php_unit_size_class' => true,
             'phpdoc_to_return_type' => true,
             'static_lambda' => true,
-            'phpdoc_align' => '',
-            'concat_space' => ['spacing' => 'one'],
-            'phpdoc_to_comment' => false,
+            'phpdoc_to_comment' => false, // This allows us some flexibility with PhpStan type resolution
+            'concat_space' => [
+                'spacing' => 'one',
+            ],
         ]
     )
     ->setFinder($finder);

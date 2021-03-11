@@ -1,10 +1,11 @@
-FROM php:7.4-fpm as build-stage
+FROM php:8.0.1-fpm as build-stage
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
     zip \
     wget \
     unzip \
+    nano \
     zlib1g-dev libicu-dev g++
 
 RUN docker-php-ext-configure intl
@@ -18,7 +19,7 @@ RUN composer --version
 
 # Install XDebug
 RUN pecl install -f xdebug \
-    && docker-php-ext-enable xdebug 
+    && docker-php-ext-enable xdebug
 ADD docker/.dev_files/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 WORKDIR /opt/app

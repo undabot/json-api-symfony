@@ -39,9 +39,9 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param mixed[] $primaryData
-     * @param null|mixed[] $includedData
-     * @param null|array<string, mixed> $meta
+     * @param mixed[]                                 $primaryData
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
      * @throws Exception
@@ -65,7 +65,7 @@ abstract class AbstractResponder
     /**
      * Opinionated collection responder that adds meta information about total count of models, used for pagination.
      *
-     * @param null|array<string, mixed> $meta
+     * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
      * @throws Exception
@@ -88,10 +88,10 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param null|mixed[] $includedData
-     * @param null|array<string, mixed> $meta
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed $primaryData
+     * @param mixed                                   $primaryData
      *
      * @throws Exception
      */
@@ -117,10 +117,10 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param null|mixed[] $includedData
-     * @param null|array<string, mixed> $meta
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed $primaryData
+     * @param mixed                                   $primaryData
      *
      * @throws Exception
      */
@@ -141,10 +141,10 @@ abstract class AbstractResponder
     }
 
     /**
-     * @param null|mixed[] $includedData
-     * @param null|array<string, mixed> $meta
+     * @param null|mixed[]                            $includedData
+     * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed $primaryData
+     * @param mixed                                   $primaryData
      *
      * @throws Exception
      */

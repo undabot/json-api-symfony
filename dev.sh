@@ -11,23 +11,23 @@ build_base_docker_image () {
 
 run_container () {
   docker run --name $CONTAINERNAME --mount type=bind,source="$(pwd)",target=/opt/app -d $PROJECTNAME
-} 
+}
 
 stop_container () {
-  docker stop $CONTAINERNAME > /dev/null 2>&1 
-  docker container rm $CONTAINERNAME 
+  docker stop $CONTAINERNAME > /dev/null 2>&1
+  docker container rm $CONTAINERNAME
 }
 
 ssh_container(){
-  $EXEC 
+  $EXEC
 }
 
 install_composer () {
-  $EXEC -c "chmod u+x /var/www/html/install-composer.sh && /var/www/html/install-composer.sh" 
+  $EXEC -c "chmod u+x /var/www/html/install-composer.sh && /var/www/html/install-composer.sh"
 }
 
 install_deps () {
-  $EXEC -c "cd /opt/app && composer validate --strict && composer outdated --strict && composer install --no-dev --optimize-autoloader"
+  $EXEC -c "cd /opt/app && composer validate --strict && composer outdated --strict && composer install --optimize-autoloader"
 }
 
 run_tests () {
@@ -46,7 +46,7 @@ run_install () {
 
 case $1 in
       build) build_base_docker_image
-             stop_container 
+             stop_container
              run_container
              install_composer
              install_deps

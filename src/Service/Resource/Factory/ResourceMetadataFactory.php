@@ -220,7 +220,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
-     * @param AttributeMetadata[] $attributeMetadata
+     * @param AttributeMetadata[]    $attributeMetadata
      * @param RelationshipMetadata[] $relationshipMetadata
      *
      * @throws InvalidResourceMappingException

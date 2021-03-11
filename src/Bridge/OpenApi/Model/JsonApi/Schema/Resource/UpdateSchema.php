@@ -21,7 +21,7 @@ class UpdateSchema implements ResourceSchema
     private $relationships;
 
     /**
-     * @param AttributeSchema[] $attributes
+     * @param AttributeSchema[]    $attributes
      * @param RelationshipSchema[] $relationships
      */
     public function __construct(string $resourceType, array $attributes, array $relationships)

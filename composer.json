@@ -4,28 +4,29 @@
     "type": "symfony-bundle",
     "license": "MIT",
     "require": {
-        "php": "^7.4||^8",
+        "php": "^8",
         "ext-json": "*",
-        "undabot/json-api-core": "^2.0",
+        "undabot/json-api-core": "^2.1",
         "symfony/http-kernel": "^5.2",
         "symfony/validator": "^5.2",
         "symfony/orm-pack": "^2.1",
-        "doctrine/annotations": "^1.11",
+        "doctrine/annotations": "^1.12",
         "symfony/property-access": "^5.2",
         "symfony/serializer": "^5.2",
         "symfony/yaml": "^5.2",
         "ramsey/uuid": "^4.1",
         "beberlei/assert": "^3.3",
-        "zantolov/toolbelt": "^0.0.1",
-        "sensio/framework-extra-bundle": "^5.6"
+        "sensio/framework-extra-bundle": "^6.1"
     },
     "require-dev": {
         "roave/security-advisories": "dev-master",
-        "friendsofphp/php-cs-fixer": "^2.18",
         "phpstan/phpstan-phpunit": "^0.12",
-        "phpstan/phpstan": "^0.12",
         "phpunit/phpunit": "^9.5",
-        "zantolov/toolbelt-dev": "^0.0.4"
+        "friendsofphp/php-cs-fixer": "^2.18",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan-beberlei-assert": "^0.12",
+        "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
     "repositories": [
         {

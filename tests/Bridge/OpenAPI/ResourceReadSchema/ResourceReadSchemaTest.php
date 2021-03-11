@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\ResourceReadSchema;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints as Assert;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\AttributeSchemaFactory;

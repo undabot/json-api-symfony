@@ -49,7 +49,7 @@
             "php-cs-fixer fix --diff --ansi --dry-run"
         ],
         "phpstan": [
-            "phpstan analyse -n --ansi --no-progress"
+            "php -d memory_limit=-1 vendor/bin/phpstan analyse -n --ansi --no-progress"
         ],
         "test": [
             "phpunit"

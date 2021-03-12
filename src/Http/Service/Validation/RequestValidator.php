@@ -16,7 +16,8 @@ use Undabot\JsonApi\Definition\Exception\Request\UnsupportedQueryStringParameter
 
 class RequestValidator implements RequestValidatorInterface
 {
-    private $supportedQueryParamNames = [
+    /** @var array<int,string> */
+    private array $supportedQueryParamNames = [
         'include',
         'sort',
         'filter',
@@ -34,11 +35,10 @@ class RequestValidator implements RequestValidatorInterface
      */
     public function assertValidRequest(Request $request): void
     {
-        return;
         /*
          * Servers MUST respond with a 415 Unsupported Media Type status code if a request specifies the header
          * Content-Type: application/vnd.api+json with any media type parameters.
-         */
+         *
         if ($request->headers->has('Content-Type') && \is_string($request->headers->get('Content-Type'))) {
             $contentTypeHeader = explode(';', $request->headers->get('Content-Type'));
 
@@ -58,7 +58,7 @@ class RequestValidator implements RequestValidatorInterface
         /*
          * Servers MUST respond with a 406 Not Acceptable status code if a request’s Accept header contains the
          * JSON:API media type and all instances of that media type are modified with media type parameters.
-         */
+         *
         if (true === $request->headers->has('Accept')) {
             $accepts = $request->headers->get('Accept');
 
@@ -80,7 +80,7 @@ class RequestValidator implements RequestValidatorInterface
          * does not know how to process it as a query parameter from this specification, it MUST return 400 Bad Request.
          *
          * @see https://jsonapi.org/format/#query-parameters
-         */
+         *
         $queryParams = $request->query->all();
         $queryParamNames = array_keys($queryParams);
         $unsupportedQueryParams = array_diff($queryParamNames, $this->supportedQueryParamNames);
@@ -90,6 +90,7 @@ class RequestValidator implements RequestValidatorInterface
 
             throw new UnsupportedQueryStringParameterGivenException($message);
         }
+        */
     }
 
     /**

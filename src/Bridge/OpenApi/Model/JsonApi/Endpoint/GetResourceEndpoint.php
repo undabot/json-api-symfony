@@ -33,7 +33,7 @@ class GetResourceEndpoint implements Endpoint
     /**
      * @param ReadSchema[] $includes
      * @param null|mixed[] $fields
-     * @param mixed[] $errorResponses
+     * @param mixed[]      $errorResponses
      */
     public function __construct(
         ReadSchema $readSchema,

@@ -6,7 +6,12 @@ namespace Undabot\JsonApi\Tests\Unit\Http\Service\EventSubscriber;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -28,11 +33,8 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
  */
 final class ViewResponseSubscriberTest extends TestCase
 {
-    /** @var MockObject */
-    private $documentEncoder;
-
-    /** @var ViewResponseSubscriber */
-    private $viewResponseSubscriber;
+    private MockObject $documentEncoder;
+    private ViewResponseSubscriber$viewResponseSubscriber;
 
     protected function setUp(): void
     {
@@ -47,9 +49,12 @@ final class ViewResponseSubscriberTest extends TestCase
         object $controllerResult,
         bool $shouldEncode
     ): void {
-        $event = $this->createMock(ViewEvent::class);
-        $event->expects(static::once())->method('getControllerResult')->willReturn($controllerResult);
-        $event->expects(static::once())->method('setResponse');
+        $event = new ViewEvent(
+            new HttpKernel(new EventDispatcher(), new ControllerResolver()),
+            Request::create('http://localhost:8000/web/v1/posts'),
+            HttpKernelInterface::MASTER_REQUEST,
+            $controllerResult,
+        );
         if ($shouldEncode) {
             $this->documentEncoder->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
         } else {
@@ -99,9 +104,13 @@ final class ViewResponseSubscriberTest extends TestCase
 
     public function testBuildViewWillNotSetResponseInEventGivenValidControllerResultButUnsupportedControllerResult(): void
     {
-        $event = $this->createMock(ViewEvent::class);
-        $event->expects(static::once())->method('getControllerResult')->willReturn(new ResourceCollection([]));
-        $event->expects(static::never())->method('setResponse');
+        $event = new ViewEvent(
+            new HttpKernel(new EventDispatcher(), new ControllerResolver()),
+            Request::create('http://localhost:8000/web/v1/posts'),
+            HttpKernelInterface::MASTER_REQUEST,
+            new ResourceCollection([]),
+        );
+
         $this->documentEncoder->expects(static::never())->method('encode');
 
         $this->viewResponseSubscriber->buildView($event);

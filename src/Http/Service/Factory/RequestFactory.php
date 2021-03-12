@@ -21,11 +21,8 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
 class RequestFactory
 {
-    /** @var PhpArrayToResourceEncoderInterface */
-    private $resourceEncoder;
-
-    /** @var RequestValidator */
-    private $requestValidator;
+    private PhpArrayToResourceEncoderInterface$resourceEncoder;
+    private RequestValidator$requestValidator;
 
     public function __construct(
         PhpArrayToResourceEncoderInterface $resourceEncoder,
@@ -80,6 +77,7 @@ class RequestFactory
             $include = explode(',', $includeString);
         }
 
+        /** @var array<string,string> $fields */
         $fields = $request->query->get(GetResourceRequest::FIELDS_KEY, null);
 
         return new GetResourceRequest($id, $include, $fields);
@@ -93,21 +91,26 @@ class RequestFactory
         $this->requestValidator->assertValidRequest($request);
 
         $sortSet = $request->query->has(GetResourceCollectionRequest::SORT_KEY)
-            ? SortSet::make($request->query->get(GetResourceCollectionRequest::SORT_KEY))
+            ? SortSet::make($request->query->get(GetResourceCollectionRequest::SORT_KEY) ?? '')
             : null;
 
-        $pagination = $request->query->has(GetResourceCollectionRequest::PAGINATION_KEY)
-            ? (new PaginationFactory())->fromArray($request->query->get(GetResourceCollectionRequest::PAGINATION_KEY))
+        /** @var array<string,int> $paginationFromRequest */
+        $paginationFromRequest = $request->query->get(GetResourceCollectionRequest::PAGINATION_KEY) ?? [];
+        $pagination = false === empty($paginationFromRequest)
+            ? (new PaginationFactory())->fromArray($paginationFromRequest)
             : null;
 
+        /** @var array<string,string> $filterFromRequest */
+        $filterFromRequest = $request->query->get(GetResourceCollectionRequest::FILTER_KEY);
         $filterSet = $request->query->has(GetResourceCollectionRequest::FILTER_KEY)
-            ? FilterSet::fromArray($request->query->get(GetResourceCollectionRequest::FILTER_KEY))
+            ? FilterSet::fromArray($filterFromRequest)
             : null;
 
         $include = $request->query->has(GetResourceCollectionRequest::INCLUDE_KEY)
-            ? explode(',', $request->query->get(GetResourceCollectionRequest::INCLUDE_KEY))
+            ? explode(',', $request->query->get(GetResourceCollectionRequest::INCLUDE_KEY) ?? '')
             : null;
 
+        /** @var array<int,string> $fields */
         $fields = $request->query->get(GetResourceCollectionRequest::FIELDS_KEY, null);
 
         return new GetResourceCollectionRequest($pagination, $filterSet, $sortSet, $include, $fields);

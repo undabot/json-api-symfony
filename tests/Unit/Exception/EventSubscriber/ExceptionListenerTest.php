@@ -6,9 +6,13 @@ namespace Undabot\JsonApi\Tests\Unit\Exception\EventSubscriber;
 
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Symfony\Component\HttpKernel\HttpKernel;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
@@ -27,11 +31,8 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolati
  */
 final class ExceptionListenerTest extends TestCase
 {
-    /** @var MockObject */
-    private $documentToPhpArrayEncoderInterfaceMock;
-
-    /** @var ExceptionListener */
-    private $exceptionListener;
+    private MockObject $documentToPhpArrayEncoderInterfaceMock;
+    private ExceptionListener $exceptionListener;
 
     protected function setUp(): void
     {
@@ -44,14 +45,17 @@ final class ExceptionListenerTest extends TestCase
      */
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupported(\Exception $exception): void
     {
-        $event = $this->createMock(ExceptionEvent::class);
+        $event = new ExceptionEvent(
+            new HttpKernel(new EventDispatcher(), new ControllerResolver()),
+            Request::create('http://localhost:8000/web/v1/posts'),
+            HttpKernelInterface::MASTER_REQUEST,
+            $exception,
+        );
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
             ->expects(static::once())
             ->method('encode')
             ->willReturn($data);
-
-        $event->expects(static::once())->method('setResponse');
 
         $this->exceptionListener->onKernelException($event);
     }

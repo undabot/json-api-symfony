@@ -9,7 +9,9 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\Resource
 
 class SchemaCollection
 {
-    private static $schemas = [];
+    /** @var array<string,mixed>
+     */
+    private static array $schemas = [];
 
     public static function add(string $resourceClass, ResourceSchemaSet $resourceSchemaSet): void
     {

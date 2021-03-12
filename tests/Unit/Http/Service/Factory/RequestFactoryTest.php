@@ -33,14 +33,9 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
  */
 final class RequestFactoryTest extends TestCase
 {
-    /** @var MockObject */
-    private $resourceEncoderMock;
-
-    /** @var MockObject */
-    private $requestValidatorMock;
-
-    /** @var RequestFactory */
-    private $requestFactory;
+    private MockObject $resourceEncoderMock;
+    private MockObject $requestValidatorMock;
+    private RequestFactory $requestFactory;
 
     protected function setUp(): void
     {

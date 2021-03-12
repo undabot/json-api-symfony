@@ -18,5 +18,6 @@ interface Endpoint extends Schema
     /** @return Response[] */
     public function getResponses(): array;
 
+    /** @return null|array<int,array<string,mixed>> */
     public function getParams(): ?array;
 }

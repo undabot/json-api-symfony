@@ -1,61 +1,63 @@
 {
-  "name": "undabot/json-api-symfony",
-  "description": "",
-  "type": "symfony-bundle",
-  "license": "MIT",
-  "require": {
-    "php": "^7.4",
-    "ext-json": "*",
-    "undabot/json-api-core": "^2.0",
-    "symfony/http-kernel": "^4.2 || ^5.0",
-    "symfony/validator": "^4.2 || ^5.0",
-    "symfony/orm-pack": "^1.0",
-    "doctrine/annotations": "^1.6",
-    "symfony/property-access": "^4.2 || ^5.0",
-    "symfony/serializer": "^4.2 || ^5.0",
-    "symfony/yaml": "^4.2 || ^5.0",
-    "ramsey/uuid": "^3.8",
-    "beberlei/assert": "^3.2",
-    "zantolov/toolbelt": "^0.0.1",
-    "sensio/framework-extra-bundle": "^5.4"
-  },
-  "require-dev": {
-    "friendsofphp/php-cs-fixer": "^2.16",
-    "phpstan/phpstan-phpunit": "^0.11.0",
-    "phpstan/phpstan": "^0.11.1",
-    "phpunit/phpunit": "^7.5",
-    "zantolov/toolbelt-dev": "^0.0.2"
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@gitlab.com:undabot/json-api-core.git"
-    }
-  ],
-  "autoload": {
-    "psr-4": {
-      "Undabot\\SymfonyJsonApi\\": "src/"
-    }
-  },
-  "autoload-dev": {
-    "psr-4": {
-      "Undabot\\SymfonyJsonApi\\Tests\\": "tests/"
-    }
-  },
-  "scripts": {
-    "lint": [
-      "php-cs-fixer fix --diff --ansi --dry-run"
+    "name": "undabot/json-api-symfony",
+    "description": "",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "require": {
+        "php": "^8",
+        "ext-json": "*",
+        "undabot/json-api-core": "^2.1",
+        "symfony/http-kernel": "^5.2",
+        "symfony/validator": "^5.2",
+        "symfony/orm-pack": "^2.1",
+        "doctrine/annotations": "^1.12",
+        "symfony/property-access": "^5.2",
+        "symfony/serializer": "^5.2",
+        "symfony/yaml": "^5.2",
+        "ramsey/uuid": "^4.1",
+        "beberlei/assert": "^3.3",
+        "sensio/framework-extra-bundle": "^6.1"
+    },
+    "require-dev": {
+        "roave/security-advisories": "dev-master",
+        "phpstan/phpstan-phpunit": "^0.12",
+        "phpunit/phpunit": "^9.5",
+        "friendsofphp/php-cs-fixer": "^2.18",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^0.12",
+        "phpstan/phpstan-beberlei-assert": "^0.12",
+        "thecodingmachine/phpstan-strict-rules": "^0.12"
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@gitlab.com:undabot/json-api-core.git"
+        }
     ],
-    "phpstan": [
-      "phpstan analyse -n --ansi --no-progress"
-    ],
-    "test": [
-      "phpunit"
-    ],
-    "qc": [
-      "@lint",
-      "@phpstan",
-      "@test"
-    ]
-  }
+    "autoload": {
+        "psr-4": {
+            "Undabot\\SymfonyJsonApi\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Undabot\\SymfonyJsonApi\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "lint": [
+            "php-cs-fixer fix --diff --ansi --dry-run"
+        ],
+        "phpstan": [
+            "php -d memory_limit=-1 vendor/bin/phpstan analyse -n --ansi --no-progress"
+        ],
+        "test": [
+            "php -d memory_limit=-1 vendor/bin/phpunit tests/"
+        ],
+        "qc": [
+            "@lint",
+            "@phpstan",
+            "@test"
+        ]
+    }
 }

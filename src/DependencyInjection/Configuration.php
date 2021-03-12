@@ -15,13 +15,12 @@ class Configuration implements ConfigurationInterface
 
         $treeBuilder
             ->getRootNode()
-                ->children()
-                    ->integerNode('exception_listener_priority')
-                        ->min(-255)
-                        ->max(255)
-                    ->end()
-                ->end()
-        ;
+            ->children()
+            ->integerNode('exception_listener_priority')
+            ->min(-255)
+            ->max(255)
+            ->end()
+            ->end();
 
         return $treeBuilder;
     }

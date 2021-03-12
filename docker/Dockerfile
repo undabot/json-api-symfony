@@ -1,10 +1,11 @@
-FROM php:7.4-fpm as build-stage
+FROM php:8.0.1-fpm as build-stage
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
     zip \
     wget \
     unzip \
+    nano \
     zlib1g-dev libicu-dev g++
 
 RUN docker-php-ext-configure intl
@@ -25,7 +26,7 @@ RUN composer status
 RUN composer validate --strict
 RUN composer outdated --strict
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader
 
 # Test stage
 FROM build-stage as test-stage
@@ -35,5 +36,5 @@ RUN composer install --optimize-autoloader
 
 RUN composer lint
 RUN composer phpstan
-RUN phpdbg -qrr ./vendor/bin/phpunit
-RUN cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
+#RUN phpdbg -qrr ./vendor/bin/phpunit test/
+#RUN cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"

@@ -18,11 +18,8 @@ use Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError;
  */
 final class ValidationViolationErrorTest extends TestCase
 {
-    /** @var MockObject */
-    private $violation;
-
-    /** @var ValidationViolationError */
-    private $validationViolationError;
+    private MockObject $violation;
+    private ValidationViolationError $validationViolationError;
 
     protected function setUp(): void
     {
@@ -63,12 +60,6 @@ final class ValidationViolationErrorTest extends TestCase
             null,
         ];
 
-        $objectWithToStringMethod = Uuid::uuid4();
-        yield 'Object with toString method provided' => [
-            $objectWithToStringMethod,
-            $objectWithToStringMethod,
-        ];
-
         yield 'Bool provided' => [
             true,
             null,
@@ -83,5 +74,13 @@ final class ValidationViolationErrorTest extends TestCase
             1.2,
             null,
         ];
+    }
+
+    public function testGetDetailWillReturnValidResponseGivenSupportedInvalidValueAsObjectWithToStringMethod(): void
+    {
+        $objectWithToStringMethod = Uuid::uuid4();
+        $this->violation->expects(static::once())->method('getInvalidValue')->willReturn($objectWithToStringMethod);
+
+        static::assertEquals($objectWithToStringMethod, $this->validationViolationError->getDetail());
     }
 }

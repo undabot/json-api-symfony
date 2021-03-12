@@ -22,7 +22,7 @@ class ReadSchema implements ResourceSchema
     private $relationships;
 
     /**
-     * @param AttributeSchema[] $attributes
+     * @param AttributeSchema[]    $attributes
      * @param RelationshipSchema[] $relationships
      */
     public function __construct(

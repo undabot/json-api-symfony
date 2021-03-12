@@ -1,12 +1,9 @@
 parameters:
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
     paths:
         - src/
     level: max
-#  symfony:
-#    container_xml_path: '%rootDir%/../../../var/cache/dev/srcApp_KernelDevDebugContainer.xml'
     ignoreErrors:
-        - '#Cannot cast Ramsey\\Uuid\\UuidInterface to string#'
         - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\).#'
 
-includes:
-    - vendor/ekino/phpstan-banned-code/extension.neon

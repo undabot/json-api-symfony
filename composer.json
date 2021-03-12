@@ -52,7 +52,7 @@
             "php -d memory_limit=-1 vendor/bin/phpstan analyse -n --ansi --no-progress"
         ],
         "test": [
-            "phpunit"
+            "php -d memory_limit=-1 vendor/bin/phpunit tests/"
         ],
         "qc": [
             "@lint",

@@ -36,5 +36,5 @@ RUN composer install --optimize-autoloader
 
 RUN composer lint
 RUN composer phpstan
-RUN phpdbg -qrr ./vendor/bin/phpunit test/
+#RUN phpdbg -qrr ./vendor/bin/phpunit test/
 RUN cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"

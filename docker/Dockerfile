@@ -26,7 +26,7 @@ RUN composer status
 RUN composer validate --strict
 RUN composer outdated --strict
 
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --optimize-autoloader
 
 # Test stage
 FROM build-stage as test-stage

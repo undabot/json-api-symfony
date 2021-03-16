@@ -5,6 +5,7 @@ cache:
 
 stages:
     - build
+    - test
 
 build:docker:
     stage: build
@@ -12,5 +13,23 @@ build:docker:
     image: docker:latest
     services:
         - docker:dind
+    before_script:
+        - docker login -u gitlab-ci-token -p $CI_BUILD_TOKEN $CI_REGISTRY
     script:
-        - docker build -f docker/Dockerfile .
+        - docker pull $CI_REGISTRY_IMAGE/base_image:latest
+        - docker build -f docker/Dockerfile -t $CI_REGISTRY_IMAGE/base_image:latest .
+        - docker push $CI_REGISTRY_IMAGE/base_image:latest
+
+test:
+    stage: test
+    only: [merge_requests, "/master/"]
+    when: on_success
+    tags:
+        - docker-build
+    image: $CI_REGISTRY_IMAGE/base_image:latest
+    script:
+        - composer install --no-ansi --no-interaction --no-progress --no-scripts --optimize-autoloader
+        - composer validate --no-check-publish --no-interaction --ansi
+        - composer run lint
+        - composer run qc
+        - vendor/bin/phpunit tests

@@ -1,6 +1,6 @@
 {
     "name": "undabot/json-api-symfony",
-    "description": "",
+    "description": "Allow symfony apps to easy handle JSON API compatible requests and responses",
     "type": "symfony-bundle",
     "license": "MIT",
     "require": {
@@ -19,7 +19,7 @@
         "sensio/framework-extra-bundle": "^6.1"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-master",
+        "roave/security-advisories": "dev-latest",
         "phpstan/phpstan-phpunit": "^0.12",
         "phpunit/phpunit": "^9.5",
         "friendsofphp/php-cs-fixer": "^2.18",
@@ -28,12 +28,6 @@
         "phpstan/phpstan-beberlei-assert": "^0.12",
         "thecodingmachine/phpstan-strict-rules": "^0.12"
     },
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "git@gitlab.com:undabot/json-api-core.git"
-        }
-    ],
     "autoload": {
         "psr-4": {
             "Undabot\\SymfonyJsonApi\\": "src/"

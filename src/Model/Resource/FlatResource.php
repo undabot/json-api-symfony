@@ -22,12 +22,12 @@ use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
  */
 class FlatResource
 {
-    /** @var ResourceInterface */
-    private $resource;
+    /** @var array<string,array> */
+    private array $relationshipMetas;
 
-    public function __construct(ResourceInterface $resource)
+    public function __construct(private ResourceInterface $resource)
     {
-        $this->resource = $resource;
+        $this->relationshipMetas = [];
     }
 
     /**
@@ -62,6 +62,7 @@ class FlatResource
 
         /** @var RelationshipInterface $relationship */
         foreach ($this->resource->getRelationships() as $relationship) {
+            $this->buildRelationshipMeta($relationship);
             $relationshipData = $relationship->getData();
 
             if (null === $relationshipData) {
@@ -79,6 +80,7 @@ class FlatResource
             if ($relationshipData instanceof ToOneRelationshipDataInterface && false === $relationshipData->isEmpty()) {
                 /** @var ResourceIdentifierInterface $data */
                 $data = $relationshipData->getData();
+
                 $flatRelationships[$relationship->getName()] = $data->getId();
 
                 continue;
@@ -128,5 +130,25 @@ class FlatResource
         }
 
         return $flatRelationships;
+    }
+
+    /** @return array<string,array<mixed,mixed>> */
+    public function getRelationshipMetas(): array
+    {
+        if (true === empty($this->relationshipMetas)) {
+            /** @var RelationshipInterface $relationship */
+            foreach ($this->resource->getRelationships() as $relationship) {
+                $this->buildRelationshipMeta($relationship);
+            }
+        }
+
+        return $this->relationshipMetas;
+    }
+
+    private function buildRelationshipMeta(RelationshipInterface $relationship): void
+    {
+        $this->relationshipMetas[$relationship->getName() . 'Meta'] = null === $relationship->getMeta()
+            ? []
+            : $relationship->getMeta()->getData();
     }
 }

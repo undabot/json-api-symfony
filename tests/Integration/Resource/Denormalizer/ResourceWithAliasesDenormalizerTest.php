@@ -158,7 +158,7 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         $this->serializer->denormalize($resource, AliasedResourceDto::class);
     }
 
-    public function testDenormalizationOfResourceWithExtraAttributeResultsWithException(): void
+    public function testDenormalizeWillReturnCorrectApiModelWithExtraAttributesIgnored(): void
     {
         $resource = new Resource(
             '1',
@@ -174,11 +174,12 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
                 ->get()
         );
 
-        $this->expectException(ResourceDenormalizationException::class);
-        $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        static::assertInstanceOf(AliasedResourceDto::class, $model);
+        static::assertObjectNotHasAttribute('extra', $model);
     }
 
-    public function testDenormalizationOfResourceWithExtraRelationshipResultsWithException(): void
+    public function testDenormalizeWillReturnCorrectApiModelWithExtraRelationshipsIgnored(): void
     {
         $resource = new Resource(
             '1',
@@ -194,8 +195,9 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
                 ->get()
         );
 
-        $this->expectException(ResourceDenormalizationException::class);
-        $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        static::assertInstanceOf(AliasedResourceDto::class, $model);
+        static::assertObjectNotHasAttribute('extras', $model);
     }
 
     public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized(): void

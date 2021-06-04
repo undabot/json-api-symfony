@@ -18,16 +18,10 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataF
 
 class ResourceDenormalizer
 {
-    /** @var ResourceMetadataFactoryInterface */
-    private $metadataFactory;
-
-    /** @var DenormalizerInterface */
-    private $denormalizer;
-
-    public function __construct(ResourceMetadataFactoryInterface $metadataFactory, DenormalizerInterface $denormalizer)
-    {
-        $this->metadataFactory = $metadataFactory;
-        $this->denormalizer = $denormalizer;
+    public function __construct(
+        private ResourceMetadataFactoryInterface $metadataFactory,
+        private DenormalizerInterface $denormalizer
+    ) {
     }
 
     /**
@@ -50,7 +44,7 @@ class ResourceDenormalizer
         try {
             /** @var ApiModel $result */
             $result = $this->denormalizer->denormalize($data, $class, null, [
-                AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => false,
+                AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true,
             ]);
         } catch (MissingConstructorArgumentsException $e) {
             throw new MissingDataValueResourceDenormalizationException(
@@ -85,6 +79,7 @@ class ResourceDenormalizer
         ];
         $data = array_merge($data, $flatResource->getAttributes());
         $data = array_merge($data, $flatResource->getRelationships());
+        $data = array_merge($data, $flatResource->getRelationshipMetas());
 
         /*
          * Resource has attribute and relationship names that can be different from the property name in the class.

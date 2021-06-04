@@ -16,7 +16,6 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\MissingDataValueResourceDenormalizationException;
-use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception\ResourceDenormalizationException;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
@@ -26,80 +25,29 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
  */
 class AliasedResourceDto implements ApiModel
 {
-    /**
-     * @var string
-     */
-    private $id;
-
-    /**
-     * @var string
-     * @JsonApi\Attribute(name="name")
-     */
-    private $title;
-
-    /**
-     * @var null|string
-     * @JsonApi\Attribute(name="description")
-     */
-    private $summary;
-
-    /**
-     * @var array
-     * @JsonApi\ToMany(name="tags", type="tag")
-     */
-    private $tagIds;
-
-    /**
-     * @var null|string
-     * @JsonApi\ToOne(name="owner", type="person")
-     */
-    private $ownerId;
-
-    public function __construct(string $id, string $title, ?string $summary, array $tagIds, ?string $ownerId)
-    {
-        $this->id = $id;
-        $this->title = $title;
-        $this->summary = $summary;
-        $this->tagIds = $tagIds;
-        $this->ownerId = $ownerId;
-    }
-
-    public function getId(): string
-    {
-        return $this->id;
-    }
-
-    public function getTitle(): string
-    {
-        return $this->title;
-    }
-
-    public function getSummary(): ?string
-    {
-        return $this->summary;
-    }
-
-    public function getTagIds(): array
-    {
-        return $this->tagIds;
-    }
-
-    public function getOwnerId(): ?string
-    {
-        return $this->ownerId;
+    public function __construct(
+        public string $id,
+        /** @JsonApi\Attribute(name="name") */
+        public string $title,
+        /** @JsonApi\Attribute(name="description") */
+        public ?string $summary,
+        /** @JsonApi\ToMany(name="tags", type="tag") */
+        public array $tagIds,
+        /** @JsonApi\ToOne(name="owner", type="person") */
+        public ?string $ownerId
+    ) {
     }
 }
 
 /**
  * @internal
- * @coversNothing
+ * @covers \Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer
  *
  * @small
  */
 final class ResourceWithAliasesDenormalizerTest extends TestCase
 {
-    /** @var ResourceDenormalizer */
-    private $serializer;
+    private ResourceDenormalizer $serializer;
 
     protected function setUp(): void
     {
@@ -133,10 +81,10 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
         static::assertInstanceOf(AliasedResourceDto::class, $dto);
 
-        static::assertSame('This is my title', $dto->getTitle());
-        static::assertSame('This is my summary', $dto->getSummary());
-        static::assertSame('p1', $dto->getOwnerId());
-        static::assertSame(['t1', 't2', 't3'], $dto->getTagIds());
+        static::assertSame('This is my title', $dto->title);
+        static::assertSame('This is my summary', $dto->summary);
+        static::assertSame('p1', $dto->ownerId);
+        static::assertSame(['t1', 't2', 't3'], $dto->tagIds);
     }
 
     public function testDenormalizationOfInvalidResourceResultsWithException(): void
@@ -158,7 +106,7 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         $this->serializer->denormalize($resource, AliasedResourceDto::class);
     }
 
-    public function testDenormalizationOfResourceWithExtraAttributeResultsWithException(): void
+    public function testDenormalizeWillReturnCorrectApiModelWithExtraAttributesIgnored(): void
     {
         $resource = new Resource(
             '1',
@@ -174,11 +122,12 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
                 ->get()
         );
 
-        $this->expectException(ResourceDenormalizationException::class);
-        $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        static::assertInstanceOf(AliasedResourceDto::class, $model);
+        static::assertObjectNotHasAttribute('extra', $model);
     }
 
-    public function testDenormalizationOfResourceWithExtraRelationshipResultsWithException(): void
+    public function testDenormalizeWillReturnCorrectApiModelWithExtraRelationshipsIgnored(): void
     {
         $resource = new Resource(
             '1',
@@ -194,8 +143,9 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
                 ->get()
         );
 
-        $this->expectException(ResourceDenormalizationException::class);
-        $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
+        static::assertInstanceOf(AliasedResourceDto::class, $model);
+        static::assertObjectNotHasAttribute('extras', $model);
     }
 
     public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized(): void
@@ -216,6 +166,6 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         /** @var AliasedResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
         static::assertInstanceOf(AliasedResourceDto::class, $dto);
-        static::assertNull($dto->getOwnerId());
+        static::assertNull($dto->ownerId);
     }
 }

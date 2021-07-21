@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKERFILE=docker/Dockerfile.dev
+DOCKERFILE=docker/Dockerfile
 PROJECTNAME=json_api_symfony_dev
 CONTAINERNAME=json_api_symfony
 EXEC="docker exec -it $CONTAINERNAME /bin/bash"
@@ -20,10 +20,6 @@ stop_container () {
 
 ssh_container(){
   $EXEC
-}
-
-install_composer () {
-  $EXEC -c "chmod u+x /var/www/html/install-composer.sh && /var/www/html/install-composer.sh"
 }
 
 install_deps () {
@@ -48,8 +44,8 @@ case $1 in
       build) build_base_docker_image
              stop_container
              run_container
-             install_composer
              install_deps
+             run_install
              stop_container;;
       run) run_container ;;
       stop) stop_container ;;

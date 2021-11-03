@@ -26,12 +26,6 @@
     "phpunit/phpunit": "^7.5",
     "zantolov/toolbelt-dev": "^0.0.2"
   },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "git@gitlab.com:undabot/json-api-core.git"
-    }
-  ],
   "autoload": {
     "psr-4": {
       "Undabot\\SymfonyJsonApi\\": "src/"

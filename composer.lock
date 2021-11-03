@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a9c0342fcedd51e58d0a89d9d613049d",
+    "content-hash": "61e15db5b3af74cf2f99cf5c3438c80e",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4100,16 +4100,16 @@
         },
         {
             "name": "undabot/json-api-core",
-            "version": "v2.0.0",
+            "version": "v2.0.1",
             "source": {
                 "type": "git",
-                "url": "https://gitlab.com/undabot/json-api-core.git",
-                "reference": "2d110cd79867a770cc9624015e45c7942fd872ff"
+                "url": "https://github.com/undabot/json-api-core.git",
+                "reference": "1cb8ffb72ba17179657f6d5a4f176ad96beaddcb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://gitlab.com/api/v4/projects/undabot%2Fjson-api-core/repository/archive.zip?sha=2d110cd79867a770cc9624015e45c7942fd872ff",
-                "reference": "2d110cd79867a770cc9624015e45c7942fd872ff",
+                "url": "https://api.github.com/repos/undabot/json-api-core/zipball/1cb8ffb72ba17179657f6d5a4f176ad96beaddcb",
+                "reference": "1cb8ffb72ba17179657f6d5a4f176ad96beaddcb",
                 "shasum": ""
             },
             "require": {
@@ -4131,31 +4131,15 @@
                     "Undabot\\JsonApi\\": "src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Undabot\\JsonApi\\Tests\\": "tests/"
-                }
-            },
-            "scripts": {
-                "lint": [
-                    "php-cs-fixer fix --diff --ansi --dry-run"
-                ],
-                "phpstan": [
-                    "phpstan analyse -n --ansi --no-progress"
-                ],
-                "test": [
-                    "phpunit"
-                ],
-                "qc": [
-                    "@lint",
-                    "@phpstan",
-                    "@test"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "Apache-2.0"
             ],
-            "time": "2020-05-15T12:10:23+00:00"
+            "support": {
+                "issues": "https://github.com/undabot/json-api-core/issues",
+                "source": "https://github.com/undabot/json-api-core/tree/v2.0.1"
+            },
+            "time": "2021-06-03T23:32:44+00:00"
         },
         {
             "name": "webimpress/safe-writer",
@@ -7050,5 +7034,6 @@
         "php": "^7.4",
         "ext-json": "*"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "2.0.0"
 }

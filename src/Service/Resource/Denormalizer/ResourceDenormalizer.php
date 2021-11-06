@@ -18,6 +18,8 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataF
 
 class ResourceDenormalizer
 {
+    private const DATA_FORMAT = 'json';
+
     public function __construct(
         private ResourceMetadataFactoryInterface $metadataFactory,
         private DenormalizerInterface $denormalizer
@@ -43,7 +45,7 @@ class ResourceDenormalizer
 
         try {
             /** @var ApiModel $result */
-            $result = $this->denormalizer->denormalize($data, $class, null, [
+            $result = $this->denormalizer->denormalize($data, $class, self::DATA_FORMAT, [
                 AbstractNormalizer::ALLOW_EXTRA_ATTRIBUTES => true,
             ]);
         } catch (MissingConstructorArgumentsException $e) {

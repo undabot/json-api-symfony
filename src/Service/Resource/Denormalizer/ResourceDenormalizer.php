@@ -18,13 +18,13 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataF
 
 class ResourceDenormalizer
 {
+    private const DATA_FORMAT = 'json';
+
     /** @var ResourceMetadataFactoryInterface */
     private $metadataFactory;
 
     /** @var DenormalizerInterface */
     private $denormalizer;
-
-    private const DATA_FORMAT = 'json';
 
     public function __construct(ResourceMetadataFactoryInterface $metadataFactory, DenormalizerInterface $denormalizer)
     {

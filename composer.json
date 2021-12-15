@@ -7,16 +7,16 @@
         "php": "^8",
         "ext-json": "*",
         "undabot/json-api-core": "^2.1",
-        "symfony/http-kernel": "^5.3",
-        "symfony/validator": "^5.3",
+        "symfony/http-kernel": "^6.0",
+        "symfony/validator": "^6.0",
         "symfony/orm-pack": "^2.1",
         "doctrine/annotations": "^1.12",
-        "symfony/property-access": "^5.3",
-        "symfony/yaml": "^5.3",
+        "symfony/property-access": "^6.0",
+        "symfony/yaml": "^6.0",
         "ramsey/uuid": "^4.1",
         "beberlei/assert": "^3.3",
         "sensio/framework-extra-bundle": "^6.1",
-        "symfony/serializer": "^5.3"
+        "symfony/serializer": "^6.0"
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",

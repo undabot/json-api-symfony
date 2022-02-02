@@ -71,14 +71,14 @@ class RequestFactory
     {
         $this->requestValidator->assertValidRequest($request);
 
-        $includeString = $request->query->get(GetResourceRequest::INCLUDE_KEY, null);
+        $includeString = $request->query->all()[GetResourceRequest::INCLUDE_KEY] ?? null;
         $include = null;
         if (null !== $includeString) {
             $include = explode(',', $includeString);
         }
 
-        /** @var array<string,string> $fields */
-        $fields = $request->query->get(GetResourceRequest::FIELDS_KEY, null);
+        /** @var null|array<string,string> $fields */
+        $fields = $request->query->all()[GetResourceRequest::FIELDS_KEY] ?? null;
 
         return new GetResourceRequest($id, $include, $fields);
     }
@@ -90,28 +90,26 @@ class RequestFactory
     {
         $this->requestValidator->assertValidRequest($request);
 
-        $sortSet = $request->query->has(GetResourceCollectionRequest::SORT_KEY)
-            ? SortSet::make($request->query->get(GetResourceCollectionRequest::SORT_KEY) ?? '')
-            : null;
+        $sortFromRequest = $request->query->all()[GetResourceCollectionRequest::SORT_KEY] ?? '';
+        $sortSet = (true === \is_string($sortFromRequest) && false === empty($sortFromRequest)) ? SortSet::make($sortFromRequest) : null;
 
         /** @var array<string,int> $paginationFromRequest */
-        $paginationFromRequest = $request->query->get(GetResourceCollectionRequest::PAGINATION_KEY) ?? [];
+        $paginationFromRequest = $request->query->all()[GetResourceCollectionRequest::PAGINATION_KEY] ?? [];
         $pagination = false === empty($paginationFromRequest)
             ? (new PaginationFactory())->fromArray($paginationFromRequest)
             : null;
 
-        /** @var array<string,string> $filterFromRequest */
-        $filterFromRequest = $request->query->get(GetResourceCollectionRequest::FILTER_KEY);
-        $filterSet = $request->query->has(GetResourceCollectionRequest::FILTER_KEY)
-            ? FilterSet::fromArray($filterFromRequest)
+        /** @var null|array<string,string> $filterFromRequest */
+        $filterFromRequest = $request->query->all()[GetResourceCollectionRequest::FILTER_KEY] ?? null;
+        $filterSet = null !== $filterFromRequest ? FilterSet::fromArray($filterFromRequest) : null;
+
+        $includeFromRequest = $request->query->all()[GetResourceCollectionRequest::INCLUDE_KEY] ?? '';
+        $include = (true === \is_string($includeFromRequest) && false === empty($includeFromRequest))
+            ? explode(',', $includeFromRequest)
             : null;
 
-        $include = $request->query->has(GetResourceCollectionRequest::INCLUDE_KEY)
-            ? explode(',', $request->query->get(GetResourceCollectionRequest::INCLUDE_KEY) ?? '')
-            : null;
-
-        /** @var array<int,string> $fields */
-        $fields = $request->query->get(GetResourceCollectionRequest::FIELDS_KEY, null);
+        /** @var null|array<int,string> $fields */
+        $fields = $request->query->all()[GetResourceCollectionRequest::FIELDS_KEY] ?? null;
 
         return new GetResourceCollectionRequest($pagination, $filterSet, $sortSet, $include, $fields);
     }

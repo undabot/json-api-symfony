@@ -41,9 +41,7 @@ final class GetResourceCollectionRequestTest extends TestCase
 
     public function testItWithoutAnyParametersCanBeConstructed(): void
     {
-//        $parameterBagMock = $this->createMock(ParameterBag::class);
-//        $requestMock = $this->createMock(Request::class);
-        $this->parameterBagMock->method('get')->willReturn(null);
+        $this->parameterBagMock->method('all')->willReturn([]);
 
         $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($this->requestMock);
         static::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
@@ -58,22 +56,15 @@ final class GetResourceCollectionRequestTest extends TestCase
     public function testItWithAllValidParametersCanBeConstructed(): void
     {
         $queryParamsMap = [
-            ['page', null, ['number' => 3, 'size' => 10]],
-            ['filter', null, ['priceMin' => 3, 'priceMax' => 10.5, 'name' => 'John']],
-            ['sort', null, 'name,-price,author.name'],
-            ['include', null, 'category,history,purchases'],
-            ['fields', null, ['author' => 'name,price,rating', 'book' => 'title,publisher']],
+            'page' => ['number' => 3, 'size' => 10],
+            'filter' => ['priceMin' => 3, 'priceMax' => 10.5, 'name' => 'John'],
+            'sort' => 'name,-price,author.name',
+            'include' => 'category,history,purchases',
+            'fields' => ['author' => 'name,price,rating', 'book' => 'title,publisher'],
         ];
 
-        $this->parameterBagMock->method('get')->willReturnMap($queryParamsMap);
+        $this->parameterBagMock->method('all')->willReturn($queryParamsMap);
 
-        $this->parameterBagMock->method('has')->willReturnCallback(static function ($param) use ($queryParamsMap) {
-            $filtered = array_filter($queryParamsMap, static function ($item) use ($param) {
-                return ($item[0] ?? null) === $param;
-            });
-
-            return 1 === \count($filtered);
-        });
         $this->requestMock->query = $this->parameterBagMock;
 
         $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($this->requestMock);

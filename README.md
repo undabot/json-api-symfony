@@ -8,11 +8,11 @@ This library is wrapper around Symfony framework and it use [json-api-core](http
 
 ## Returning the response
 
-### Read model
+### Read side
 
 Create read model which is class with annotations which you want to return to the client. For example if you want to return this JSON:API response:
 
-```
+```json
 {
 	"links": {
 		"self": "http://example.com/articles",
@@ -32,7 +32,7 @@ Create read model which is class with annotations which you want to return to th
 					"related": "http://example.com/articles/01FTZBPQ1EY5P5N3QW4ZHHFCM3/author"
 				},
 				"data": {
-					"type": "people",
+					"type": "authors",
 					"id": "01FTZBN5HZ590S48WM0VEYFMBY"
 				}
 			},
@@ -155,7 +155,7 @@ namespace App;
 class Controller
 {
     public function get(
-        CmsResponder $responder
+        Responder $responder,
     ): ResourceCollectionResponse {
         ... # fetch array of entities
 
@@ -238,6 +238,226 @@ Accepts data (single object for example) that will be converted to a ResourceUpd
 public function resourceDeleted(): ResourceDeletedResponse
 ```
 ResourceDeletedResponse response will be returned which is basically [204 HTTP status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204) code with no content. 
+
+#### Includes
+
+We often need to return objects related to given resource. In our example maybe we want to include all comments and author allowing client to read their data, not just see id and type which is returned inside relationship key (pointer to resource). So we would like to return response like this:
+
+```json
+{
+	"links": {
+		"self": "http://example.com/articles",
+		"next": "http://example.com/articles?page[offset]=2",
+		"last": "http://example.com/articles?page[offset]=10"
+	},
+	"data": [{
+		"type": "articles",
+		"id": "01FTZBPQ1EY5P5N3QW4ZHHFCM3",
+		"attributes": {
+			"title": "JSON:API Symfony rocks!"
+		},
+		"relationships": {
+			"author": {
+				"links": {
+					"self": "http://example.com/articles/01FTZBPQ1EY5P5N3QW4ZHHFCM3/relationships/author",
+					"related": "http://example.com/articles/01FTZBPQ1EY5P5N3QW4ZHHFCM3/author"
+				},
+				"data": {
+					"type": "authors",
+					"id": "01FTZBN5HZ590S48WM0VEYFMBY"
+				}
+			},
+			"comments": {
+				"links": {
+					"self": "http://example.com/articles/01FTZBPQ1EY5P5N3QW4ZHHFCM3/relationships/comments",
+					"related": "http://example.com/articles/01FTZBPQ1EY5P5N3QW4ZHHFCM3/comments"
+				},
+				"data": [{
+						"type": "comments",
+						"id": "01FTZBQRGVWX1AZG19NN0FMQZR"
+					},
+					{
+						"type": "comments",
+						"id": "01FTZBNTAB25AM278R6G3YRCKT"
+					}
+				]
+			}
+		},
+		"links": {
+			"self": "http://example.com/articles/01FTZBPQ1EY5P5N3QW4ZHHFCM3"
+		}
+	}],
+	"included": [{
+		"type": "authors",
+		"id": "01FTZBN5HZ590S48WM0VEYFMBY",
+		"attributes": {
+			"firstName": "John",
+			"lastName": "Doe",
+			"twitter": "jhde"
+		},
+		"links": {
+			"self": "http://example.com/authors/01FTZBN5HZ590S48WM0VEYFMBY"
+		}
+	}, {
+		"type": "comments",
+		"id": "01FTZBQRGVWX1AZG19NN0FMQZR",
+		"attributes": {
+			"body": "First!"
+		},
+		"relationships": {
+			"author": {
+				"data": {
+					"type": "authors",
+					"id": "01FTZBT0Q2G6G8ZGBBQ0DTSW1P"
+				}
+			}
+		},
+		"links": {
+			"self": "http://example.com/comments/01FTZBQRGVWX1AZG19NN0FMQZR"
+		}
+	}, {
+		"type": "comments",
+		"id": "01FTZBNTAB25AM278R6G3YRCKT",
+		"attributes": {
+			"body": "I like XML better"
+		},
+		"relationships": {
+			"author": {
+				"data": {
+					"type": "authors",
+					"id": "01FTZBN5HZ590S48WM0VEYFMBY"
+				}
+			}
+		},
+		"links": {
+			"self": "http://example.com/comments/01FTZBNTAB25AM278R6G3YRCKT"
+		}
+	}]
+}
+```
+
+To achieve this we need to pass 2nd argument to the method of the resource responder with array of given objects. For example, we would do this in our controller for given case:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+class Controller
+{
+    public function get(
+        ArticleId $id,
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        $article = # fetch article by id
+        $includes = array_merge($article->comments->toArray(), $article->author()];
+
+        return $responder->resource($article, $includes);
+    }
+```
+
+When returning includes, which is basically array of objects that we want to return with main resource, we need to define read model for each included type and map them inside responder.
+
+When returning includes inside list of objects (e.g. if we're returning list of articles inside `/articles` endpoint) we want to include only 1 resource with id. So if we have list of articles and some articles have same author, we want to include that author only once. We can use [\Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection](src/Model/Collection/ObjectCollection.php#L11) for that. 
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
+
+class Controller
+{
+    public function list(
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        $articles = # fetch array of articles
+        $includes = new UniqueCollection();
+        foreach ($articles as $article) {
+            $includes->addObject($article->author()); // only one
+            $includes->addObjects($article->comments()->toArray()); // multiple objects
+        }
+        // if there are many articles with same author, only 1 will be added
+
+        return $responder->resource($article, $includes);
+    }
+```
+
+### Write side
+
+Request and response lifecycle beside read side have write side, too. Our endpoints must have option to receive data from the client. Data must be sent through body of the request as JSON string which is compliant with JSON:API. This library allows us to fetch given data, validate it and convert it to PHP class. 
+
+So if we want to allow client to create or update our article we would first create write model:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\SymfonyJsonApi\Model\ApiModel;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Attribute;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToMany;
+use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToOne;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
+
+/** @ResourceType(type="articles") */
+final class ArticleWriteModel implements ApiModel
+{
+    public function __construct(
+        public readonly string $id,
+        /** @Attribute */
+        public readonly string $title,
+        /** @ToOne(name="author", type="authors") */
+        public readonly string $authorId,
+        /**
+         * @var array<int,string>
+         * @ToMany(name="comments", type="comments")
+         */
+        public readonly array $commentIds,
+    ) {
+    }
+}
+```
+
+Notice that we don't have `fromSomething` method because this class will be created from request data, not from some class. As you see, we now have basically same properties in read and write model. If you have that case you can combine them in same model and have e.g. `ArticleModel`. Also, if your update model is same as write model, you can combine them into one and have one write (for create and update) and one read model. Notice that update model needs to have `fromSomething` method because we first need to create model from existing data. So in our example above we'll need to add that static method if we're going to use it for write and update.
+
+When request come into the controller we'll have to inject request and create write model from sent data. Here is example in which we'll use [SimpleResourceHandler](/src/Http/Service/SimpleResourceHandler.php#L13) and [CreateResourceRequestInterface](https://github.com/undabot/json-api-core/blob/master/src/Definition/Model/Request/CreateResourceRequestInterface.php) (and its concrete implementation) for help.
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\JsonApi\Definition\Model\Request\CreateResourceRequestInterface;
+use Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler;
+
+class Controller
+{
+    public function create(
+        CreateResourceRequestInterface $request,
+        SimpleResourceHandler $resourceHandler,
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        /** @var ArticleWriteModel $articleWriteModel */
+        $articleWriteModel = $resourceHandler->getModelFromRequest(
+            $request,
+            ArticleWriteModel::class,
+        );
+        // now you can use something like
+        $articleWriteModel->title;
+        
+        return $responder->resourceCreated($article, $includes);
+    }
+```
 
 # Configuration
 Exception listener has default priority of -128 but it can be configured by creating `config/packages/json_api_symfony.yaml` with following parameters

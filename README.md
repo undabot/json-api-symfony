@@ -582,6 +582,8 @@ final class ArticleWriteModel implements ApiModel
 }
 ```
 
+#### Create
+
 Notice that we don't have `fromSomething` method because this class will be created from request data, not from some class. As you see, we now have basically same properties in read and write model. If you have that case you can combine them in same model and have e.g. `ArticleModel`. Also, if your update model is same as write model, you can combine them into one and have one write (for create and update) and one read model. Notice that update model needs to have `fromSomething` method because we first need to create model from existing data. So in our example above we'll need to add that static method if we're going to use it for write and update.
 
 When request come into the controller we'll have to inject request and create write model from sent data. Here is example in which we'll use [SimpleResourceHandler](/src/Http/Service/SimpleResourceHandler.php#L13) and [CreateResourceRequestInterface](https://github.com/undabot/json-api-core/blob/master/src/Definition/Model/Request/CreateResourceRequestInterface.php) (and its concrete implementation) for help.
@@ -594,6 +596,7 @@ declare(strict_types=1);
 namespace App;
 
 use Undabot\JsonApi\Definition\Model\Request\CreateResourceRequestInterface;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
 use Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler;
 
 class Controller
@@ -602,7 +605,7 @@ class Controller
         CreateResourceRequestInterface $request,
         SimpleResourceHandler $resourceHandler,
         Responder $responder,
-    ): ResourceCollectionResponse {
+    ): ResourceCreatedResponse {
         /** @var ArticleWriteModel $articleWriteModel */
         $articleWriteModel = $resourceHandler->getModelFromRequest(
             $request,
@@ -612,6 +615,48 @@ class Controller
         $articleWriteModel->title;
         
         return $responder->resourceCreated($article, $includes);
+    }
+```
+
+#### Update
+
+When updating resource we also must have some model and we must have option to create it from current state because data in request doesn't need to have all fields sent. So we can use write model from above example but we'll have to add `fromSomething` method and then use it inside controller like this:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\JsonApi\Definition\Model\Request\UpdateResourceRequestInterface;
+use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
+use Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler;
+use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
+
+class Controller
+{
+    public function update(
+        ArticleId $id,
+        UpdateResourceRequestInterface $request,
+        SimpleResourceHandler $resourceHandler,
+        Responder $responder,
+        ResourceFactory $resourceFactory,
+    ): ResourceUpdatedResponse {
+        $article = // fetch article by id
+        $baseModel = ArticleWriteModel::fromEntity($article);
+        $baseResource = $resourceFactory->make($baseModel);
+        $updateResource = new CombinedResource($baseResource, $request->getResource());
+
+        /** @var ArticleWriteModel $articleUpdateModel */
+        $articleUpdateModel = $resourceHandler->getModelFromResource(
+            $updateResource,
+            ArticleWriteModel::class,
+        );
+        // now you can use something like
+        $articleUpdateModel->title;
+        
+        return $responder->resourceUpdated($article, $includes);
     }
 ```
 

@@ -512,6 +512,34 @@ class Controller
     }
 ```
 
+#### Fields
+
+We can allow client calling only some fields:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\JsonApi\Definition\Model\Request\GetResourceRequestInterface;class Controller
+{
+    public function get(
+        ArticleId $id,
+        Responder $responder,
+        GetResourceRequestInterface $request,
+    ): ResourceCollectionResponse {
+        $request->allowFields(['title']);
+        // now it's up to you will you fetch resource with only given fields
+        // or you'll fetch entire resource and strip fields in read
+        // model (make separate read model for all fields combination)
+        $article = # fetch article by id
+
+        return $responder->resource($article);
+    }
+```
+
 Notes: 
  * Given examples have a lot of logic inside controller because of readability. In real application we would recommend splitting the logic and move it into separate classes.
  * Given examples have parameters from query passed into query bus which should return array of results. You can use query bus, but you can inject repository and send parameters directly to it, you can inject database connection and make raw query with given parameters or whatever approach you use when building your applications.

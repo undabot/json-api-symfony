@@ -358,9 +358,11 @@ class Controller
     }
 ```
 
-When returning includes, which is basically array of objects that we want to return with main resource, we need to define read model for each included type and map them inside responder.
+JSON:API documentation allows us to include resource into response because of 2 reasons. First one is when server returns includes because server wants that and all possible includes are returned in response for given endpoint. Second one is when client requested some (or all) of allowed includes and server returns only requested ones. When returning includes, which is basically array of objects that we want to return with main resource, we need to define read model for each included type and map them inside responder.
 
 When returning includes inside list of objects (e.g. if we're returning list of articles inside `/articles` endpoint) we want to include only 1 resource with id. So if we have list of articles and some articles have same author, we want to include that author only once. We can use [\Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection](src/Model/Collection/ObjectCollection.php#L11) for that. 
+
+Here are examples:
 
 ```php
 <?php
@@ -387,6 +389,132 @@ class Controller
         return $responder->resource($article, $includes);
     }
 ```
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\JsonApi\Definition\Model\Request\GetResourceCollectionRequestInterface;
+use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
+
+class Controller
+{
+    public function list(
+        GetResourceCollectionRequestInterface $request,
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        $request->allowIncluded(['author', 'comments']);
+        $articles = # fetch array of articles
+        $includes = new UniqueCollection();
+        foreach ($articles as $article) {
+            if (true === $request->isIncluded('author')) {
+                $includes->addObject($article->author()); // only one
+            }
+            if (true === $request->isIncluded('comments')) {
+                $includes->addObjects($article->comments()->toArray()); // multiple objects
+            }
+        }
+        // note: you can also call $request->getIncludes() to retrieve array of all includes
+        
+        return $responder->resource($article, $includes);
+    }
+```
+
+#### Request filters
+
+If we want to allow and read filter from request when given endpoint is resource collection one we can do it like this:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\JsonApi\Definition\Model\Request\GetResourceCollectionRequestInterface;
+use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
+
+class Controller
+{
+    public function list(
+        GetResourceCollectionRequestInterface $request,
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        $request->allowFilters(['author.id', 'comment.ids']); // we can name this whatever we want (this could be author and comments also).
+        $articles = $queryBus->handleQuery(new ArticlesQuery(
+            $request->getFilterSet()?->getFilterValue('author.id'),
+            $request->getFilterSet()?->getFilterValue('comment.ids'),
+        ));
+
+        return $responder->resource($article, $includes);
+    }
+```
+
+#### Pagination
+
+Currently, this library can read page and offset based pagination. No matter which one client sends to the server we can read them both like this:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\JsonApi\Definition\Model\Request\GetResourceCollectionRequestInterface;
+use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
+
+class Controller
+{
+    public function list(
+        GetResourceCollectionRequestInterface $request,
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        $pagination = $request->getPagination();
+        $articles = $queryBus->handleQuery(new ArticlesQuery(
+            $pagination?->getOffset(),
+            $pagination?->getSize(),
+        ));
+
+        return $responder->resource($article, $includes);
+    }
+```
+
+#### Sorting
+
+We can set allowed sorting and then fetch it like this:
+
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\JsonApi\Definition\Model\Request\GetResourceCollectionRequestInterface;
+use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
+
+class Controller
+{
+    public function list(
+        GetResourceCollectionRequestInterface $request,
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        $request->allowSorting(['article.id', 'article.createdAt', 'author.name']); // this can be any string, e.g. createdAt, article-createdAt, article_createdAt, ...
+        $articles = $queryBus->handleQuery(new ArticlesQuery(
+            $request->getSortSet()?->getSortsArray(),
+        ));
+
+        return $responder->resource($article, $includes);
+    }
+```
+
+Notes: 
+ * Given examples have a lot of logic inside controller because of readability. In real application we would recommend splitting the logic and move it into separate classes.
+ * Given examples have parameters from query passed into query bus which should return array of results. You can use query bus, but you can inject repository and send parameters directly to it, you can inject database connection and make raw query with given parameters or whatever approach you use when building your applications.
 
 ### Write side
 

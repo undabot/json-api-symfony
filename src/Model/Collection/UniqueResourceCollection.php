@@ -56,7 +56,7 @@ class UniqueResourceCollection implements ResourceCollectionInterface
         return $this->items;
     }
 
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new ArrayIterator($this->items);
     }

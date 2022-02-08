@@ -48,7 +48,7 @@ final class ExceptionListenerTest extends TestCase
         $event = new ExceptionEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             Request::create('http://localhost:8000/web/v1/posts'),
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $exception,
         );
         $data = [];
@@ -87,7 +87,7 @@ final class ExceptionListenerTest extends TestCase
         $event = new ExceptionEvent(
             $this->createMock(KernelInterface::class),
             $this->createMock(Request::class),
-            KernelInterface::MASTER_REQUEST,
+            KernelInterface::MAIN_REQUEST,
             new \LogicException()
         );
         $data = [];
@@ -114,7 +114,7 @@ final class ExceptionListenerTest extends TestCase
         $event = new ExceptionEvent(
             $this->createMock(KernelInterface::class),
             $this->createMock(Request::class),
-            KernelInterface::MASTER_REQUEST,
+            KernelInterface::MAIN_REQUEST,
             $e = new AccessDeniedHttpException()
         );
         $data = [];

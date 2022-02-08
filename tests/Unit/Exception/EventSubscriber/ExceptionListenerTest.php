@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
+use Undabot\JsonApi\Definition\Exception\Request\ClientGeneratedIdIsNotAllowedException;
 use Undabot\JsonApi\Definition\Exception\Request\RequestException;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener;
@@ -79,6 +80,10 @@ final class ExceptionListenerTest extends TestCase
 
         yield 'Exception is Exception instance' => [
             new \Exception(),
+        ];
+
+        yield 'Exception is ClientGeneratedIdIsNotAllowedException instance' => [
+            new ClientGeneratedIdIsNotAllowedException(),
         ];
     }
 

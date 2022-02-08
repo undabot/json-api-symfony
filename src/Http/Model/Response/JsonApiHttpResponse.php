@@ -87,6 +87,16 @@ class JsonApiHttpResponse extends Response
      *
      * @throws \JsonException
      */
+    public static function conflict(array $data): self
+    {
+        return self::makeError($data, Response::HTTP_CONFLICT);
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @throws \JsonException
+     */
     private static function makeError(array $data, int $statusCode): self
     {
         $content = json_encode($data, JSON_THROW_ON_ERROR);

@@ -52,7 +52,7 @@ class ExceptionListener
             ]);
             $document = new Document(null, $errorCollection);
             $data = $this->documentToPhpArrayEncoderInterface->encode($document);
-            $response = JsonApiHttpResponse::forbidden($data);
+            $response = JsonApiHttpResponse::conflict($data);
             $event->setResponse($response);
 
             return;

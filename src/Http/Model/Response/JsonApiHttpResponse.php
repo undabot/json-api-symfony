@@ -18,15 +18,7 @@ class JsonApiHttpResponse extends Response
      */
     public static function validationError(array $data): self
     {
-        $content = json_encode($data, JSON_THROW_ON_ERROR);
-
-        return new self(
-            $content ?: null,
-            Response::HTTP_UNPROCESSABLE_ENTITY,
-            [
-                'Content-Type' => self::CONTENT_TYPE,
-            ]
-        );
+        return self::makeError($data, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
     public static function notFound(): self
@@ -47,15 +39,7 @@ class JsonApiHttpResponse extends Response
      */
     public static function badRequest(array $data): self
     {
-        $content = json_encode($data, JSON_THROW_ON_ERROR);
-
-        return new self(
-            $content ?: null,
-            Response::HTTP_BAD_REQUEST,
-            [
-                'Content-Type' => self::CONTENT_TYPE,
-            ]
-        );
+        return self::makeError($data, Response::HTTP_BAD_REQUEST);
     }
 
     /**
@@ -65,15 +49,7 @@ class JsonApiHttpResponse extends Response
      */
     public static function forbidden(array $data): self
     {
-        $content = json_encode($data, JSON_THROW_ON_ERROR);
-
-        return new self(
-            $content ?: null,
-            Response::HTTP_FORBIDDEN,
-            [
-                'Content-Type' => self::CONTENT_TYPE,
-            ]
-        );
+        return self::makeError($data, Response::HTTP_FORBIDDEN);
     }
 
     /**
@@ -83,15 +59,7 @@ class JsonApiHttpResponse extends Response
      */
     public static function unauthorized(array $data): self
     {
-        $content = json_encode($data, JSON_THROW_ON_ERROR);
-
-        return new self(
-            $content ?: null,
-            Response::HTTP_UNAUTHORIZED,
-            [
-                'Content-Type' => self::CONTENT_TYPE,
-            ]
-        );
+        return self::makeError($data, Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -101,15 +69,7 @@ class JsonApiHttpResponse extends Response
      */
     public static function serverError(array $data): self
     {
-        $content = json_encode($data, JSON_THROW_ON_ERROR);
-
-        return new self(
-            $content ?: null,
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            [
-                'Content-Type' => self::CONTENT_TYPE,
-            ]
-        );
+        return self::makeError($data, Response::HTTP_INTERNAL_SERVER_ERROR);
     }
 
     /**
@@ -119,11 +79,21 @@ class JsonApiHttpResponse extends Response
      */
     public static function fromSymfonyHttpException(array $data, HttpExceptionInterface $exception): self
     {
+        return self::makeError($data, $exception->getStatusCode());
+    }
+
+    /**
+     * @param array<string, mixed> $data
+     *
+     * @throws \JsonException
+     */
+    private static function makeError(array $data, int $statusCode): self
+    {
         $content = json_encode($data, JSON_THROW_ON_ERROR);
 
         return new self(
             $content ?: null,
-            $exception->getStatusCode(),
+            $statusCode,
             [
                 'Content-Type' => self::CONTENT_TYPE,
             ]

@@ -7,6 +7,7 @@ namespace Undabot\JsonApi\Tests\Integration\Resource\Metadata;
 use Doctrine\Common\Annotations\AnnotationReader;
 use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToManyRelationshipDataInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToOneRelationshipDataInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\RelationshipInterface;
@@ -18,6 +19,7 @@ use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
  * @ResourceType(type="resource")
@@ -72,16 +74,23 @@ class ResourceDto implements ApiModel
  */
 final class ResourceFactoryTest extends TestCase
 {
-    /** @var ResourceFactory */
-    private $resourceFactory;
+    private ResourceFactory $resourceFactory;
+    private bool $shouldValidateReadModel = false;
+    private ValidatorInterface $validatorMock;
 
     protected function setUp(): void
     {
         parent::setUp();
-        AnnotationRegistry::registerLoader('class_exists');
         $annotationReader = new AnnotationReader();
         $metadataFactory = new ResourceMetadataFactory($annotationReader);
-        $this->resourceFactory = new ResourceFactory($metadataFactory);
+        $this->shouldValidateReadModel = false;
+        $this->validatorMock = $this->createMock(ValidatorInterface::class);
+        $resourceValidator = new ResourceValidator($metadataFactory, $this->validatorMock);
+        $this->resourceFactory = new ResourceFactory(
+            $metadataFactory,
+            $this->shouldValidateReadModel,
+            $resourceValidator
+        );
     }
 
     public function testResourceFactoryCreatesValidResourceWithoutAttributesOrRelationshipsValues(): void

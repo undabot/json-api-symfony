@@ -19,6 +19,9 @@ class Configuration implements ConfigurationInterface
             ->integerNode('exception_listener_priority')
             ->min(-255)
             ->max(255)
+            ->end()
+            ?->booleanNode('validate_read_model')
+            ->defaultFalse()
             ->end();
 
         return $treeBuilder;

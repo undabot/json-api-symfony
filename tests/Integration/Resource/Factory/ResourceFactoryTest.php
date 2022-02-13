@@ -26,58 +26,49 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
  */
 class ResourceDto implements ApiModel
 {
-    /**
-     * @Assert\NotBlank
-     * @var string
-     */
-    public $id;
+    /** @Assert\NotBlank */
+    public string $id;
 
     /**
-     * @var string
      * @JsonApi\Attribute
      * @Assert\NotBlank
      */
-    public $title;
+    public string $title;
 
     /**
-     * @var string
      * @JsonApi\Attribute
      * @Assert\NotBlank
      */
-    public $date;
+    public string $date;
 
     /**
-     * @var string
      * @JsonApi\Attribute
      * @Assert\NotBlank
      */
-    public $summary;
+    public string $summary;
+
+    /** @JsonApi\ToOne(type="people") */
+    public ?string $author;
 
     /**
-     * @var null|string
-     * @JsonApi\ToOne(type="people")
-     */
-    public $author;
-
-    /**
-     * @var string[]
+     * @var array<int,string>
      * @JsonApi\ToMany(type="tags")
      * @Assert\All({
      *     @Assert\NotBlank,
      *     @Assert\Type("string")
      * })
      */
-    public $tags = [];
+    public array $tags = [];
 
     /**
-     * @var string[]
+     * @var array<int,string>
      * @JsonApi\ToMany(type="comments")
      * @Assert\All({
      *     @Assert\NotBlank,
      *     @Assert\Type("string")
      * })
      */
-    public $comments = [];
+    public array $comments = [];
 }
 
 /**

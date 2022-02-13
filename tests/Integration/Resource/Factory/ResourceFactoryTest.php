@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Resource\Metadata;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Factory;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToManyRelationshipDataInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToOneRelationshipDataInterface;
@@ -26,24 +26,30 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
  */
 class ResourceDto implements ApiModel
 {
-    /** @var string */
+    /**
+     * @Assert\NotBlank
+     * @var string
+     */
     public $id;
 
     /**
      * @var string
      * @JsonApi\Attribute
+     * @Assert\NotBlank
      */
     public $title;
 
     /**
      * @var string
      * @JsonApi\Attribute
+     * @Assert\NotBlank
      */
     public $date;
 
     /**
      * @var string
      * @JsonApi\Attribute
+     * @Assert\NotBlank
      */
     public $summary;
 
@@ -56,12 +62,20 @@ class ResourceDto implements ApiModel
     /**
      * @var string[]
      * @JsonApi\ToMany(type="tags")
+     * @Assert\All({
+     *     @Assert\NotBlank,
+     *     @Assert\Type("string")
+     * })
      */
     public $tags = [];
 
     /**
      * @var string[]
      * @JsonApi\ToMany(type="comments")
+     * @Assert\All({
+     *     @Assert\NotBlank,
+     *     @Assert\Type("string")
+     * })
      */
     public $comments = [];
 }
@@ -83,7 +97,6 @@ final class ResourceFactoryTest extends TestCase
         parent::setUp();
         $annotationReader = new AnnotationReader();
         $metadataFactory = new ResourceMetadataFactory($annotationReader);
-        $this->shouldValidateReadModel = false;
         $this->validatorMock = $this->createMock(ValidatorInterface::class);
         $resourceValidator = new ResourceValidator($metadataFactory, $this->validatorMock);
         $this->resourceFactory = new ResourceFactory(
@@ -200,5 +213,61 @@ final class ResourceFactoryTest extends TestCase
             new ResourceIdentifier('a1', 'people'),
             $authorRelationship->getData()->getData()
         );
+    }
+
+    public function testMakeWillCreateValidResourceGivenWriteModelShouldNotBeValidatedAndResourceHasValues(): void
+    {
+        $resourceDto = new ResourceDto();
+        $resourceDto->id = '1';
+        $resourceDto->title = 'Resource title';
+        $resourceDto->summary = 'Resource summary';
+        $resourceDto->date = '2018-01-01';
+        $resourceDto->tags = ['t1', 't2', 't3'];
+        $resourceDto->comments = ['c1', 'c2', 'c3'];
+        $resourceDto->author = 'a1';
+
+        $this->shouldValidateReadModel = false;
+        $resource = $this->resourceFactory->make($resourceDto);
+        static::assertInstanceOf(ResourceInterface::class, $resource);
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
+        static::assertCount(3, $resource->getAttributes());
+        static::assertCount(3, $resource->getRelationships());
+
+        $flatResource = new FlatResource($resource);
+        static::assertSame('Resource title', $flatResource->getAttributes()['title']);
+        static::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
+        static::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
+        static::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
+        static::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
+        static::assertSame('a1', $flatResource->getRelationships()['author']);
+    }
+
+    public function testMakeWillCreateValidResourceGivenWriteModelShouldBeValidatedAndResourceHasValuesAndConstraints(): void
+    {
+        $resourceDto = new ResourceDto();
+        $resourceDto->id = '1';
+        $resourceDto->title = 'Resource title';
+        $resourceDto->summary = 'Resource summary';
+        $resourceDto->date = '2018-01-01';
+        $resourceDto->tags = ['t1', 't2', 't3'];
+        $resourceDto->comments = ['c1', 'c2', 'c3'];
+        $resourceDto->author = 'a1';
+
+        $this->shouldValidateReadModel = true;
+        $resource = $this->resourceFactory->make($resourceDto);
+        static::assertInstanceOf(ResourceInterface::class, $resource);
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
+        static::assertCount(3, $resource->getAttributes());
+        static::assertCount(3, $resource->getRelationships());
+
+        $flatResource = new FlatResource($resource);
+        static::assertSame('Resource title', $flatResource->getAttributes()['title']);
+        static::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
+        static::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
+        static::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
+        static::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
+        static::assertSame('a1', $flatResource->getRelationships()['author']);
     }
 }

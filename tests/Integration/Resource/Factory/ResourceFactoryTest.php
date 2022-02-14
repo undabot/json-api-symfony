@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Factory;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToManyRelationshipDataInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToOneRelationshipDataInterface;
@@ -19,11 +22,12 @@ use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolations;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
  * @internal
- * @coversNothing
+ * @covers \Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory
  *
  * @small
  */
@@ -31,60 +35,38 @@ final class ResourceFactoryTest extends TestCase
 {
     private ResourceFactory $resourceFactory;
     private bool $shouldValidateReadModel = false;
-    private ValidatorInterface $validatorMock;
+    private MockObject $validatorMock;
+    private ResourceMetadataFactory $resourceMetadataFactory;
+    private ResourceValidator $resourceValidator;
 
     protected function setUp(): void
     {
         parent::setUp();
         $annotationReader = new AnnotationReader();
-        $metadataFactory = new ResourceMetadataFactory($annotationReader);
+        $this->resourceMetadataFactory = new ResourceMetadataFactory($annotationReader);
         $this->validatorMock = $this->createMock(ValidatorInterface::class);
-        $resourceValidator = new ResourceValidator($metadataFactory, $this->validatorMock);
+        $this->resourceValidator = new ResourceValidator($this->resourceMetadataFactory, $this->validatorMock);
         $this->resourceFactory = new ResourceFactory(
-            $metadataFactory,
+            $this->resourceMetadataFactory,
             $this->shouldValidateReadModel,
-            $resourceValidator
+            $this->resourceValidator,
         );
     }
 
     public function testResourceFactoryCreatesValidResourceWithoutAttributesOrRelationshipsValues(): void
     {
-        $resourceDto = new ResourceDto(
-            '1',
-            null,
-            null,
-            null,
-            null,
-            [],
-            [],
-        );
+        $resourceDto = $this->createMinimalResource();
 
         $resource = $this->resourceFactory->make($resourceDto);
-        static::assertInstanceOf(ResourceInterface::class, $resource);
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
-        static::assertCount(3, $resource->getAttributes());
-        static::assertCount(3, $resource->getRelationships());
+        $this->assertFullResourceGiven($resource);
     }
 
     public function testResourceFactoryCreatesValidResourceWithValues(): void
     {
-        $resourceDto = new ResourceDto(
-            '1',
-            'Resource title',
-            '2018-01-01',
-            'Resource summary',
-            'a1',
-            ['t1', 't2', 't3'],
-            ['c1', 'c2', 'c3'],
-        );
+        $resourceDto = $this->createFullResource();
 
         $resource = $this->resourceFactory->make($resourceDto);
-        static::assertInstanceOf(ResourceInterface::class, $resource);
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
-        static::assertCount(3, $resource->getAttributes());
-        static::assertCount(3, $resource->getRelationships());
+        $this->assertFullResourceGiven($resource);
 
         $flatResource = new FlatResource($resource);
         static::assertSame('Resource title', $flatResource->getAttributes()['title']);
@@ -99,7 +81,7 @@ final class ResourceFactoryTest extends TestCase
     {
         $resourceDto = new ResourceDto(
             '1',
-            null,
+            'Resource title',
             null,
             null,
             null,
@@ -108,9 +90,7 @@ final class ResourceFactoryTest extends TestCase
         );
 
         $resource = $this->resourceFactory->make($resourceDto);
-        static::assertInstanceOf(ResourceInterface::class, $resource);
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
+        $this->assertMinimumResourceParametersAreValid($resource);
 
         $tagsRelationship = $resource->getRelationships()->getRelationshipByName('tags');
         static::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
@@ -134,20 +114,10 @@ final class ResourceFactoryTest extends TestCase
 
     public function testResourceFactoryCreatesValidEmptyTagsRelationshipFromEmptyArray(): void
     {
-        $resourceDto = new ResourceDto(
-            '1',
-            null,
-            null,
-            null,
-            null,
-            [],
-            [],
-        );
+        $resourceDto = $this->createMinimalResource();
 
         $resource = $this->resourceFactory->make($resourceDto);
-        static::assertInstanceOf(ResourceInterface::class, $resource);
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
+        $this->assertMinimumResourceParametersAreValid($resource);
 
         $tagsRelationship = $resource->getRelationships()->getRelationshipByName('tags');
         static::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
@@ -159,7 +129,7 @@ final class ResourceFactoryTest extends TestCase
     {
         $resourceDto = new ResourceDto(
             '1',
-            null,
+            'Resource title',
             null,
             null,
             'a1',
@@ -168,9 +138,7 @@ final class ResourceFactoryTest extends TestCase
         );
 
         $resource = $this->resourceFactory->make($resourceDto);
-        static::assertInstanceOf(ResourceInterface::class, $resource);
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
+        $this->assertMinimumResourceParametersAreValid($resource);
 
         $authorRelationship = $resource->getRelationships()->getRelationshipByName('author');
         static::assertInstanceOf(RelationshipInterface::class, $authorRelationship);
@@ -184,23 +152,11 @@ final class ResourceFactoryTest extends TestCase
 
     public function testMakeWillCreateValidResourceGivenWriteModelShouldNotBeValidatedAndResourceHasValues(): void
     {
-        $resourceDto = new ResourceDto(
-            '1',
-            'Resource title',
-            '2018-01-01',
-            'Resource summary',
-            'a1',
-            ['t1', 't2', 't3'],
-            ['c1', 'c2', 'c3'],
-        );
+        $resourceDto = $this->createFullResource();
 
         $this->shouldValidateReadModel = false;
         $resource = $this->resourceFactory->make($resourceDto);
-        static::assertInstanceOf(ResourceInterface::class, $resource);
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
-        static::assertCount(3, $resource->getAttributes());
-        static::assertCount(3, $resource->getRelationships());
+        $this->assertFullResourceGiven($resource);
 
         $flatResource = new FlatResource($resource);
         static::assertSame('Resource title', $flatResource->getAttributes()['title']);
@@ -213,23 +169,16 @@ final class ResourceFactoryTest extends TestCase
 
     public function testMakeWillCreateValidResourceGivenWriteModelShouldBeValidatedAndResourceHasValuesAndConstraints(): void
     {
-        $resourceDto = new ResourceDto(
-            '1',
-            'Resource title',
-            '2018-01-01',
-            'Resource summary',
-            'a1',
-            ['t1', 't2', 't3'],
-            ['c1', 'c2', 'c3'],
-        );
+        $resourceDto = $this->createFullResource();
 
         $this->shouldValidateReadModel = true;
-        $resource = $this->resourceFactory->make($resourceDto);
-        static::assertInstanceOf(ResourceInterface::class, $resource);
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
-        static::assertCount(3, $resource->getAttributes());
-        static::assertCount(3, $resource->getRelationships());
+        $resourceFactory = new ResourceFactory(
+            $this->resourceMetadataFactory,
+            $this->shouldValidateReadModel,
+            $this->resourceValidator,
+        );
+        $resource = $resourceFactory->make($resourceDto);
+        $this->assertFullResourceGiven($resource);
 
         $flatResource = new FlatResource($resource);
         static::assertSame('Resource title', $flatResource->getAttributes()['title']);
@@ -238,6 +187,80 @@ final class ResourceFactoryTest extends TestCase
         static::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
         static::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
         static::assertSame('a1', $flatResource->getRelationships()['author']);
+    }
+
+    public function testMakeWillThrowExceptionGivenWriteModelShouldBeValidatedAndResourceHasValuesWhichAreAgainstConstraints(): void
+    {
+        $this->expectException(\Exception::class);
+        $validatorMock = $this->createMock(ValidatorInterface::class);
+        $validatorMock
+            ->expects(static::exactly(4))
+            ->method('validate')
+            ->willReturn(new ResourceValidationViolations(
+                new ConstraintViolationList(
+                    [new ConstraintViolation('Test', null, [], null, null, null)],
+                ),
+                new ConstraintViolationList(),
+                new ConstraintViolationList(),
+            ));
+        $resourceValidator = new ResourceValidator($this->resourceMetadataFactory, $validatorMock);
+        $this->shouldValidateReadModel = true;
+
+        $resourceDto = new ResourceDto(
+            '1',
+            '',
+            null,
+            null,
+            null,
+            [],
+            [],
+        );
+
+        $resourceFactory = new ResourceFactory(
+            $this->resourceMetadataFactory,
+            $this->shouldValidateReadModel,
+            $resourceValidator,
+        );
+        $resourceFactory->make($resourceDto);
+    }
+
+    private function assertMinimumResourceParametersAreValid(ResourceInterface $resource): void
+    {
+        static::assertSame('1', $resource->getId());
+        static::assertSame('resource', $resource->getType());
+    }
+
+    private function assertFullResourceGiven(ResourceInterface $resource): void
+    {
+        $this->assertMinimumResourceParametersAreValid($resource);
+        static::assertCount(3, $resource->getAttributes());
+        static::assertCount(3, $resource->getRelationships());
+    }
+
+    private function createMinimalResource(): ResourceDto
+    {
+        return new ResourceDto(
+            '1',
+            'Resource title',
+            null,
+            null,
+            'a1',
+            [],
+            [],
+        );
+    }
+
+    private function createFullResource(): ResourceDto
+    {
+        return new ResourceDto(
+            '1',
+            'Resource title',
+            '2018-01-01',
+            'Resource summary',
+            'a1',
+            ['t1', 't2', 't3'],
+            ['c1', 'c2', 'c3'],
+        );
     }
 }
 
@@ -249,8 +272,11 @@ final class ResourceDto implements ApiModel
     /** @Assert\NotBlank */
     public string $id;
 
-    /** @JsonApi\Attribute */
-    public ?string $title;
+    /**
+     * @JsonApi\Attribute
+     * @Assert\NotBlank
+     */
+    public string $title;
 
     /** @JsonApi\Attribute */
     public ?string $date;

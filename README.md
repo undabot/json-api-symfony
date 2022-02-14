@@ -7,9 +7,12 @@ The library itself is a wrapper around the Symfony framework, and it uses [json-
 This document covers following sections:
 - [Usage](#usage)
   - [How to return the JSON:API compliant response?](#return-response)
-    - [Write side](#write-side)
-    - [Read side](#read-side)
-    - [Responder](#responder)
+  - [Write side](#write-side)
+  - [Read side](#read-side)
+  - [Responder](#responder)
+- [Configuration](#configuration)
+- [Development](#development)
+- [Glossary](#glossary)
 
 ## <a name='usage'></a>Usage
 
@@ -30,8 +33,8 @@ To return JSON:API compliant response, you have to go through a couple of steps 
 Before going deeper into the read and write models, responders and controllers, it's a good idea to describe how we distinguish attributes from relations in our models. To recognise which property is attribute and which one is relation we use annotations. Each model should have one "main" annotation that determines its type, a top-level member for any resource object. This annotation is placed just above the class declaration, and it looks like this:
 
 ```php
-    /** @ResourceType(type="articles") */
-    final class ArticleWriteModel implements ApiModel
+/** @ResourceType(type="articles") */
+final class ArticleWriteModel implements ApiModel
 ```
 
 Apart from `@ResourceType` annotation, there are three more - `@Attribute`, `@ToOne` and `@ToMany`.
@@ -41,11 +44,11 @@ Apart from `@ResourceType` annotation, there are three more - `@Attribute`, `@To
 `@ToOne` and `@ToMany` annotations say that the property is a relationship. Relations must consist of name and type value inside ToOne and ToMany annotations, e.g.
 
 ```php
-    /**
-        * @var array<int,string>
-        * @ToMany(name="article_comments", type="comments")
-    */
-    public readonly array $commentIds,
+/**
+  * @var array<int,string>
+  * @ToMany(name="article_comments", type="comments")
+ */
+public readonly array $commentIds,
 ```
 
 **Name** value is what we want to show in response. For this example, `article_comments` is the name for this relationship that will be returned in the response.\
@@ -54,21 +57,21 @@ Apart from `@ResourceType` annotation, there are three more - `@Attribute`, `@To
 Relationships can be nullable, and to add a nullable relationship to the model, you just need to assign a bool value to `nullable` property inside the annotation, like in the following example. Don't forget to null safe type-hint your property in that case, and remember - relationships are not nullable by default.
 
 ```php
-    /**
-        * @var array<int,string>
-        * @ToOne(name="article_author", type="authors", nullable=true)
-    */
-    public readonly ?string $authorId,
+/**
+  * @var array<int,string>
+  * @ToOne(name="article_author", type="authors", nullable=true)
+ */
+public readonly ?string $authorId,
 ```
 
 With this knowledge, lets dive into the more concrete examples.
 
 
-#### <a name='write-side'></a>Write side
+### <a name='write-side'></a>Write side
 
 The request and response lifecycle consists of receiving the data from the client and returning the data to the client - write and read side. When receiving data, it must be sent through the request's body as a JSON string compliant with JSON:API. This library allows us to fetch given data, validate it and convert it to PHP class.
 
-##### Create
+#### Create
 
 The write model consists of the annotated properties that build the resource we are about to create. So if we're about to create article with id, title and some related comments this is how the create (write) model would look like. 
 
@@ -140,7 +143,7 @@ class Controller
     }
 ```
 
-##### Update
+#### Update
 
 When updating a resource, the client may send you some of the fields that are part of the read model, not an entire model. E.g. if we're updating Article with content, there is no need to send the title or some other property. However, for the mentioned case, we need some model and need to have the option to create it from the current state. So we can use the write model from the above example, but we'll have to add `fromSomething` method and then use it inside the controller like in the example below.
 
@@ -244,7 +247,7 @@ public static function fromEntity(Article $article): self
     }
 ```
 
-#### <a name='read-side'></a>Read side
+### <a name='read-side'></a>Read side
 
 Like the write model, the read model is a class with annotated properties that you want to return to the client. E.g. if you need to return this JSON:API response:
 
@@ -351,133 +354,11 @@ The data flow that we usually use is similar to this:
 2. We use the entity until the moment in which we need to return the response.
 3. At that moment, we pass the entity to this library to create a proper read model.
 
-_In this example, we assume that there is a `title` method on the article entity which have `__toString` method, same as id. Also, we assume that this is Doctrine entity which have `author` method which is `Author` entity and `comments` method which is `Doctrine Collection` of `Comment` objects. But this can be any object from which you can construct a given read model._
+With everything previously written we have covered the basic model. What if the model is not so basic, and it requires includes, sorting, filtering, etc? 
 
-#### <a name='responder'></a>Responder
+#### Includes
 
-Responder is a class that extends `\Undabot\SymfonyJsonApi\Http\Service\Responder\AbstractResponder\AbstractResponder` and will provide array of classes mapped to callable that will accept the class of an item you send to the Responder as a key, and a callable (annon. function, factory method reference, ...) that should convert that particular data object to an API model. So create a Responder class that extends `AbstractResponder` and implement `getMap()` method which will return array as described.
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-use Undabot\SymfonyJsonApi\Http\Service\Responder\AbstractResponder;
-
-final class Responder extends AbstractResponder
-{
-    /** {@inheritdoc} */
-    public function getMap(): array
-    {
-        return [
-            SomeClass::class => [SomeReadModel::class, 'fromSomething'],
-        ];
-    }
-}
-
-```
-
-Once Responder has been created, it can be used this way
-
-```php
-<?php
-
-declare(strict_types=1);
-
-namespace App;
-
-class Controller
-{
-    public function get(
-        Responder $responder,
-    ): ResourceCollectionResponse {
-        ... # fetch array of entities
-
-        return $responder->resourceCollection($entities);
-    }
-```
-Each method accepts a data object (or collection/array of data objects) along with some other optional arguments and constructs a DTO representing the JSON:API compliant response:
-
-* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse](src/Http/Service/Responder/AbstractResponder.php#L47)
-* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse](src/Http/Service/Responder/AbstractResponder.php#L95)
-* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse](src/Http/Service/Responder/AbstractResponder.php#L119)
-* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse](src/Http/Service/Responder/AbstractResponder.php#L71)
-* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse](src/Http/Service/Responder/AbstractResponder.php#L136) (doesn't accept anything)
-
-That response will then be encoded to the JSON:API compliant JSON Response by the `\Undabot\SymfonyJsonApi\Http\EventSubscriber\ViewResponseSubscriber` and will add correct HTTP status code.
-
-#### resourceCollection(...) method
-
-```php
-public function resourceCollection(
-  array $primaryData, 
-  array $includedData = null, 
-  array $meta = null, 
-  array $links = null
-): ResourceCollectionResponse()
-```
-Accepts an array of data objects (that you have defined an encoding map entry for) and converts them to a ResourceCollectionResponse.
-
-#### resourceObjectCollection(...) method
-
-```php
-public function resourceObjectCollection(
-  ObjectCollection $primaryModels,
-  array $included = null,
-  array $meta = null,
-  array $links = null
-): ResourceCollectionResponse
-```
-Accepts an array of objects (that you have defined an encoding map entry for) and converts them to a ResourceCollectionResponse.
-
-#### resource(...) method
-
-```php
-public function resource(
-  $primaryData,
-  array $includedData = null,
-  array $meta = null,
-  array $links = null
-): ResourceResponse {
-```
-Accepts data (single object for example) that will be converted to a ResourceResponse. This can also be null if no data is present (e.g. somone requests `/user/1/car` and car is to one relation which is NOT present on the user because user doesn't own the car, but user with id 1 is found).
-
-#### resourceCreated(...) method
-
-```php
-public function resourceCreated(
-  $primaryData,
-  array $includedData = null,
-  array $meta = null,
-  array $links = null
-): ResourceCreatedResponse
-```
-Accepts data (single object for example) that will be converted to a ResourceCreatedResponse.
-
-#### resourceUpdated(...) method
-
-```php
-public function resourceUpdated(
-  $primaryData,
-  array $includedData = null,
-  array $meta = null,
-  array $links = null
-): ResourceUpdatedResponse
-```
-Accepts data (single object for example) that will be converted to a ResourceUpdatedResponse.
-
-#### resourceDeleted(...) method
-
-```php
-public function resourceDeleted(): ResourceDeletedResponse
-```
-ResourceDeletedResponse response will be returned which is basically [204 HTTP status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204) code with no content. 
-
-##### Includes
-
-We often need to return objects related to given resource. In our example maybe we want to include all comments and author allowing client to read their data, not just see id and type which is returned inside relationship key (pointer to resource). So we would like to return response like this:
+We often need to return objects related to the given resource. Maybe our client needs more than id and type of the relation, and we need to include the details of all comments and author in our example. E.g. our client needs a response similar to the one below.
 
 ```json
 {
@@ -572,7 +453,7 @@ We often need to return objects related to given resource. In our example maybe 
 }
 ```
 
-To achieve this we need to pass 2nd argument to the method of the resource responder with array of given objects. For example, we would do this in our controller for given case:
+To return more than just a resource pointer to the client, we need to pass an array of objects that we need to return as the second argument of the called method. For example, if we need to include details of all comments related to the article, we would pass an array of comment entities as a second argument of the method called from the Responder. Like this:
 
 ```php
 <?php
@@ -588,17 +469,16 @@ class Controller
         Responder $responder,
     ): ResourceCollectionResponse {
         $article = # fetch article by id
-        $includes = array_merge($article->comments->toArray(), $article->author()];
-
-        return $responder->resource($article, $includes);
+        // use toArray() method since comments are a collection
+        return $responder->resource($article, $article->comments->toArray());
     }
 ```
 
-JSON:API documentation allows us to include resource into response because of 2 reasons. First one is when server returns includes because server wants that and all possible includes are returned in response for given endpoint. Second one is when client requested some (or all) of allowed includes and server returns only requested ones. When returning includes, which is basically array of objects that we want to return with main resource, we need to define read model for each included type and map them inside responder.
+Whether the client requested explicitly requested includes, or the response needs to have all the possible includes, Responder needs to have the mapping for the read model of each entity that is returned in the response.
 
-When returning includes inside list of objects (e.g. if we're returning list of articles inside `/articles` endpoint) we want to include only 1 resource with id. So if we have list of articles and some articles have same author, we want to include that author only once. We can use [\Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection](src/Model/Collection/ObjectCollection.php#L11) for that. 
+When returning includes inside a list of objects (e.g. returning a list of articles from the `/articles` endpoint) there is a chance that different resources will have same relations. In that case we want to include the relation only once. E.g., if we have a list of articles and some articles have the same author, we want to include that author only once. We can use [\Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection](src/Model/Collection/ObjectCollection.php#L11) for that.
 
-Here are examples:
+Here are some examples:
 
 ```php
 <?php
@@ -659,9 +539,9 @@ class Controller
     }
 ```
 
-##### Request filters
+#### Request filters
 
-If we want to allow and read filter from request when given endpoint is resource collection one we can do it like this:
+If the endpoint requires filters, this is how to add them. First, allow the filters by calling the `allowFilters` method. This method receives an array of strings, which are actually filter names. After allowing the filters you can read their values by calling `$request->getFilterSet()?->getFilterValue('filter_name')`. Keep in mind that filtering is supported on endpoints that deal with collections.
 
 ```php
 <?php
@@ -689,9 +569,9 @@ class Controller
     }
 ```
 
-##### Pagination
+#### Pagination
 
-Currently, this library can read page and offset based pagination. No matter which one client sends to the server we can read them both like this:
+The library can currently read page and offset based pagination. So no matter which one the client sends to the server, we can read them both like in the example below.
 
 ```php
 <?php
@@ -719,9 +599,9 @@ class Controller
     }
 ```
 
-##### Sorting
+#### Sorting
 
-We can set allowed sorting and then fetch it like this:
+Similar to filtering, sorting needs to be allowed first. The example below shows how to enable and read sorting values.
 
 ```php
 <?php
@@ -748,7 +628,7 @@ class Controller
     }
 ```
 
-##### Fields
+#### Fields
 
 We can allow client calling only some fields:
 
@@ -759,7 +639,9 @@ declare(strict_types=1);
 
 namespace App;
 
-use Undabot\JsonApi\Definition\Model\Request\GetResourceRequestInterface;class Controller
+use Undabot\JsonApi\Definition\Model\Request\GetResourceRequestInterface;
+
+class Controller
 {
     public function get(
         ArticleId $id,
@@ -776,73 +658,198 @@ use Undabot\JsonApi\Definition\Model\Request\GetResourceRequestInterface;class C
     }
 ```
 
-Notes: 
- * Given examples have a lot of logic inside controller because of readability. In real application we would recommend splitting the logic and move it into separate classes.
- * Given examples have parameters from query passed into query bus which should return array of results. You can use query bus, but you can inject repository and send parameters directly to it, you can inject database connection and make raw query with given parameters or whatever approach you use when building your applications.
+### <a name='responder'></a>Responder
 
+Responder is a glue that we need to link the entities with their models. It holds the array of (entity) classes mapped to a callable inside a model.
 
+Every Responder you create, and you can have more of them in your project, should extend `\Undabot\SymfonyJsonApi\Http\Service\Responder\AbstractResponder\AbstractResponder`class and implement `getMap()` method in the following way.
 
-## Configuration
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+use Undabot\SymfonyJsonApi\Http\Service\Responder\AbstractResponder;
+
+final class Responder extends AbstractResponder
+{
+    /** {@inheritdoc} */
+    public function getMap(): array
+    {
+        return [
+            SomeClass::class => [SomeReadModel::class, 'fromSomething'],
+        ];
+    }
+}
+
+```
+This is how the Responder is used in a controller to return the single resource (`getById` endpoint). 
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+class Controller
+{
+    public function get(
+        Responder $responder,
+    ): ResourceResponse {
+        ... # fetch single entity
+
+        return $responder->resource($singleEntity);
+    }
+```
+This is how the Responder is used in a controller to return the collection of resources (`list` endpoint). Responder will convert each entity from the array of entites to read model.
+```php
+<?php
+
+declare(strict_types=1);
+
+namespace App;
+
+class Controller
+{
+    public function list(
+        Responder $responder,
+    ): ResourceCollectionResponse {
+        ... # fetch array of entities
+
+        return $responder->resourceCollection($entities);
+    }
+```
+As you can see, Responder supports several different methods, which you can use depending on the response you need to return to the client. Each method accepts a data object (or collection/array of data objects) along with some other optional arguments and constructs a DTO representing the JSON:API compliant response. This is the list of the supported methods:
+
+* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse](src/Http/Service/Responder/AbstractResponder.php#L47)
+* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse](src/Http/Service/Responder/AbstractResponder.php#L95)
+* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse](src/Http/Service/Responder/AbstractResponder.php#L119)
+* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse](src/Http/Service/Responder/AbstractResponder.php#L71)
+* [\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse](src/Http/Service/Responder/AbstractResponder.php#L136) (doesn't accept anything)
+
+ViewResponseSubscriber (`\Undabot\SymfonyJsonApi\Http\EventSubscriber\ViewResponseSubscriber`) will then encode the response generated by the Responder to the JSON:API compliant JSON response. Furthermore, it will add the correct HTTP status code to the response, e.g. `201` if the `ResourceCreatedMethod` has been called from the Responder, or `204` if you have called `ResourceDeletedResponse`.
+
+### resourceCollection(...) method
+
+Accepts an array of data objects you have defined an encoding map entry for in the Responder and converts them to a ResourceCollectionResponse.
+```php
+public function resourceCollection(
+  array $primaryData, 
+  array $includedData = null, 
+  array $meta = null, 
+  array $links = null
+): ResourceCollectionResponse()
+```
+
+### resourceObjectCollection(...) method
+
+Accepts an array of objects you have defined an encoding map entry for in the Responder and converts them to a ResourceCollectionResponse.
+```php
+public function resourceObjectCollection(
+  ObjectCollection $primaryModels,
+  array $included = null,
+  array $meta = null,
+  array $links = null
+): ResourceCollectionResponse
+```
+
+### resource(...) method
+
+Accepts data, e.g. single object that will be converted to a ResourceResponse. Data can also be null if no data is present. For example, if someone requests `/user/1/car` and car is to one relation which is NOT present on the user because the user doesn't own the car. In this example, the user with id 1 exists in the database.
+
+```php
+public function resource(
+  $primaryData,
+  array $includedData = null,
+  array $meta = null,
+  array $links = null
+): ResourceResponse {
+```
+
+### resourceCreated(...) method
+
+Accepts data, e.g. single object that will be converted to a ResourceCreatedResponse.
+
+```php
+public function resourceCreated(
+  $primaryData,
+  array $includedData = null,
+  array $meta = null,
+  array $links = null
+): ResourceCreatedResponse
+```
+
+### resourceUpdated(...) method
+
+Accepts data, e.g. single object that will be converted to a ResourceUpdatedResponse.
+
+```php
+public function resourceUpdated(
+  $primaryData,
+  array $includedData = null,
+  array $meta = null,
+  array $links = null
+): ResourceUpdatedResponse
+```
+
+### resourceDeleted(...) method
+
+ResourceDeletedResponse response is basically [204 HTTP status](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status/204) code with no content.
+
+```php
+public function resourceDeleted(): ResourceDeletedResponse
+```
+
+## <a name="configuration"></a>Configuration
 Exception listener has default priority of -128 but it can be configured by creating `config/packages/json_api_symfony.yaml` with following parameters
 
 ```yaml
 json_api_symfony:
     exception_listener_priority: 100
-``` 
+```
 
-## Naming
+## <a name="development"></a>Development
 
-### Entity
-Domain object that is modeled and used in the application. Has nothing to do with the outer world.
+There is a custom docker image that you can use for development.
+This repository is mounted inside the container, and any changes made to the files are automatically propagated into the container. You can use the container to run tests and check for compatibility issues.
+There isn't any syncing since the filesystem points to the 2 locations simultaneously.
 
-### (API) Model
-Domain representation for specific API. Data-transfer object, POPO that contains only values of attributes and identifiers of related resources. 
+Use the script called `dev.sh` to manage the image. Here are the available commands:
+- **Build** base dev docker image, and to install composer and dependencies at first run
 
-### (JSON:API) Resource
-Object representation of JSON:API resource defined by the JSON:API specification.
+      ./dev.sh build
 
-## Data conversion flow
+- **Start** the dev container
 
-<img src='https://g.gravizo.com/svg?
-digraph G {
-resource;
-model;
-entity;
-entity -> model [label="Api model construction"];
-model -> resource [label="JSON:API serialize"];
-resource -> model [label="JSON:API denormalize"];
-model -> entity [label="Commands"];
-  }
-'>
+      ./dev.sh run
 
-## Development
+- **Stop** the dev container
 
-There is a custom docker image that can be used for development. 
-This docker container should be used to run tests and check for any compatibility issues.
+      ./dev.sh stop
 
-This repo is mounted inside of the container and any changes made to the files are automatically propagated into the container.
-There isnt any syncing, the filesystem is pointed to the 2 locations at the same time.
+- **Attach** the container shell to the terminal so that you can execute commands inside of the container
 
-A script called dev.sh can be used to manage the image. Here are the avaliable commands:
+      ./dev.sh ssh
 
-- ./dev.sh build
-
-      used to build base dev docker image, and to install composer and dependencies at first run
-- ./dev.sh run
-
-      starts the dev container
-- ./dev.sh stop
-
-      stops the dev container
-- ./dev.sh ssh
-
-      attaches the container shell to the terminal so that you can execute commands inside of the container
-- ./dev.sh test
+- Run PHP unit tests inside of the running container
       
-      run php unit tests inside of the running container
-- ./dev.sh qc
+      ./dev.sh test
 
-      executes qc tests
+- Execute code check and run tests
 
-- ./dev.sh install
-      executes composer install --optimize-autoloader
+      ./dev.sh qc
+
+- Executes composer install --optimize-autoloader
+
+      ./dev.sh install
+
+## <a name="glossary"></a>Glossary
+
+| **Term**    | **Description** |
+| :---        | :---        |
+| Entity      | Domain object that is modeled and used in the application. It might map to a single row in a relational database, but it won't necessarily do so. |
+| (API) Model | Domain representation for specific API. Data-transfer object, POPO that contains only values of attributes and identifiers of related resources. |
+| (JSON:API) Resource | Object representation of JSON:API resource defined by the JSON:API specification. |
+

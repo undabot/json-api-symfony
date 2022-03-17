@@ -40,7 +40,7 @@
     },
     "scripts": {
         "lint": [
-            "php-cs-fixer fix --diff --ansi --dry-run"
+            "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --diff --ansi --dry-run"
         ],
         "phpstan": [
             "php -d memory_limit=-1 vendor/bin/phpstan analyse -n --ansi --no-progress"

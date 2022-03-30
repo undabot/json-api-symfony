@@ -13,6 +13,7 @@ use Undabot\JsonApi\Implementation\Model\Request\Filter\FilterSet;
 use Undabot\SymfonyJsonApi\Exception\FilterRequiredException;
 use Undabot\SymfonyJsonApi\Exception\PaginationRequiredException;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\AbstractQueryFactory;
+use Undabot\SymfonyJsonApi\Model\Query\Annotation\Query;
 
 final class MockQueryFactoryImplementation extends AbstractQueryFactory
 {
@@ -47,6 +48,8 @@ final class MockQueryWithOptionalPagination
     ) {
     }
 }
+
+
 
 /**
  * @internal

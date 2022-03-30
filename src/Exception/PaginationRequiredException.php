@@ -8,13 +8,8 @@ use Exception;
 
 final class PaginationRequiredException extends Exception
 {
-    private function __construct(string $message)
+    public function __construct()
     {
-        parent::__construct($message, 422);
-    }
-
-    public static function noPaginationProvided(): self
-    {
-        return new self('Expected pagination, none found.');
+        parent::__construct('Expected pagination, none found.', 422);
     }
 }

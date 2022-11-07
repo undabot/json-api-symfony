@@ -95,7 +95,7 @@ json_api_symfony:
 Domain object that is modeled and used in the application. Has nothing to do with the outer world.
 
 ## (API) Model
-Domain representation for specific API. Data-transfer object, POPO that contains only values of attributes and identifiers of related resources. 
+Domain representation for specific API. Data-transfer object, POPO that contains only values of attributes and identifiers of related resources.
 
 ## (JSON:API) Resource
 Object representation of JSON:API resource defined by the JSON:API specification.
@@ -111,12 +111,12 @@ entity -> model [label="Api model construction"];
 model -> resource [label="JSON:API serialize"];
 resource -> model [label="JSON:API denormalize"];
 model -> entity [label="Commands"];
-  }
+}
 '>
 
 # Development
 
-There is a custom docker image that can be used for development. 
+There is a custom docker image that can be used for development.
 This docker container should be used to run tests and check for any compatibility issues.
 
 This repo is mounted inside of the container and any changes made to the files are automatically propagated into the container.
@@ -137,11 +137,11 @@ A script called dev.sh can be used to manage the image. Here are the avaliable c
 
       attaches the container shell to the terminal so that you can execute commands inside of the container
 - ./dev.sh test
-      
+
       run php unit tests inside of the running container
 - ./dev.sh qc
 
       executes qc tests
 
 - ./dev.sh install
-      executes composer install --optimize-autoloader
+  executes composer install --optimize-autoloader

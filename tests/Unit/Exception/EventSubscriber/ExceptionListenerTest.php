@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
+use Undabot\JsonApi\Definition\Exception\Request\ClientGeneratedIdIsNotAllowedException;
 use Undabot\JsonApi\Definition\Exception\Request\RequestException;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener;
@@ -48,7 +49,7 @@ final class ExceptionListenerTest extends TestCase
         $event = new ExceptionEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             Request::create('http://localhost:8000/web/v1/posts'),
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $exception,
         );
         $data = [];
@@ -80,6 +81,10 @@ final class ExceptionListenerTest extends TestCase
         yield 'Exception is Exception instance' => [
             new \Exception(),
         ];
+
+        yield 'Exception is ClientGeneratedIdIsNotAllowedException instance' => [
+            new ClientGeneratedIdIsNotAllowedException(),
+        ];
     }
 
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupportedAndEventHaveThrowableMethod(): void
@@ -87,7 +92,7 @@ final class ExceptionListenerTest extends TestCase
         $event = new ExceptionEvent(
             $this->createMock(KernelInterface::class),
             $this->createMock(Request::class),
-            KernelInterface::MASTER_REQUEST,
+            KernelInterface::MAIN_REQUEST,
             new \LogicException()
         );
         $data = [];
@@ -114,7 +119,7 @@ final class ExceptionListenerTest extends TestCase
         $event = new ExceptionEvent(
             $this->createMock(KernelInterface::class),
             $this->createMock(Request::class),
-            KernelInterface::MASTER_REQUEST,
+            KernelInterface::MAIN_REQUEST,
             $e = new AccessDeniedHttpException()
         );
         $data = [];

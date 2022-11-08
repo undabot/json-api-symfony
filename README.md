@@ -20,7 +20,7 @@ This section covers usage examples and a detailed explanation of library element
 - - -
 _Before we proceed, here are a few notes:_
 * _Namespaces for Article and Comment are just for demo purposes. You can place it wherever you want._
-* _We use `readonly` for properties because we don't want that value assigned during the creation of the object is changed, but you don't need to do this. If using a version of PHP prior 8.1 you can add `@psalm-immutable` annotation on the class to have readonly behaviour for properties._
+* _We use `readonly` for properties because we don't want that value assigned during the creation of the object is changed, but you don't need to do this. If using a version of PHP prior 8.1 you can add `@psalm-immutable` (read more about Psalm [here](https://github.com/vimeo/psalm)) annotation on the class to have readonly behaviour for properties._
 * _Final class is used on the class because we don't want to extend read models, but if you need to extend it remove final declaration (although we recommend to have one read model per resource which only implements ApiModel and doesn't extend any other model)._
 * _Given examples have a lot of logic inside the controller because of readability. In a real application, we would recommend splitting the logic and move it into separate classes._
 * _Given examples have parameters from query passed into query bus, which should return an array of results. Instead of using the query bus, you can inject the repository and send parameters directly to it or even inject a database connection and make a raw query with the given parameters. Use whatever approach you use when building your applications._
@@ -28,7 +28,12 @@ _Before we proceed, here are a few notes:_
 
 ### <a name='return-response'></a>How to return the JSON:API compliant response?
 
-To return JSON:API compliant response, you have to go through a couple of steps - what you need is read or write side and responder. Both read and write sides logically consist of several classes - the controller, an entry point of the request, the model used to create the entity or return requested information, and the entity that stores the data. Responder serves as a glue, mapping the entities to models.
+To return JSON:API compliant response, you have to go through a couple of steps - what you need is read or write side and responder. Both read and write sides logically consist of several classes: 
+* the controller, an entry point of the request 
+* the model used to create the entity or return requested information
+* the entity that stores the data 
+
+Responder serves as a glue, mapping the entities to models.
 
 Before going deeper into the read and write models, responders and controllers, it's a good idea to describe how we distinguish attributes from relations in our models. To recognise which property is attribute and which one is relation we use annotations. Each model should have one "main" annotation that determines its type, a top-level member for any resource object. This annotation is placed just above the class declaration, and it looks like this:
 
@@ -51,7 +56,7 @@ Apart from `@ResourceType` annotation, there are three more - `@Attribute`, `@To
 public readonly array $commentIds,
 ```
 
-**Name** value is what we want to show in response. For this example, `article_comments` is the name for this relationship that will be returned in the response.\
+**Name** value is what we want to show in response. For this example, `article_comments` is the name for this relationship that will be returned in the response. If no name is defined in the annotation the relationship will inherit the property name.\
 **Type** value is the resource type of relation to which we're referring. Here, we're referring to comments, meaning that a model of type comments related to this model is part of the codebase. Keep in mind that the library links only types of the exact name, so if your model is of type `comment`, and you make a mistake and write plural library will throw an error.
 
 Relationships can be nullable, and to add a nullable relationship to the model, you just need to assign a bool value to `nullable` property inside the annotation, like in the following example. Don't forget to null safe type-hint your property in that case, and remember - relationships are not nullable by default.
@@ -474,7 +479,7 @@ class Controller
     }
 ```
 
-Whether the client requested explicitly requested includes, or the response needs to have all the possible includes, Responder needs to have the mapping for the read model of each entity that is returned in the response.
+Whether the client requested explicitly requested includes, or the response needs to have all the possible includes, Responder needs to have the mapping for the read model of each object that is returned in the response.
 
 When returning includes inside a list of objects (e.g. returning a list of articles from the `/articles` endpoint) there is a chance that different resources will have same relations. In that case we want to include the relation only once. E.g., if we have a list of articles and some articles have the same author, we want to include that author only once. We can use [\Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection](src/Model/Collection/ObjectCollection.php#L11) for that.
 
@@ -571,7 +576,7 @@ class Controller
 
 #### Pagination
 
-The library can currently read page and offset based pagination. So no matter which one the client sends to the server, we can read them both like in the example below.
+The library can currently read page and offset based pagination. Page based pagination is automatically converted to an offset based pagination. So no matter which one the client sends to the server, we can read them both like in the example below.
 
 ```php
 <?php

@@ -91,7 +91,7 @@ final class ViewResponseSubscriberTest extends TestCase
         $event = new ViewEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             new ResourceCollectionResponse(
                 new ResourceCollection([
                     new Resource(
@@ -247,7 +247,7 @@ final class ViewResponseSubscriberTest extends TestCase
         return new ViewEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             $request,
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             new ResourceCollectionResponse(
                 new ResourceCollection([
                     new Resource(

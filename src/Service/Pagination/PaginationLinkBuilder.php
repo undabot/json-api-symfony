@@ -18,10 +18,10 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 
 class PaginationLinkBuilder
 {
-    public function createLinks(Request $request, ResourceCollectionResponse $response): LinkCollectionInterface
+    public function createLinks(Request $request, ResourceCollectionResponse $response): ?LinkCollectionInterface
     {
         $pagination = $request->query->has(GetResourceCollectionRequest::PAGINATION_KEY)
-            ? (new PaginationFactory())->fromArray($request->query->get(GetResourceCollectionRequest::PAGINATION_KEY))
+            ? (new PaginationFactory())->fromArray($request->query->all()[GetResourceCollectionRequest::PAGINATION_KEY] ?? [])
             : null;
         $links = $response->getLinks();
         if (null !== $pagination) {
@@ -92,6 +92,6 @@ class PaginationLinkBuilder
             );
         }
 
-        return $links ?? new LinkCollection([]);
+        return $links ?? null;
     }
 }

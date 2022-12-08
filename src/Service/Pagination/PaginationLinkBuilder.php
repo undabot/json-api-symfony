@@ -12,9 +12,10 @@ use Undabot\JsonApi\Implementation\Model\Link\Link;
 use Undabot\JsonApi\Implementation\Model\Link\LinkCollection;
 use Undabot\JsonApi\Implementation\Model\Link\LinkUrl;
 use Undabot\JsonApi\Implementation\Model\Request\Pagination\OffsetBasedPagination;
-use Undabot\JsonApi\Implementation\Model\Request\Pagination\PageBasedPagination;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
+use Undabot\SymfonyJsonApi\Service\Pagination\Creator\OffsetBasedPaginationLinkParametersCreator;
+use Undabot\SymfonyJsonApi\Service\Pagination\Creator\PageBasedPaginationLinkParametersCreator;
 
 final class PaginationLinkBuilder
 {
@@ -33,62 +34,45 @@ final class PaginationLinkBuilder
         if (null !== $response->getMeta()) {
             $total = $response->getMeta()->getData()['total'] ?? null;
         }
-        $key = PageBasedPagination::PARAM_PAGE_NUMBER;
-        $nextSet = 1;
-        $prevSet = -1;
-        $firstPageKey = 1;
-        $lastPageKey = null;
-        if (null !== $total) {
-            $lastPageKey = ceil($total / $pagination->getSize());
-        }
-        if (true === ($pagination instanceof OffsetBasedPagination)) {
-            $key = OffsetBasedPagination::PARAM_PAGE_OFFSET;
-            $nextSet = $pagination->getSize();
-            $prevSet = $pagination->getSize() * -1;
-            $firstPageKey = 0;
-            if (null !== $lastPageKey) {
-                $lastPageKey = $lastPageKey * $pagination->getSize() - $pagination->getSize();
-            }
-        }
-        $queryParamsFirst = $queryParams;
-        $queryParamsFirst[GetResourceCollectionRequest::PAGINATION_KEY][$key] = $firstPageKey;
-        $paginationLinks = [
-            new Link(
-                LinkNamesEnum::LINK_NAME_PAGINATION_FIRST,
-                new LinkUrl($request->getPathInfo() . '?' . urldecode(http_build_query($queryParamsFirst)))
-            ),
-        ];
-        if (null !== $lastPageKey) {
-            $queryParamsLast = $queryParams;
-            $queryParamsLast[GetResourceCollectionRequest::PAGINATION_KEY][$key] = $lastPageKey;
-            $lastLink = new Link(
-                LinkNamesEnum::LINK_NAME_PAGINATION_LAST,
-                new LinkUrl($request->getPathInfo() . '?' . urldecode(http_build_query($queryParamsLast)))
+        $responsePaginationLink = (true === ($pagination instanceof OffsetBasedPagination))
+            ? (new OffsetBasedPaginationLinkParametersCreator())->createLinks(
+                $pagination,
+                $total,
+            )
+            : (new PageBasedPaginationLinkParametersCreator())->createLinks(
+                $pagination,
+                $total,
             );
-            $paginationLinks[] = $lastLink;
+        $queryParamsFirst = $queryParams;
+        $queryParamsFirst[GetResourceCollectionRequest::PAGINATION_KEY][$responsePaginationLink->paginationPageKey]
+            = $responsePaginationLink->firstPageKey;
+        $paginationLinks = [$this->buildLink(LinkNamesEnum::LINK_NAME_PAGINATION_FIRST, $request, $queryParamsFirst)];
+        if (null !== $responsePaginationLink->lastPageKey) {
+            $queryParamsLast = $queryParams;
+            $queryParamsLast[GetResourceCollectionRequest::PAGINATION_KEY][$responsePaginationLink->paginationPageKey]
+                = $responsePaginationLink->lastPageKey;
+            $paginationLinks[] = $this->buildLink(LinkNamesEnum::LINK_NAME_PAGINATION_LAST, $request, $queryParamsLast);
         }
         if (0 !== $pagination->getOffset()) {
             $queryParamsPrev = $queryParams;
-            $queryParamsPrev[GetResourceCollectionRequest::PAGINATION_KEY][$key] += $prevSet;
-            $prevLink = new Link(
-                LinkNamesEnum::LINK_NAME_PAGINATION_PREV,
-                new LinkUrl($request->getPathInfo() . '?' . urldecode(http_build_query($queryParamsPrev)))
-            );
-            $paginationLinks[] = $prevLink;
+            $queryParamsPrev[GetResourceCollectionRequest::PAGINATION_KEY][$responsePaginationLink->paginationPageKey] += $responsePaginationLink->previousSet;
+            $paginationLinks[] = $this->buildLink(LinkNamesEnum::LINK_NAME_PAGINATION_PREV, $request, $queryParamsPrev);
         }
         if (null !== $total && ($pagination->getOffset() + $pagination->getSize()) < $total) {
             $queryParamsNext = $queryParams;
-            $queryParamsNext[GetResourceCollectionRequest::PAGINATION_KEY][$key] += $nextSet;
-            $nextLink = new Link(
-                LinkNamesEnum::LINK_NAME_PAGINATION_NEXT,
-                new LinkUrl($request->getPathInfo() . '?' . urldecode(http_build_query($queryParamsNext)))
-            );
-            $paginationLinks[] = $nextLink;
+            $queryParamsNext[GetResourceCollectionRequest::PAGINATION_KEY][$responsePaginationLink->paginationPageKey] += $responsePaginationLink->nextSet;
+            $paginationLinks[] = $this->buildLink(LinkNamesEnum::LINK_NAME_PAGINATION_NEXT, $request, $queryParamsNext);
         }
 
-        return new LinkCollection(array_merge(
-                $paginationLinks,
-                null === $links ? [] : $links->getLinks())
+        return new LinkCollection(array_merge($paginationLinks, null === $links ? [] : $links->getLinks()));
+    }
+
+    /** @param array<string,string> $queryParams */
+    private function buildLink(string $linkName, Request $request, array $queryParams): Link
+    {
+        return new Link(
+            $linkName,
+            new LinkUrl($request->getPathInfo() . '?' . urldecode(http_build_query($queryParams))),
         );
     }
 }

@@ -141,10 +141,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['size' => 3, 'number' => 1]]
             ),
-            '/web/v1/posts?page[size]=3&page[number]=1',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=1',
             null,
-            '/web/v1/posts?page[size]=3&page[number]=2',
-            '/web/v1/posts?page[size]=3&page[number]=4',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=2',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=4',
         ];
 
         yield 'Page based pagination with 2nd page retrieved' => [
@@ -153,10 +153,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['size' => 3, 'number' => 2]]
             ),
-            '/web/v1/posts?page[size]=3&page[number]=1',
-            '/web/v1/posts?page[size]=3&page[number]=1',
-            '/web/v1/posts?page[size]=3&page[number]=3',
-            '/web/v1/posts?page[size]=3&page[number]=4',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=1',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=1',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=3',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=4',
         ];
 
         yield 'Page based pagination with 3rd page retrieved' => [
@@ -165,10 +165,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['size' => 3, 'number' => 3]]
             ),
-            '/web/v1/posts?page[size]=3&page[number]=1',
-            '/web/v1/posts?page[size]=3&page[number]=2',
-            '/web/v1/posts?page[size]=3&page[number]=4',
-            '/web/v1/posts?page[size]=3&page[number]=4',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=1',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=2',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=4',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=4',
         ];
 
         yield 'Page based pagination with last page retrieved' => [
@@ -177,10 +177,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['size' => 3, 'number' => 4]]
             ),
-            '/web/v1/posts?page[size]=3&page[number]=1',
-            '/web/v1/posts?page[size]=3&page[number]=3',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=1',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=3',
             null,
-            '/web/v1/posts?page[size]=3&page[number]=4',
+            'http://localhost:8000/web/v1/posts?page[size]=3&page[number]=4',
         ];
 
         yield 'Offset based pagination with 1st page retrieved' => [
@@ -189,10 +189,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['offset' => 0, 'limit' => 3]]
             ),
-            '/web/v1/posts?page[offset]=0&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=0&page[limit]=3',
             null,
-            '/web/v1/posts?page[offset]=3&page[limit]=3',
-            '/web/v1/posts?page[offset]=9&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=3&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=9&page[limit]=3',
         ];
 
         yield 'Offset based pagination with 2nd page retrieved' => [
@@ -201,10 +201,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['offset' => 3, 'limit' => 3]]
             ),
-            '/web/v1/posts?page[offset]=0&page[limit]=3',
-            '/web/v1/posts?page[offset]=0&page[limit]=3',
-            '/web/v1/posts?page[offset]=6&page[limit]=3',
-            '/web/v1/posts?page[offset]=9&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=0&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=0&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=6&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=9&page[limit]=3',
         ];
 
         yield 'Offset based pagination with 3rd page retrieved' => [
@@ -213,10 +213,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['offset' => 6, 'limit' => 3]]
             ),
-            '/web/v1/posts?page[offset]=0&page[limit]=3',
-            '/web/v1/posts?page[offset]=3&page[limit]=3',
-            '/web/v1/posts?page[offset]=9&page[limit]=3',
-            '/web/v1/posts?page[offset]=9&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=0&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=3&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=9&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=9&page[limit]=3',
         ];
 
         yield 'Offset based pagination with last page retrieved' => [
@@ -225,10 +225,10 @@ final class ViewResponseSubscriberTest extends TestCase
                 Request::METHOD_GET,
                 ['page' => ['offset' => 9, 'limit' => 3]]
             ),
-            '/web/v1/posts?page[offset]=0&page[limit]=3',
-            '/web/v1/posts?page[offset]=6&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=0&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=6&page[limit]=3',
             null,
-            '/web/v1/posts?page[offset]=9&page[limit]=3',
+            'http://localhost:8000/web/v1/posts?page[offset]=9&page[limit]=3',
         ];
     }
 

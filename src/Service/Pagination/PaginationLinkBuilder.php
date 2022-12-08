@@ -72,7 +72,8 @@ final class PaginationLinkBuilder
     {
         return new Link(
             $linkName,
-            new LinkUrl($request->getPathInfo() . '?' . urldecode(http_build_query($queryParams))),
+            new LinkUrl($request->getSchemeAndHttpHost() . $request->getPathInfo() . '?'
+                . urldecode(http_build_query($queryParams))),
         );
     }
 }

@@ -14,8 +14,8 @@ use Undabot\JsonApi\Implementation\Model\Link\LinkUrl;
 use Undabot\JsonApi\Implementation\Model\Request\Pagination\OffsetBasedPagination;
 use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
-use Undabot\SymfonyJsonApi\Service\Pagination\Creator\OffsetBasedPaginationLinkParametersCreator;
-use Undabot\SymfonyJsonApi\Service\Pagination\Creator\PageBasedPaginationLinkParametersCreator;
+use Undabot\SymfonyJsonApi\Service\Pagination\Creator\OffsetBasedPaginationLinkParametersFactory;
+use Undabot\SymfonyJsonApi\Service\Pagination\Creator\PageBasedPaginationLinkParametersFactory;
 
 final class PaginationLinkBuilder
 {
@@ -35,11 +35,11 @@ final class PaginationLinkBuilder
             $total = $response->getMeta()->getData()['total'] ?? null;
         }
         $responsePaginationLink = (true === ($pagination instanceof OffsetBasedPagination))
-            ? (new OffsetBasedPaginationLinkParametersCreator())->createLinks(
+            ? (new OffsetBasedPaginationLinkParametersFactory())->createLinks(
                 $pagination,
                 $total,
             )
-            : (new PageBasedPaginationLinkParametersCreator())->createLinks(
+            : (new PageBasedPaginationLinkParametersFactory())->createLinks(
                 $pagination,
                 $total,
             );

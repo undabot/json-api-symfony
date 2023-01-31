@@ -8,7 +8,7 @@ use Undabot\JsonApi\Definition\Model\Request\Pagination\PaginationInterface;
 use Undabot\JsonApi\Implementation\Model\Request\Pagination\PageBasedPagination;
 use Undabot\SymfonyJsonApi\Model\Link\ResponsePaginationLink;
 
-final class PageBasedPaginationLinkParametersCreator implements PaginationLinkParametersCreator
+final class PageBasedPaginationLinkParametersFactory implements PaginationLinkParametersFactory
 {
     public function createLinks(PaginationInterface $pagination, ?int $total): ResponsePaginationLink
     {

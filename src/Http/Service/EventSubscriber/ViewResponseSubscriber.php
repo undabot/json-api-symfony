@@ -21,7 +21,7 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceValidationErrorsResponse;
 use Undabot\SymfonyJsonApi\Service\Pagination\PaginationLinkBuilder;
 
-class ViewResponseSubscriber implements EventSubscriberInterface
+final class ViewResponseSubscriber implements EventSubscriberInterface
 {
     private DocumentToPhpArrayEncoderInterface $documentEncoder;
 

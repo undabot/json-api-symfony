@@ -7,6 +7,7 @@ namespace Undabot\SymfonyJsonApi\Service\Pagination;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Definition\Model\Link\LinkCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Link\LinkNamesEnum;
+use Undabot\JsonApi\Definition\Model\Request\Pagination\PaginationInterface;
 use Undabot\JsonApi\Implementation\Factory\PaginationFactory;
 use Undabot\JsonApi\Implementation\Model\Link\Link;
 use Undabot\JsonApi\Implementation\Model\Link\LinkCollection;
@@ -21,10 +22,7 @@ final class PaginationLinkBuilder
 {
     public function createLinks(Request $request, ResourceCollectionResponse $response): ?LinkCollectionInterface
     {
-        $pagination = $request->query->has(GetResourceCollectionRequest::PAGINATION_KEY)
-            ? (new PaginationFactory())->fromArray($request->query->all()[GetResourceCollectionRequest::PAGINATION_KEY]
-                ?? [])
-            : null;
+        $pagination = $this->buildPaginationIfAvailable($request);
         $links = $response->getLinks();
         if (null === $pagination) {
             return $links;
@@ -75,5 +73,15 @@ final class PaginationLinkBuilder
             new LinkUrl($request->getSchemeAndHttpHost() . $request->getPathInfo() . '?'
                 . urldecode(http_build_query($queryParams))),
         );
+    }
+
+    private function buildPaginationIfAvailable(Request $request): ?PaginationInterface
+    {
+        if (false === $request->query->has(GetResourceCollectionRequest::PAGINATION_KEY)) {
+            return null;
+        }
+
+        return (new PaginationFactory())
+            ->fromArray($request->query->all()[GetResourceCollectionRequest::PAGINATION_KEY] ?? null);
     }
 }

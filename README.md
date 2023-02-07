@@ -13,6 +13,7 @@ This document covers following sections:
 - [Configuration](#configuration)
 - [Development](#development)
 - [Glossary](#glossary)
+- [Performance](#performance)
 
 ## <a name='usage'></a>Usage
 
@@ -858,3 +859,219 @@ Use the script called `dev.sh` to manage the image. Here are the available comma
 | (API) Model | Domain representation for specific API. Data-transfer object, POPO that contains only values of attributes and identifiers of related resources. |
 | (JSON:API) Resource | Object representation of JSON:API resource defined by the JSON:API specification. |
 
+## <a name='performance'></a>Performance
+
+Performance is an important part of every backend application. We tested returning a list of resources on the 1 vCPU (1797.917 MHz) server with 1 GB of RAM. The installed PHP version was 8.0.3 and Symfony packages were 6.0.*. xDebug was disabled.
+
+The tested request was a list of 10 resources with included relationships.
+
+Example:
+
+```
+{
+    "jsonapi": {
+        "version": "1.0"
+    },
+    "meta": {
+        "total": 501
+    },
+    "data": [
+        {
+            "type": "products",
+            "id": "01FR7ZF0CVC7DWYAXK9NN75B2E",
+            "attributes": {
+                "name": "khlywk oingpndl",
+                "price": 34575
+            },
+            "relationships": {
+                "productVariants": {
+                    "data": [
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403K8"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403K9"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KA"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KB"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KC"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KD"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KE"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KF"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KG"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KH"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KJ"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KK"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KM"
+                        },
+                        {
+                            "type": "product-variants",
+                            "id": "01GPBFYZCGF6Y6S99J4YG403KN"
+                        }
+                    ]
+                }
+            }
+        },
+        .....
+    "included": [
+        {
+            "type": "product-variants",
+            "id": "01GPBFYZCGF6Y6S99J4YG403K8",
+            "attributes": {
+                "color": "LightPink",
+                "size": "eum",
+                "multiplier": 0.8
+            },
+            "relationships": {
+                "product": {
+                    "data": {
+                        "type": "products",
+                        "id": "01FR7ZF0CVC7DWYAXK9NN75B2E"
+                    }
+                }
+            }
+        },
+        .....
+```
+
+The response was around 17.5 kb and the average response time was 158 ms.
+
+The same response was tested without the library in a way that it was assembled inside the controller by looping through data and creating JSON:API compatible PHP array which was returned in JsonResponse.
+
+The response was around 17.5 kb and the average response time was 140 ms.
+
+The same resources were returned as plain response without any standardization.
+
+Example:
+
+```
+[
+    {
+        "id": "01FR7ZF0CVC7DWYAXK9NN75B2E",
+        "name": "khlywk oingpndl",
+        "price": 34575,
+        "variants": [
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403K8",
+                "color": "LightPink",
+                "size": "eum",
+                "multiplier": 0.8
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403K9",
+                "color": "WhiteSmoke",
+                "size": "ut",
+                "multiplier": 0.4
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KA",
+                "color": "Aqua",
+                "size": "quibusdam",
+                "multiplier": 1
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KB",
+                "color": "SandyBrown",
+                "size": "minima",
+                "multiplier": 2.1
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KC",
+                "color": "GreenYellow",
+                "size": "ipsa",
+                "multiplier": 1.3
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KD",
+                "color": "PeachPuff",
+                "size": "sit",
+                "multiplier": 0.3
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KE",
+                "color": "LavenderBlush",
+                "size": "aut",
+                "multiplier": 0.3
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KF",
+                "color": "LawnGreen",
+                "size": "dolor",
+                "multiplier": 1.3
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KG",
+                "color": "MediumBlue",
+                "size": "eos",
+                "multiplier": 0.1
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KH",
+                "color": "DarkSlateGray",
+                "size": "esse",
+                "multiplier": 1.5
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KJ",
+                "color": "Gray",
+                "size": "consequatur",
+                "multiplier": 2.9
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KK",
+                "color": "CadetBlue",
+                "size": "fuga",
+                "multiplier": 1.7
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KM",
+                "color": "Aqua",
+                "size": "tenetur",
+                "multiplier": 1.3
+            },
+            {
+                "id": "01GPBFYZCGF6Y6S99J4YG403KN",
+                "color": "FireBrick",
+                "size": "esse",
+                "multiplier": 1.3
+            }
+        ]
+    },
+    .....
+```
+
+The response was around 6 kb and the average response time was 103 ms.

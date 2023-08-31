@@ -1,4 +1,4 @@
-FROM php:8.1.0-fpm as build-stage
+FROM php:8.2.9-fpm as build-stage
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
@@ -27,14 +27,3 @@ RUN composer validate --strict
 RUN composer outdated --strict
 
 RUN composer install --optimize-autoloader
-
-# Test stage
-FROM build-stage as test-stage
-
-WORKDIR /opt/app
-RUN composer install --optimize-autoloader
-
-RUN composer lint
-RUN composer phpstan
-#RUN phpdbg -qrr ./vendor/bin/phpunit test/
-#RUN cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"

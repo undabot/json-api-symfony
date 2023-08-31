@@ -1,4 +1,4 @@
-FROM php:8.1.0-fpm as build-stage
+FROM php:8.0.30-fpm as build-stage
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
@@ -17,9 +17,13 @@ RUN chmod u+x install-composer.sh
 RUN ./install-composer.sh
 RUN composer --version
 
-# Install XDebug
-RUN pecl install -f xdebug \
-    && docker-php-ext-enable xdebug
-ADD docker/.dev_files/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
-
 WORKDIR /opt/app
+
+COPY . /opt/app
+
+# Don't allow installation with outdated dependencies or invalid composer file
+RUN composer status
+RUN composer validate --strict
+RUN composer outdated --strict
+
+RUN composer install --optimize-autoloader

@@ -302,5 +302,24 @@ final class RequestFactoryTest extends TestCase
             '{"data": {"foo": "bar"}}',
             false,
         ];
+
+        yield 'Create request have lid' => [
+            '{"data": {"lid": "123", "foo": "bar"}}',
+            false,
+        ];
+    }
+
+    public function testCreateResourceRequestWillReturnResourceWithLidAsRequestIdentifierGivenRequestHasLidInBody(): void
+    {
+        $lid = '123';
+        $request = $this->createMock(Request::class);
+        $request->expects(static::once())->method('getContent')->willReturn('{"data": {"lid": "123", "foo": "bar"}}');
+        $resource = new Resource($lid, 'type', new AttributeCollection([new Attribute('foo', 'bar')]));
+        $this->resourceEncoderMock
+            ->expects(static::once())
+            ->method('decode')
+            ->willReturn($resource);
+
+        static::assertEquals($lid, $this->requestFactory->createResourceRequest($request)->getResource()->getId());
     }
 }

@@ -136,9 +136,13 @@ class FlatResource
     public function getRelationshipMetas(): array
     {
         if (true === empty($this->relationshipMetas)) {
-            /** @var RelationshipInterface $relationship */
-            foreach ($this->resource->getRelationships() as $relationship) {
-                $this->buildRelationshipMeta($relationship);
+            $relationships = $this->resource->getRelationships();
+
+            if (null !== $relationships) {
+                /** @var RelationshipInterface $relationship */
+                foreach ($relationships as $relationship) {
+                    $this->buildRelationshipMeta($relationship);
+                }
             }
         }
 

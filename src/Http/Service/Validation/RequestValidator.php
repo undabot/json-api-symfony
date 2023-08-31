@@ -117,4 +117,11 @@ class RequestValidator implements RequestValidatorInterface
 
         Assertion::same($data['id'], $id, 'Resource with invalid ID given');
     }
+
+    public function assertResourceLidIsValid(array $requestPrimaryData): void
+    {
+        if (true === \array_key_exists('lid', $requestPrimaryData)) {
+            Assertion::string($requestPrimaryData['lid']);
+        }
+    }
 }

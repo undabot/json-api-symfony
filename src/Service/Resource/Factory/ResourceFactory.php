@@ -19,6 +19,7 @@ use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMapp
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
  * Class responsible for creating a ResourceInterface instance out of given API model that is
@@ -26,12 +27,11 @@ use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder
  */
 class ResourceFactory
 {
-    /** @var ResourceMetadataFactory */
-    private $metadataFactory;
-
-    public function __construct(ResourceMetadataFactory $metadataFactory)
-    {
-        $this->metadataFactory = $metadataFactory;
+    public function __construct(
+        private ResourceMetadataFactory $metadataFactory,
+        private bool $shouldValidateReadModel,
+        private ResourceValidator $validator,
+    ) {
     }
 
     /**
@@ -53,7 +53,12 @@ class ResourceFactory
         $attributes = $this->makeAttributeCollection($apiModel, $metadata);
         $relationships = $this->makeRelationshipsCollection($apiModel, $metadata);
 
-        return new Resource($id, $type, $attributes, $relationships);
+        $resource = new Resource($id, $type, $attributes, $relationships);
+        if (true === $this->shouldValidateReadModel) {
+            $this->validator->assertValid($resource, \get_class($apiModel));
+        }
+
+        return $resource;
     }
 
     /**

@@ -3,15 +3,26 @@ name: json-api-symfony
 on: [push, pull_request]
 
 jobs:
+  start-runner:
+    uses: undabot/ci/.github/workflows/startEc2.yml@master
+    secrets: inherit
+
   build_image_82:
-    runs-on: ubuntu-latest
+    needs: start-runner
+    runs-on: ${{ needs.start-runner.outputs.label }}
+    #runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - name: Login to Docker Hub
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 1
+          set-safe-directory: 'true'
+      - run: git init
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
         with:
-          username: ${{ secrets.DOCKERHUB_USER }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build work image
         run: |
           docker build -f ./docker/php82.Dockerfile --build-arg XDEBUG_ENABLED="false"
@@ -36,26 +47,33 @@ jobs:
           cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
 
   build_image_81:
-      runs-on: ubuntu-latest
+      needs: start-runner
+      runs-on: ${{ needs.start-runner.outputs.label }}
+      #runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v2
-          - name: Login to Docker Hub
+          - uses: actions/checkout@v3
+            with:
+                fetch-depth: 1
+                set-safe-directory: 'true'
+          - run: git init
+          - name: Login to GitHub Container Registry
             uses: docker/login-action@v1
             with:
-                username: ${{ secrets.DOCKERHUB_USER }}
-                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
           - name: Build work image
             run: |
                 docker build -f ./docker/php81.Dockerfile --build-arg XDEBUG_ENABLED="false"
           - name: Push image to DockerHub
             run: |
-                docker push undabot/json-api-symfony:latest
+                docker push undabot/json-api-symfony:81
 
   test_image_81:
       runs-on: ubuntu-latest
       needs: [build_image_81]
       container:
-          image: json-api-symfony:latest
+          image: json-api-symfony:81
       steps:
           - name: Test image
             run: |
@@ -68,26 +86,33 @@ jobs:
                 cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
 
   build_image_83:
-      runs-on: ubuntu-latest
+      needs: start-runner
+      runs-on: ${{ needs.start-runner.outputs.label }}
+      #runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v2
-          - name: Login to Docker Hub
+          - uses: actions/checkout@v3
+            with:
+                fetch-depth: 1
+                set-safe-directory: 'true'
+          - run: git init
+          - name: Login to GitHub Container Registry
             uses: docker/login-action@v1
             with:
-                username: ${{ secrets.DOCKERHUB_USER }}
-                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
           - name: Build work image
             run: |
                 docker build -f ./docker/php83.Dockerfile --build-arg XDEBUG_ENABLED="false"
           - name: Push image to DockerHub
             run: |
-                docker push undabot/json-api-symfony:latest
+                docker push undabot/json-api-symfony:83
 
   test_image_83:
       runs-on: ubuntu-latest
       needs: [build_image_83]
       container:
-          image: json-api-symfony:latest
+          image: json-api-symfony:83
       steps:
           - name: Test image
             run: |
@@ -100,26 +125,33 @@ jobs:
                 cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
 
   build_image_80:
-      runs-on: ubuntu-latest
+      needs: start-runner
+      runs-on: ${{ needs.start-runner.outputs.label }}
+      #runs-on: ubuntu-latest
       steps:
-          - uses: actions/checkout@v2
-          - name: Login to Docker Hub
+          - uses: actions/checkout@v3
+            with:
+                fetch-depth: 1
+                set-safe-directory: 'true'
+          - run: git init
+          - name: Login to GitHub Container Registry
             uses: docker/login-action@v1
             with:
-                username: ${{ secrets.DOCKERHUB_USER }}
-                password: ${{ secrets.DOCKERHUB_PASSWORD }}
+                registry: ghcr.io
+                username: ${{ github.actor }}
+                password: ${{ secrets.GITHUB_TOKEN }}
           - name: Build work image
             run: |
                 docker build -f ./docker/php80.Dockerfile --build-arg XDEBUG_ENABLED="false"
           - name: Push image to DockerHub
             run: |
-                docker push undabot/json-api-symfony:latest
+                docker push undabot/json-api-symfony:80
 
-  test_image_8:
+  test_image_80:
       runs-on: ubuntu-latest
       needs: [build_image_80]
       container:
-          image: json-api-symfony:latest
+          image: json-api-symfony:80
       steps:
           - name: Test image
             run: |

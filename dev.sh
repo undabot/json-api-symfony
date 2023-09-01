@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOCKERFILE=docker/Dockerfile
+DOCKERFILE=docker/php82.Dockerfile
 PROJECTNAME=json_api_symfony_dev
 CONTAINERNAME=json_api_symfony
 EXEC="docker exec -it $CONTAINERNAME /bin/bash"

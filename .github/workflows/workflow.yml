@@ -20,7 +20,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build work image
         run: |
-          docker build -f ./docker/php82.Dockerfile --build-arg XDEBUG_ENABLED="false"
+          docker build -f ./docker/php82.Dockerfile --build-arg XDEBUG_ENABLED="false" .
       - name: Push image to DockerHub
         run: |
           docker push undabot/json-api-symfony:latest
@@ -57,7 +57,7 @@ jobs:
                 password: ${{ secrets.GITHUB_TOKEN }}
           - name: Build work image
             run: |
-                docker build -f ./docker/php81.Dockerfile --build-arg XDEBUG_ENABLED="false"
+                docker build -f ./docker/php81.Dockerfile --build-arg XDEBUG_ENABLED="false" .
           - name: Push image to DockerHub
             run: |
                 docker push undabot/json-api-symfony:81
@@ -94,7 +94,7 @@ jobs:
                 password: ${{ secrets.GITHUB_TOKEN }}
           - name: Build work image
             run: |
-                docker build -f ./docker/php83.Dockerfile --build-arg XDEBUG_ENABLED="false"
+                docker build -f ./docker/php83.Dockerfile --build-arg XDEBUG_ENABLED="false" .
           - name: Push image to DockerHub
             run: |
                 docker push undabot/json-api-symfony:83
@@ -131,7 +131,7 @@ jobs:
                 password: ${{ secrets.GITHUB_TOKEN }}
           - name: Build work image
             run: |
-                docker build -f ./docker/php80.Dockerfile --build-arg XDEBUG_ENABLED="false"
+                docker build -f ./docker/php80.Dockerfile --build-arg XDEBUG_ENABLED="false" .
           - name: Push image to DockerHub
             run: |
                 docker push undabot/json-api-symfony:80

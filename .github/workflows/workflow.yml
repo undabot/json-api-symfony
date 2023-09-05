@@ -3,14 +3,9 @@ name: json-api-symfony
 on: [push, pull_request]
 
 jobs:
-  start-runner:
-    uses: undabot/ci/.github/workflows/startEc2.yml@master
-    secrets: inherit
 
   build_image_82:
-    needs: start-runner
-    runs-on: ${{ needs.start-runner.outputs.label }}
-    #runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -47,9 +42,7 @@ jobs:
           cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
 
   build_image_81:
-      needs: start-runner
-      runs-on: ${{ needs.start-runner.outputs.label }}
-      #runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
       steps:
           - uses: actions/checkout@v3
             with:
@@ -86,9 +79,7 @@ jobs:
                 cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
 
   build_image_83:
-      needs: start-runner
-      runs-on: ${{ needs.start-runner.outputs.label }}
-      #runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
       steps:
           - uses: actions/checkout@v3
             with:
@@ -125,9 +116,7 @@ jobs:
                 cat tests/_reports/coverage.txt | head -n 10 | grep "Lines"
 
   build_image_80:
-      needs: start-runner
-      runs-on: ${{ needs.start-runner.outputs.label }}
-      #runs-on: ubuntu-latest
+      runs-on: ubuntu-latest
       steps:
           - uses: actions/checkout@v3
             with:

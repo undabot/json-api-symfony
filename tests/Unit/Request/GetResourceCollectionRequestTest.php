@@ -15,6 +15,7 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -44,13 +45,13 @@ final class GetResourceCollectionRequestTest extends TestCase
         $this->parameterBagMock->method('all')->willReturn([]);
 
         $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($this->requestMock);
-        static::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
+        self::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
-        static::assertNull($getResourceCollectionRequest->getPagination());
-        static::assertNull($getResourceCollectionRequest->getIncludes());
-        static::assertNull($getResourceCollectionRequest->getFilterSet());
-        static::assertNull($getResourceCollectionRequest->getSortSet());
-        static::assertNull($getResourceCollectionRequest->getSparseFieldset());
+        self::assertNull($getResourceCollectionRequest->getPagination());
+        self::assertNull($getResourceCollectionRequest->getIncludes());
+        self::assertNull($getResourceCollectionRequest->getFilterSet());
+        self::assertNull($getResourceCollectionRequest->getSortSet());
+        self::assertNull($getResourceCollectionRequest->getSparseFieldset());
     }
 
     public function testItWithAllValidParametersCanBeConstructed(): void
@@ -68,31 +69,31 @@ final class GetResourceCollectionRequestTest extends TestCase
         $this->requestMock->query = $this->parameterBagMock;
 
         $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($this->requestMock);
-        static::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
+        self::assertInstanceOf(GetResourceCollectionRequest::class, $getResourceCollectionRequest);
 
-        static::assertSame(10, $getResourceCollectionRequest->getPagination()->getSize());
-        static::assertSame((3 - 1) * 10, $getResourceCollectionRequest->getPagination()->getOffset());
+        self::assertSame(10, $getResourceCollectionRequest->getPagination()->getSize());
+        self::assertSame((3 - 1) * 10, $getResourceCollectionRequest->getPagination()->getOffset());
 
         $filters = $getResourceCollectionRequest->getFilterSet();
-        static::assertSame(3, $filters->getFilter('priceMin')->getValue());
-        static::assertSame(10.5, $filters->getFilter('priceMax')->getValue());
-        static::assertSame('John', $filters->getFilter('name')->getValue());
+        self::assertSame(3, $filters->getFilter('priceMin')->getValue());
+        self::assertSame(10.5, $filters->getFilter('priceMax')->getValue());
+        self::assertSame('John', $filters->getFilter('name')->getValue());
 
         $sorts = iterator_to_array($getResourceCollectionRequest->getSortSet());
 
-        static::assertSame($sorts[0]->getAttribute(), 'name');
-        static::assertTrue($sorts[0]->isAsc());
+        self::assertSame($sorts[0]->getAttribute(), 'name');
+        self::assertTrue($sorts[0]->isAsc());
 
-        static::assertSame($sorts[1]->getAttribute(), 'price');
-        static::assertTrue($sorts[1]->isDesc());
+        self::assertSame($sorts[1]->getAttribute(), 'price');
+        self::assertTrue($sorts[1]->isDesc());
 
-        static::assertSame($sorts[2]->getAttribute(), 'author.name');
-        static::assertTrue($sorts[2]->isAsc());
+        self::assertSame($sorts[2]->getAttribute(), 'author.name');
+        self::assertTrue($sorts[2]->isAsc());
 
         $includes = $getResourceCollectionRequest->getIncludes();
-        static::assertSame(['category', 'history', 'purchases'], $includes);
+        self::assertSame(['category', 'history', 'purchases'], $includes);
 
         $fields = $getResourceCollectionRequest->getSparseFieldset();
-        static::assertSame(['author' => 'name,price,rating', 'book' => 'title,publisher'], $fields);
+        self::assertSame(['author' => 'name,price,rating', 'book' => 'title,publisher'], $fields);
     }
 }

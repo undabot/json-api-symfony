@@ -31,24 +31,28 @@ class ResourceDto implements ApiModel
 
     /**
      * @var string
+     *
      * @JsonApi\Attribute
      */
     private $title;
 
     /**
      * @var null|string
+     *
      * @JsonApi\Attribute
      */
     private $summary;
 
     /**
      * @var array
+     *
      * @JsonApi\ToMany(type="tag")
      */
     private $tags;
 
     /**
      * @var null|string
+     *
      * @JsonApi\ToOne(type="person")
      */
     private $owner;
@@ -90,6 +94,7 @@ class ResourceDto implements ApiModel
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -129,11 +134,11 @@ final class ResourceDenormalizerTest extends TestCase
 
         /** @var ResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, ResourceDto::class);
-        static::assertInstanceOf(ResourceDto::class, $dto);
+        self::assertInstanceOf(ResourceDto::class, $dto);
 
-        static::assertSame('This is my title', $dto->getTitle());
-        static::assertSame('This is my summary', $dto->getSummary());
-        static::assertSame('p1', $dto->getOwner());
-        static::assertSame(['t1', 't2', 't3'], $dto->getTags());
+        self::assertSame('This is my title', $dto->getTitle());
+        self::assertSame('This is my summary', $dto->getSummary());
+        self::assertSame('p1', $dto->getOwner());
+        self::assertSame(['t1', 't2', 't3'], $dto->getTags());
     }
 }

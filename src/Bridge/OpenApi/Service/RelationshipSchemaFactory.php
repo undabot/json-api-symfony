@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Service;
 
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\RelationshipSchema;
@@ -17,7 +16,6 @@ class RelationshipSchemaFactory
         $relationshipAnnotation = $metadata->getRelationshipAnnotation();
         $nullable = $relationshipAnnotation->nullable;
 
-        /** @var Constraint $constraint */
         foreach ($metadata->getConstraints() as $constraint) {
             if ($constraint instanceof NotNull) {
                 $nullable = false;
@@ -34,6 +32,10 @@ class RelationshipSchemaFactory
 
         if (null === $nullable) {
             $nullable = false;
+        }
+
+        if (null === $relationshipAnnotation->type) {
+            throw new \InvalidArgumentException('Type cannot be null.');
         }
 
         return new RelationshipSchema(

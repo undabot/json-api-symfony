@@ -18,6 +18,7 @@ class ResourceSchemaSet
     /** @var null|UpdateSchema */
     private $updateModel;
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         ?IdentifierSchema $identifier,
         ?ReadSchema $readModel,

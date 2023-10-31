@@ -7,6 +7,7 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\QueryParam;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\StringSchema;
 
+/** @psalm-suppress UnusedClass */
 class PaginationQueryParam extends QueryParam
 {
     public function __construct(string $parameterName, bool $required = true)

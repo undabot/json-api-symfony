@@ -6,6 +6,7 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Response;
 
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Response;
 
+/** @psalm-suppress UnusedClass */
 class ErrorResponse implements Response
 {
     public function getStatusCode(): int

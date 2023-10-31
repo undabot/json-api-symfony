@@ -8,22 +8,18 @@ use Doctrine\Common\Annotations\Annotation;
 
 /**
  * @Annotation
+ *
  * @Target("PROPERTY")
  */
 class Attribute
 {
-    /** @var string */
-    public $name;
+    public ?string $name;
 
-    /** @var string */
-    public $description;
+    public string $description;
 
-    /** @var string */
-    public $example;
+    public string $example;
 
-    /** @var string */
-    public $format;
+    public string $format;
 
-    /** @var bool */
-    public $nullable;
+    public bool $nullable;
 }

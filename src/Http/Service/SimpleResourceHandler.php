@@ -10,6 +10,7 @@ use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
+/** @psalm-suppress UnusedClass */
 final class SimpleResourceHandler
 {
     /** @var ResourceValidator */

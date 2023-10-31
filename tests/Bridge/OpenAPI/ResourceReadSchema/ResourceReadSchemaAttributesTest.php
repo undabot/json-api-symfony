@@ -17,6 +17,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory
  *
  * @small
@@ -53,30 +54,35 @@ final class ResourceReadSchemaAttributesTest extends TestCase
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="integer")
              */
             public int $integerProperty;
 
             /**
              * @JsonApi\Attribute(nullable=true)
+             *
              * @Assert\Type(type="integer")
              */
             public ?int $nullableIntegerProperty;
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="boolean")
              */
             public bool $booleanProperty1;
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="bool")
              */
             public bool $booleanProperty2;
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="float")
              */
             public float $floatProperty;
@@ -86,19 +92,19 @@ final class ResourceReadSchemaAttributesTest extends TestCase
         $resourceReadSchema = $this->resourceSchemaFactory->readSchema($className);
 
         $resourceSchema = $resourceReadSchema->toOpenApi();
-        static::assertIsArray($resourceSchema);
-        static::assertSame($resourceSchema['type'], 'object');
-        static::assertSame(
+        self::assertIsArray($resourceSchema);
+        self::assertSame($resourceSchema['type'], 'object');
+        self::assertSame(
             ['id', 'type', 'attributes'],
             $resourceSchema['required']
         );
 
-        static::assertSame(
+        self::assertSame(
             ['type' => 'string'],
             $resourceSchema['properties']['id']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'name',
                 'type' => 'string',
@@ -110,7 +116,7 @@ final class ResourceReadSchemaAttributesTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['name']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'nullableName',
                 'type' => 'string',
@@ -122,7 +128,7 @@ final class ResourceReadSchemaAttributesTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['nullableName']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'integerProperty',
                 'type' => 'integer',
@@ -131,7 +137,7 @@ final class ResourceReadSchemaAttributesTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['integerProperty']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'nullableIntegerProperty',
                 'type' => 'integer',
@@ -140,7 +146,7 @@ final class ResourceReadSchemaAttributesTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['nullableIntegerProperty']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'booleanProperty1',
                 'type' => 'boolean',
@@ -149,7 +155,7 @@ final class ResourceReadSchemaAttributesTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['booleanProperty1']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'booleanProperty2',
                 'type' => 'boolean',
@@ -158,7 +164,7 @@ final class ResourceReadSchemaAttributesTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['booleanProperty2']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'floatProperty',
                 'type' => 'number',

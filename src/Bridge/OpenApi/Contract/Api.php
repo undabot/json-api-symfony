@@ -15,5 +15,6 @@ interface Api extends Schema
      */
     public function addSchemas(array $includedSchemas): void;
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function addServer(Server $server): void;
 }

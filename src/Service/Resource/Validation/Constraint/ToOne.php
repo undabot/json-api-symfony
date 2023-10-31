@@ -9,6 +9,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\ToOne
 
 /**
  * @Annotation
+ *
  * @Target({"PROPERTY"})
  */
 class ToOne extends Constraint

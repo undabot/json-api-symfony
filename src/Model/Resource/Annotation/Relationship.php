@@ -8,21 +8,18 @@ use Doctrine\Common\Annotations\Annotation;
 
 /**
  * @Annotation
+ *
  * @Target("PROPERTY")
  */
 abstract class Relationship
 {
-    /** @var string */
-    public $name;
+    public ?string $name;
 
-    /** @var string */
-    public $type;
+    public ?string $type;
 
-    /** @var string */
-    public $description;
+    public string $description;
 
-    /** @var bool */
-    public $nullable;
+    public bool $nullable;
 
     abstract public function isToMany(): bool;
 }

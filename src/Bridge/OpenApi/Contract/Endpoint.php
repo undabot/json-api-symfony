@@ -15,7 +15,11 @@ interface Endpoint extends Schema
 
     public function getPath(): string;
 
-    /** @return Response[] */
+    /**
+     * @return Response[]
+     *
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function getResponses(): array;
 
     /** @return null|array<int,array<string,mixed>> */

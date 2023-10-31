@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Service;
 
-use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;
@@ -18,10 +17,10 @@ class AttributeSchemaFactory
         $type = 'string';
 
         $attributeAnnotation = $metadata->getAttributeAnnotation();
+
         /** @var null|bool $nullable */
         $nullable = $attributeAnnotation->nullable;
 
-        /** @var Constraint $constraint */
         foreach ($metadata->getConstraints() as $constraint) {
             if ($constraint instanceof Type) {
                 $type = $constraint->type;

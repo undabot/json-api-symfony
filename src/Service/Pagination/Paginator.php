@@ -9,6 +9,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator as DoctrinePaginator;
 use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 use Undabot\SymfonyJsonApi\Model\Collection\PaginatedArrayCollection;
 
+/** @psalm-suppress UnusedClass */
 class Paginator implements PaginatorInterface
 {
     public function paginate(

@@ -9,6 +9,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\ToMan
 
 /**
  * @Annotation
+ *
  * @Target({"PROPERTY"})
  */
 class ToMany extends Constraint

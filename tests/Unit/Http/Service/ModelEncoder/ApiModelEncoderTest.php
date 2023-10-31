@@ -15,6 +15,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder
  *
  * @small
@@ -54,13 +55,13 @@ final class ApiModelEncoderTest extends TestCase
 
         $resourceInterface = $this->createMock(ResourceInterface::class);
 
-        $this->resourceFactory->expects(static::once())->method('make')->willReturn($resourceInterface);
+        $this->resourceFactory->expects(self::once())->method('make')->willReturn($resourceInterface);
 
         $encodedData = $this->apiModelEncoder->encodeData($data, static function ($data) {
             return new DummyApiModel($data->id);
         });
 
-        static::assertEquals($resourceInterface, $encodedData);
+        self::assertEquals($resourceInterface, $encodedData);
     }
 
     public function testEncodeDatasetWillThrowExceptionGivenModelTransformerDoNotReturnApiModel(): void
@@ -86,13 +87,13 @@ final class ApiModelEncoderTest extends TestCase
 
         $resourceInterface = $this->createMock(ResourceInterface::class);
 
-        $this->resourceFactory->expects(static::exactly(2))->method('make')->willReturn($resourceInterface);
+        $this->resourceFactory->expects(self::exactly(2))->method('make')->willReturn($resourceInterface);
 
         $encodedDataset = $this->apiModelEncoder->encodeDataset([$data1, $data2], static function ($data) {
             return new DummyApiModel($data->id);
         });
 
-        static::assertContainsOnlyInstancesOf(ResourceInterface::class, $encodedDataset);
+        self::assertContainsOnlyInstancesOf(ResourceInterface::class, $encodedDataset);
     }
 }
 

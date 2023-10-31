@@ -31,7 +31,6 @@ final class IncludedSchema implements Schema
     {
         $includedSchemas = [];
 
-        /** @var ReadSchema $schema */
         foreach ($this->includes as $schema) {
             $includedSchemas[] = ['$ref' => SchemaReference::ref($schema->getName())];
         }

@@ -21,6 +21,7 @@ class JsonApiHttpResponse extends Response
         return self::makeError($data, Response::HTTP_UNPROCESSABLE_ENTITY);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function notFound(): self
     {
         return new self(
@@ -46,6 +47,8 @@ class JsonApiHttpResponse extends Response
      * @param array<string, mixed> $data
      *
      * @throws \JsonException
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public static function forbidden(array $data): self
     {
@@ -56,6 +59,8 @@ class JsonApiHttpResponse extends Response
      * @param array<string, mixed> $data
      *
      * @throws \JsonException
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public static function unauthorized(array $data): self
     {

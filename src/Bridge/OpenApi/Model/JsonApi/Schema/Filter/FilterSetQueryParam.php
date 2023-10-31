@@ -36,7 +36,6 @@ class FilterSetQueryParam implements Schema
             ],
         ];
 
-        /** @var Filter $filter */
         foreach ($this->filters as $filter) {
             $schema['schema']['properties'][$filter->getName()] = $filter->getSchema()->toOpenApi();
         }

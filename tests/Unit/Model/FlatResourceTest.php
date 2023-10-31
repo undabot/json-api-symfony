@@ -15,6 +15,7 @@ use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -33,7 +34,7 @@ final class FlatResourceTest extends TestCase
 
         $flatResource = new FlatResource($resource);
 
-        static::assertSame([
+        self::assertSame([
             'attribute1' => 'string',
             'attribute2' => 1,
             'attribute3' => 2.0,
@@ -54,7 +55,7 @@ final class FlatResourceTest extends TestCase
 
         $flatResource = new FlatResource($resource);
 
-        static::assertSame([
+        self::assertSame([
             'empty2many' => [],
             'empty2one' => null,
             '2many' => ['1', '2', '3'],

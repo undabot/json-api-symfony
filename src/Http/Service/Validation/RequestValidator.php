@@ -16,14 +16,14 @@ use Undabot\JsonApi\Definition\Exception\Request\UnsupportedQueryStringParameter
 
 class RequestValidator implements RequestValidatorInterface
 {
-    /** @var array<int,string> */
-    private array $supportedQueryParamNames = [
-        'include',
-        'sort',
-        'filter',
-        'page',
-        'fields',
-    ];
+    //    /** @var array<int,string> */
+    //    private array $supportedQueryParamNames = [
+    //        'include',
+    //        'sort',
+    //        'filter',
+    //        'page',
+    //        'fields',
+    //    ];
 
     /**
      * Validates request according to JSON:API specification.
@@ -116,5 +116,12 @@ class RequestValidator implements RequestValidatorInterface
         }
 
         Assertion::same($data['id'], $id, 'Resource with invalid ID given');
+    }
+
+    public function assertResourceLidIsValid(array $requestPrimaryData): void
+    {
+        if (true === \array_key_exists('lid', $requestPrimaryData)) {
+            Assertion::string($requestPrimaryData['lid']);
+        }
     }
 }

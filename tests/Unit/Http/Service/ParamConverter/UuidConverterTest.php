@@ -13,6 +13,7 @@ use Undabot\SymfonyJsonApi\Http\Service\ParamConverter\UuidConverter;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -29,13 +30,13 @@ final class UuidConverterTest extends TestCase
     public function testSupports(): void
     {
         $config = $this->createConfiguration(UuidInterface::class);
-        static::assertTrue($this->converter->supports($config));
+        self::assertTrue($this->converter->supports($config));
 
         $config = $this->createConfiguration(__CLASS__);
-        static::assertFalse($this->converter->supports($config));
+        self::assertFalse($this->converter->supports($config));
 
         $config = $this->createConfiguration();
-        static::assertFalse($this->converter->supports($config));
+        self::assertFalse($this->converter->supports($config));
     }
 
     public function testApply(): void
@@ -45,8 +46,8 @@ final class UuidConverterTest extends TestCase
 
         $this->converter->apply($request, $config);
 
-        static::assertInstanceOf(UuidInterface::class, $request->attributes->get('id'));
-        static::assertEquals('47ce6a0c-9cb0-4332-a831-980c43922b00', (string) $request->attributes->get('id'));
+        self::assertInstanceOf(UuidInterface::class, $request->attributes->get('id'));
+        self::assertEquals('47ce6a0c-9cb0-4332-a831-980c43922b00', (string) $request->attributes->get('id'));
     }
 
     public function testApplyWithInvalidUuid(): void
@@ -68,12 +69,12 @@ final class UuidConverterTest extends TestCase
             ->getMock();
 
         if (null !== $name) {
-            $config->expects(static::any())
+            $config->expects(self::any())
                 ->method('getName')
                 ->willReturn($name);
         }
         if (null !== $class) {
-            $config->expects(static::any())
+            $config->expects(self::any())
                 ->method('getClass')
                 ->willReturn($class);
         }

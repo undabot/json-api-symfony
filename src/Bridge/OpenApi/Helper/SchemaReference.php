@@ -8,6 +8,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\NamedSchema;
 
 class SchemaReference
 {
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function schema(NamedSchema $schema): string
     {
         return static::ref($schema->getName());

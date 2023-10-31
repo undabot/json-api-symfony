@@ -6,11 +6,11 @@ namespace Undabot\SymfonyJsonApi\Http\Service\ModelEncoder;
 
 use Assert\Assertion;
 use Assert\AssertionFailedException;
-use Exception;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
+/** @psalm-suppress UnusedClass */
 final class ApiModelEncoder implements EncoderInterface
 {
     /** @var ResourceFactory */
@@ -27,7 +27,7 @@ final class ApiModelEncoder implements EncoderInterface
      *
      * @param mixed $data
      *
-     * @throws Exception
+     * @throws \Exception
      * @throws AssertionFailedException
      */
     public function encodeData($data, callable $modelTransformer): ResourceInterface

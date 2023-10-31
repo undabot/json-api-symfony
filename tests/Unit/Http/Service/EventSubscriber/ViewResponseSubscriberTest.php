@@ -27,23 +27,24 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber
  *
  * @medium
  */
 final class ViewResponseSubscriberTest extends TestCase
 {
-    private MockObject $documentEncoder;
-    private ViewResponseSubscriber$viewResponseSubscriber;
+    private MockObject $documentEncoderMock;
+    private ViewResponseSubscriber $viewResponseSubscriber;
 
     protected function setUp(): void
     {
-        $this->documentEncoder = $this->createMock(DocumentToPhpArrayEncoderInterface::class);
-        $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoder);
+        $this->documentEncoderMock = $this->createMock(DocumentToPhpArrayEncoderInterface::class);
+        $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoderMock);
     }
 
     /**
-     * @dataProvider controllerResultProvider
+     * @dataProvider provideBuildViewWillSetCorrectResponseInEventGivenValidControllerResultCases
      */
     public function testBuildViewWillSetCorrectResponseInEventGivenValidControllerResult(
         object $controllerResult,
@@ -52,19 +53,19 @@ final class ViewResponseSubscriberTest extends TestCase
         $event = new ViewEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             Request::create('http://localhost:8000/web/v1/posts'),
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             $controllerResult,
         );
         if ($shouldEncode) {
-            $this->documentEncoder->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
+            $this->documentEncoderMock->expects(self::once())->method('encode')->willReturn(['foo' => 'bar']);
         } else {
-            $this->documentEncoder->expects(static::never())->method('encode');
+            $this->documentEncoderMock->expects(self::never())->method('encode');
         }
 
         $this->viewResponseSubscriber->buildView($event);
     }
 
-    public function controllerResultProvider(): \Generator
+    public function provideBuildViewWillSetCorrectResponseInEventGivenValidControllerResultCases(): iterable
     {
         yield 'ResourceCollectionResponse returned by controller' => [
             new ResourceCollectionResponse($this->createMock(ResourceCollectionInterface::class)),
@@ -107,11 +108,10 @@ final class ViewResponseSubscriberTest extends TestCase
         $event = new ViewEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             Request::create('http://localhost:8000/web/v1/posts'),
-            HttpKernelInterface::MASTER_REQUEST,
+            HttpKernelInterface::MAIN_REQUEST,
             new ResourceCollection([]),
         );
-
-        $this->documentEncoder->expects(static::never())->method('encode');
+        $this->documentEncoderMock->expects(self::never())->method('encode');
 
         $this->viewResponseSubscriber->buildView($event);
     }

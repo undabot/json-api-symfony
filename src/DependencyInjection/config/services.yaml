@@ -51,7 +51,9 @@ services:
     Undabot\SymfonyJsonApi\Service\Resource\Factory\Definition\ResourceMetadataFactoryInterface: '@Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory'
     Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer: ~
     Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator: ~
-    Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory: ~
+    Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory:
+        arguments:
+            $shouldValidateReadModel: '%json_api_symfony.validate_read_model%'
 
     Undabot\SymfonyJsonApi\Http\Service\:
         resource: '../../Http/Service/*'

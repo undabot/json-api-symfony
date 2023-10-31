@@ -30,7 +30,6 @@ final class RelationshipsSchema implements Schema
         $relationships = [];
         $requiredRelationships = [];
 
-        /** @var RelationshipSchema $relationshipSchema */
         foreach ($this->relationships as $relationshipSchema) {
             $relationships[$relationshipSchema->getName()] = $relationshipSchema->toOpenApi();
             if (false === $relationshipSchema->isNullable()) {

@@ -6,6 +6,7 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model;
 
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract;
 
+/** @psalm-suppress UnusedClass */
 class Server implements Contract\Server
 {
     /** @var string */

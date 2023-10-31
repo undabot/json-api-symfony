@@ -7,6 +7,7 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi;
 use Symfony\Component\Yaml\Yaml;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 
+/** @psalm-suppress UnusedClass */
 final class ApiTransformer
 {
     public function toYaml(Api $api): string

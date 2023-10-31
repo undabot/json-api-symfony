@@ -20,13 +20,12 @@
     },
     "require-dev": {
         "roave/security-advisories": "dev-latest",
-        "phpstan/phpstan-phpunit": "^0.12",
+        "phpstan/phpstan-phpunit": "^1.3",
         "phpunit/phpunit": "^9.5",
-        "friendsofphp/php-cs-fixer": "^2.18",
+        "friendsofphp/php-cs-fixer": "^v3.37.1",
         "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^0.12",
-        "phpstan/phpstan-beberlei-assert": "^0.12",
-        "thecodingmachine/phpstan-strict-rules": "^0.12"
+        "phpstan/phpstan": "^1.8",
+        "vimeo/psalm": "^5.15"
     },
     "autoload": {
         "psr-4": {
@@ -40,7 +39,7 @@
     },
     "scripts": {
         "lint": [
-            "php-cs-fixer fix --diff --ansi --dry-run"
+            "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --diff --ansi --dry-run"
         ],
         "phpstan": [
             "php -d memory_limit=-1 vendor/bin/phpstan analyse -n --ansi --no-progress"
@@ -53,5 +52,10 @@
             "@phpstan",
             "@test"
         ]
+    },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        }
     }
 }

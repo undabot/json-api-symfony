@@ -7,6 +7,8 @@ namespace Undabot\SymfonyJsonApi\Model\Collection;
 /**
  * Collection of objects that assures only no duplicates will be added to it.
  * One instance of object will be added, while all others will be silently ignored.
+ *
+ * @psalm-suppress UnusedClass
  */
 class UniqueCollection implements ObjectCollection
 {

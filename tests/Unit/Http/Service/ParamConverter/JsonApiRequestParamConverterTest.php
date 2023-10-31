@@ -15,6 +15,7 @@ use Undabot\SymfonyJsonApi\Http\Service\ParamConverter\JsonApiRequestParamConver
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -23,6 +24,7 @@ final class JsonApiRequestParamConverterTest extends TestCase
 {
     /** @var MockObject */
     private $requestFactoryMock;
+
     /** @var JsonApiRequestParamConverter */
     private $jsonApiRequestParamConverter;
 
@@ -33,7 +35,7 @@ final class JsonApiRequestParamConverterTest extends TestCase
         $this->jsonApiRequestParamConverter = new JsonApiRequestParamConverter($this->requestFactoryMock);
     }
 
-    /** @dataProvider paramConverterConfigPreventsClientGeneratedIDs */
+    /** @dataProvider provideParamConvertHandlesCreateResourceRequestsWithClientProvidedResourceIdsCases */
     public function testParamConvertHandlesCreateResourceRequestsWithClientProvidedResourceIds(array $paramConverterConfiguration): void
     {
         $request = $this->createMock(Request::class);
@@ -42,29 +44,29 @@ final class JsonApiRequestParamConverterTest extends TestCase
 
         $this->expectException(ClientGeneratedIdIsNotAllowedException::class);
 
-        $config->expects(static::once())
+        $config->expects(self::once())
             ->method('getName')
             ->willReturn('');
 
-        $config->expects(static::once())
+        $config->expects(self::once())
             ->method('getClass')
             ->willReturn(CreateResourceRequestInterface::class);
 
-        $config->expects(static::once())
+        $config->expects(self::once())
             ->method('getOptions')
             ->willReturn(
                 $paramConverterConfiguration
             );
 
         $this->requestFactoryMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('requestResourceHasClientSideGeneratedId')
             ->willReturn(true);
 
         $this->jsonApiRequestParamConverter->apply($request, $config);
     }
 
-    public function paramConverterConfigPreventsClientGeneratedIDs(): array
+    public function provideParamConvertHandlesCreateResourceRequestsWithClientProvidedResourceIdsCases(): iterable
     {
         return [
             'does not support client generated ID' => [

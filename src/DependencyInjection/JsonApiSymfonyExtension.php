@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\DependencyInjection;
 
-use Exception;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -14,12 +13,13 @@ use Symfony\Component\DependencyInjection\Reference;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
 use Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener;
 
+/** @psalm-suppress UnusedClass */
 class JsonApiSymfonyExtension extends Extension
 {
     public const EXCEPTION_LISTENER_PRIORITY = -128;
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function load(array $configs, ContainerBuilder $container): void
     {
@@ -41,5 +41,6 @@ class JsonApiSymfonyExtension extends Extension
             ],
         ]);
         $container->setDefinition('json_api_symfony.exception_listener', $definition);
+        $container->setParameter('json_api_symfony.validate_read_model', $config['validate_read_model'] ?? false);
     }
 }

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Collection;
 
-use ArrayIterator;
 use Assert\Assertion;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 /**
  * Collection of resources that additionally takes care of duplicates and adds each resource only once.
+ *
+ * @psalm-suppress UnusedClass
  */
 class UniqueResourceCollection implements ResourceCollectionInterface
 {
@@ -58,6 +59,6 @@ class UniqueResourceCollection implements ResourceCollectionInterface
 
     public function getIterator(): \Traversable
     {
-        return new ArrayIterator($this->items);
+        return new \ArrayIterator($this->items);
     }
 }

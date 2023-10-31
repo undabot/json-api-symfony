@@ -17,6 +17,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler
  *
  * @small
@@ -44,15 +45,15 @@ final class SimpleResourceHandlerTest extends TestCase
     {
         $resourcePayloadRequest = $this->createMock(ResourcePayloadRequest::class);
 
-        $resourcePayloadRequest->expects(static::once())
+        $resourcePayloadRequest->expects(self::once())
             ->method('getResource')
             ->willReturn($this->createMock(ResourceInterface::class));
 
-        $this->validator->expects(static::once())->method('assertValid');
+        $this->validator->expects(self::once())->method('assertValid');
 
         $apiModel = $this->createMock(ApiModel::class);
 
-        $this->denormalizer->expects(static::once())->method('denormalize')->willReturn($apiModel);
+        $this->denormalizer->expects(self::once())->method('denormalize')->willReturn($apiModel);
 
         $this->simpleResourceHandler->getModelFromRequest($resourcePayloadRequest, FooApiModel::class);
     }
@@ -66,21 +67,19 @@ final class SimpleResourceHandlerTest extends TestCase
 
         $resource = $this->createMock(ResourceInterface::class);
 
-        $resourcePayloadRequest->expects(static::once())
+        $resourcePayloadRequest->expects(self::once())
             ->method('getResource')
             ->willReturn($resource);
 
         $this->validator
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('assertValid')
             ->willThrowException(new ModelInvalid($resource, $this->createMock(ResourceValidationViolations::class)));
 
-        $this->denormalizer->expects(static::never())->method('denormalize');
+        $this->denormalizer->expects(self::never())->method('denormalize');
 
         $this->simpleResourceHandler->getModelFromRequest($resourcePayloadRequest, FooApiModel::class);
     }
 }
 
-class FooApiModel implements ApiModel
-{
-}
+class FooApiModel implements ApiModel {}

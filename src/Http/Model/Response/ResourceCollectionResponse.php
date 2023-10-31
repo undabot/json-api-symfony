@@ -41,6 +41,7 @@ final class ResourceCollectionResponse
         $this->links = $links;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function fromObjectCollection(
         ObjectCollection $primaryResources,
         ?ResourceCollectionInterface $includedResources = null,
@@ -63,6 +64,8 @@ final class ResourceCollectionResponse
      * @param ResourceInterface[]      $resources
      * @param null|ResourceInterface[] $included
      * @param null|LinkInterface[]     $links
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public static function fromArray(
         array $resources,

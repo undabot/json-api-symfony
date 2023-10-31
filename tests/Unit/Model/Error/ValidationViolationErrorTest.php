@@ -12,6 +12,7 @@ use Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError
  *
  * @small
@@ -29,7 +30,7 @@ final class ValidationViolationErrorTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidValueProvider
+     * @dataProvider provideGetDetailWillReturnValidResponseGivenSupportedInvalidValueCases
      *
      * @param mixed $invalidValue
      */
@@ -37,12 +38,12 @@ final class ValidationViolationErrorTest extends TestCase
         $invalidValue,
         ?string $expectedReturnValue
     ): void {
-        $this->violation->expects(static::once())->method('getInvalidValue')->willReturn($invalidValue);
+        $this->violation->expects(self::once())->method('getInvalidValue')->willReturn($invalidValue);
 
-        static::assertEquals($expectedReturnValue, $this->validationViolationError->getDetail());
+        self::assertEquals($expectedReturnValue, $this->validationViolationError->getDetail());
     }
 
-    public function invalidValueProvider(): \Generator
+    public function provideGetDetailWillReturnValidResponseGivenSupportedInvalidValueCases(): iterable
     {
         yield 'Null provided' => [
             null,
@@ -55,6 +56,7 @@ final class ValidationViolationErrorTest extends TestCase
         ];
 
         $objectWithoutToStringMethod = new \stdClass();
+
         yield 'Object without toString method provided' => [
             $objectWithoutToStringMethod,
             null,
@@ -79,8 +81,8 @@ final class ValidationViolationErrorTest extends TestCase
     public function testGetDetailWillReturnValidResponseGivenSupportedInvalidValueAsObjectWithToStringMethod(): void
     {
         $objectWithToStringMethod = Uuid::uuid4();
-        $this->violation->expects(static::once())->method('getInvalidValue')->willReturn($objectWithToStringMethod);
+        $this->violation->expects(self::once())->method('getInvalidValue')->willReturn($objectWithToStringMethod);
 
-        static::assertEquals($objectWithToStringMethod, $this->validationViolationError->getDetail());
+        self::assertEquals($objectWithToStringMethod, $this->validationViolationError->getDetail());
     }
 }

@@ -7,6 +7,7 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Exception\SchemaCollectionException;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ResourceSchemaSet;
 
+/** @psalm-suppress UnusedClass */
 class SchemaCollection
 {
     /** @var array<string,mixed>
@@ -34,7 +35,7 @@ class SchemaCollection
     {
         $className = self::normalizeClassName($className);
 
-        if (!array_key_exists($className, self::$schemas)) {
+        if (!\array_key_exists($className, self::$schemas)) {
             throw new \InvalidArgumentException("Schema not found for class {$className}");
         }
 

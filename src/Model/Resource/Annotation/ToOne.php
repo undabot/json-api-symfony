@@ -8,7 +8,10 @@ use Doctrine\Common\Annotations\Annotation;
 
 /**
  * @Annotation
+ *
  * @Target("PROPERTY")
+ *
+ * @psalm-suppress UnusedClass
  */
 class ToOne extends Relationship
 {

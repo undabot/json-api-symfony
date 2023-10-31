@@ -12,6 +12,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInte
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\SymfonyJsonApi\Exception\ParamConverterInvalidUuidFormatException;
 
+/** @psalm-suppress UnusedClass */
 class UuidConverter implements ParamConverterInterface
 {
     public function apply(Request $request, ParamConverter $configuration): bool
@@ -21,7 +22,7 @@ class UuidConverter implements ParamConverterInterface
         $attributeValue = $request->attributes->get($name);
 
         // Ensure the attribute value is a string
-        if (!is_string($attributeValue)) {
+        if (!\is_string($attributeValue)) {
             throw new \InvalidArgumentException(sprintf('The attribute "%s" must be a string.', $name));
         }
 

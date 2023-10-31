@@ -46,7 +46,6 @@ class ResourceMetadata
         $this->attributesMetadata = new ArrayCollection($attributesMetadata);
         $this->relationshipsMetadata = new ArrayCollection($relationshipsMetadata);
 
-        /** @var JsonApiConstraint\ResourceType[] $resourceTypeConstraints */
         $resourceTypeConstraints = array_filter($resourceConstraints, static function (Constraint $constraint) {
             return $constraint instanceof JsonApiConstraint\ResourceType;
         });
@@ -79,7 +78,6 @@ class ResourceMetadata
     public function getAttributesConstraints(): array
     {
         $constraints = [];
-        /** @var AttributeMetadata $attributeMetadatum */
         foreach ($this->attributesMetadata as $attributeMetadatum) {
             $constraints[$attributeMetadatum->getName()] = $attributeMetadatum->getConstraints();
         }
@@ -95,7 +93,6 @@ class ResourceMetadata
     public function getRelationshipsObjectConstraints(): array
     {
         $constraints = [];
-        /** @var RelationshipMetadata $relationshipMetadatum */
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
             $objectConstraints = array_filter(
                 $relationshipMetadatum->getConstraints(),
@@ -119,7 +116,6 @@ class ResourceMetadata
     {
         $constraints = [];
 
-        /** @var RelationshipMetadata $relationshipMetadatum */
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
             $valueConstraints = array_filter(
                 $relationshipMetadatum->getConstraints(),
@@ -142,9 +138,9 @@ class ResourceMetadata
         return $this->attributesMetadata;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function getAttributeMetadata(string $name): ?AttributeMetadata
     {
-
         $metadata = $this->attributesMetadata
             ->filter(static function (AttributeMetadata $attributeMetadata) use ($name) {
                 return $attributeMetadata->getName() === $name;
@@ -166,6 +162,7 @@ class ResourceMetadata
         return $this->relationshipsMetadata;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function getRelationshipMetadata(string $name): ?RelationshipMetadata
     {
         $metadata = $this->relationshipsMetadata

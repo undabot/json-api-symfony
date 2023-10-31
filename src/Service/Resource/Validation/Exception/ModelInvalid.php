@@ -24,6 +24,7 @@ class ModelInvalid extends \Exception
         $this->violations = $violations;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function getResource(): ResourceInterface
     {
         return $this->resource;

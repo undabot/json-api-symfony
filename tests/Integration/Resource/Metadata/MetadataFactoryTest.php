@@ -14,6 +14,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -36,6 +37,7 @@ final class MetadataFactoryTest extends TestCase
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute
+             *
              * @JsonApi\ToOne
              */
             public $name;
@@ -51,6 +53,7 @@ final class MetadataFactoryTest extends TestCase
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute
+             *
              * @JsonApi\ToMany
              */
             public $name;
@@ -66,6 +69,7 @@ final class MetadataFactoryTest extends TestCase
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\ToMany
+             *
              * @JsonApi\ToOne
              */
             public $name;

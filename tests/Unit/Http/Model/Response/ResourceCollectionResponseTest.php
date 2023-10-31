@@ -18,6 +18,7 @@ use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse
  *
  * @medium
@@ -27,7 +28,7 @@ final class ResourceCollectionResponseTest extends TestCase
     public function testFromObjectCollectionCanCreateValidResourceCollectionResponseGivenAllArgumentsPresent(): void
     {
         $objectCollection = $this->createMock(ObjectCollection::class);
-        $objectCollection->expects(static::once())->method('getItems')->willReturn([]);
+        $objectCollection->expects(self::once())->method('getItems')->willReturn([]);
         $includedResources = $this->createMock(ResourceCollectionInterface::class);
         $meta = $this->createMock(MetaInterface::class);
         $links = $this->createMock(LinkCollectionInterface::class);
@@ -39,29 +40,29 @@ final class ResourceCollectionResponseTest extends TestCase
             $links
         );
 
-        static::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
-        static::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
-        static::assertEquals($includedResources, $resourceCollectionResponse->getIncludedResources());
-        static::assertEquals($meta, $resourceCollectionResponse->getMeta());
-        static::assertEquals($links, $resourceCollectionResponse->getLinks());
+        self::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
+        self::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
+        self::assertEquals($includedResources, $resourceCollectionResponse->getIncludedResources());
+        self::assertEquals($meta, $resourceCollectionResponse->getMeta());
+        self::assertEquals($links, $resourceCollectionResponse->getLinks());
     }
 
     public function testFromObjectCollectionCanCreateValidResourceCollectionResponseGivenOnlyObjectCollectionArg(): void
     {
         $objectCollection = $this->createMock(ObjectCollection::class);
-        $objectCollection->expects(static::once())->method('getItems')->willReturn([]);
+        $objectCollection->expects(self::once())->method('getItems')->willReturn([]);
 
         $resourceCollectionResponse = ResourceCollectionResponse::fromObjectCollection($objectCollection);
 
-        static::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
-        static::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
-        static::assertNull($resourceCollectionResponse->getIncludedResources());
-        static::assertEquals(new Meta(['total' => 0]), $resourceCollectionResponse->getMeta());
-        static::assertNull($resourceCollectionResponse->getLinks());
+        self::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
+        self::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
+        self::assertNull($resourceCollectionResponse->getIncludedResources());
+        self::assertEquals(new Meta(['total' => 0]), $resourceCollectionResponse->getMeta());
+        self::assertNull($resourceCollectionResponse->getLinks());
     }
 
     /**
-     * @dataProvider validResourceCollectionArrayArguments
+     * @dataProvider provideFromArrayCanCreateValidResourceCollectionResponseGivenValidArgumentsPresentCases
      */
     public function testFromArrayCanCreateValidResourceCollectionResponseGivenValidArgumentsPresent(
         array $resources,
@@ -76,20 +77,20 @@ final class ResourceCollectionResponseTest extends TestCase
             $links
         );
 
-        static::assertEquals($resources, $resourceCollectionResponse->getPrimaryResources()->getResources());
-        static::assertEquals(
+        self::assertEquals($resources, $resourceCollectionResponse->getPrimaryResources()->getResources());
+        self::assertEquals(
             $included,
             $resourceCollectionResponse->getIncludedResources()
                 ? $resourceCollectionResponse->getIncludedResources()->getResources()
                 : $resourceCollectionResponse->getIncludedResources()
         );
-        static::assertEquals(
+        self::assertEquals(
             $meta,
             $resourceCollectionResponse->getMeta()
                 ? $resourceCollectionResponse->getMeta()->getData()
                 : $resourceCollectionResponse->getMeta()
         );
-        static::assertEquals(
+        self::assertEquals(
             $links,
             $resourceCollectionResponse->getLinks()
                 ? $resourceCollectionResponse->getLinks()->getLinks()
@@ -97,7 +98,7 @@ final class ResourceCollectionResponseTest extends TestCase
         );
     }
 
-    public function validResourceCollectionArrayArguments(): \Generator
+    public function provideFromArrayCanCreateValidResourceCollectionResponseGivenValidArgumentsPresentCases(): iterable
     {
         yield 'Only resources present' => [
             [$this->createMock(ResourceInterface::class), $this->createMock(ResourceInterface::class)],
@@ -115,7 +116,7 @@ final class ResourceCollectionResponseTest extends TestCase
     }
 
     /**
-     * @dataProvider invalidResourceCollectionArrayArguments
+     * @dataProvider provideFromArrayWillThrowExceptionGivenInvalidArgumentsPresentCases
      */
     public function testFromArrayWillThrowExceptionGivenInvalidArgumentsPresent(
         array $resources,
@@ -135,9 +136,10 @@ final class ResourceCollectionResponseTest extends TestCase
         );
     }
 
-    public function invalidResourceCollectionArrayArguments(): \Generator
+    public function provideFromArrayWillThrowExceptionGivenInvalidArgumentsPresentCases(): iterable
     {
         $objectCollection = $this->createMock(ObjectCollection::class);
+
         yield 'Resource array not valid type' => [
             [$objectCollection, $this->createMock(ResourceInterface::class)],
             null,

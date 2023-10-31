@@ -21,11 +21,13 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
 class RequestFactory
 {
-    private PhpArrayToResourceEncoderInterface$resourceEncoder;
-    private RequestValidator$requestValidator;
+    private PhpArrayToResourceEncoderInterface $resourceEncoder;
+    private RequestValidator $requestValidator;
+
     /** @var array<string, mixed> */
     private array $requestData = [];
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         PhpArrayToResourceEncoderInterface $resourceEncoder,
         RequestValidator $requestValidator
@@ -47,15 +49,17 @@ class RequestFactory
         $this->requestValidator->assertValidRequest($request);
         $requestPrimaryData = $this->getRequestPrimaryData($request);
 
-        /** If the server-side ID is passed as argument, we don't expect the Client to generate ID
+        /** If the server-side ID is passed as argument, we don't expect the Client to generate ID.
          * @see https://jsonapi.org/format/#crud-creating-client-ids
          */
         if (null !== $id) {
             $this->requestValidator->assertResourceIsWithoutClientGeneratedId($requestPrimaryData);
             $requestPrimaryData['id'] = $id;
         }
+
         /**
-         * If we have lid sent as id we will pass it as resource id
+         * If we have lid sent as id we will pass it as resource id.
+         *
          * @see https://jsonapi.org/format/#document-resource-object-identification
          */
         $lid = $this->getResourceLid($request);
@@ -142,9 +146,9 @@ class RequestFactory
     }
 
     /**
-     * @throws AssertionFailedException
-     *
      * @return array<string, mixed>
+     *
+     * @throws AssertionFailedException
      */
     private function getRequestPrimaryData(Request $request): array
     {
@@ -152,7 +156,6 @@ class RequestFactory
             return $this->requestData;
         }
 
-        /** @var string $rawRequestData */
         $rawRequestData = $request->getContent();
         Assertion::isJsonString($rawRequestData, 'Request data must be valid JSON');
         $requestData = json_decode($rawRequestData, true);
@@ -171,7 +174,7 @@ class RequestFactory
         $this->requestValidator->assertResourceLidIsValid($requestPrimaryData);
 
         // Check if 'lid' is set and is a string
-        return (isset($requestPrimaryData['lid']) && is_string($requestPrimaryData['lid']))
+        return (isset($requestPrimaryData['lid']) && \is_string($requestPrimaryData['lid']))
             ? $requestPrimaryData['lid']
             : null;
     }

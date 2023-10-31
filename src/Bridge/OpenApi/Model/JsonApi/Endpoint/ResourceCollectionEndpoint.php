@@ -28,24 +28,28 @@ class ResourceCollectionEndpoint implements Endpoint
     /** @var Filter[] */
     private $filters;
 
-    /** @var array<string, ReadSchema> $includes */
+    /** @var array<string, ReadSchema> */
     private $includes;
 
     /** @var mixed[] */
     private $fields;
 
-    /** @var mixed[] */
+    /**
+     * @var mixed[]
+     *
+     * @psalm-suppress UnusedProperty
+     */
     private $sorts;
 
     /** @var null|Schema */
     private $pagination;
 
     /**
-     * @param Filter[] $filters
-     * @param mixed[] $sorts
+     * @param Filter[]                  $filters
+     * @param mixed[]                   $sorts
      * @param array<string, ReadSchema> $includes
-     * @param mixed[] $fields
-     * @param mixed[] $errorResponses
+     * @param mixed[]                   $fields
+     * @param mixed[]                   $errorResponses
      */
     public function __construct(
         ReadSchema $schema,
@@ -123,7 +127,6 @@ class ResourceCollectionEndpoint implements Endpoint
     {
         $responses = [];
 
-        /** @var Response $response */
         foreach ($this->responses as $response) {
             $responses[$response->getStatusCode()] = $response->toOpenApi();
         }

@@ -21,7 +21,11 @@ class Api implements Contract\Api
     /** @var string */
     private $description;
 
-    /** @var null|string */
+    /**
+     * @var null|string
+     *
+     * @psalm-suppress UnusedProperty
+     */
     private $email;
 
     /** @var Endpoint[] */
@@ -33,7 +37,11 @@ class Api implements Contract\Api
     /** @var mixed[] */
     private $schemas = [];
 
-    /** @todo add support for security schemas */
+    /**
+     * @todo add support for security schemas
+     *
+     * @psalm-suppress PossiblyUnusedMethod
+     */
     public function __construct(
         string $title,
         string $version,
@@ -86,12 +94,10 @@ class Api implements Contract\Api
             'paths' => [],
         ];
 
-        /** @var Server $server */
         foreach ($this->servers as $server) {
             $api['servers'][] = $server->toOpenApi();
         }
 
-        /** @var Endpoint $endpoint */
         foreach ($this->endpoints as $endpoint) {
             $api['paths'][$endpoint->getPath()][$endpoint->getMethod()] = $endpoint->toOpenApi();
         }

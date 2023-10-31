@@ -21,13 +21,13 @@ class ApiGeneratorPass implements CompilerPassInterface
 
         $taggedServices = $container->findTaggedServiceIds('app.open_api.definition');
 
-        foreach ($taggedServices as $id => $tags) {
+        foreach ($taggedServices as $id => $_) {
             $definition->addMethodCall('addDefinition', [new Reference($id)]);
         }
 
         $taggedServices = $container->findTaggedServiceIds('app.open_api.resource');
 
-        foreach ($taggedServices as $id => $tags) {
+        foreach ($taggedServices as $id => $_) {
             $definition->addMethodCall('addResource', [new Reference($id)]);
         }
     }

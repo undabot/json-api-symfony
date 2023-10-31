@@ -35,12 +35,12 @@ class AliasedResourceDto implements ApiModel
         public array $tagIds,
         /** @JsonApi\ToOne(name="owner", type="person") */
         public ?string $ownerId
-    ) {
-    }
+    ) {}
 }
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer
  *
  * @small
@@ -79,12 +79,12 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
 
         /** @var AliasedResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $dto);
+        self::assertInstanceOf(AliasedResourceDto::class, $dto);
 
-        static::assertSame('This is my title', $dto->title);
-        static::assertSame('This is my summary', $dto->summary);
-        static::assertSame('p1', $dto->ownerId);
-        static::assertSame(['t1', 't2', 't3'], $dto->tagIds);
+        self::assertSame('This is my title', $dto->title);
+        self::assertSame('This is my summary', $dto->summary);
+        self::assertSame('p1', $dto->ownerId);
+        self::assertSame(['t1', 't2', 't3'], $dto->tagIds);
     }
 
     public function testDenormalizationOfInvalidResourceResultsWithException(): void
@@ -123,8 +123,8 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         );
 
         $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $model);
-        static::assertObjectNotHasAttribute('extra', $model);
+        self::assertInstanceOf(AliasedResourceDto::class, $model);
+        self::assertObjectNotHasAttribute('extra', $model);
     }
 
     public function testDenormalizeWillReturnCorrectApiModelWithExtraRelationshipsIgnored(): void
@@ -144,8 +144,8 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         );
 
         $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $model);
-        static::assertObjectNotHasAttribute('extras', $model);
+        self::assertInstanceOf(AliasedResourceDto::class, $model);
+        self::assertObjectNotHasAttribute('extras', $model);
     }
 
     public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized(): void
@@ -165,7 +165,7 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
 
         /** @var AliasedResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $dto);
-        static::assertNull($dto->ownerId);
+        self::assertInstanceOf(AliasedResourceDto::class, $dto);
+        self::assertNull($dto->ownerId);
     }
 }

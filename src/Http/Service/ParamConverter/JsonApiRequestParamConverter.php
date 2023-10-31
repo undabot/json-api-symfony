@@ -18,6 +18,7 @@ use Undabot\JsonApi\Definition\Model\Request\UpdateResourceRequestInterface;
 use Undabot\JsonApi\Implementation\Encoding\Exception\JsonApiEncodingException;
 use Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory;
 
+/** @psalm-suppress UnusedClass */
 class JsonApiRequestParamConverter implements ParamConverterInterface
 {
     public const OPTION_CLIENT_GENERATED_IDS = 'clientGeneratedIds';
@@ -35,11 +36,11 @@ class JsonApiRequestParamConverter implements ParamConverterInterface
      *
      * @param ParamConverter $configuration Contains the name, class and options of the object
      *
+     * @return bool True if the object has been successfully set, else false
+     *
      * @throws RequestException
      * @throws AssertionFailedException
      * @throws JsonApiEncodingException
-     *
-     * @return bool True if the object has been successfully set, else false
      */
     public function apply(Request $request, ParamConverter $configuration): bool
     {
@@ -121,13 +122,13 @@ class JsonApiRequestParamConverter implements ParamConverterInterface
         $idAttribute = $options['id'] ?? 'id';
 
         $routeParams = $request->attributes->get('_route_params');
-        if (!is_array($routeParams)) {
+        if (!\is_array($routeParams)) {
             return null;
         }
 
         // Now safely access the $idAttribute
         $routeParamValue = $routeParams[$idAttribute] ?? null;
 
-        return is_string($routeParamValue) ? $routeParamValue : null;
+        return \is_string($routeParamValue) ? $routeParamValue : null;
     }
 }

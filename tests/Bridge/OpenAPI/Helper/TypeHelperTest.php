@@ -9,6 +9,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper\TypeHelper;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -17,7 +18,7 @@ final class TypeHelperTest extends TestCase
 {
     public function testItResolvesBoolToBoolean(): void
     {
-        static::assertSame(
+        self::assertSame(
             'boolean',
             TypeHelper::resolve('bool')
         );
@@ -25,7 +26,7 @@ final class TypeHelperTest extends TestCase
 
     public function testItResolvesIntToInteger(): void
     {
-        static::assertSame(
+        self::assertSame(
             'integer',
             TypeHelper::resolve('int')
         );
@@ -33,7 +34,7 @@ final class TypeHelperTest extends TestCase
 
     public function testItResolvesFloatToNumber(): void
     {
-        static::assertSame(
+        self::assertSame(
             'number',
             TypeHelper::resolve('float')
         );
@@ -41,7 +42,7 @@ final class TypeHelperTest extends TestCase
 
     public function testItReturnsPassedValueWhenUnsupported(): void
     {
-        static::assertSame(
+        self::assertSame(
             'somethingThatDoesntExist',
             TypeHelper::resolve('somethingThatDoesntExist')
         );

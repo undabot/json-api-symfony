@@ -90,7 +90,6 @@ class GetResourceEndpoint implements Endpoint
     {
         $responses = [];
 
-        /** @var Response $response */
         foreach ($this->responses as $response) {
             $responses[$response->getStatusCode()] = $response->toOpenApi();
         }

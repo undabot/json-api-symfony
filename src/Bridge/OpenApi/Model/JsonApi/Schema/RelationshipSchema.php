@@ -13,7 +13,11 @@ class RelationshipSchema implements Schema
     /** @var string */
     private $name;
 
-    /** @var null|string */
+    /**
+     * @var null|string
+     *
+     * @psalm-suppress UnusedProperty
+     */
     private $description;
 
     /** @var bool */

@@ -11,6 +11,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\CreateResourceE
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\GetResourceEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\ResourceCollectionEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\UpdateResourceEndpoint;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Filter\Filter;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\OffsetBasedPaginationQueryParam;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\PageBasedPaginationQueryParam;
 
@@ -37,7 +38,11 @@ class ResourceApiEndpointsFactory
     /** @var bool */
     private $update;
 
-    /** @var bool */
+    /**
+     * @var bool
+     *
+     * @psalm-suppress UnusedProperty
+     */
     private $delete;
 
     /** @var mixed[] */
@@ -66,6 +71,7 @@ class ResourceApiEndpointsFactory
         $this->schemaFactory = $schemaFactory;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function new(string $path, string $resource): self
     {
         $self = new self($this->schemaFactory);
@@ -77,6 +83,8 @@ class ResourceApiEndpointsFactory
 
     /**
      * @param mixed[] $singleIncludes
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function withSingleIncludes(array $singleIncludes): self
     {
@@ -90,6 +98,8 @@ class ResourceApiEndpointsFactory
 
     /**
      * @param mixed[] $singleFields
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function withSingleFields(array $singleFields): self
     {
@@ -103,6 +113,8 @@ class ResourceApiEndpointsFactory
 
     /**
      * @param mixed[] $collectionIncludes
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function withCollectionIncludes(array $collectionIncludes): self
     {
@@ -116,6 +128,8 @@ class ResourceApiEndpointsFactory
 
     /**
      * @param mixed[] $collectionFilters
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function withCollectionFilters(array $collectionFilters): self
     {
@@ -129,6 +143,8 @@ class ResourceApiEndpointsFactory
 
     /**
      * @param mixed[] $collectionSorts
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function withCollectionSortableAttributes(array $collectionSorts): self
     {
@@ -140,11 +156,13 @@ class ResourceApiEndpointsFactory
         return $this;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withOffsetBasedPagination(): self
     {
         return $this->withCollectionPagination(new OffsetBasedPaginationQueryParam());
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withPageBasedPagination(): self
     {
         return $this->withCollectionPagination(new PageBasedPaginationQueryParam());
@@ -160,6 +178,7 @@ class ResourceApiEndpointsFactory
         return $this;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withGetSingle(): self
     {
         $this->getSingle = true;
@@ -167,6 +186,7 @@ class ResourceApiEndpointsFactory
         return $this;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withGetCollection(): self
     {
         $this->getCollection = true;
@@ -174,6 +194,7 @@ class ResourceApiEndpointsFactory
         return $this;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withCreate(): self
     {
         $this->create = true;
@@ -181,6 +202,7 @@ class ResourceApiEndpointsFactory
         return $this;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withUpdate(): self
     {
         $this->update = true;
@@ -188,6 +210,7 @@ class ResourceApiEndpointsFactory
         return $this;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function withDelete(): self
     {
         $this->delete = true;
@@ -214,23 +237,24 @@ class ResourceApiEndpointsFactory
              */
             $collectionIncludedSchemas = array_map(
                 function ($item) {
-                    if (!is_string($item)) {
-                        throw new \InvalidArgumentException("Expected a string");
+                    if (!\is_string($item)) {
+                        throw new \InvalidArgumentException('Expected a string');
                     }
+
                     return $this->schemaFactory->readSchema($item);
                 },
                 $this->collectionIncludes
             );
-
+            $preparedCollectionFilters = $this->prepareCollectionFilters();
             $getCollectionEndpoint = new ResourceCollectionEndpoint(
                 $readSchema,
                 $this->path,
-                $this->collectionFilters,
+                $preparedCollectionFilters,
                 $this->collectionSorts,
                 $collectionIncludedSchemas,
                 $this->collectionFields,
                 $this->paginationSchema
-            // @todo Add error responses (e.g. validation errors)
+                // @todo Add error responses (e.g. validation errors)
             );
 
             $api->addSchemas($relationshipsIdentifiers);
@@ -248,9 +272,10 @@ class ResourceApiEndpointsFactory
              */
             $singleIncludedSchemas = array_map(
                 function ($item) {
-                    if (!is_string($item)) {
-                        throw new \InvalidArgumentException("Expected a string");
+                    if (!\is_string($item)) {
+                        throw new \InvalidArgumentException('Expected a string');
                     }
+
                     return $this->schemaFactory->readSchema($item);
                 },
                 $this->singleIncludes
@@ -261,7 +286,7 @@ class ResourceApiEndpointsFactory
                 $this->path,
                 $singleIncludedSchemas,
                 $this->singleFields
-            // @todo error responses
+                // @todo error responses
             );
 
             $api->addEndpoint($getSingleResourceEndpoint);
@@ -290,5 +315,25 @@ class ResourceApiEndpointsFactory
             $api->addSchema($updateSchema);
             $api->addEndpoint($createResourceEndpoint);
         }
+    }
+
+    /**
+     * Checks and prepares collection filters before using them in ResourceCollectionEndpoint.
+     *
+     * @throws \InvalidArgumentException if any filter is not of the expected type
+     */
+    private function prepareCollectionFilters(): array
+    {
+        $preparedFilters = [];
+
+        foreach ($this->collectionFilters as $filter) {
+            if (!$filter instanceof Filter) {
+                continue;
+            }
+
+            $preparedFilters[] = $filter;
+        }
+
+        return $preparedFilters;
     }
 }

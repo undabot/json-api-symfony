@@ -26,6 +26,7 @@ class ResourceSchemaFactory
     /** @var RelationshipSchemaFactory */
     private $relationshipSchemaFactory;
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         ResourceMetadataFactory $resourceMetadataFactory,
         AttributeSchemaFactory $attributeSchemaFactory,
@@ -38,6 +39,8 @@ class ResourceSchemaFactory
 
     /**
      * @throws \Exception
+     *
+     * @psalm-suppress PossiblyUnusedMethod
      */
     public function identifier(string $resourceClass): IdentifierSchema
     {
@@ -63,9 +66,9 @@ class ResourceSchemaFactory
     /**
      * Returns array of schemas representing each resource identifier contained in the relationship.
      *
-     * @throws \Exception
-     *
      * @return IdentifierSchema[]
+     *
+     * @throws \Exception
      */
     public function relationshipsIdentifiers(string $resourceClass): array
     {
@@ -75,7 +78,6 @@ class ResourceSchemaFactory
         $relationshipsMetadata = $resourceMetadata->getRelationshipsMetadata()->toArray();
 
         $identifierSchemas = [];
-        /** @var RelationshipMetadata $relationshipMetadata */
         foreach ($relationshipsMetadata as $relationshipMetadata) {
             $identifierSchemas[] = new IdentifierSchema($relationshipMetadata->getRelatedResourceType());
         }
@@ -121,6 +123,7 @@ class ResourceSchemaFactory
                 if (!$attributeMetadata instanceof AttributeMetadata) {
                     throw new \InvalidArgumentException('Expected AttributeMetadata instance.');
                 }
+
                 return $this->attributeSchemaFactory->make($attributeMetadata);
             })
             ->toArray();
@@ -136,6 +139,7 @@ class ResourceSchemaFactory
                 if (!$relationshipMetadata instanceof RelationshipMetadata) {
                     throw new \InvalidArgumentException('Expected RelationshipMetadata instance.');
                 }
+
                 return $this->relationshipSchemaFactory->make($relationshipMetadata);
             })
             ->toArray();

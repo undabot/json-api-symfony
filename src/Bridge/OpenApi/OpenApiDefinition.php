@@ -8,7 +8,9 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 
 interface OpenApiDefinition
 {
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function getApi(): Api;
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function getFileName(): string;
 }

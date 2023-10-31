@@ -7,9 +7,6 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Proxy\Proxy;
-use Exception;
-use http\Exception\InvalidArgumentException;
-use RuntimeException;
 use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Link\Link;
@@ -24,10 +21,12 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
 use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
+/** @psalm-suppress UnusedClass */
 abstract class AbstractResponder
 {
     /** @var EntityManagerInterface */
     private $entityManager;
+
     /** @var EncoderInterface */
     private $dataEncoder;
 
@@ -45,7 +44,7 @@ abstract class AbstractResponder
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceCollection(
         array $primaryData,
@@ -69,7 +68,7 @@ abstract class AbstractResponder
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceObjectCollection(
         ObjectCollection $primaryModels,
@@ -94,7 +93,7 @@ abstract class AbstractResponder
      * @param null|array<string, LinkMemberInterface> $links
      * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resource(
         $primaryData,
@@ -123,7 +122,7 @@ abstract class AbstractResponder
      * @param null|array<string, LinkMemberInterface> $links
      * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceCreated(
         $primaryData,
@@ -147,7 +146,7 @@ abstract class AbstractResponder
      * @param null|array<string, LinkMemberInterface> $links
      * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceUpdated(
         $primaryData,
@@ -187,12 +186,12 @@ abstract class AbstractResponder
     /**
      * @param mixed $data
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function encodeData($data): ResourceInterface
     {
-        if (!is_object($data)) {
-            throw new InvalidArgumentException('Data must be an object.');
+        if (!\is_object($data)) {
+            throw new \InvalidArgumentException('Data must be an object.');
         }
 
         $dataTransformer = $this->getDataTransformer($data);
@@ -261,7 +260,7 @@ abstract class AbstractResponder
                 $dataClass
             );
 
-            throw new RuntimeException($message);
+            throw new \RuntimeException($message);
         }
 
         return $map[$dataClass];

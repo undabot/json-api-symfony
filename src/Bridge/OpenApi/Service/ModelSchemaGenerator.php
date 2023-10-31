@@ -4,6 +4,5 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Service;
 
-class ModelSchemaGenerator
-{
-}
+/** @psalm-suppress UnusedClass */
+class ModelSchemaGenerator {}

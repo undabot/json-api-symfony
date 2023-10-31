@@ -29,7 +29,6 @@ final class AttributesSchema implements Schema
     {
         $attributes = [];
 
-        /** @var AttributeSchema $attributeSchema */
         foreach ($this->attributes as $attributeSchema) {
             $attributes[$attributeSchema->getName()] = $attributeSchema->toOpenApi();
         }

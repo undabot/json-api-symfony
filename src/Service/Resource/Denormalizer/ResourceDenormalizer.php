@@ -8,7 +8,6 @@ use Assert\Assertion;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
-use Throwable;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
@@ -20,11 +19,11 @@ class ResourceDenormalizer
 {
     private const DATA_FORMAT = 'json';
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function __construct(
         private ResourceMetadataFactoryInterface $metadataFactory,
         private DenormalizerInterface $denormalizer
-    ) {
-    }
+    ) {}
 
     /**
      * Creates new instance of $class and populates it with values from the provided $resource.
@@ -54,7 +53,7 @@ class ResourceDenormalizer
                 $e->getCode(),
                 $e
             );
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new ResourceDenormalizationException(
                 $e->getMessage(),
                 $e->getCode(),
@@ -70,7 +69,7 @@ class ResourceDenormalizer
      * For properties that are aliased (i.e. class property name is not the same as resource attribute / relationship)
      * change the key to match class property name.
      *
-     * @return array<string, array|string|null>
+     * @return array<string, null|array|string>
      */
     private function prepareData(ResourceInterface $resource, string $class): array
     {

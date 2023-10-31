@@ -45,6 +45,7 @@ class ResourceTypeValidator extends ConstraintValidator
                 if (!$resource instanceof ResourceInterface) {
                     throw new \InvalidArgumentException('Expected ResourceInterface');
                 }
+
                 return $resource->getType();
             }, iterator_to_array($value));
         }
@@ -55,6 +56,7 @@ class ResourceTypeValidator extends ConstraintValidator
                 if (!$resource instanceof ResourceIdentifierInterface) {
                     throw new \InvalidArgumentException('Expected ResourceIdentifierInterface');
                 }
+
                 return $resource->getType();
             }, iterator_to_array($value));
         }

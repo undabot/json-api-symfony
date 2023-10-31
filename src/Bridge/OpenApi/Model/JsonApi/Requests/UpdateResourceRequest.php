@@ -9,7 +9,11 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\UpdateSc
 
 class UpdateResourceRequest implements Request
 {
-    /** @var string */
+    /**
+     * @var string
+     *
+     * @psalm-suppress UnusedProperty
+     */
     private $resourceType;
 
     /** @var UpdateSchema */

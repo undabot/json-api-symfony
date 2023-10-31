@@ -9,6 +9,7 @@ use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection
  *
  * @small
@@ -24,7 +25,7 @@ final class UniqueCollectionTest extends TestCase
         $collection = [$class1, $class2, $class3, $class4, $class1, $class1, $class2, $class3, $class4];
         $uniqueCollection = new UniqueCollection($collection);
 
-        static::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
+        self::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
     }
 
     public function testAddObjectsWillNotStoreObjectAlreadyAddedWhileConstructingClassGivenArrayOfObjects(): void
@@ -37,6 +38,6 @@ final class UniqueCollectionTest extends TestCase
         $uniqueCollection = new UniqueCollection($collection);
         $uniqueCollection->addObjects([$class1, $class2, $class1, $class1, $class1, $class2, $class3, $class3, $class4]);
 
-        static::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
+        self::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
     }
 }

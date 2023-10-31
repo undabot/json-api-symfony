@@ -9,7 +9,11 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\ResourceSchema;
 
 class CreateResourceRequest implements Request
 {
-    /** @var string */
+    /**
+     * @var string
+     *
+     * @psalm-suppress UnusedProperty
+     */
     private $resourceType;
 
     /** @var ResourceSchema */

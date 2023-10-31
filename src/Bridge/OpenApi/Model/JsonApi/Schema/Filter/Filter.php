@@ -26,6 +26,7 @@ final class Filter
         $this->required = $required;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function integer(
         string $name,
         bool $required = false,
@@ -35,6 +36,7 @@ final class Filter
         return new self($name, new IntegerSchema($example, $description), $required);
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public static function string(
         string $name,
         bool $required = false,
@@ -54,6 +56,7 @@ final class Filter
         return $this->schema;
     }
 
+    /** @psalm-suppress PossiblyUnusedMethod */
     public function isRequired(): bool
     {
         return $this->required;

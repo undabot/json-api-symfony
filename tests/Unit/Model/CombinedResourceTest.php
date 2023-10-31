@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\JsonApi\Tests\Unit\Model\Resource;
 
-use ArrayIterator;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
 use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
@@ -22,6 +20,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -35,8 +34,8 @@ final class CombinedResourceTest extends TestCase
 
         $combinedResource = new CombinedResource($resource1, $resource2);
 
-        static::assertSame('id', $combinedResource->getId());
-        static::assertSame('resource', $combinedResource->getType());
+        self::assertSame('id', $combinedResource->getId());
+        self::assertSame('resource', $combinedResource->getType());
     }
 
     public function testIncorrectResourceIdReferencesAreCaught(): void
@@ -66,8 +65,8 @@ final class CombinedResourceTest extends TestCase
 
         $combinedResource = new CombinedResource($resource1, $resource2);
 
-        static::assertSame($link, $combinedResource->getSelfUrl());
-        static::assertSame($meta, $combinedResource->getMeta());
+        self::assertSame($link, $combinedResource->getSelfUrl());
+        self::assertSame($meta, $combinedResource->getMeta());
     }
 
     public function testItCorrectlyCombinesAttributes(): void
@@ -89,20 +88,20 @@ final class CombinedResourceTest extends TestCase
 
         $combinedResource = new CombinedResource($resource1, $resource2);
 
-        static::assertSame(
+        self::assertSame(
             $combinedResource->getAttributes()->getAttributeByName('attribute1')->getValue(),
             'string_updated'
         );
-        static::assertSame(
+        self::assertSame(
             $combinedResource->getAttributes()->getAttributeByName('attribute2')->getValue(),
             1
         );
-        static::assertSame(
+        self::assertSame(
             $combinedResource->getAttributes()->getAttributeByName('attribute3')->getValue(),
             12.0
         );
-        static::assertNull($combinedResource->getAttributes()->getAttributeByName('attribute4')->getValue());
-        static::assertSame(
+        self::assertNull($combinedResource->getAttributes()->getAttributeByName('attribute4')->getValue());
+        self::assertSame(
             $combinedResource->getAttributes()->getAttributeByName('attribute5')->getValue(),
             'x'
         );
@@ -114,22 +113,22 @@ final class CombinedResourceTest extends TestCase
 
         $attributes = $this->createMock(AttributeCollectionInterface::class);
         $attributes->method('getIterator')
-            ->willReturn(new ArrayIterator());
+            ->willReturn(new \ArrayIterator());
         $resource2 = new Resource('id', 'resource', $attributes);
 
         $combinedResource = new CombinedResource($resource1, $resource2);
-        static::assertNull($combinedResource->getAttributes());
+        self::assertNull($combinedResource->getAttributes());
     }
 
     public function testItReturnsBaseResourcesAttributesWhenOverlayedResourceIsWithoutAttributes(): void
     {
         $attributes = $this->createMock(AttributeCollectionInterface::class);
         $attributes->method('getIterator')
-            ->willReturn(new ArrayIterator());
+            ->willReturn(new \ArrayIterator());
         $resource1 = new Resource('id', 'resource', $attributes);
         $resource2 = new Resource('id', 'resource', null);
         $combinedResource = new CombinedResource($resource1, $resource2);
-        static::assertSame($attributes, $combinedResource->getAttributes());
+        self::assertSame($attributes, $combinedResource->getAttributes());
     }
 
     public function testItCorrectlyCombinesRelationships(): void
@@ -158,7 +157,7 @@ final class CombinedResourceTest extends TestCase
         $combinedResource = new CombinedResource($resource1, $resource2);
         $flatResource = new FlatResource($combinedResource);
 
-        static::assertEquals([
+        self::assertEquals([
             'r1' => '1_updated',
             'r2' => ['a_updated', 'b_updated', 'c_updated'],
             'r3' => 'x',
@@ -170,22 +169,22 @@ final class CombinedResourceTest extends TestCase
         $resource1 = new Resource('id', 'resource');
         $relationships = $this->createMock(RelationshipCollectionInterface::class);
         $relationships->method('getIterator')
-            ->willReturn(new ArrayIterator());
+            ->willReturn(new \ArrayIterator());
         $resource2 = new Resource('id', 'resource', null, $relationships);
 
         $combinedResource = new CombinedResource($resource1, $resource2);
-        static::assertNull($combinedResource->getRelationships());
+        self::assertNull($combinedResource->getRelationships());
     }
 
     public function testItReturnsBaseResourcesRelationshipsWhenOverlayedResourceIsWithoutAttributes(): void
     {
         $relationships = $this->createMock(RelationshipCollectionInterface::class);
         $relationships->method('getIterator')
-            ->willReturn(new ArrayIterator());
+            ->willReturn(new \ArrayIterator());
         $resource1 = new Resource('id', 'resource', null, $relationships);
         $resource2 = new Resource('id', 'resource');
         $combinedResource = new CombinedResource($resource1, $resource2);
-        static::assertSame($relationships, $combinedResource->getRelationships());
+        self::assertSame($relationships, $combinedResource->getRelationships());
     }
 
     public function testItThrowsExceptionWhenIncompatibleAttributesProvided(): void
@@ -206,7 +205,7 @@ final class CombinedResourceTest extends TestCase
             new Attribute('attribute6', 'y'),
         ]));
 
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(\InvalidArgumentException::class);
         new CombinedResource($resource1, $resource2);
     }
 }

@@ -26,6 +26,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolati
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener
  *
  * @medium
@@ -42,7 +43,7 @@ final class ExceptionListenerTest extends TestCase
     }
 
     /**
-     * @dataProvider exceptionProvider
+     * @dataProvider provideOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupportedCases
      */
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupported(\Exception $exception): void
     {
@@ -54,14 +55,14 @@ final class ExceptionListenerTest extends TestCase
         );
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('encode')
             ->willReturn($data);
 
         $this->exceptionListener->onKernelException($event);
     }
 
-    public function exceptionProvider(): \Generator
+    public function provideOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupportedCases(): iterable
     {
         yield 'Exception is ModelInvalid instance' => [
             new ModelInvalid(
@@ -97,12 +98,12 @@ final class ExceptionListenerTest extends TestCase
         );
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('encode')
             ->willReturn($data);
 
         $this->exceptionListener->onKernelException($event);
-        static::assertEquals(
+        self::assertEquals(
             new JsonApiHttpResponse(
                 json_encode($data),
                 500,
@@ -124,12 +125,12 @@ final class ExceptionListenerTest extends TestCase
         );
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('encode')
             ->willReturn($data);
 
         $this->exceptionListener->onKernelException($event);
-        static::assertEquals(
+        self::assertEquals(
             new JsonApiHttpResponse(
                 json_encode($data),
                 $e->getStatusCode(),

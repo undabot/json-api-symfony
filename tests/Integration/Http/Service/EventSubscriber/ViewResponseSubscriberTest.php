@@ -36,6 +36,7 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber
  *
  * @medium
@@ -105,13 +106,13 @@ final class ViewResponseSubscriberTest extends TestCase
 
         $this->viewResponseSubscriber->buildView($event);
         $responseString = $event->getResponse()->getContent();
-        static::assertIsString($responseString);
+        self::assertIsString($responseString);
         $responseContent = json_decode($responseString, true, 512, JSON_THROW_ON_ERROR);
-        static::assertArrayNotHasKey('links', $responseContent);
+        self::assertArrayNotHasKey('links', $responseContent);
     }
 
     /**
-     * @dataProvider paginationRequestDatProvider
+     * @dataProvider provideBuildViewWillSetCorrectResponseWithPaginationLinksInEventGivenValidResourceCollectionControllerWithPaginatedResultsCases
      */
     public function testBuildViewWillSetCorrectResponseWithPaginationLinksInEventGivenValidResourceCollectionControllerWithPaginatedResults(
         Request $request,
@@ -123,9 +124,9 @@ final class ViewResponseSubscriberTest extends TestCase
         $event = $this->getViewEvent($request);
         $this->viewResponseSubscriber->buildView($event);
         $responseString = $event->getResponse()->getContent();
-        static::assertIsString($responseString);
+        self::assertIsString($responseString);
         $responseContent = json_decode($responseString, true, 512, JSON_THROW_ON_ERROR);
-        static::assertArrayHasKey('links', $responseContent);
+        self::assertArrayHasKey('links', $responseContent);
         $links = $responseContent['links'];
         $this->assertLinkCanExistAndIsValidIfExists($links, 'first', $firstLink);
         $this->assertLinkCanExistAndIsValidIfExists($links, 'prev', $prevLink);
@@ -133,7 +134,7 @@ final class ViewResponseSubscriberTest extends TestCase
         $this->assertLinkCanExistAndIsValidIfExists($links, 'last', $lastLink);
     }
 
-    public function paginationRequestDatProvider(): \Generator
+    public function provideBuildViewWillSetCorrectResponseWithPaginationLinksInEventGivenValidResourceCollectionControllerWithPaginatedResultsCases(): iterable
     {
         yield 'Page based pagination with 1st page retrieved' => [
             Request::create(
@@ -235,10 +236,10 @@ final class ViewResponseSubscriberTest extends TestCase
     private function assertLinkCanExistAndIsValidIfExists(array $links, string $key, ?string $keyValue): void
     {
         if (null !== $keyValue) {
-            static::assertArrayHasKey($key, $links);
-            static::assertEquals($keyValue, $links[$key]);
+            self::assertArrayHasKey($key, $links);
+            self::assertEquals($keyValue, $links[$key]);
         } else {
-            static::assertArrayNotHasKey($key, $links);
+            self::assertArrayNotHasKey($key, $links);
         }
     }
 

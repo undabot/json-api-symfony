@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Exception;
 
-use Exception;
-
-class ResourceApiEndpointsException extends Exception
+class ResourceApiEndpointsException extends \Exception
 {
     public static function collectionNotEnabled(): self
     {

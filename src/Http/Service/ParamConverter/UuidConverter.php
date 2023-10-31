@@ -18,8 +18,15 @@ class UuidConverter implements ParamConverterInterface
     {
         $name = $configuration->getName();
 
+        $attributeValue = $request->attributes->get($name);
+
+        // Ensure the attribute value is a string
+        if (!is_string($attributeValue)) {
+            throw new \InvalidArgumentException(sprintf('The attribute "%s" must be a string.', $name));
+        }
+
         try {
-            $value = Uuid::fromString($request->attributes->get($configuration->getName()));
+            $value = Uuid::fromString($attributeValue);
         } catch (InvalidUuidStringException $ex) {
             throw new ParamConverterInvalidUuidFormatException($ex->getMessage(), (int) $ex->getCode(), $ex);
         }

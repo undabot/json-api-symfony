@@ -42,12 +42,39 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         }
 
         $reflection = new ReflectionClass($class);
-
+        /**
+         * @var array $attributeMetadata
+         * @var array $relationshipMetadata
+         * @var array $resourceConstraints
+         */
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
-
+        if (!is_array($attributeMetadata) || !$this->isArrayOfTypeAttributeMetadata($attributeMetadata)) {
+            throw new \InvalidArgumentException('Expected an array of AttributeMetadata objects');
+        }
         $this->validate($attributeMetadata, $relationshipMetadata);
 
         return new ResourceMetadata($resourceConstraints, $attributeMetadata, $relationshipMetadata);
+    }
+
+    /**
+     * Checks if an array contains only instances of AttributeMetadata.
+     *
+     * @param mixed $array
+     * @return bool
+     */
+    private function isArrayOfTypeAttributeMetadata(mixed $array): bool
+    {
+        if (!is_array($array)) {
+            return false;
+        }
+
+        foreach ($array as $item) {
+            if (!$item instanceof AttributeMetadata) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -59,6 +86,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     {
         $reflection = new ReflectionClass($apiModel);
 
+        /**
+         * @var array $resourceConstraints
+         * @var array $attributeMetadata
+         * @var array $relationshipMetadata
+         */
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
 
         $this->validate($attributeMetadata, $relationshipMetadata);
@@ -67,9 +99,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
+     * @return mixed[]
      * @throws InvalidResourceMappingException
      *
-     * @return mixed[]
      */
     private function loadMetadata(ReflectionClass $reflection): array
     {
@@ -155,10 +187,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
      * @param Constraint[] $constraintAnnotations
      */
     private function buildAttributeMetadata(
-        ReflectionProperty $property,
+        ReflectionProperty   $property,
         Annotation\Attribute $attributeAnnotation,
-        array $constraintAnnotations
-    ): AttributeMetadata {
+        array                $constraintAnnotations
+    ): AttributeMetadata
+    {
         // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
         $name = $attributeAnnotation->name ?? $property->getName();
 
@@ -187,10 +220,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
      * @throws InvalidResourceMappingException
      */
     private function buildRelationshipMetadata(
-        ReflectionProperty $property,
+        ReflectionProperty      $property,
         Annotation\Relationship $relationshipAnnotation,
-        array $constraintAnnotations
-    ): RelationshipMetadata {
+        array                   $constraintAnnotations
+    ): RelationshipMetadata
+    {
         // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
         $name = $relationshipAnnotation->name ?? $property->getName();
         /** @var null|string $relatedResourceType */
@@ -220,7 +254,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
-     * @param AttributeMetadata[]    $attributeMetadata
+     * @param AttributeMetadata[] $attributeMetadata
      * @param RelationshipMetadata[] $relationshipMetadata
      *
      * @throws InvalidResourceMappingException

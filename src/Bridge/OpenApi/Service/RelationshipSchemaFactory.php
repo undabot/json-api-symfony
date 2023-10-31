@@ -36,6 +36,10 @@ class RelationshipSchemaFactory
             $nullable = false;
         }
 
+        if (null === $relationshipAnnotation->type) {
+            throw new \InvalidArgumentException("Type cannot be null.");
+        }
+
         return new RelationshipSchema(
             $metadata->getName(),
             $relationshipAnnotation->description,

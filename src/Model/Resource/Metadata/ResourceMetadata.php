@@ -15,10 +15,12 @@ class ResourceMetadata
     /** @var array */
     private $resourceConstraints;
 
-    /** @var Collection */
+    /** @var Collection<int, AttributeMetadata> */
     private $attributesMetadata;
 
-    /** @var Collection */
+    /**
+     * @var Collection<int|string, RelationshipMetadata>
+     */
     private $relationshipsMetadata;
 
     /** @var string */
@@ -142,6 +144,7 @@ class ResourceMetadata
 
     public function getAttributeMetadata(string $name): ?AttributeMetadata
     {
+
         $metadata = $this->attributesMetadata
             ->filter(static function (AttributeMetadata $attributeMetadata) use ($name) {
                 return $attributeMetadata->getName() === $name;

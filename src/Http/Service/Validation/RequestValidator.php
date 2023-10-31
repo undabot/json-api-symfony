@@ -16,14 +16,14 @@ use Undabot\JsonApi\Definition\Exception\Request\UnsupportedQueryStringParameter
 
 class RequestValidator implements RequestValidatorInterface
 {
-    /** @var array<int,string> */
-    private array $supportedQueryParamNames = [
-        'include',
-        'sort',
-        'filter',
-        'page',
-        'fields',
-    ];
+//    /** @var array<int,string> */
+//    private array $supportedQueryParamNames = [
+//        'include',
+//        'sort',
+//        'filter',
+//        'page',
+//        'fields',
+//    ];
 
     /**
      * Validates request according to JSON:API specification.

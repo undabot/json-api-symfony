@@ -118,9 +118,16 @@ class JsonApiRequestParamConverter implements ParamConverterInterface
      */
     private function getResourceId(Request $request, array $options): ?string
     {
-        // Which route attribute contains the ID (URL path param)?
         $idAttribute = $options['id'] ?? 'id';
 
-        return $request->attributes->get('_route_params')[$idAttribute] ?? null;
+        $routeParams = $request->attributes->get('_route_params');
+        if (!is_array($routeParams)) {
+            return null;
+        }
+
+        // Now safely access the $idAttribute
+        $routeParamValue = $routeParams[$idAttribute] ?? null;
+
+        return is_string($routeParamValue) ? $routeParamValue : null;
     }
 }

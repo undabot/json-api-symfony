@@ -213,7 +213,12 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $collectionIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                function ($item) {
+                    if (!is_string($item)) {
+                        throw new \InvalidArgumentException("Expected a string");
+                    }
+                    return $this->schemaFactory->readSchema($item);
+                },
                 $this->collectionIncludes
             );
 
@@ -242,7 +247,12 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $singleIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                function ($item) {
+                    if (!is_string($item)) {
+                        throw new \InvalidArgumentException("Expected a string");
+                    }
+                    return $this->schemaFactory->readSchema($item);
+                },
                 $this->singleIncludes
             );
 

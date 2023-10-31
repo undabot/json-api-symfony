@@ -12,17 +12,17 @@ use Doctrine\Common\Annotations\Annotation;
  */
 abstract class Relationship
 {
-    /** @var string */
-    public $name;
+    /** @var string|null */
+    public ?string $name;
+
+    /** @var string|null */
+    public ?string $type;
 
     /** @var string */
-    public $type;
-
-    /** @var string */
-    public $description;
+    public string $description;
 
     /** @var bool */
-    public $nullable;
+    public bool $nullable;
 
     abstract public function isToMany(): bool;
 }

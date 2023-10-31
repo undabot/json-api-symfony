@@ -8,6 +8,7 @@ use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Proxy\Proxy;
 use Exception;
+use http\Exception\InvalidArgumentException;
 use RuntimeException;
 use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -190,6 +191,10 @@ abstract class AbstractResponder
      */
     private function encodeData($data): ResourceInterface
     {
+        if (!is_object($data)) {
+            throw new InvalidArgumentException('Data must be an object.');
+        }
+
         $dataTransformer = $this->getDataTransformer($data);
 
         return $this->dataEncoder->encodeData($data, $dataTransformer);

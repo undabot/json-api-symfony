@@ -6,4 +6,9 @@ parameters:
     level: max
     ignoreErrors:
         - '#Call to an undefined method Symfony\\Component\\Config\\Definition\\Builder\\NodeDefinition::children\(\).#'
-
+        - '#Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\Api::\$email is never read, only written.#'
+        - '#Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Endpoint\\ResourceCollectionEndpoint::\$sorts is never read, only written.#'
+        - '#Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Service\\ResourceApiEndpointsFactory::\$delete is never read, only written.#'
+        - '#Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema::\$description is never read, only written.#'
+        - '#Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Requests\\UpdateResourceRequest::\$resourceType is never read, only written.#'
+        - '#Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Requests\\CreateResourceRequest::\$resourceType is never read, only written.#'

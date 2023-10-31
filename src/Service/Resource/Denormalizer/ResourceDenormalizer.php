@@ -70,7 +70,7 @@ class ResourceDenormalizer
      * For properties that are aliased (i.e. class property name is not the same as resource attribute / relationship)
      * change the key to match class property name.
      *
-     * @return array<string, null|string|string[]>
+     * @return array<string, array|string|null>
      */
     private function prepareData(ResourceInterface $resource, string $class): array
     {

@@ -29,9 +29,10 @@ class ResourceFactory
 {
     public function __construct(
         private ResourceMetadataFactory $metadataFactory,
-        private bool $shouldValidateReadModel,
-        private ResourceValidator $validator,
-    ) {
+        private bool                    $shouldValidateReadModel,
+        private ResourceValidator       $validator,
+    )
+    {
     }
 
     /**
@@ -46,8 +47,10 @@ class ResourceFactory
         $propertyAccessor = PropertyAccess::createPropertyAccessorBuilder()
             ->enableExceptionOnInvalidIndex()
             ->getPropertyAccessor();
-
         $id = $propertyAccessor->getValue($apiModel, 'id');
+        if (!is_string($id)){
+            throw new \InvalidArgumentException('ID must be a string.');
+        }
         $type = $metadata->getType();
 
         $attributes = $this->makeAttributeCollection($apiModel, $metadata);
@@ -82,7 +85,8 @@ class ResourceFactory
 
     private function makeAttributeCollection(ApiModel $apiModel, ResourceMetadata $metadata): ?AttributeCollection
     {
-        if (true === empty($metadata->getAttributesMetadata())) {
+        /* @phpstan-ignore-next-line */
+        if (empty($metadata->getAttributesMetadata())) {
             return null;
         }
 
@@ -103,10 +107,12 @@ class ResourceFactory
     }
 
     private function makeRelationshipsCollection(
-        ApiModel $apiModel,
+        ApiModel         $apiModel,
         ResourceMetadata $metadata
-    ): ?RelationshipCollection {
-        if (true === empty($metadata->getRelationshipsMetadata())) {
+    ): ?RelationshipCollection
+    {
+        /* @phpstan-ignore-next-line */
+        if (empty($metadata->getRelationshipsMetadata())) {
             return null;
         }
 
@@ -117,20 +123,33 @@ class ResourceFactory
         $relationshipBuilder = ResourceRelationshipsBuilder::make();
 
         foreach ($metadata->getRelationshipsMetadata() as $relationshipsMetadatum) {
+            $propertyValue = $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath());
+
             if ($relationshipsMetadatum->isToMany()) {
+                if (!is_array($propertyValue)) {
+                    continue;
+                }
+
+                $ids = array_map('strval', $propertyValue);
                 $relationshipBuilder->toMany(
                     $relationshipsMetadatum->getName(),
                     $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
+                    $ids
                 );
             } else {
+                if (!is_string($propertyValue) && $propertyValue !== null) {
+                    continue;
+                }
+
+                $id = $propertyValue !== null ? (string)$propertyValue : null; // Cast to string or null
                 $relationshipBuilder->toOne(
                     $relationshipsMetadatum->getName(),
                     $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
+                    $id
                 );
             }
         }
+
 
         return $relationshipBuilder->get();
     }

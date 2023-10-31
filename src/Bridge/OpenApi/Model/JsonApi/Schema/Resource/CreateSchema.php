@@ -45,20 +45,21 @@ class CreateSchema implements ResourceSchema
 
     public function toOpenApi(): array
     {
-        /** @todo add support for configurable client-side generated IDs */
-        $required = [
-            'type',
-        ];
+        $required = ['type'];
 
-        if (false === empty($this->attributes)) {
+        if (!empty($this->attributes)) {
             $required[] = 'attributes';
+            $attributesSchema = new AttributesSchema($this->attributes);
+            $schema['properties']['attributes'] = $attributesSchema->toOpenApi();
         }
 
-        if (false === empty($this->relationships)) {
+        if (!empty($this->relationships)) {
             $required[] = 'relationships';
+            $relationshipsSchema = new RelationshipsSchema($this->relationships);
+            $schema['properties']['relationships'] = $relationshipsSchema->toOpenApi();
         }
 
-        $schema = [
+        return [
             'type' => 'object',
             'properties' => [
                 'type' => [
@@ -67,22 +68,7 @@ class CreateSchema implements ResourceSchema
                     'enum' => [$this->resourceType],
                 ],
             ],
+            'required' => $required,
         ];
-
-        if (false === empty($required)) {
-            $schema['required'] = $required;
-        }
-
-        if (false === empty($this->attributes)) {
-            $attributesSchema = new AttributesSchema($this->attributes);
-            $schema['properties']['attributes'] = $attributesSchema->toOpenApi();
-        }
-
-        if (false === empty($this->relationships)) {
-            $relationshipsSchema = new RelationshipsSchema($this->relationships);
-            $schema['properties']['relationships'] = $relationshipsSchema->toOpenApi();
-        }
-
-        return $schema;
     }
 }

@@ -47,9 +47,12 @@ class GetResourceEndpoint implements Endpoint
         $this->path = $path;
         $this->includes = $includes;
 
-        $this->responses = array_merge([
+        /** @var Response[] $mergedResponses */
+        $mergedResponses = array_merge([
             new ResourceResponse($this->readSchema, $this->includes),
         ], $errorResponses);
+
+        $this->responses = $mergedResponses;
 
         $this->fields = $fields;
     }

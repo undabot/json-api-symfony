@@ -13,6 +13,7 @@ class PaginatedArrayCollection extends ArrayCollection
         $count = $paginator->count();
         $entities = $paginator->getQuery()->getResult();
 
-        return new self($entities, $count);
+
+        return new self(is_array($entities) ? $entities : (array) $entities, $count);
     }
 }

@@ -170,6 +170,9 @@ class RequestFactory
         $requestPrimaryData = $this->getRequestPrimaryData($request);
         $this->requestValidator->assertResourceLidIsValid($requestPrimaryData);
 
-        return $requestPrimaryData['lid'] ?? null;
+        // Check if 'lid' is set and is a string
+        return (isset($requestPrimaryData['lid']) && is_string($requestPrimaryData['lid']))
+            ? $requestPrimaryData['lid']
+            : null;
     }
 }

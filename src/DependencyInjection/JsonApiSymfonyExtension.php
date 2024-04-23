@@ -41,5 +41,6 @@ class JsonApiSymfonyExtension extends Extension
             ],
         ]);
         $container->setDefinition('json_api_symfony.exception_listener', $definition);
+        $container->setParameter('json_api_symfony.validate_read_model', $config['validate_read_model'] ?? false);
     }
 }

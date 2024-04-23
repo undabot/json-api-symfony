@@ -124,7 +124,7 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
 
         $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
         static::assertInstanceOf(AliasedResourceDto::class, $model);
-        static::assertObjectNotHasAttribute('extra', $model);
+        static::assertObjectNotHasProperty('extra', $model);
     }
 
     public function testDenormalizeWillReturnCorrectApiModelWithExtraRelationshipsIgnored(): void
@@ -145,7 +145,7 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
 
         $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
         static::assertInstanceOf(AliasedResourceDto::class, $model);
-        static::assertObjectNotHasAttribute('extras', $model);
+        static::assertObjectNotHasProperty('extras', $model);
     }
 
     public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized(): void

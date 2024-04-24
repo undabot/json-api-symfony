@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Undabot\JsonApi\Tests\Integration\Resource\Metadata;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation as JsonApi;
@@ -14,6 +13,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -26,7 +26,6 @@ final class MetadataFactoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        AnnotationRegistry::registerLoader('class_exists');
         $annotationReader = new AnnotationReader();
         $this->metadataFactory = new ResourceMetadataFactory($annotationReader);
     }
@@ -36,6 +35,7 @@ final class MetadataFactoryTest extends TestCase
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute
+             *
              * @JsonApi\ToOne
              */
             public $name;
@@ -51,6 +51,7 @@ final class MetadataFactoryTest extends TestCase
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\Attribute
+             *
              * @JsonApi\ToMany
              */
             public $name;
@@ -66,6 +67,7 @@ final class MetadataFactoryTest extends TestCase
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\ToMany
+             *
              * @JsonApi\ToOne
              */
             public $name;

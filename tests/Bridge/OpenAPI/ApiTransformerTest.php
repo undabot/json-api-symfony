@@ -11,6 +11,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -32,7 +33,7 @@ final class ApiTransformerTest extends TestCase
             'Example API documentation for JSON:API'
         );
         $result = $this->service->toJson($api);
-        static::assertJson($result);
+        self::assertJson($result);
     }
 
     public function testItTransformsToYaml(): void
@@ -44,6 +45,6 @@ final class ApiTransformerTest extends TestCase
         );
         $result = $this->service->toYaml($api);
         $array = Yaml::parse($result);
-        static::assertIsArray($array);
+        self::assertIsArray($array);
     }
 }

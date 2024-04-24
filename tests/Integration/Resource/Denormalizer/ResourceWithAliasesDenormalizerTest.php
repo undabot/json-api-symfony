@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Undabot\JsonApi\Tests\Integration\Resource\Denormalizer;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
@@ -35,12 +35,12 @@ class AliasedResourceDto implements ApiModel
         public array $tagIds,
         /** @JsonApi\ToOne(name="owner", type="person") */
         public ?string $ownerId
-    ) {
-    }
+    ) {}
 }
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer
  *
  * @small
@@ -52,11 +52,10 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        AnnotationRegistry::registerLoader('class_exists');
         $annotationReader = new AnnotationReader();
         $resourceMetadataFactory = new ResourceMetadataFactory($annotationReader);
 
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
         $normalizer = new ObjectNormalizer($classMetadataFactory);
 
         $this->serializer = new ResourceDenormalizer($resourceMetadataFactory, $normalizer);
@@ -79,12 +78,12 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
 
         /** @var AliasedResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $dto);
+        self::assertInstanceOf(AliasedResourceDto::class, $dto);
 
-        static::assertSame('This is my title', $dto->title);
-        static::assertSame('This is my summary', $dto->summary);
-        static::assertSame('p1', $dto->ownerId);
-        static::assertSame(['t1', 't2', 't3'], $dto->tagIds);
+        self::assertSame('This is my title', $dto->title);
+        self::assertSame('This is my summary', $dto->summary);
+        self::assertSame('p1', $dto->ownerId);
+        self::assertSame(['t1', 't2', 't3'], $dto->tagIds);
     }
 
     public function testDenormalizationOfInvalidResourceResultsWithException(): void
@@ -123,8 +122,8 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         );
 
         $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $model);
-        static::assertObjectNotHasProperty('extra', $model);
+        self::assertInstanceOf(AliasedResourceDto::class, $model);
+        self::assertObjectNotHasProperty('extra', $model);
     }
 
     public function testDenormalizeWillReturnCorrectApiModelWithExtraRelationshipsIgnored(): void
@@ -144,8 +143,8 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
         );
 
         $model = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $model);
-        static::assertObjectNotHasProperty('extras', $model);
+        self::assertInstanceOf(AliasedResourceDto::class, $model);
+        self::assertObjectNotHasProperty('extras', $model);
     }
 
     public function testResourceWithAliasedOptionalToOneRelationshipCanBeDenormalized(): void
@@ -165,7 +164,7 @@ final class ResourceWithAliasesDenormalizerTest extends TestCase
 
         /** @var AliasedResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, AliasedResourceDto::class);
-        static::assertInstanceOf(AliasedResourceDto::class, $dto);
-        static::assertNull($dto->ownerId);
+        self::assertInstanceOf(AliasedResourceDto::class, $dto);
+        self::assertNull($dto->ownerId);
     }
 }

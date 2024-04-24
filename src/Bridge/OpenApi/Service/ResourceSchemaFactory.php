@@ -63,9 +63,9 @@ class ResourceSchemaFactory
     /**
      * Returns array of schemas representing each resource identifier contained in the relationship.
      *
-     * @throws \Exception
-     *
      * @return IdentifierSchema[]
+     *
+     * @throws \Exception
      */
     public function relationshipsIdentifiers(string $resourceClass): array
     {
@@ -75,6 +75,7 @@ class ResourceSchemaFactory
         $relationshipsMetadata = $resourceMetadata->getRelationshipsMetadata()->toArray();
 
         $identifierSchemas = [];
+
         /** @var RelationshipMetadata $relationshipMetadata */
         foreach ($relationshipsMetadata as $relationshipMetadata) {
             $identifierSchemas[] = new IdentifierSchema($relationshipMetadata->getRelatedResourceType());

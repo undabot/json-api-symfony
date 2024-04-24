@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Collection;
 
-use ArrayIterator;
-
 class ArrayCollection implements ObjectCollection
 {
     /** @var array */
@@ -17,7 +15,7 @@ class ArrayCollection implements ObjectCollection
     /**
      * @param mixed[] $items
      */
-    public function __construct(array $items, int $count = null)
+    public function __construct(array $items, ?int $count = null)
     {
         $this->items = $items;
         if (null === $count) {
@@ -41,6 +39,6 @@ class ArrayCollection implements ObjectCollection
 
     public function getIterator(): \Traversable
     {
-        return new ArrayIterator($this->getItems());
+        return new \ArrayIterator($this->getItems());
     }
 }

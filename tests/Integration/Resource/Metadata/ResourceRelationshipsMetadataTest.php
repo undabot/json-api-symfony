@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Undabot\JsonApi\Tests\Integration\Resource\Metadata;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
@@ -20,6 +19,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -32,7 +32,6 @@ final class ResourceRelationshipsMetadataTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        AnnotationRegistry::registerLoader('class_exists');
         $annotationReader = new AnnotationReader();
         $this->metadataFactory = new ResourceMetadataFactory($annotationReader);
     }
@@ -43,31 +42,31 @@ final class ResourceRelationshipsMetadataTest extends TestCase
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
-        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+        self::assertInstanceOf(ResourceMetadata::class, $metadata);
 
-        static::assertCount(4, $metadata->getRelationshipsMetadata());
-        static::assertContainsOnlyInstancesOf(RelationshipMetadata::class, $metadata->getRelationshipsMetadata());
+        self::assertCount(4, $metadata->getRelationshipsMetadata());
+        self::assertContainsOnlyInstancesOf(RelationshipMetadata::class, $metadata->getRelationshipsMetadata());
 
-        static::assertNotNull($metadata->getRelationshipMetadata('tags'));
-        static::assertNotNull($metadata->getRelationshipMetadata('owner'));
-        static::assertNotNull($metadata->getRelationshipMetadata('emptyOne'));
-        static::assertNotNull($metadata->getRelationshipMetadata('emptyMany'));
-        static::assertNull($metadata->getRelationshipMetadata('notARelationship'));
+        self::assertNotNull($metadata->getRelationshipMetadata('tags'));
+        self::assertNotNull($metadata->getRelationshipMetadata('owner'));
+        self::assertNotNull($metadata->getRelationshipMetadata('emptyOne'));
+        self::assertNotNull($metadata->getRelationshipMetadata('emptyMany'));
+        self::assertNull($metadata->getRelationshipMetadata('notARelationship'));
     }
 
     public function testResourceMetadataContainsValidTagsRelationshipMetadata(): void
     {
         $resource = $this->getResource();
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+        self::assertInstanceOf(ResourceMetadata::class, $metadata);
 
         $tagsMetadata = $metadata->getRelationshipMetadata('tags');
 
-        static::assertSame('tags', $tagsMetadata->getName());
-        static::assertSame('tag', $tagsMetadata->getRelatedResourceType());
+        self::assertSame('tags', $tagsMetadata->getName());
+        self::assertSame('tag', $tagsMetadata->getRelatedResourceType());
 
-        static::assertCount(2, $tagsMetadata->getConstraints());
-        static::assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
+        self::assertCount(2, $tagsMetadata->getConstraints());
+        self::assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
 
         $expectationMap = [
             ResourceType::class => 0,
@@ -77,12 +76,12 @@ final class ResourceRelationshipsMetadataTest extends TestCase
         foreach ($tagsMetadata->getConstraints() as $constraint) {
             ++$expectationMap[\get_class($constraint)];
             if ($constraint instanceof ResourceType) {
-                static::assertSame('tag', $constraint->getType());
+                self::assertSame('tag', $constraint->getType());
             }
         }
 
         foreach ($expectationMap as $constraintClass => $expectationCount) {
-            static::assertSame(1, $expectationCount, $constraintClass);
+            self::assertSame(1, $expectationCount, $constraintClass);
         }
     }
 
@@ -90,15 +89,15 @@ final class ResourceRelationshipsMetadataTest extends TestCase
     {
         $resource = $this->getResource();
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-        static::assertInstanceOf(ResourceMetadata::class, $metadata);
+        self::assertInstanceOf(ResourceMetadata::class, $metadata);
 
         $tagsMetadata = $metadata->getRelationshipMetadata('owner');
 
-        static::assertSame('owner', $tagsMetadata->getName());
-        static::assertSame('person', $tagsMetadata->getRelatedResourceType());
+        self::assertSame('owner', $tagsMetadata->getName());
+        self::assertSame('person', $tagsMetadata->getRelatedResourceType());
 
-        static::assertCount(2, $tagsMetadata->getConstraints());
-        static::assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
+        self::assertCount(2, $tagsMetadata->getConstraints());
+        self::assertContainsOnlyInstancesOf(Constraint::class, $tagsMetadata->getConstraints());
 
         $expectationMap = [
             ResourceType::class => 0,
@@ -108,12 +107,12 @@ final class ResourceRelationshipsMetadataTest extends TestCase
         foreach ($tagsMetadata->getConstraints() as $constraint) {
             ++$expectationMap[\get_class($constraint)];
             if ($constraint instanceof ResourceType) {
-                static::assertSame('person', $constraint->getType());
+                self::assertSame('person', $constraint->getType());
             }
         }
 
         foreach ($expectationMap as $constraintClass => $expectationCount) {
-            static::assertSame(1, $expectationCount, $constraintClass);
+            self::assertSame(1, $expectationCount, $constraintClass);
         }
     }
 
@@ -125,6 +124,7 @@ final class ResourceRelationshipsMetadataTest extends TestCase
         $resource = new class() implements ApiModel {
             /**
              * @JsonApi\ToMany(name="tag")
+             *
              * @JsonApi\ToOne(name="tag2")
              */
             public $tagId;
@@ -149,13 +149,13 @@ final class ResourceRelationshipsMetadataTest extends TestCase
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
 
-        static::assertInstanceOf(ResourceMetadata::class, $metadata);
-        static::assertCount(2, $metadata->getRelationshipsMetadata());
+        self::assertInstanceOf(ResourceMetadata::class, $metadata);
+        self::assertCount(2, $metadata->getRelationshipsMetadata());
 
-        static::assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('defaultName'));
+        self::assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('defaultName'));
 
-        static::assertNull($metadata->getRelationshipMetadata('defaultName2'));
-        static::assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('overridenName'));
+        self::assertNull($metadata->getRelationshipMetadata('defaultName2'));
+        self::assertInstanceOf(RelationshipMetadata::class, $metadata->getRelationshipMetadata('overridenName'));
     }
 
     public function testRelationshipMetadataIsEmptyWhenNoRelationshipsAnnotated(): void
@@ -163,11 +163,10 @@ final class ResourceRelationshipsMetadataTest extends TestCase
         /**
          * @ResourceType(type="resource")
          */
-        $resource = new class() implements ApiModel {
-        };
+        $resource = new class() implements ApiModel {};
 
         $metadata = $this->metadataFactory->getInstanceMetadata($resource);
-        static::assertTrue($metadata->getRelationshipsMetadata()->isEmpty());
+        self::assertTrue($metadata->getRelationshipsMetadata()->isEmpty());
     }
 
     private function getResource()
@@ -178,12 +177,14 @@ final class ResourceRelationshipsMetadataTest extends TestCase
         return new class() implements ApiModel {
             /**
              * @var array
+             *
              * @JsonApi\ToMany(name="tags", type="tag")
              */
             public $tagIds;
 
             /**
              * @var null|string
+             *
              * @JsonApi\ToOne(name="owner", type="person")
              */
             public $ownerId;

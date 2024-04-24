@@ -18,6 +18,7 @@ class Tag implements ApiModel
 
     /**
      * @var string
+     *
      * @Attribute
      */
     private $name;

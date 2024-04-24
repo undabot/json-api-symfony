@@ -21,7 +21,7 @@ class IncludeQueryParam implements Schema
      * @param mixed[]      $includes
      * @param null|mixed[] $default
      */
-    public function __construct(array $includes, ?string $description = null, array $default = null)
+    public function __construct(array $includes, ?string $description = null, ?array $default = null)
     {
         $this->includes = $includes;
         $this->description = $description;

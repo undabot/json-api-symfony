@@ -18,6 +18,7 @@ class Category implements ApiModel
 
     /**
      * @var string
+     *
      * @Attribute
      */
     private $name;

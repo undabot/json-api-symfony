@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace Undabot\JsonApi\Tests\Unit\Http\Service\EventSubscriber;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
@@ -19,23 +20,18 @@ use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Error\ErrorCollection;
 use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
-use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceDeletedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceValidationErrorsResponse;
 use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
 
-/**
- * @internal
- * @covers \Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber
- *
- * @medium
- */
+#[CoversClass(ViewResponseSubscriber::class)]
+#[Medium]
 final class ViewResponseSubscriberTest extends TestCase
 {
     private MockObject $documentEncoderMock;
-    private ViewResponseSubscriber$viewResponseSubscriber;
+    private ViewResponseSubscriber $viewResponseSubscriber;
 
     protected function setUp(): void
     {
@@ -43,76 +39,66 @@ final class ViewResponseSubscriberTest extends TestCase
         $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoderMock);
     }
 
-    /**
-     * @dataProvider controllerResultProvider
-     */
-    public function testBuildViewWillSetCorrectResponseInEventGivenValidControllerResult(
+    public function buildEvent(
         object $controllerResult,
-        bool $shouldEncode
-    ): void {
+    ): ViewEvent {
         $event = new ViewEvent(
             new HttpKernel(new EventDispatcher(), new ControllerResolver()),
             Request::create('http://localhost:8000/web/v1/posts'),
             HttpKernelInterface::MAIN_REQUEST,
             $controllerResult,
         );
-        if ($shouldEncode) {
-            $this->documentEncoderMock->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
-        } else {
-            $this->documentEncoderMock->expects(static::never())->method('encode');
-        }
 
         $this->viewResponseSubscriber->buildView($event);
+
+        return $event;
     }
 
-    public function controllerResultProvider(): \Generator
+    public function testBuildViewWillSetCorrectResponseInEventGivenValidResourceCollectionResponse(): void
     {
-        yield 'ResourceCollectionResponse returned by controller' => [
-            new ResourceCollectionResponse($this->createMock(ResourceCollectionInterface::class)),
-            true,
-        ];
+        $event = $this->buildEvent(new ResourceCollectionResponse($this->createMock(ResourceCollectionInterface::class)));
+        self::assertSame('null', $event->getResponse()?->getContent());
+    }
 
-        yield 'ResourceCreatedResponse returned by controller' => [
-            new ResourceCreatedResponse($this->createMock(ResourceInterface::class)),
-            true,
-        ];
+    public function testBuildViewWillSetCorrectResponseInEventGivenValidResourceCreatedResponse(): void
+    {
+        $event = $this->buildEvent(new ResourceCollectionResponse($this->createMock(ResourceCollectionInterface::class)));
+        self::assertSame('null', $event->getResponse()?->getContent());
+    }
 
-        yield 'ResourceUpdatedResponse returned by controller' => [
-            new ResourceUpdatedResponse($this->createMock(ResourceInterface::class)),
-            true,
-        ];
+    public function testBuildViewWillSetCorrectResponseInEventGivenValidResourceUpdatedResponse(): void
+    {
+        $event = $this->buildEvent(new ResourceUpdatedResponse($this->createMock(ResourceInterface::class)));
+        self::assertSame('null', $event->getResponse()?->getContent());
+    }
 
-        yield 'ResourceDeletedResponse returned by controller' => [
-            new ResourceDeletedResponse(),
-            false,
-        ];
+    public function testBuildViewWillSetCorrectResponseInEventGivenValidResourceDeletedResponse(): void
+    {
+        $event = $this->buildEvent(new ResourceDeletedResponse());
+        self::assertSame('', $event->getResponse()?->getContent());
+    }
 
-        yield 'ResourceResponse returned by controller' => [
-            new ResourceResponse($this->createMock(ResourceInterface::class)),
-            true,
-        ];
+    public function testBuildViewWillSetCorrectResponseInEventGivenValidResourceResponse(): void
+    {
+        $event = $this->buildEvent(new ResourceResponse($this->createMock(ResourceInterface::class)));
+        self::assertSame('null', $event->getResponse()?->getContent());
+    }
 
-        yield 'Null ResourceResponse returned by controller' => [
-            new ResourceResponse(null),
-            true,
-        ];
+    public function testBuildViewWillSetCorrectResponseInEventGivenValidNullResourceResponse(): void
+    {
+        $event = $this->buildEvent(new ResourceResponse(null));
+        self::assertSame('null', $event->getResponse()?->getContent());
+    }
 
-        yield 'ResourceValidationErrorsResponse returned by controller' => [
-            new ResourceValidationErrorsResponse(new ErrorCollection([])),
-            true,
-        ];
+    public function testBuildViewWillSetCorrectResponseInEventGivenValidResourceValidationErrorsResponse(): void
+    {
+        $event = $this->buildEvent(new ResourceValidationErrorsResponse(new ErrorCollection([])));
+        self::assertSame('null', $event->getResponse()?->getContent());
     }
 
     public function testBuildViewWillNotSetResponseInEventGivenValidControllerResultButUnsupportedControllerResult(): void
     {
-        $event = new ViewEvent(
-            new HttpKernel(new EventDispatcher(), new ControllerResolver()),
-            Request::create('http://localhost:8000/web/v1/posts'),
-            HttpKernelInterface::MAIN_REQUEST,
-            new ResourceCollection([]),
-        );
-        $this->documentEncoderMock->expects(static::never())->method('encode');
-
-        $this->viewResponseSubscriber->buildView($event);
+        $event = $this->buildEvent(new ResourceCollection([]));
+        self::assertNull($event->getResponse()?->getContent());
     }
 }

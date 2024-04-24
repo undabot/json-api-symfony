@@ -1,7 +1,8 @@
 <?php
 
 declare(strict_types=1);
+use Undabot\SymfonyJsonApi\JsonApiSymfonyBundle;
 
 return [
-    Undabot\SymfonyJsonApi\JsonApiSymfonyBundle::class => ['all' => true],
+    JsonApiSymfonyBundle::class => ['all' => true],
 ];

@@ -1,4 +1,4 @@
-FROM php:8.1.0-fpm as build-stage
+FROM php:8.3.6-fpm as build-stage
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git \

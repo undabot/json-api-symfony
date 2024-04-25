@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Undabot\SymfonyJsonApi\DependencyInjection\Compiler\ApiGeneratorPass;
 
-class JsonApiSymfonyBundle extends Bundle
+class JsonApiSymfonyBundle extends AbstractBundle
 {
     public function build(ContainerBuilder $container): void
     {

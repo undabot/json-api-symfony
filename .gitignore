@@ -6,3 +6,5 @@
 /ci_key*
 /tests/_reports
 .phpunit.result.cache
+.phpunit.cache/*
+/var

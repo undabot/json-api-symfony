@@ -9,6 +9,7 @@ use Undabot\SymfonyJsonApi\Model\Collection\ArrayCollection;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Model\Collection\ArrayCollection
  *
  * @small
@@ -21,7 +22,7 @@ final class ArrayCollectionTest extends TestCase
 
         $arrayCollection = new ArrayCollection($items);
 
-        static::assertEquals(2, $arrayCollection->count());
-        static::assertEquals($items, $arrayCollection->getItems());
+        self::assertEquals(2, $arrayCollection->count());
+        self::assertEquals($items, $arrayCollection->getItems());
     }
 }

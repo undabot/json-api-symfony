@@ -15,7 +15,7 @@ class ToMany extends Constraint
 {
     public const MESSAGE = 'This value must be an array.';
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return ToManyValidator::class;
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Model\Resource\Metadata;
 
 use Assert\Assertion;
+use Assert\AssertionFailedException;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\Validator\Constraint;
@@ -29,7 +30,7 @@ class ResourceMetadata
      * @param AttributeMetadata[]    $attributesMetadata
      * @param RelationshipMetadata[] $relationshipsMetadata
      *
-     * @throws \Assert\AssertionFailedException
+     * @throws AssertionFailedException
      */
     public function __construct(
         array $resourceConstraints,
@@ -77,6 +78,7 @@ class ResourceMetadata
     public function getAttributesConstraints(): array
     {
         $constraints = [];
+
         /** @var AttributeMetadata $attributeMetadatum */
         foreach ($this->attributesMetadata as $attributeMetadatum) {
             $constraints[$attributeMetadatum->getName()] = $attributeMetadatum->getConstraints();
@@ -93,6 +95,7 @@ class ResourceMetadata
     public function getRelationshipsObjectConstraints(): array
     {
         $constraints = [];
+
         /** @var RelationshipMetadata $relationshipMetadatum */
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
             $objectConstraints = array_filter(

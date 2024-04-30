@@ -15,7 +15,7 @@ class ToOne extends Constraint
 {
     public const MESSAGE = 'This value must be string or null.';
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return ToOneValidator::class;
     }

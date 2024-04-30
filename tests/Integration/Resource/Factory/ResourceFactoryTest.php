@@ -27,6 +27,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory
  *
  * @small
@@ -69,12 +70,12 @@ final class ResourceFactoryTest extends TestCase
         $this->assertFullResourceGiven($resource);
 
         $flatResource = new FlatResource($resource);
-        static::assertSame('Resource title', $flatResource->getAttributes()['title']);
-        static::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
-        static::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
-        static::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
-        static::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
-        static::assertSame('a1', $flatResource->getRelationships()['author']);
+        self::assertSame('Resource title', $flatResource->getAttributes()['title']);
+        self::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
+        self::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
+        self::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
+        self::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
+        self::assertSame('a1', $flatResource->getRelationships()['author']);
     }
 
     public function testResourceFactoryCreatesValidTagsRelationship(): void
@@ -93,20 +94,20 @@ final class ResourceFactoryTest extends TestCase
         $this->assertMinimumResourceParametersAreValid($resource);
 
         $tagsRelationship = $resource->getRelationships()->getRelationshipByName('tags');
-        static::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
-        static::assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
+        self::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
+        self::assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
 
-        static::assertEquals(
+        self::assertEquals(
             new ResourceIdentifier('t1', 'tags'),
             $tagsRelationship->getData()->getData()->getResourceIdentifiers()[0]
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new ResourceIdentifier('t2', 'tags'),
             $tagsRelationship->getData()->getData()->getResourceIdentifiers()[1]
         );
 
-        static::assertEquals(
+        self::assertEquals(
             new ResourceIdentifier('t3', 'tags'),
             $tagsRelationship->getData()->getData()->getResourceIdentifiers()[2]
         );
@@ -120,9 +121,9 @@ final class ResourceFactoryTest extends TestCase
         $this->assertMinimumResourceParametersAreValid($resource);
 
         $tagsRelationship = $resource->getRelationships()->getRelationshipByName('tags');
-        static::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
-        static::assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
-        static::assertTrue($tagsRelationship->getData()->isEmpty());
+        self::assertInstanceOf(RelationshipInterface::class, $tagsRelationship);
+        self::assertInstanceOf(ToManyRelationshipDataInterface::class, $tagsRelationship->getData());
+        self::assertTrue($tagsRelationship->getData()->isEmpty());
     }
 
     public function testResourceFactoryCreatesValidAuthorRelationship(): void
@@ -141,10 +142,10 @@ final class ResourceFactoryTest extends TestCase
         $this->assertMinimumResourceParametersAreValid($resource);
 
         $authorRelationship = $resource->getRelationships()->getRelationshipByName('author');
-        static::assertInstanceOf(RelationshipInterface::class, $authorRelationship);
-        static::assertInstanceOf(ToOneRelationshipDataInterface::class, $authorRelationship->getData());
+        self::assertInstanceOf(RelationshipInterface::class, $authorRelationship);
+        self::assertInstanceOf(ToOneRelationshipDataInterface::class, $authorRelationship->getData());
 
-        static::assertEquals(
+        self::assertEquals(
             new ResourceIdentifier('a1', 'people'),
             $authorRelationship->getData()->getData()
         );
@@ -159,12 +160,12 @@ final class ResourceFactoryTest extends TestCase
         $this->assertFullResourceGiven($resource);
 
         $flatResource = new FlatResource($resource);
-        static::assertSame('Resource title', $flatResource->getAttributes()['title']);
-        static::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
-        static::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
-        static::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
-        static::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
-        static::assertSame('a1', $flatResource->getRelationships()['author']);
+        self::assertSame('Resource title', $flatResource->getAttributes()['title']);
+        self::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
+        self::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
+        self::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
+        self::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
+        self::assertSame('a1', $flatResource->getRelationships()['author']);
     }
 
     public function testMakeWillCreateValidResourceGivenWriteModelShouldBeValidatedAndResourceHasValuesAndConstraints(): void
@@ -181,12 +182,12 @@ final class ResourceFactoryTest extends TestCase
         $this->assertFullResourceGiven($resource);
 
         $flatResource = new FlatResource($resource);
-        static::assertSame('Resource title', $flatResource->getAttributes()['title']);
-        static::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
-        static::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
-        static::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
-        static::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
-        static::assertSame('a1', $flatResource->getRelationships()['author']);
+        self::assertSame('Resource title', $flatResource->getAttributes()['title']);
+        self::assertSame('Resource summary', $flatResource->getAttributes()['summary']);
+        self::assertSame('2018-01-01', $flatResource->getAttributes()['date']);
+        self::assertSame(['t1', 't2', 't3'], $flatResource->getRelationships()['tags']);
+        self::assertSame(['c1', 'c2', 'c3'], $flatResource->getRelationships()['comments']);
+        self::assertSame('a1', $flatResource->getRelationships()['author']);
     }
 
     public function testMakeWillThrowExceptionGivenWriteModelShouldBeValidatedAndResourceHasValuesWhichAreAgainstConstraints(): void
@@ -194,7 +195,7 @@ final class ResourceFactoryTest extends TestCase
         $this->expectException(\Exception::class);
         $validatorMock = $this->createMock(ValidatorInterface::class);
         $validatorMock
-            ->expects(static::exactly(4))
+            ->expects(self::exactly(4))
             ->method('validate')
             ->willReturn(new ResourceValidationViolations(
                 new ConstraintViolationList(
@@ -226,15 +227,15 @@ final class ResourceFactoryTest extends TestCase
 
     private function assertMinimumResourceParametersAreValid(ResourceInterface $resource): void
     {
-        static::assertSame('1', $resource->getId());
-        static::assertSame('resource', $resource->getType());
+        self::assertSame('1', $resource->getId());
+        self::assertSame('resource', $resource->getType());
     }
 
     private function assertFullResourceGiven(ResourceInterface $resource): void
     {
         $this->assertMinimumResourceParametersAreValid($resource);
-        static::assertCount(3, $resource->getAttributes());
-        static::assertCount(3, $resource->getRelationships());
+        self::assertCount(3, $resource->getAttributes());
+        self::assertCount(3, $resource->getRelationships());
     }
 
     private function createMinimalResource(): ResourceDto
@@ -289,6 +290,7 @@ final class ResourceDto implements ApiModel
 
     /**
      * @var array<int,string>
+     *
      * @JsonApi\ToMany(type="tags")
      * @Assert\All({
      *     @Assert\NotBlank,
@@ -299,6 +301,7 @@ final class ResourceDto implements ApiModel
 
     /**
      * @var array<int,string>
+     *
      * @JsonApi\ToMany(type="comments")
      * @Assert\All({
      *     @Assert\NotBlank,

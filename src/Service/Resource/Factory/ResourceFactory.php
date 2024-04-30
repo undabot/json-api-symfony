@@ -6,7 +6,6 @@ namespace Undabot\SymfonyJsonApi\Service\Resource\Factory;
 
 use Assert\Assertion;
 use Doctrine\Common\Annotations\AnnotationException;
-use ReflectionException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -31,12 +30,11 @@ class ResourceFactory
         private ResourceMetadataFactory $metadataFactory,
         private bool $shouldValidateReadModel,
         private ResourceValidator $validator,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AnnotationException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws InvalidResourceMappingException
      */
     public function make(ApiModel $apiModel): ResourceInterface
@@ -66,7 +64,7 @@ class ResourceFactory
      *
      * @throws AnnotationException
      * @throws InvalidResourceMappingException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function makeCollection(array $apiModels): ResourceCollectionInterface
     {

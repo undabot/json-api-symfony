@@ -10,6 +10,7 @@ final class OpenApiGenerator
 {
     /** @var array<OpenApiDefinition> */
     private array $definitions = [];
+
     /** @var array<string,array<ResourceApiInterface>> */
     private array $resources = [];
 

@@ -7,8 +7,6 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Proxy\Proxy;
-use Exception;
-use RuntimeException;
 use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Link\Link;
@@ -27,6 +25,7 @@ abstract class AbstractResponder
 {
     /** @var EntityManagerInterface */
     private $entityManager;
+
     /** @var EncoderInterface */
     private $dataEncoder;
 
@@ -44,13 +43,13 @@ abstract class AbstractResponder
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceCollection(
         array $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceCollectionResponse {
         $primaryResources = $this->encodeDataset($primaryData);
 
@@ -68,13 +67,13 @@ abstract class AbstractResponder
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceObjectCollection(
         ObjectCollection $primaryModels,
-        array $included = null,
-        array $meta = null,
-        array $links = null
+        ?array $included = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceCollectionResponse {
         $primaryResources = $this->encodeDataset($primaryModels->getItems());
         $meta = $meta ?? ['total' => $primaryModels->count()];
@@ -93,13 +92,13 @@ abstract class AbstractResponder
      * @param null|array<string, LinkMemberInterface> $links
      * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resource(
         $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceResponse {
         /**
          * resource response can be single resource or null.
@@ -122,13 +121,13 @@ abstract class AbstractResponder
      * @param null|array<string, LinkMemberInterface> $links
      * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceCreated(
         $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceCreatedResponse {
         $resource = $this->encodeData($primaryData);
 
@@ -146,13 +145,13 @@ abstract class AbstractResponder
      * @param null|array<string, LinkMemberInterface> $links
      * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceUpdated(
         $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceUpdatedResponse {
         $resource = $this->encodeData($primaryData);
 
@@ -186,7 +185,7 @@ abstract class AbstractResponder
     /**
      * @param mixed $data
      *
-     * @throws Exception
+     * @throws \Exception
      */
     private function encodeData($data): ResourceInterface
     {
@@ -256,7 +255,7 @@ abstract class AbstractResponder
                 $dataClass
             );
 
-            throw new RuntimeException($message);
+            throw new \RuntimeException($message);
         }
 
         return $map[$dataClass];

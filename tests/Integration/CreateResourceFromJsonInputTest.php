@@ -17,6 +17,7 @@ use Undabot\JsonApi\Implementation\Model\Resource\ResourceIdentifier;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -60,36 +61,37 @@ final class CreateResourceFromJsonInputTest extends TestCase
             JSON;
 
         $resource = $this->phpArrayToResourceEncoder->decode(json_decode($resourceJson, true));
-        static::assertInstanceOf(Resource::class, $resource);
-        static::assertNull($resource->getSelfUrl());
-        static::assertNull($resource->getMeta());
-        static::assertSame('product', $resource->getType());
-        static::assertSame('1', $resource->getId());
+        self::assertInstanceOf(Resource::class, $resource);
+        self::assertNull($resource->getSelfUrl());
+        self::assertNull($resource->getMeta());
+        self::assertSame('product', $resource->getType());
+        self::assertSame('1', $resource->getId());
 
-        static::assertCount(2, $resource->getAttributes());
+        self::assertCount(2, $resource->getAttributes());
 
         $attributes = iterator_to_array($resource->getAttributes()->getIterator());
-        static::assertSame('name', $attributes[0]->getName());
-        static::assertSame('Rails is Omakase', $attributes[0]->getValue());
-        static::assertSame('price', $attributes[1]->getName());
-        static::assertSame(1500, $attributes[1]->getValue());
+        self::assertSame('name', $attributes[0]->getName());
+        self::assertSame('Rails is Omakase', $attributes[0]->getValue());
+        self::assertSame('price', $attributes[1]->getName());
+        self::assertSame(1500, $attributes[1]->getValue());
 
-        static::assertCount(1, $resource->getRelationships());
+        self::assertCount(1, $resource->getRelationships());
         $relationships = iterator_to_array($resource->getRelationships()->getIterator());
+
         /** @var Relationship $category */
         $category = $relationships[0];
-        static::assertSame('category', $category->getName());
+        self::assertSame('category', $category->getName());
 
         $categoryRelData = $category->getData();
-        static::assertInstanceOf(ToOneRelationshipData::class, $categoryRelData);
-        static::assertFalse($categoryRelData->isEmpty());
+        self::assertInstanceOf(ToOneRelationshipData::class, $categoryRelData);
+        self::assertFalse($categoryRelData->isEmpty());
 
         /** @var ResourceIdentifier $categoryRelDataResourceIdentifier */
         $categoryRelDataResourceIdentifier = $categoryRelData->getData();
-        static::assertInstanceOf(ResourceIdentifier::class, $categoryRelDataResourceIdentifier);
+        self::assertInstanceOf(ResourceIdentifier::class, $categoryRelDataResourceIdentifier);
 
-        static::assertSame('1', $categoryRelDataResourceIdentifier->getId());
-        static::assertSame('category', $categoryRelDataResourceIdentifier->getType());
-        static::assertNull($categoryRelDataResourceIdentifier->getMeta());
+        self::assertSame('1', $categoryRelDataResourceIdentifier->getId());
+        self::assertSame('category', $categoryRelDataResourceIdentifier->getType());
+        self::assertNull($categoryRelDataResourceIdentifier->getMeta());
     }
 }

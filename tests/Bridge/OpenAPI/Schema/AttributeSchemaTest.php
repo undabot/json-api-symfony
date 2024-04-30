@@ -9,6 +9,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\AttributeSchema;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -18,7 +19,7 @@ final class AttributeSchemaTest extends TestCase
     public function testItCanBeConstructedWithMinimalData(): void
     {
         $schema = new AttributeSchema('name', 'type', false, null, null, null);
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -28,7 +29,7 @@ final class AttributeSchemaTest extends TestCase
         );
 
         $schema2 = new AttributeSchema('name', 'type', true, null, null, null);
-        static::assertSame(
+        self::assertSame(
             $schema2->toOpenApi(),
             [
                 'title' => 'name',
@@ -49,7 +50,7 @@ final class AttributeSchemaTest extends TestCase
             null
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -71,7 +72,7 @@ final class AttributeSchemaTest extends TestCase
             null
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -94,7 +95,7 @@ final class AttributeSchemaTest extends TestCase
             'example'
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -118,7 +119,7 @@ final class AttributeSchemaTest extends TestCase
             'example'
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',

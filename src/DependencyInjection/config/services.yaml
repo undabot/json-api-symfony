@@ -53,10 +53,25 @@ services:
     Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator: ~
     Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory:
         arguments:
-            $shouldValidateReadModel: '%json_api_symfony.validate_read_model%'
+            $shouldValidateReadModel: true
 
     Undabot\SymfonyJsonApi\Http\Service\:
         resource: '../../Http/Service/*'
+
+
+    Undabot\JsonApi\Definition\Model\Request\UpdateResourceRequestInterface: '@Undabot\SymfonyJsonApi\Http\Model\Request\UpdateResourceRequest'
+    Undabot\JsonApi\Definition\Model\Request\GetResourceRequestInterface: '@Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest'
+    Undabot\JsonApi\Definition\Model\Request\GetResourceCollectionRequestInterface: '@Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest'
+    Undabot\JsonApi\Definition\Model\Request\CreateResourceRequestInterface: '@Undabot\SymfonyJsonApi\Http\Model\Request\CreateResourceRequest'
+
+    Undabot\SymfonyJsonApi\Http\Model\Request\CreateResourceRequest:
+        factory: ['@Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory', 'createResourceRequest']
+    Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest:
+        factory: ['@Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory', 'getResourceRequest']
+    Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceCollectionRequest:
+        factory: ['@Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory', 'getResourceCollectionRequest']
+    Undabot\SymfonyJsonApi\Http\Model\Request\UpdateResourceRequest:
+        factory: ['@Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory', 'updateResourceRequest']
 
     Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidatorInterface: '@Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator'
     Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface: '@Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder'
@@ -67,3 +82,6 @@ services:
     Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceApiEndpointsFactory: ~
     Undabot\SymfonyJsonApi\Bridge\OpenApi\ApiTransformer: ~
     Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiGenerator: ~
+
+    Doctrine\Common\Annotations\AnnotationReader: ~
+    Doctrine\Common\Annotations\Reader: '@Doctrine\Common\Annotations\AnnotationReader'

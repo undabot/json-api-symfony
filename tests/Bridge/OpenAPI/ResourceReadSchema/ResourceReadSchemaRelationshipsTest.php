@@ -16,6 +16,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
 /**
  * @internal
+ *
  * @covers \Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory
  *
  * @small
@@ -49,9 +50,9 @@ final class ResourceReadSchemaRelationshipsTest extends TestCase
         $resourceReadSchema = $this->resourceSchemaFactory->readSchema($className);
 
         $resourceSchema = $resourceReadSchema->toOpenApi();
-        static::assertIsArray($resourceSchema);
-        //var_dump($resourceSchema);
+        self::assertIsArray($resourceSchema);
+        // var_dump($resourceSchema);
 
-        //exit;
+        // exit;
     }
 }

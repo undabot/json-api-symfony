@@ -15,6 +15,7 @@ use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -38,7 +39,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resource($this->testObject);
 
-        static::assertInstanceOf(ResourceResponse::class, $result);
+        self::assertInstanceOf(ResourceResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceCollectionResponse(): void
@@ -50,7 +51,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceCollection([$this->testObject]);
 
-        static::assertInstanceOf(ResourceCollectionResponse::class, $result);
+        self::assertInstanceOf(ResourceCollectionResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceUpdatedResponse(): void
@@ -62,7 +63,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceUpdated($this->testObject);
 
-        static::assertInstanceOf(ResourceUpdatedResponse::class, $result);
+        self::assertInstanceOf(ResourceUpdatedResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceCreatedResponse(): void
@@ -74,7 +75,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceCreated($this->testObject);
 
-        static::assertInstanceOf(ResourceCreatedResponse::class, $result);
+        self::assertInstanceOf(ResourceCreatedResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceDeletedResponse(): void
@@ -86,7 +87,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceDeleted();
 
-        static::assertInstanceOf(ResourceDeletedResponse::class, $result);
+        self::assertInstanceOf(ResourceDeletedResponse::class, $result);
     }
 
     public function testItThrowsExceptionIfNoMapDefined(): void

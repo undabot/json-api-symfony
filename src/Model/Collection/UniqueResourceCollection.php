@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Collection;
 
-use ArrayIterator;
 use Assert\Assertion;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -58,6 +57,6 @@ class UniqueResourceCollection implements ResourceCollectionInterface
 
     public function getIterator(): \Traversable
     {
-        return new ArrayIterator($this->items);
+        return new \ArrayIterator($this->items);
     }
 }

@@ -31,7 +31,7 @@ class ResourceType extends Constraint
         return $this->type;
     }
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return ResourceTypeValidator::class;
     }

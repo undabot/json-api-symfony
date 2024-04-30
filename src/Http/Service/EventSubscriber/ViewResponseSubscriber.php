@@ -23,12 +23,7 @@ use Undabot\SymfonyJsonApi\Service\Pagination\PaginationLinkBuilder;
 
 final class ViewResponseSubscriber implements EventSubscriberInterface
 {
-    private DocumentToPhpArrayEncoderInterface $documentEncoder;
-
-    public function __construct(DocumentToPhpArrayEncoderInterface $documentEncoder)
-    {
-        $this->documentEncoder = $documentEncoder;
-    }
+    public function __construct(private DocumentToPhpArrayEncoderInterface $documentEncoder) {}
 
     public static function getSubscribedEvents(): array
     {
@@ -79,7 +74,7 @@ final class ViewResponseSubscriber implements EventSubscriberInterface
                 $data->getIncludedResources()
             );
 
-            $response = $this->buildDocumentResponse($document, Response::HTTP_OK);
+            $response = $this->buildDocumentResponse($document);
             $event->setResponse($response);
         }
 
@@ -112,8 +107,6 @@ final class ViewResponseSubscriber implements EventSubscriberInterface
             $document = new Document(null, $data->getErrorCollection());
             $response = $this->buildDocumentResponse($document);
             $event->setResponse($response);
-
-            return;
         }
     }
 

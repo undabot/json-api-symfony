@@ -7,9 +7,6 @@ namespace Undabot\SymfonyJsonApi\Service\Resource\Factory;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Collections\ArrayCollection;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionProperty;
 use Symfony\Component\Validator\Constraint;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation;
@@ -31,7 +28,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
     /**
      * @throws AnnotationException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws InvalidResourceMappingException
      * @throws \InvalidArgumentException
      */
@@ -41,7 +38,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             throw new \InvalidArgumentException('Given class does not exists');
         }
 
-        $reflection = new ReflectionClass($class);
+        $reflection = new \ReflectionClass($class);
 
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
 
@@ -52,12 +49,12 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
     /**
      * @throws AnnotationException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws InvalidResourceMappingException
      */
     public function getInstanceMetadata(ApiModel $apiModel): ResourceMetadata
     {
-        $reflection = new ReflectionClass($apiModel);
+        $reflection = new \ReflectionClass($apiModel);
 
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
 
@@ -67,11 +64,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
     }
 
     /**
-     * @throws InvalidResourceMappingException
-     *
      * @return mixed[]
+     *
+     * @throws InvalidResourceMappingException
      */
-    private function loadMetadata(ReflectionClass $reflection): array
+    private function loadMetadata(\ReflectionClass $reflection): array
     {
         $attributeMetadata = [];
         $relationshipMetadata = [];
@@ -84,7 +81,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             return $annotation instanceof Constraint;
         })->getValues();
 
-        /** @var ReflectionProperty $property */
+        /** @var \ReflectionProperty $property */
         foreach ($properties as $property) {
             $propertyAnnotations = $this->reader->getPropertyAnnotations($property);
             $propertyAnnotations = new ArrayCollection($propertyAnnotations);
@@ -155,7 +152,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
      * @param Constraint[] $constraintAnnotations
      */
     private function buildAttributeMetadata(
-        ReflectionProperty $property,
+        \ReflectionProperty $property,
         Annotation\Attribute $attributeAnnotation,
         array $constraintAnnotations
     ): AttributeMetadata {
@@ -163,12 +160,12 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         $name = $attributeAnnotation->name ?? $property->getName();
 
         // @todo should we infer nullability from typehint?
-//        $docComment = $property->getDocComment();
-//        $nullable = null;
-//        if (false === empty($docComment)) {
-//            preg_match_all('/@var (.*)/m', $docComment, $result);
-//            $nullable = strpos($result[1][0] ?? '', 'null') !== false;
-//        }
+        //        $docComment = $property->getDocComment();
+        //        $nullable = null;
+        //        if (false === empty($docComment)) {
+        //            preg_match_all('/@var (.*)/m', $docComment, $result);
+        //            $nullable = strpos($result[1][0] ?? '', 'null') !== false;
+        //        }
         // @todo add support for PHP 7.4 types and nullability check
 
         // @todo Idea: add attribute type validation constraint based on the property type (docblock)?
@@ -187,12 +184,13 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
      * @throws InvalidResourceMappingException
      */
     private function buildRelationshipMetadata(
-        ReflectionProperty $property,
+        \ReflectionProperty $property,
         Annotation\Relationship $relationshipAnnotation,
         array $constraintAnnotations
     ): RelationshipMetadata {
         // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
         $name = $relationshipAnnotation->name ?? $property->getName();
+
         /** @var null|string $relatedResourceType */
         $relatedResourceType = $relationshipAnnotation->type;
 

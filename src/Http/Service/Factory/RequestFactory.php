@@ -6,6 +6,7 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Factory;
 
 use Assert\Assertion;
 use Assert\AssertionFailedException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Undabot\JsonApi\Definition\Encoding\PhpArrayToResourceEncoderInterface;
@@ -61,6 +62,15 @@ final class RequestFactory
         if (null !== $lid) {
             $requestPrimaryData['id'] = $lid;
             unset($requestPrimaryData['lid']);
+        }
+
+        /**
+         * If no ID is already generated create new one so the write model
+         * can already have ID as a property. Consider having ID strategy
+         * set through configuration.
+         */
+        if (false === array_key_exists('id', $requestPrimaryData)) {
+            $requestPrimaryData['id'] = (string) Uuid::uuid4();
         }
 
         $resource = $this->resourceEncoder->decode($requestPrimaryData);

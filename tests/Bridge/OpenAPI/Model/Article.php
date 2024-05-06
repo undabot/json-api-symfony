@@ -65,6 +65,7 @@ class Article implements ApiModel
      * @var string
      *
      * @ToOne(name="category", type="category", nullable=true)
+     *
      * @Assert\Type(type="string")
      */
     private $categoryId;
@@ -73,6 +74,7 @@ class Article implements ApiModel
      * @var string[]
      *
      * @ToMany(name="tags", type="tag", nullable=false)
+     *
      * @Assert\Type(type="array")
      */
     private $tagIds;
@@ -81,6 +83,7 @@ class Article implements ApiModel
      * @var string
      *
      * @Attribute(format="datetime", example="2001")
+     *
      * @Assert\NotBlank
      */
     private $createdAt;

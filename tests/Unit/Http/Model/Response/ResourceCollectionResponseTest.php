@@ -147,7 +147,7 @@ final class ResourceCollectionResponseTest extends TestCase
         $resourceMocks = [];
         $includeMocks = [];
         foreach ($resources as $resource) {
-            if (true === is_string($resource)) {
+            if (true === \is_string($resource)) {
                 $resourceMocks[] = $this->createMock($resource);
             } else {
                 $resourceMocks[] = $resource;
@@ -155,7 +155,7 @@ final class ResourceCollectionResponseTest extends TestCase
         }
 
         foreach ($included as $include) {
-            if (true === is_string($include)) {
+            if (true === \is_string($include)) {
                 $includeMocks[] = $this->createMock($include);
             } else {
                 $includeMocks[] = $include;

@@ -54,30 +54,35 @@ final class ResourceReadSchemaTest extends TestCase
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="integer")
              */
             public int $integerProperty;
 
             /**
              * @JsonApi\Attribute(nullable=true)
+             *
              * @Assert\Type(type="integer")
              */
             public ?int $nullableIntegerProperty;
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="boolean")
              */
             public bool $booleanProperty1;
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="bool")
              */
             public bool $booleanProperty2;
 
             /**
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="float")
              */
             public float $floatProperty;

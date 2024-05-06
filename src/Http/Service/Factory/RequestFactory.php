@@ -69,7 +69,7 @@ final class RequestFactory
          * can already have ID as a property. Consider having ID strategy
          * set through configuration.
          */
-        if (false === array_key_exists('id', $requestPrimaryData)) {
+        if (false === \array_key_exists('id', $requestPrimaryData)) {
             $requestPrimaryData['id'] = (string) Uuid::uuid4();
         }
 

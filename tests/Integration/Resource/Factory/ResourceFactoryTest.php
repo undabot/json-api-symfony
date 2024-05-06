@@ -275,6 +275,7 @@ final class ResourceDto implements ApiModel
 
     /**
      * @JsonApi\Attribute
+     *
      * @Assert\NotBlank
      */
     public string $title;
@@ -292,8 +293,11 @@ final class ResourceDto implements ApiModel
      * @var array<int,string>
      *
      * @JsonApi\ToMany(type="tags")
+     *
      * @Assert\All({
+     *
      *     @Assert\NotBlank,
+     *
      *     @Assert\Type("string")
      * })
      */
@@ -303,8 +307,11 @@ final class ResourceDto implements ApiModel
      * @var array<int,string>
      *
      * @JsonApi\ToMany(type="comments")
+     *
      * @Assert\All({
+     *
      *     @Assert\NotBlank,
+     *
      *     @Assert\Type("string")
      * })
      */

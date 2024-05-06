@@ -26,6 +26,13 @@ use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceUpdatedResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceValidationErrorsResponse;
 use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
 
+/**
+ * @internal
+ *
+ * @coversNothing
+ *
+ * @small
+ */
 #[CoversClass(ViewResponseSubscriber::class)]
 #[Medium]
 final class ViewResponseSubscriberTest extends TestCase

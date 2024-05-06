@@ -200,8 +200,11 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var string
              *
              * @JsonApi\Attribute
+             *
              * @Assert\NotBlank
+             *
              * @Assert\Length(min=100, max=200)
+             *
              * @Assert\Type(type="string")
              */
             public $name;
@@ -210,6 +213,7 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var null|string
              *
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="string")
              */
             public $summary;
@@ -218,7 +222,9 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var \DateTimeImmutable
              *
              * @JsonApi\Attribute
+             *
              * @Assert\NotBlank
+             *
              * @Assert\Type(type="datetime")
              */
             public $publishedAt;
@@ -227,7 +233,9 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var bool
              *
              * @JsonApi\Attribute
+             *
              * @Assert\NotBlank
+             *
              * @Assert\Type(type="bool")
              */
             public $active;

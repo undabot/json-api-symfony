@@ -118,7 +118,11 @@ class ResourceSchemaFactory
     private function getAttributes(ResourceMetadata $metadata): array
     {
         return $metadata->getAttributesMetadata()
-            ->map(function (AttributeMetadata $attributeMetadata) {
+            ->map(function ($attributeMetadata) {
+                if (!$attributeMetadata instanceof AttributeMetadata) {
+                    throw new \InvalidArgumentException('Expected AttributeMetadata instance.');
+                }
+
                 return $this->attributeSchemaFactory->make($attributeMetadata);
             })
             ->toArray();
@@ -130,7 +134,11 @@ class ResourceSchemaFactory
     private function getRelationships(ResourceMetadata $metadata): array
     {
         return $metadata->getRelationshipsMetadata()
-            ->map(function (RelationshipMetadata $relationshipMetadata) {
+            ->map(function ($relationshipMetadata) {
+                if (!$relationshipMetadata instanceof RelationshipMetadata) {
+                    throw new \InvalidArgumentException('Expected RelationshipMetadata instance.');
+                }
+
                 return $this->relationshipSchemaFactory->make($relationshipMetadata);
             })
             ->toArray();

@@ -11,6 +11,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\CreateResourceE
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\GetResourceEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\ResourceCollectionEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\UpdateResourceEndpoint;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Filter\Filter;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\OffsetBasedPaginationQueryParam;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\PageBasedPaginationQueryParam;
 
@@ -213,14 +214,20 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $collectionIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                function ($item) {
+                    if (!\is_string($item)) {
+                        throw new \InvalidArgumentException('Expected a string');
+                    }
+
+                    return $this->schemaFactory->readSchema($item);
+                },
                 $this->collectionIncludes
             );
 
             $getCollectionEndpoint = new ResourceCollectionEndpoint(
                 $readSchema,
                 $this->path,
-                $this->collectionFilters,
+                $this->prepareCollectionFilters(),
                 $this->collectionSorts,
                 $collectionIncludedSchemas,
                 $this->collectionFields,
@@ -242,7 +249,13 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $singleIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                function ($item) {
+                    if (!\is_string($item)) {
+                        throw new \InvalidArgumentException('Expected a string');
+                    }
+
+                    return $this->schemaFactory->readSchema($item);
+                },
                 $this->singleIncludes
             );
 
@@ -280,5 +293,30 @@ class ResourceApiEndpointsFactory
             $api->addSchema($updateSchema);
             $api->addEndpoint($createResourceEndpoint);
         }
+    }
+
+    public function isDelete(): bool
+    {
+        return $this->delete;
+    }
+
+    /**
+     * Checks and prepares collection filters before using them in ResourceCollectionEndpoint.
+     *
+     * @throws \InvalidArgumentException if any filter is not of the expected type
+     */
+    private function prepareCollectionFilters(): array
+    {
+        $preparedFilters = [];
+
+        foreach ($this->collectionFilters as $filter) {
+            if (!$filter instanceof Filter) {
+                continue;
+            }
+
+            $preparedFilters[] = $filter;
+        }
+
+        return $preparedFilters;
     }
 }

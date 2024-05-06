@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint;
 
+use Assert\Assertion;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Endpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Response;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Response\CollectionResponse;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Filter\Filter;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Filter\FilterSetQueryParam;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\IncludeQueryParam;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSchema;
@@ -26,24 +28,25 @@ class ResourceCollectionEndpoint implements Endpoint
     /** @var mixed[] */
     private $filters;
 
-    /** @var mixed[] */
+    /** @var array<string, ReadSchema> */
     private $includes;
 
     /** @var mixed[] */
     private $fields;
 
-    /** @var mixed[] */
+    /**
+     * @var mixed[]
+     *
+     * @psalm-suppress UnusedProperty
+     */
     private $sorts;
 
     /** @var null|Schema */
     private $pagination;
 
     /**
-     * @param mixed[] $filters
-     * @param mixed[] $sorts
-     * @param mixed[] $includes
-     * @param mixed[] $fields
-     * @param mixed[] $errorResponses
+     * @param Filter[]                  $filters
+     * @param array<string, ReadSchema> $includes
      */
     public function __construct(
         ReadSchema $schema,
@@ -59,13 +62,17 @@ class ResourceCollectionEndpoint implements Endpoint
         $this->path = $path;
         $this->includes = $includes;
 
-        $this->responses = array_merge(
+        Assertion::allIsInstanceOf($this->includes, ReadSchema::class);
+
+        /** @var Response[] $responses */
+        $responses = array_merge(
             [
                 new CollectionResponse($this->schema, $this->includes),
             ],
             $errorResponses
         );
 
+        $this->responses = $responses;
         $this->filters = $filters;
         $this->sorts = $sorts;
         $this->fields = $fields;
@@ -101,6 +108,7 @@ class ResourceCollectionEndpoint implements Endpoint
         }
 
         if (false === empty($this->filters)) {
+            Assertion::allIsInstanceOf($this->filters, Filter::class);
             $filterSet = new FilterSetQueryParam('filter', $this->filters);
             $queryParams[] = $filterSet->toOpenApi();
         }
@@ -116,7 +124,6 @@ class ResourceCollectionEndpoint implements Endpoint
     {
         $responses = [];
 
-        /** @var Response $response */
         foreach ($this->responses as $response) {
             $responses[$response->getStatusCode()] = $response->toOpenApi();
         }
@@ -129,5 +136,10 @@ class ResourceCollectionEndpoint implements Endpoint
             'tags' => [$this->schema->getResourceType()],
             'responses' => $responses,
         ];
+    }
+
+    public function getSorts(): array
+    {
+        return $this->sorts;
     }
 }

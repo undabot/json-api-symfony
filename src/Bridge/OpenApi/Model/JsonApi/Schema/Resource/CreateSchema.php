@@ -67,11 +67,8 @@ class CreateSchema implements ResourceSchema
                     'enum' => [$this->resourceType],
                 ],
             ],
+            'required' => $required,
         ];
-
-        if (false === empty($required)) {
-            $schema['required'] = $required;
-        }
 
         if (false === empty($this->attributes)) {
             $attributesSchema = new AttributesSchema($this->attributes);

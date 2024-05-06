@@ -65,11 +65,11 @@ class ResourceDenormalizer
     }
 
     /**
-     * Prepares data for the incoming resource as key - value map.
-     * For properties that are aliased (i.e. class property name is not the same as resource attribute / relationship)
+     * Prepares data for the incoming resource as a key - value map.
+     * For properties that are aliased (i.e., class property name is not the same as resource attribute / relationship)
      * change the key to match class property name.
      *
-     * @return array<string, null|string|string[]>
+     * @return array<string, null|array|string>
      */
     private function prepareData(ResourceInterface $resource, string $class): array
     {

@@ -36,6 +36,7 @@ final class RequestFactory
      *
      * @throws RequestException
      * @throws JsonApiEncodingException
+     * @throws AssertionFailedException
      */
     public function createResourceRequest(): CreateResourceRequest
     {
@@ -93,6 +94,10 @@ final class RequestFactory
         $request = $this->requestStack->getMainRequest();
         Assertion::isInstanceOf($request, Request::class);
         $id = $request->attributes->get('id');
+        if (false === \is_string($id)) {
+            throw new \InvalidArgumentException('ID must be a string.');
+        }
+
         $this->requestValidator->assertValidRequest($request);
 
         $includeString = $request->query->all()[GetResourceRequest::INCLUDE_KEY] ?? null;
@@ -150,6 +155,10 @@ final class RequestFactory
         $request = $this->requestStack->getMainRequest();
         Assertion::isInstanceOf($request, Request::class);
         $id = $request->attributes->get('id');
+        if (false === \is_string($id)) {
+            throw new \InvalidArgumentException('ID must be a string.');
+        }
+
         $this->requestValidator->assertValidRequest($request);
         $requestPrimaryData = $this->getRequestPrimaryData();
         $this->requestValidator->assertValidUpdateRequestData($requestPrimaryData, $id);
@@ -184,13 +193,17 @@ final class RequestFactory
         return $requestData['data'];
     }
 
+    /**
+     * @throws AssertionFailedException
+     */
     private function getResourceLid(): ?string
     {
-        $request = $this->requestStack->getMainRequest();
-        Assertion::isInstanceOf($request, Request::class);
         $requestPrimaryData = $this->getRequestPrimaryData();
         $this->requestValidator->assertResourceLidIsValid($requestPrimaryData);
 
-        return $requestPrimaryData['lid'] ?? null;
+        // Check if 'lid' is set and is a string
+        return (isset($requestPrimaryData['lid']) && \is_string($requestPrimaryData['lid']))
+            ? $requestPrimaryData['lid']
+            : null;
     }
 }

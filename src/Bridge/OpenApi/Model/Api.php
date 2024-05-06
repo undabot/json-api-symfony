@@ -102,4 +102,9 @@ class Api implements Contract\Api
 
         return $api;
     }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
 }

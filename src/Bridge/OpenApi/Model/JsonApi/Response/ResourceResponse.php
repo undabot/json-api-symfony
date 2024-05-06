@@ -58,9 +58,7 @@ class ResourceResponse implements Response
 
         if (false === empty($this->includes)) {
             $includedSchema = new IncludedSchema($this->includes);
-            if (false === empty($includedSchema)) {
-                $responseContentSchema['schema']['properties']['included'] = $includedSchema->toOpenApi();
-            }
+            $responseContentSchema['schema']['properties']['included'] = $includedSchema->toOpenApi();
         }
 
         return [

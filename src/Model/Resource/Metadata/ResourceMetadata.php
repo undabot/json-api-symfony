@@ -16,10 +16,12 @@ class ResourceMetadata
     /** @var array */
     private $resourceConstraints;
 
-    /** @var Collection */
+    /** @var Collection<int, AttributeMetadata> */
     private $attributesMetadata;
 
-    /** @var Collection */
+    /**
+     * @var Collection<int|string, RelationshipMetadata>
+     */
     private $relationshipsMetadata;
 
     /** @var string */
@@ -45,7 +47,6 @@ class ResourceMetadata
         $this->attributesMetadata = new ArrayCollection($attributesMetadata);
         $this->relationshipsMetadata = new ArrayCollection($relationshipsMetadata);
 
-        /** @var JsonApiConstraint\ResourceType[] $resourceTypeConstraints */
         $resourceTypeConstraints = array_filter($resourceConstraints, static function (Constraint $constraint) {
             return $constraint instanceof JsonApiConstraint\ResourceType;
         });
@@ -79,7 +80,6 @@ class ResourceMetadata
     {
         $constraints = [];
 
-        /** @var AttributeMetadata $attributeMetadatum */
         foreach ($this->attributesMetadata as $attributeMetadatum) {
             $constraints[$attributeMetadatum->getName()] = $attributeMetadatum->getConstraints();
         }
@@ -96,7 +96,6 @@ class ResourceMetadata
     {
         $constraints = [];
 
-        /** @var RelationshipMetadata $relationshipMetadatum */
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
             $objectConstraints = array_filter(
                 $relationshipMetadatum->getConstraints(),
@@ -120,7 +119,6 @@ class ResourceMetadata
     {
         $constraints = [];
 
-        /** @var RelationshipMetadata $relationshipMetadatum */
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
             $valueConstraints = array_filter(
                 $relationshipMetadatum->getConstraints(),

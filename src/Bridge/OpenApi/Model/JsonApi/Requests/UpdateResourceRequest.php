@@ -30,4 +30,9 @@ class UpdateResourceRequest implements Request
     {
         return $this->schema->getName();
     }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
+    }
 }

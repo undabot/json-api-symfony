@@ -81,4 +81,9 @@ class RelationshipSchema implements Schema
     {
         return $this->name;
     }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
 }

@@ -6,7 +6,7 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Proxy\Proxy;
+use Doctrine\ORM\Proxy\ProxyFactory;
 use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Link\Link;
@@ -189,6 +189,10 @@ abstract class AbstractResponder
      */
     private function encodeData($data): ResourceInterface
     {
+        if (false === \is_object($data)) {
+            throw new \InvalidArgumentException('Data must be an object.');
+        }
+
         $dataTransformer = $this->getDataTransformer($data);
 
         return $this->dataEncoder->encodeData($data, $dataTransformer);
@@ -243,8 +247,8 @@ abstract class AbstractResponder
         $dataClass = \get_class($data);
 
         // Support Doctrine Entities that are usually represented as Proxy classes.
-        // Resolve exact class name before looking up in the encoders map.
-        if ($data instanceof Proxy) {
+        // Resolve exact class name before looking up in the encoder map.
+        if ($data instanceof ProxyFactory) {
             $dataClass = $this->entityManager->getClassMetadata($dataClass)->name;
         }
 

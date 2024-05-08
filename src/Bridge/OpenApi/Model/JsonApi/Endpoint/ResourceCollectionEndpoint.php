@@ -16,33 +16,30 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSche
 
 class ResourceCollectionEndpoint implements Endpoint
 {
-    /** @var ReadSchema */
-    private $schema;
+    private ReadSchema $schema;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
     /** @var Response[] */
-    private $responses;
+    private array $responses;
 
     /** @var mixed[] */
-    private $filters;
+    private array $filters;
 
     /** @var array<string, ReadSchema> */
-    private $includes;
+    private array $includes;
 
     /** @var mixed[] */
-    private $fields;
+    private array $fields;
 
     /**
      * @var mixed[]
      *
      * @psalm-suppress UnusedProperty
      */
-    private $sorts;
+    private array $sorts;
 
-    /** @var null|Schema */
-    private $pagination;
+    private ?Schema $pagination;
 
     /**
      * @param Filter[]                  $filters

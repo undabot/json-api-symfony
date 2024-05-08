@@ -12,17 +12,13 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Server;
 
 class Api implements Contract\Api
 {
-    /** @var string */
-    private $title;
+    private string $title;
 
-    /** @var string */
-    private $version;
+    private string $version;
 
-    /** @var string */
-    private $description;
+    private string $description;
 
-    /** @var null|string */
-    private $email;
+    private ?string $email;
 
     /** @var Endpoint[] */
     private $endpoints = [];

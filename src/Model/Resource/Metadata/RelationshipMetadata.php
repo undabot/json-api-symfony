@@ -10,23 +10,17 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Relationship;
 
 class RelationshipMetadata
 {
-    /** @var bool */
-    protected $isToMany;
+    protected bool $isToMany;
 
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $relatedResourceType;
+    private string $relatedResourceType;
 
-    /** @var string */
-    private $propertyPath;
+    private string $propertyPath;
 
-    /** @var array */
-    private $constraints;
+    private array $constraints;
 
-    /** @var Relationship */
-    private $relationshipAnnotation;
+    private Relationship $relationshipAnnotation;
 
     /**
      * @param Constraint[] $constraints

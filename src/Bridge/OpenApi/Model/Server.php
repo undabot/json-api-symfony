@@ -8,11 +8,9 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract;
 
 class Server implements Contract\Server
 {
-    /** @var string */
-    private $url;
+    private string $url;
 
-    /** @var null|string */
-    private $description;
+    private ?string $description;
 
     public function __construct(string $url, ?string $description = null)
     {

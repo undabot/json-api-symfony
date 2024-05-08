@@ -8,17 +8,13 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class PathParam implements Schema
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var bool */
-    private $required;
+    private bool $required;
 
-    /** @var string */
-    private $description;
+    private string $description;
 
-    /** @var Schema */
-    private $schema;
+    private Schema $schema;
 
     public function __construct(string $name, bool $required, string $description, Schema $schema)
     {

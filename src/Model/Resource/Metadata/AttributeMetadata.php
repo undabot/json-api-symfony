@@ -10,17 +10,13 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Attribute;
 
 class AttributeMetadata
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $propertyPath;
+    private string $propertyPath;
 
-    /** @var array */
-    private $constraints;
+    private array $constraints;
 
-    /** @var Attribute */
-    private $attributeAnnotation;
+    private Attribute $attributeAnnotation;
 
     /**
      * @param Constraint[] $constraints

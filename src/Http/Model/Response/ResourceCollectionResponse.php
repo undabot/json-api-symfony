@@ -17,17 +17,13 @@ use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 final class ResourceCollectionResponse
 {
-    /** @var ResourceCollectionInterface */
-    private $primaryResources;
+    private ResourceCollectionInterface $primaryResources;
 
-    /** @var null|ResourceCollectionInterface */
-    private $includedResources;
+    private ?ResourceCollectionInterface $includedResources;
 
-    /** @var null|MetaInterface */
-    private $meta;
+    private ?MetaInterface $meta;
 
-    /** @var null|LinkCollectionInterface */
-    private $links;
+    private ?LinkCollectionInterface $links;
 
     public function __construct(
         ResourceCollectionInterface $primaryResources,

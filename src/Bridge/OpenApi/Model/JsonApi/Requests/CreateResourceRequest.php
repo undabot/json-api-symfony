@@ -9,11 +9,9 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\ResourceSchema;
 
 class CreateResourceRequest implements Request
 {
-    /** @var string */
-    private $resourceType;
+    private string $resourceType;
 
-    /** @var ResourceSchema */
-    private $schema;
+    private ResourceSchema $schema;
 
     public function __construct(string $resourceType, ResourceSchema $schema)
     {

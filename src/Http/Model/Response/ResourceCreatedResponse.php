@@ -11,17 +11,13 @@ use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 final class ResourceCreatedResponse
 {
-    /** @var ResourceInterface */
-    private $primaryResource;
+    private ResourceInterface $primaryResource;
 
-    /** @var null|ResourceCollectionInterface */
-    private $includedResources;
+    private ?ResourceCollectionInterface $includedResources;
 
-    /** @var null|MetaInterface */
-    private $meta;
+    private ?MetaInterface $meta;
 
-    /** @var null|LinkCollectionInterface */
-    private $links;
+    private ?LinkCollectionInterface $links;
 
     public function __construct(
         ResourceInterface $primaryResource,

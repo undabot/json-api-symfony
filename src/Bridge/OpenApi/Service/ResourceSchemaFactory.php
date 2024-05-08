@@ -17,14 +17,11 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 class ResourceSchemaFactory
 {
-    /** @var ResourceMetadataFactory */
-    private $resourceMetadataFactory;
+    private ResourceMetadataFactory $resourceMetadataFactory;
 
-    /** @var AttributeSchemaFactory */
-    private $attributeSchemaFactory;
+    private AttributeSchemaFactory $attributeSchemaFactory;
 
-    /** @var RelationshipSchemaFactory */
-    private $relationshipSchemaFactory;
+    private RelationshipSchemaFactory $relationshipSchemaFactory;
 
     public function __construct(
         ResourceMetadataFactory $resourceMetadataFactory,

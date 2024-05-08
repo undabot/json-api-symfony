@@ -14,14 +14,12 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\UpdateSc
 
 class UpdateResourceEndpoint implements Endpoint
 {
-    /** @var UpdateSchema */
-    private $resourceUpdateSchema;
+    private UpdateSchema $resourceUpdateSchema;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
     /** @var Response[] */
-    private $responses;
+    private array $responses;
 
     /**
      * @param Response[] $errorResponses

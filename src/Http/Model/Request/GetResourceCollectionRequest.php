@@ -21,20 +21,15 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     public const INCLUDE_KEY = 'include';
     public const FIELDS_KEY = 'fields';
 
-    /** @var null|PaginationInterface */
-    private $pagination;
+    private ?PaginationInterface $pagination;
 
-    /** @var null|FilterSet */
-    private $filterSet;
+    private ?FilterSet $filterSet;
 
-    /** @var null|SortSet */
-    private $sortSet;
+    private ?SortSet $sortSet;
 
-    /** @var null|array */
-    private $includes;
+    private ?array $includes;
 
-    /** @var null|array */
-    private $fields;
+    private ?array $fields;
 
     public function __construct(
         ?PaginationInterface $pagination,

@@ -8,14 +8,11 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class StringSchema implements Schema
 {
-    /** @var null|string */
-    private $example;
+    private ?string $example;
 
-    /** @var null|string */
-    private $format;
+    private ?string $format;
 
-    /** @var null|string */
-    private $description;
+    private ?string $description;
 
     public function __construct(?string $example = null, ?string $description = null, ?string $format = null)
     {

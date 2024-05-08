@@ -13,10 +13,7 @@ use Undabot\JsonApi\Implementation\Model\Source\Source;
 
 class ValidationViolationError implements ErrorInterface
 {
-    /**
-     * @var ConstraintViolationInterface
-     */
-    private $violation;
+    private ConstraintViolationInterface $violation;
 
     public function __construct(ConstraintViolationInterface $violation)
     {

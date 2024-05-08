@@ -15,20 +15,18 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\UuidSchema;
 
 class GetResourceEndpoint implements Endpoint
 {
-    /** @var ReadSchema */
-    private $readSchema;
+    private ReadSchema $readSchema;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
     /** @var Response[] */
-    private $responses;
+    private array $responses;
 
     /** @var ReadSchema[] */
-    private $includes;
+    private array $includes;
 
     /** @var null|mixed[] */
-    private $fields;
+    private ?array $fields;
 
     /**
      * @param ReadSchema[] $includes

@@ -11,8 +11,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
 final class ResourceValidationErrorsResponse
 {
-    /** @var ErrorCollection */
-    private $errorCollection;
+    private ErrorCollection $errorCollection;
 
     public function __construct(ErrorCollection $errorCollection)
     {

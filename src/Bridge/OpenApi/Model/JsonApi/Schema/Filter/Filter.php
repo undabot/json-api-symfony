@@ -10,14 +10,11 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\StringSchema;
 
 final class Filter
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var Schema */
-    private $schema;
+    private Schema $schema;
 
-    /** @var bool */
-    private $required;
+    private bool $required;
 
     public function __construct(string $name, Schema $schema, bool $required = false)
     {

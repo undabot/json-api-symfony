@@ -9,23 +9,17 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper\TypeHelper;
 
 class AttributeSchema implements Schema
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $type;
+    private string $type;
 
-    /** @var bool */
-    private $nullable;
+    private bool $nullable;
 
-    /** @var null|string */
-    private $description;
+    private ?string $description;
 
-    /** @var null|string */
-    private $format;
+    private ?string $format;
 
-    /** @var null|string */
-    private $example;
+    private ?string $example;
 
     public function __construct(
         string $name,

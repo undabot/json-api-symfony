@@ -8,11 +8,10 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class FilterSetQueryParam implements Schema
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
     /** @var Filter[] */
-    private $filters;
+    private array $filters;
 
     /**
      * @param Filter[] $filters

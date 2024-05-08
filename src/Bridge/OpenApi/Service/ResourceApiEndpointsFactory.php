@@ -17,8 +17,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\PageBasedPa
 
 class ResourceApiEndpointsFactory
 {
-    /** @var ResourceSchemaFactory */
-    private $schemaFactory;
+    private ResourceSchemaFactory $schemaFactory;
 
     /** @var string */
     private $resourceClassName;

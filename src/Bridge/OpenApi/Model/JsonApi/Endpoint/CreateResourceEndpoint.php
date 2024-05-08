@@ -14,17 +14,14 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSche
 
 class CreateResourceEndpoint implements Endpoint
 {
-    /** @var ReadSchema */
-    private $readSchema;
+    private ReadSchema $readSchema;
 
-    /** @var CreateSchema */
-    private $createSchema;
+    private CreateSchema $createSchema;
 
-    /** @var string */
-    private $path;
+    private string $path;
 
     /** @var Response[] */
-    private $responses;
+    private array $responses;
 
     /**
      * @param Response[] $errorResponses

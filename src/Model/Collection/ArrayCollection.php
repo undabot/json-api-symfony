@@ -8,11 +8,9 @@ use Traversable;
 
 class ArrayCollection implements ObjectCollection
 {
-    /** @var array */
-    private $items;
+    private array $items;
 
-    /** @var int */
-    private $count;
+    private ?int $count;
 
     /**
      * @param mixed[] $items

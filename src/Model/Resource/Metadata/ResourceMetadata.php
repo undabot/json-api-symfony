@@ -13,8 +13,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint as JsonApiCons
 
 class ResourceMetadata
 {
-    /** @var array */
-    private $resourceConstraints;
+    private array $resourceConstraints;
 
     /** @var Collection<int, AttributeMetadata> */
     private $attributesMetadata;

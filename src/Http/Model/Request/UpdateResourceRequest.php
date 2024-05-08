@@ -9,8 +9,7 @@ use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 class UpdateResourceRequest implements UpdateResourceRequestInterface
 {
-    /** @var ResourceInterface */
-    private $resource;
+    private ResourceInterface $resource;
 
     public function __construct(ResourceInterface $resource)
     {

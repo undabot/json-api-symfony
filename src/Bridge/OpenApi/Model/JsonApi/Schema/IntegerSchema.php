@@ -8,11 +8,9 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class IntegerSchema implements Schema
 {
-    /** @var null|int */
-    private $example;
+    private ?int $example;
 
-    /** @var null|string */
-    private $description;
+    private ?string $description;
 
     public function __construct(?int $example, ?string $description)
     {

@@ -16,7 +16,7 @@ final class IncludedSchema implements Schema
      *
      * @var array<string, ReadSchema>
      */
-    private $includes;
+    private array $includes;
 
     /**
      * @param array<string, ReadSchema> $includes

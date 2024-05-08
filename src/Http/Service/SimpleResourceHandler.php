@@ -12,11 +12,9 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 final class SimpleResourceHandler
 {
-    /** @var ResourceValidator */
-    private $validator;
+    private ResourceValidator $validator;
 
-    /** @var ResourceDenormalizer */
-    private $denormalizer;
+    private ResourceDenormalizer $denormalizer;
 
     public function __construct(ResourceValidator $validator, ResourceDenormalizer $denormalizer)
     {

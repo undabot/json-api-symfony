@@ -23,11 +23,9 @@ use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 abstract class AbstractResponder
 {
-    /** @var EntityManagerInterface */
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    /** @var EncoderInterface */
-    private $dataEncoder;
+    private EncoderInterface $dataEncoder;
 
     public function __construct(
         EntityManagerInterface $entityManager,

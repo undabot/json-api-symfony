@@ -12,8 +12,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
 final class ApiModelEncoder implements EncoderInterface
 {
-    /** @var ResourceFactory */
-    private $resourceFactory;
+    private ResourceFactory $resourceFactory;
 
     public function __construct(ResourceFactory $resourceFactory)
     {

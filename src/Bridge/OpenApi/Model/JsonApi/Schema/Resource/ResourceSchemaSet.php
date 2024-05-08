@@ -6,17 +6,13 @@ namespace Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource;
 
 class ResourceSchemaSet
 {
-    /** @var null|IdentifierSchema */
-    private $identifier;
+    private ?IdentifierSchema $identifier;
 
-    /** @var null|ReadSchema */
-    private $readModel;
+    private ?ReadSchema $readModel;
 
-    /** @var null|CreateSchema */
-    private $createModel;
+    private ?CreateSchema $createModel;
 
-    /** @var null|UpdateSchema */
-    private $updateModel;
+    private ?UpdateSchema $updateModel;
 
     public function __construct(
         ?IdentifierSchema $identifier,

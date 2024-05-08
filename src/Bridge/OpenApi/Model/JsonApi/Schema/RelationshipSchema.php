@@ -10,20 +10,15 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\Identifi
 
 class RelationshipSchema implements Schema
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var null|string */
-    private $description;
+    private ?string $description;
 
-    /** @var bool */
-    private $nullable;
+    private bool $nullable;
 
-    /** @var string */
-    private $targetResourceType;
+    private string $targetResourceType;
 
-    /** @var bool */
-    private $isToMany;
+    private bool $isToMany;
 
     public function __construct(
         string $name,

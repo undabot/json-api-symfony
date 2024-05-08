@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Http\Service\EventSubscriber;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Http\Service\EventSubscriber;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;

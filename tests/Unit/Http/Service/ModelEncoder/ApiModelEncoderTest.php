@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Http\Service\ModelEncoder;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Http\Service\ModelEncoder;
 
 use Assert\AssertionFailedException;
 use PHPUnit\Framework\MockObject\MockObject;

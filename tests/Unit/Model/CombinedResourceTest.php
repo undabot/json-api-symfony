@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Model\Resource;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Resource;
 
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Link\LinkInterface;

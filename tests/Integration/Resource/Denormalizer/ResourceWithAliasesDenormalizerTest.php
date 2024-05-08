@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Resource\Denormalizer;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Denormalizer;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;

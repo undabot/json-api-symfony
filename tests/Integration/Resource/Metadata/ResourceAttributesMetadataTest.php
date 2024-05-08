@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Resource\Metadata;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Metadata;
 
 use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\Common\Annotations\AnnotationReader;

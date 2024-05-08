@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Exception\EventSubscriber;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Exception\EventSubscriber;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;

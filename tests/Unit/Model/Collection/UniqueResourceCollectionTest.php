@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Model\Collection;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Collection;
 
 use Assert\AssertionFailedException;
 use PHPUnit\Framework\TestCase;

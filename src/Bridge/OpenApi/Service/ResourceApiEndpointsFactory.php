@@ -17,8 +17,6 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\PageBasedPa
 
 class ResourceApiEndpointsFactory
 {
-    private ResourceSchemaFactory $schemaFactory;
-
     /** @var string */
     private $resourceClassName;
 
@@ -61,10 +59,7 @@ class ResourceApiEndpointsFactory
     /** @var null|Schema */
     private $paginationSchema;
 
-    public function __construct(ResourceSchemaFactory $schemaFactory)
-    {
-        $this->schemaFactory = $schemaFactory;
-    }
+    public function __construct(private ResourceSchemaFactory $schemaFactory) {}
 
     public function new(string $path, string $resource): self
     {

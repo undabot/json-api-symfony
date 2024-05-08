@@ -11,18 +11,15 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSche
 
 class ResourceResponse implements Response
 {
-    private ReadSchema $readSchema;
-
     /** @var array<string, ReadSchema> */
     private array $includes;
 
     /**
      * @param array<string, ReadSchema> $includes
      */
-    public function __construct(ReadSchema $readSchema, array $includes = [])
+    public function __construct(private ReadSchema $readSchema, array $includes = [])
     {
         Assertion::allIsInstanceOf($includes, ReadSchema::class);
-        $this->readSchema = $readSchema;
         $this->includes = $includes;
     }
 

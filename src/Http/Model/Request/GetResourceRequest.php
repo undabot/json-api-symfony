@@ -13,18 +13,7 @@ class GetResourceRequest implements GetResourceRequestInterface
     public const INCLUDE_KEY = 'include';
     public const FIELDS_KEY = 'fields';
 
-    private string $id;
-
-    private ?array $include;
-
-    private ?array $sparseFieldset;
-
-    public function __construct(string $id, ?array $include, ?array $sparseFieldset)
-    {
-        $this->id = $id;
-        $this->include = $include;
-        $this->sparseFieldset = $sparseFieldset;
-    }
+    public function __construct(private string $id, private ?array $include, private ?array $sparseFieldset) {}
 
     public function getId(): string
     {

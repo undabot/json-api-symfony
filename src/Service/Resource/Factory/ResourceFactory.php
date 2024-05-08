@@ -58,7 +58,7 @@ class ResourceFactory
 
         $resource = new Resource($id, $type, $attributes, $relationships);
         if (true === $this->shouldValidateReadModel) {
-            $this->validator->assertValid($resource, \get_class($apiModel));
+            $this->validator->assertValid($resource, $apiModel::class);
         }
 
         return $resource;

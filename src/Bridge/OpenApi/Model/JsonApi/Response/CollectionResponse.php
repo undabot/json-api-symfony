@@ -11,17 +11,14 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSche
 
 class CollectionResponse implements Response
 {
-    private ReadSchema $schema;
-
     /** @var array<string, ReadSchema> */
     private array $includes;
 
     /**
      * @param array<string, ReadSchema> $includes
      */
-    public function __construct(ReadSchema $schema, array $includes)
+    public function __construct(private ReadSchema $schema, array $includes)
     {
-        $this->schema = $schema;
         Assertion::allIsInstanceOf($includes, ReadSchema::class);
         $this->includes = $includes;
     }

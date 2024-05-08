@@ -17,21 +17,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 class ResourceSchemaFactory
 {
-    private ResourceMetadataFactory $resourceMetadataFactory;
-
-    private AttributeSchemaFactory $attributeSchemaFactory;
-
-    private RelationshipSchemaFactory $relationshipSchemaFactory;
-
-    public function __construct(
-        ResourceMetadataFactory $resourceMetadataFactory,
-        AttributeSchemaFactory $attributeSchemaFactory,
-        RelationshipSchemaFactory $relationshipSchemaFactory
-    ) {
-        $this->resourceMetadataFactory = $resourceMetadataFactory;
-        $this->attributeSchemaFactory = $attributeSchemaFactory;
-        $this->relationshipSchemaFactory = $relationshipSchemaFactory;
-    }
+    public function __construct(private ResourceMetadataFactory $resourceMetadataFactory, private AttributeSchemaFactory $attributeSchemaFactory, private RelationshipSchemaFactory $relationshipSchemaFactory) {}
 
     /**
      * @throws \Exception

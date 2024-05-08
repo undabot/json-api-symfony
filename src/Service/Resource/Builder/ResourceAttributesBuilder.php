@@ -17,10 +17,7 @@ class ResourceAttributesBuilder
         return new self();
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function add(string $attributeName, $value): self
+    public function add(string $attributeName, mixed $value): self
     {
         $this->attributes[$attributeName] = new Attribute($attributeName, $value);
 

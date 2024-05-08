@@ -9,33 +9,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper\TypeHelper;
 
 class AttributeSchema implements Schema
 {
-    private string $name;
-
-    private string $type;
-
-    private bool $nullable;
-
-    private ?string $description;
-
-    private ?string $format;
-
-    private ?string $example;
-
-    public function __construct(
-        string $name,
-        string $type,
-        bool $nullable,
-        ?string $description,
-        ?string $format,
-        ?string $example
-    ) {
-        $this->name = $name;
-        $this->type = $type;
-        $this->nullable = $nullable;
-        $this->description = $description;
-        $this->format = $format;
-        $this->example = $example;
-    }
+    public function __construct(private string $name, private string $type, private bool $nullable, private ?string $description, private ?string $format, private ?string $example) {}
 
     public function toOpenApi(): array
     {

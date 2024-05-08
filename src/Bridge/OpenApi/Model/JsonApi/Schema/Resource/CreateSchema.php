@@ -11,8 +11,6 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\RelationshipSchem
 
 class CreateSchema implements ResourceSchema
 {
-    private string $resourceType;
-
     /** @var AttributeSchema[] */
     private array $attributes;
 
@@ -23,11 +21,10 @@ class CreateSchema implements ResourceSchema
      * @param AttributeSchema[]    $attributes
      * @param RelationshipSchema[] $relationships
      */
-    public function __construct(string $resourceType, array $attributes, array $relationships)
+    public function __construct(private string $resourceType, array $attributes, array $relationships)
     {
         Assertion::allIsInstanceOf($attributes, AttributeSchema::class);
         Assertion::allIsInstanceOf($relationships, RelationshipSchema::class);
-        $this->resourceType = $resourceType;
         $this->attributes = $attributes;
         $this->relationships = $relationships;
     }

@@ -15,18 +15,11 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\UuidSchema;
 
 class GetResourceEndpoint implements Endpoint
 {
-    private ReadSchema $readSchema;
-
-    private string $path;
-
     /** @var Response[] */
     private array $responses;
 
     /** @var ReadSchema[] */
     private array $includes;
-
-    /** @var null|mixed[] */
-    private ?array $fields;
 
     /**
      * @param ReadSchema[] $includes
@@ -34,15 +27,13 @@ class GetResourceEndpoint implements Endpoint
      * @param mixed[]      $errorResponses
      */
     public function __construct(
-        ReadSchema $readSchema,
-        string $path,
+        private ReadSchema $readSchema,
+        private string $path,
         array $includes,
-        ?array $fields,
+        private ?array $fields,
         array $errorResponses = []
     ) {
         Assertion::allIsInstanceOf($includes, ReadSchema::class);
-        $this->readSchema = $readSchema;
-        $this->path = $path;
         $this->includes = $includes;
 
         /** @var Response[] $mergedResponses */
@@ -51,7 +42,6 @@ class GetResourceEndpoint implements Endpoint
         ], $errorResponses);
 
         $this->responses = $mergedResponses;
-        $this->fields = $fields;
     }
 
     public function getMethod(): string

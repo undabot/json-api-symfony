@@ -8,18 +8,15 @@ use Traversable;
 
 class ArrayCollection implements ObjectCollection
 {
-    private array $items;
-
     private ?int $count;
 
     /**
      * @param mixed[] $items
      */
-    public function __construct(array $items, ?int $count = null)
+    public function __construct(private array $items, ?int $count = null)
     {
-        $this->items = $items;
         if (null === $count) {
-            $count = \count($items);
+            $count = \count($this->items);
         }
         $this->count = $count;
     }

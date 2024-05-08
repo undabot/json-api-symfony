@@ -16,49 +16,29 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSche
 
 class ResourceCollectionEndpoint implements Endpoint
 {
-    private ReadSchema $schema;
-
-    private string $path;
-
     /** @var Response[] */
     private array $responses;
-
-    /** @var mixed[] */
-    private array $filters;
-
-    /** @var array<string, ReadSchema> */
-    private array $includes;
-
-    /** @var mixed[] */
-    private array $fields;
-
-    /**
-     * @var mixed[]
-     *
-     * @psalm-suppress UnusedProperty
-     */
-    private array $sorts;
-
-    private ?Schema $pagination;
 
     /**
      * @param Filter[]                  $filters
      * @param array<string, ReadSchema> $includes
      */
     public function __construct(
-        ReadSchema $schema,
-        string $path,
-        array $filters = [],
-        array $sorts = [],
-        array $includes = [],
-        array $fields = [],
-        ?Schema $pagination = null,
+        private ReadSchema $schema,
+        private string $path,
+        private array $filters = [],
+        /**
+         * @var mixed[]
+         *
+         * @psalm-suppress UnusedProperty
+         */
+        private array $sorts = [],
+        private array $includes = [],
+        /** @var mixed[] */
+        private array $fields = [],
+        private ?Schema $pagination = null,
         array $errorResponses = []
     ) {
-        $this->schema = $schema;
-        $this->path = $path;
-        $this->includes = $includes;
-
         Assertion::allIsInstanceOf($this->includes, ReadSchema::class);
 
         /** @var Response[] $responses */
@@ -70,10 +50,6 @@ class ResourceCollectionEndpoint implements Endpoint
         );
 
         $this->responses = $responses;
-        $this->filters = $filters;
-        $this->sorts = $sorts;
-        $this->fields = $fields;
-        $this->pagination = $pagination;
     }
 
     public function getMethod(): string

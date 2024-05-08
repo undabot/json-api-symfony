@@ -18,15 +18,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
 class ResourceValidator
 {
-    private ResourceMetadataFactory $metadataFactory;
-
-    private ValidatorInterface $validator;
-
-    public function __construct(ResourceMetadataFactory $metadataFactory, ValidatorInterface $validator)
-    {
-        $this->metadataFactory = $metadataFactory;
-        $this->validator = $validator;
-    }
+    public function __construct(private ResourceMetadataFactory $metadataFactory, private ValidatorInterface $validator) {}
 
     /**
      * @throws AnnotationException

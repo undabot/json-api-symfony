@@ -46,9 +46,7 @@ class ResourceMetadata
         $this->attributesMetadata = new ArrayCollection($attributesMetadata);
         $this->relationshipsMetadata = new ArrayCollection($relationshipsMetadata);
 
-        $resourceTypeConstraints = array_filter($resourceConstraints, static function (Constraint $constraint) {
-            return $constraint instanceof JsonApiConstraint\ResourceType;
-        });
+        $resourceTypeConstraints = array_filter($resourceConstraints, static fn (Constraint $constraint) => $constraint instanceof JsonApiConstraint\ResourceType);
 
         Assertion::count(
             $resourceTypeConstraints,
@@ -98,9 +96,7 @@ class ResourceMetadata
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
             $objectConstraints = array_filter(
                 $relationshipMetadatum->getConstraints(),
-                function (Constraint $constraint) {
-                    return true === $this->relationshipConstraintWorksOnObject($constraint);
-                }
+                fn (Constraint $constraint) => true === $this->relationshipConstraintWorksOnObject($constraint)
             );
 
             $constraints[$relationshipMetadatum->getName()] = array_values($objectConstraints);
@@ -121,9 +117,7 @@ class ResourceMetadata
         foreach ($this->relationshipsMetadata as $relationshipMetadatum) {
             $valueConstraints = array_filter(
                 $relationshipMetadatum->getConstraints(),
-                function (Constraint $constraint) {
-                    return false === $this->relationshipConstraintWorksOnObject($constraint);
-                }
+                fn (Constraint $constraint) => false === $this->relationshipConstraintWorksOnObject($constraint)
             );
 
             $constraints[$relationshipMetadatum->getName()] = array_values($valueConstraints);
@@ -143,9 +137,7 @@ class ResourceMetadata
     public function getAttributeMetadata(string $name): ?AttributeMetadata
     {
         $metadata = $this->attributesMetadata
-            ->filter(static function (AttributeMetadata $attributeMetadata) use ($name) {
-                return $attributeMetadata->getName() === $name;
-            })
+            ->filter(static fn (AttributeMetadata $attributeMetadata) => $attributeMetadata->getName() === $name)
             ->first();
 
         if (false === $metadata) {
@@ -166,9 +158,7 @@ class ResourceMetadata
     public function getRelationshipMetadata(string $name): ?RelationshipMetadata
     {
         $metadata = $this->relationshipsMetadata
-            ->filter(static function (RelationshipMetadata $relationshipMetadata) use ($name) {
-                return $relationshipMetadata->getName() === $name;
-            })
+            ->filter(static fn (RelationshipMetadata $relationshipMetadata) => $relationshipMetadata->getName() === $name)
             ->first();
 
         if (false === $metadata) {
@@ -186,9 +176,7 @@ class ResourceMetadata
         $map = [];
 
         $this->attributesMetadata
-            ->filter(static function (AttributeMetadata $attributeMetadata) {
-                return $attributeMetadata->getName() !== $attributeMetadata->getPropertyPath();
-            })
+            ->filter(static fn (AttributeMetadata $attributeMetadata) => $attributeMetadata->getName() !== $attributeMetadata->getPropertyPath())
             ->map(static function (AttributeMetadata $attributeMetadata) use (&$map) {
                 $map[$attributeMetadata->getName()] = $attributeMetadata->getPropertyPath();
 
@@ -206,9 +194,7 @@ class ResourceMetadata
         $map = [];
 
         $this->relationshipsMetadata
-            ->filter(static function (RelationshipMetadata $relationshipMetadata) {
-                return $relationshipMetadata->getName() !== $relationshipMetadata->getPropertyPath();
-            })
+            ->filter(static fn (RelationshipMetadata $relationshipMetadata) => $relationshipMetadata->getName() !== $relationshipMetadata->getPropertyPath())
             ->map(static function (RelationshipMetadata $relationshipMetadata) use (&$map) {
                 $map[$relationshipMetadata->getName()] = $relationshipMetadata->getPropertyPath();
 

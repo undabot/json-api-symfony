@@ -158,6 +158,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         Annotation\Attribute $attributeAnnotation,
         array $constraintAnnotations
     ): AttributeMetadata {
+        /** @phpstan-ignore-next-line */
+        $name = $attributeAnnotation->name ?? $property->getName();
+
         // @todo should we infer nullability from typehint?
         //        $docComment = $property->getDocComment();
         //        $nullable = null;
@@ -170,7 +173,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         // @todo Idea: add attribute type validation constraint based on the property type (docblock)?
 
         return new AttributeMetadata(
-            $attributeAnnotation->name,
+            $name,
             $property->getName(),
             $constraintAnnotations,
             $attributeAnnotation
@@ -190,6 +193,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         /** @var null|string $relatedResourceType */
         $relatedResourceType = $relationshipAnnotation->type;
 
+        /** @phpstan-ignore-next-line */
+        $name = $relationshipAnnotation->name ?? $property->getName();
+
         if (null === $relatedResourceType) {
             /**
              * @todo Idea: if the type is not set, library could use "best effort" method and guess the type from the
@@ -204,7 +210,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         $constraintAnnotations[] = JsonApiConstraint\ResourceType::make($relatedResourceType);
 
         return new RelationshipMetadata(
-            $relationshipAnnotation->name,
+            $name,
             $relatedResourceType,
             $property->getName(),
             $constraintAnnotations,

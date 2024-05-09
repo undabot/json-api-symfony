@@ -31,7 +31,7 @@ class ArrayCollection implements ObjectCollection
 
     public function count(): int
     {
-        return $this->count;
+        return (int) $this->count;
     }
 
     /**

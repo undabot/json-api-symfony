@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Integration\Http\Service\EventSubscriber;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,10 +40,12 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber
+ * @coversNothing
  *
- * @medium
+ * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber')]
+#[Medium]
 final class ViewResponseSubscriberTest extends TestCase
 {
     private ViewResponseSubscriber $viewResponseSubscriber;
@@ -111,9 +116,7 @@ final class ViewResponseSubscriberTest extends TestCase
         self::assertArrayNotHasKey('links', $responseContent);
     }
 
-    /**
-     * @dataProvider provideBuildViewWillSetCorrectResponseWithPaginationLinksInEventGivenValidResourceCollectionControllerWithPaginatedResultsCases
-     */
+    #[DataProvider('provideBuildViewWillSetCorrectResponseWithPaginationLinksInEventGivenValidResourceCollectionControllerWithPaginatedResultsCases')]
     public function testBuildViewWillSetCorrectResponseWithPaginationLinksInEventGivenValidResourceCollectionControllerWithPaginatedResults(
         Request $request,
         ?string $firstLink,

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Integration;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Implementation\Encoding\PhpArrayToAttributeCollectionEncoder;
 use Undabot\JsonApi\Implementation\Encoding\PhpArrayToLinkCollectionEncoder;
@@ -22,6 +24,8 @@ use Undabot\JsonApi\Implementation\Model\Resource\ResourceIdentifier;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class CreateResourceFromJsonInputTest extends TestCase
 {
     /** @var PhpArrayToResourceEncoder */

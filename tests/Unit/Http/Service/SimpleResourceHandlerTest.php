@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Http\Service;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Request\ResourcePayloadRequest;
@@ -18,10 +20,12 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Http\Service\SimpleResourceHandler')]
+#[Small]
 final class SimpleResourceHandlerTest extends TestCase
 {
     /** @var MockObject */

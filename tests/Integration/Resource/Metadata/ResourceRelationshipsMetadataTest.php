@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Metadata;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
@@ -24,6 +26,8 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ToOne;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceRelationshipsMetadataTest extends TestCase
 {
     /** @var ResourceMetadataFactory */

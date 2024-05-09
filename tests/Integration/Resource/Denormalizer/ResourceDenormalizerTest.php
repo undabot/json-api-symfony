@@ -91,6 +91,9 @@ class ResourceDto implements ApiModel
     }
 }
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
+
 /**
  * @internal
  *
@@ -98,6 +101,8 @@ class ResourceDto implements ApiModel
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceDenormalizerTest extends TestCase
 {
     /** @var ResourceDenormalizer */

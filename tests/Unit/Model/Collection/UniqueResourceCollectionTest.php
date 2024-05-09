@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Collection;
 
 use Assert\AssertionFailedException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\Collection\UniqueResourceCollection;
@@ -12,10 +14,12 @@ use Undabot\SymfonyJsonApi\Model\Collection\UniqueResourceCollection;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Model\Collection\UniqueResourceCollection
+ * @coversNothing
  *
- * @medium
+ * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Model\Collection\UniqueResourceCollection')]
+#[Medium]
 final class UniqueResourceCollectionTest extends TestCase
 {
     public function testConstructingUniqueResourceCollectionWillThrowExceptionGivenResourcesNotCorrectType(): void

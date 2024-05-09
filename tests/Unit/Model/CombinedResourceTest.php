@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Resource;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
 use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
@@ -25,6 +27,8 @@ use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class CombinedResourceTest extends TestCase
 {
     public function testItReturnsCorrectTypeAndId(): void

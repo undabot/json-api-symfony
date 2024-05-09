@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\ApiTransformer;
@@ -16,6 +18,8 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ApiTransformerTest extends TestCase
 {
     private ApiTransformer $service;

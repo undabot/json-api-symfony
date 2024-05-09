@@ -85,6 +85,9 @@ class ResourceDto
     public $comments = [];
 }
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
+
 /**
  * @internal
  *
@@ -92,6 +95,8 @@ class ResourceDto
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceValidationTest extends KernelTestCase
 {
     /** @var ResourceValidator */

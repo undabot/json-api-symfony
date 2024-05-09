@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Metadata;
 
-use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,12 +21,12 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 /**
  * @internal
  *
- * @IgnoreAnnotation("Assert\NotBlank")
- *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceAttributesMetadataTest extends TestCase
 {
     /** @var ResourceMetadataFactory */

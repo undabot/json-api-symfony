@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Helper;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper\TypeHelper;
 
@@ -14,6 +16,8 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper\TypeHelper;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class TypeHelperTest extends TestCase
 {
     public function testItResolvesBoolToBoolean(): void

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\ResourceReadSchema;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\AttributeSchemaFactory;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\RelationshipSchemaFactory;
@@ -17,10 +19,12 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory')]
+#[Small]
 final class ResourceReadSchemaRelationshipsTest extends TestCase
 {
     private ResourceSchemaFactory $resourceSchemaFactory;

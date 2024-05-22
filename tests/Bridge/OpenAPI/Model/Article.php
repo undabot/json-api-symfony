@@ -45,6 +45,7 @@ class Article implements ApiModel
      *
      * @Attribute(name="eventDate")
      */
+    #[\Undabot\SymfonyJsonApi\Model\Resource\Attribute\Attribute('ovoJeIme')]
     private $date;
 
     /**

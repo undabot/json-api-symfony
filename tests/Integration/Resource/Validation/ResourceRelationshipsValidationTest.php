@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Validation;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 use Symfony\Component\Validator\Validation;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
@@ -23,6 +25,8 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceRelationshipsValidationTest extends KernelTestCase
 {
     /** @var ResourceValidator */

@@ -8,20 +8,10 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class FilterSetQueryParam implements Schema
 {
-    /** @var string */
-    private $name;
-
-    /** @var Filter[] */
-    private $filters;
-
     /**
      * @param Filter[] $filters
      */
-    public function __construct(string $name, array $filters)
-    {
-        $this->name = $name;
-        $this->filters = $filters;
-    }
+    public function __construct(private string $name, private array $filters) {}
 
     public function toOpenApi(): array
     {

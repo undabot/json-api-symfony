@@ -20,12 +20,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint as JsonApiCons
 
 class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
-    private Reader $reader;
-
-    public function __construct(Reader $reader)
-    {
-        $this->reader = $reader;
-    }
+    public function __construct(private Reader $reader) {}
 
     /**
      * @throws \ReflectionException
@@ -92,9 +87,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
         $classAnnotations = $this->reader->getClassAnnotations($reflection);
         $classAnnotations = new ArrayCollection($classAnnotations);
-        $resourceConstraints = $classAnnotations->filter(static function ($annotation) {
-            return $annotation instanceof Constraint;
-        })->getValues();
+        $resourceConstraints = $classAnnotations->filter(static fn ($annotation) => $annotation instanceof Constraint)->getValues();
 
         /** @var \ReflectionProperty $property */
         foreach ($properties as $property) {
@@ -102,17 +95,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             $propertyAnnotations = new ArrayCollection($propertyAnnotations);
 
             /** @var array<int,Constraint> $constraintAnnotations */
-            $constraintAnnotations = $propertyAnnotations->filter(static function ($annotation) {
-                return $annotation instanceof Constraint;
-            })->getValues();
+            $constraintAnnotations = $propertyAnnotations->filter(static fn ($annotation) => $annotation instanceof Constraint)->getValues();
 
-            $attributeAnnotations = $propertyAnnotations->filter(static function ($annotation) {
-                return $annotation instanceof Annotation\Attribute;
-            });
+            $attributeAnnotations = $propertyAnnotations->filter(static fn ($annotation) => $annotation instanceof Annotation\Attribute);
 
-            $relationshipAnnotations = $propertyAnnotations->filter(static function ($annotation) {
-                return $annotation instanceof Annotation\Relationship;
-            });
+            $relationshipAnnotations = $propertyAnnotations->filter(static fn ($annotation) => $annotation instanceof Annotation\Relationship);
 
             if (false === $attributeAnnotations->isEmpty() && false === $relationshipAnnotations->isEmpty()) {
                 $message = sprintf(
@@ -171,6 +158,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         Annotation\Attribute $attributeAnnotation,
         array $constraintAnnotations
     ): AttributeMetadata {
+        /** @phpstan-ignore-next-line */
+        $name = $attributeAnnotation->name ?? $property->getName();
+
         // @todo should we infer nullability from typehint?
         //        $docComment = $property->getDocComment();
         //        $nullable = null;
@@ -183,7 +173,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         // @todo Idea: add attribute type validation constraint based on the property type (docblock)?
 
         return new AttributeMetadata(
-            $attributeAnnotation->name,
+            $name,
             $property->getName(),
             $constraintAnnotations,
             $attributeAnnotation
@@ -203,6 +193,9 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         /** @var null|string $relatedResourceType */
         $relatedResourceType = $relationshipAnnotation->type;
 
+        /** @phpstan-ignore-next-line */
+        $name = $relationshipAnnotation->name ?? $property->getName();
+
         if (null === $relatedResourceType) {
             /**
              * @todo Idea: if the type is not set, library could use "best effort" method and guess the type from the
@@ -217,7 +210,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         $constraintAnnotations[] = JsonApiConstraint\ResourceType::make($relatedResourceType);
 
         return new RelationshipMetadata(
-            $relationshipAnnotation->name,
+            $name,
             $relatedResourceType,
             $property->getName(),
             $constraintAnnotations,

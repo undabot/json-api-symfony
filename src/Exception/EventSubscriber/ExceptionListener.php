@@ -99,7 +99,7 @@ class ExceptionListener
             $exception->getMessage(),
             sprintf(
                 'Exception %s: "%s"',
-                \get_class($exception),
+                $exception::class,
                 $exception->getMessage()
             )
         );

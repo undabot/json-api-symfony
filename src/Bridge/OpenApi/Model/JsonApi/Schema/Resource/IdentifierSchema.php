@@ -9,13 +9,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\UuidSchema;
 
 class IdentifierSchema implements ResourceSchema
 {
-    /** @var string */
-    private $type;
-
-    public function __construct(string $type)
-    {
-        $this->type = $type;
-    }
+    public function __construct(private string $type) {}
 
     public function getName(): string
     {

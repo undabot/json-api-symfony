@@ -10,33 +10,19 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Attribute;
 
 class AttributeMetadata
 {
-    /** @var string */
-    private $name;
-
-    /** @var string */
-    private $propertyPath;
-
-    /** @var array */
-    private $constraints;
-
-    /** @var Attribute */
-    private $attributeAnnotation;
+    private array $constraints;
 
     /**
      * @param Constraint[] $constraints
      */
     public function __construct(
-        string $name,
-        string $propertyPath,
+        private string $name,
+        private string $propertyPath,
         array $constraints,
-        Attribute $attributeAnnotation
+        private Attribute $attributeAnnotation
     ) {
         Assertion::allIsInstanceOf($constraints, Constraint::class);
-
-        $this->name = $name;
-        $this->propertyPath = $propertyPath;
         $this->constraints = $constraints;
-        $this->attributeAnnotation = $attributeAnnotation;
     }
 
     public function getName(): string

@@ -8,21 +8,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class StringSchema implements Schema
 {
-    /** @var null|string */
-    private $example;
-
-    /** @var null|string */
-    private $format;
-
-    /** @var null|string */
-    private $description;
-
-    public function __construct(?string $example = null, ?string $description = null, ?string $format = null)
-    {
-        $this->example = $example;
-        $this->description = $description;
-        $this->format = $format;
-    }
+    public function __construct(private ?string $example = null, private ?string $description = null, private ?string $format = null) {}
 
     public function toOpenApi(): array
     {

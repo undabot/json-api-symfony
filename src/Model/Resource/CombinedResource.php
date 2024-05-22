@@ -18,11 +18,9 @@ use Undabot\SymfonyJsonApi\Model\Resource\Exception\ResourceTypeValueMismatch;
 
 class CombinedResource implements ResourceInterface
 {
-    /** @var ResourceInterface */
-    private $baseResource;
+    private ResourceInterface $baseResource;
 
-    /** @var ResourceInterface */
-    private $updateResource;
+    private ResourceInterface $updateResource;
 
     public function __construct(ResourceInterface $baseResource, ResourceInterface $updateResource)
     {

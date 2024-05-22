@@ -14,7 +14,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\AttributeSchema;
 final class AttributesSchema implements Schema
 {
     /** @var AttributeSchema[] */
-    private $attributes;
+    private array $attributes;
 
     /**
      * @param AttributeSchema[] $attributes

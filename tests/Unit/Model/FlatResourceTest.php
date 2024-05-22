@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Resource;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Implementation\Factory\RelationshipDataFactory;
 use Undabot\JsonApi\Implementation\Model\Resource\Attribute\Attribute;
@@ -20,6 +22,8 @@ use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class FlatResourceTest extends TestCase
 {
     public function testFlatResourceCorrectlyFlattensAttributes(): void

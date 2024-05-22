@@ -8,27 +8,14 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class IncludeQueryParam implements Schema
 {
-    /** @var null|string */
-    private $description;
-
-    /** @var string[] */
-    private $includes;
-
-    /** @var null|string[] */
-    private $default;
-
     /**
      * @param string[]      $includes
      * @param null|string[] $default
      */
-    public function __construct(array $includes, ?string $description = null, ?array $default = null)
+    public function __construct(private array $includes, private ?string $description = null, private ?array $default = null)
     {
-        $this->includes = $includes;
-        $this->description = $description;
-        $this->default = $default;
-
-        if (null === $description) {
-            $this->description = 'Relationships to be included. Available: ' . implode(',', $includes);
+        if (null === $this->description) {
+            $this->description = 'Relationships to be included. Available: ' . implode(',', $this->includes);
         }
     }
 

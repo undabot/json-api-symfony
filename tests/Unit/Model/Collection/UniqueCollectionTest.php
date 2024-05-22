@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Collection;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
 
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection')]
+#[Small]
 final class UniqueCollectionTest extends TestCase
 {
     public function testConstructingUniqueCollectionWillSilentlyIgnoreDuplicatesGivenArrayWithDuplicateItems(): void

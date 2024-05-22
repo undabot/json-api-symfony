@@ -12,18 +12,6 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Server;
 
 class Api implements Contract\Api
 {
-    /** @var string */
-    private $title;
-
-    /** @var string */
-    private $version;
-
-    /** @var string */
-    private $description;
-
-    /** @var null|string */
-    private $email;
-
     /** @var Endpoint[] */
     private $endpoints = [];
 
@@ -34,17 +22,7 @@ class Api implements Contract\Api
     private $schemas = [];
 
     /** @todo add support for security schemas */
-    public function __construct(
-        string $title,
-        string $version,
-        string $description,
-        ?string $email = null
-    ) {
-        $this->title = $title;
-        $this->version = $version;
-        $this->description = $description;
-        $this->email = $email;
-    }
+    public function __construct(private string $title, private string $version, private string $description, private ?string $email = null) {}
 
     public function addEndpoint(Endpoint $endpoint): void
     {

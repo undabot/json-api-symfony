@@ -10,21 +10,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\StringSchema;
 
 final class Filter
 {
-    /** @var string */
-    private $name;
-
-    /** @var Schema */
-    private $schema;
-
-    /** @var bool */
-    private $required;
-
-    public function __construct(string $name, Schema $schema, bool $required = false)
-    {
-        $this->name = $name;
-        $this->schema = $schema;
-        $this->required = $required;
-    }
+    public function __construct(private string $name, private Schema $schema, private bool $required = false) {}
 
     public static function integer(
         string $name,

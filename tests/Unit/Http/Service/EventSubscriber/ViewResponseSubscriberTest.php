@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Http\Service\EventSubscriber;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Medium;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -33,6 +35,8 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 #[CoversClass(ViewResponseSubscriber::class)]
 #[Medium]
 final class ViewResponseSubscriberTest extends TestCase

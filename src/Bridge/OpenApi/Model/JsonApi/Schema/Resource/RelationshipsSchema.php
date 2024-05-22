@@ -14,7 +14,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\RelationshipSchem
 final class RelationshipsSchema implements Schema
 {
     /** @var RelationshipSchema[] */
-    private $relationships;
+    private array $relationships;
 
     /**
      * @param RelationshipSchema[] $relationships

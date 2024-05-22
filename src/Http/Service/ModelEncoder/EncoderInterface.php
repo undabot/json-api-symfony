@@ -8,6 +8,5 @@ use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
 interface EncoderInterface
 {
-    /** @param mixed $data */
-    public function encodeData($data, callable $modelTransformer): ResourceInterface;
+    public function encodeData(mixed $data, callable $modelTransformer): ResourceInterface;
 }

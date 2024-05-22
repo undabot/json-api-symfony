@@ -282,11 +282,6 @@ final class RequestFactoryTest extends TestCase
             'Request data must be valid JSON',
         ];
 
-        yield 'Null data given' => [
-            null,
-            'Request data must be valid JSON',
-        ];
-
         yield 'Not array given' => [
             '2',
             'Request data must be parsable to a valid array',

@@ -180,7 +180,7 @@ final class ResourceCollectionResponseTest extends TestCase
 
         yield 'Resource array not valid type' => [
             [$objectCollection, ResourceInterface::class],
-            null,
+            [],
             null,
             null,
             'Class "' . \get_class($objectCollection) . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Resource\ResourceInterface" but is not.',

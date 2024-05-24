@@ -1,44 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!-- https://phpunit.de/manual/current/en/appendixes.configuration.html -->
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/6.5/phpunit.xsd"
-         backupGlobals="false"
-         colors="true"
-         bootstrap="vendor/autoload.php"
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/11.1/phpunit.xsd" backupGlobals="false" colors="true" bootstrap="vendor/autoload.php" cacheDirectory=".phpunit.cache"
+         displayDetailsOnTestsThatTriggerDeprecations="true"
+         displayDetailsOnTestsThatTriggerWarnings="true"
 >
-    <php>
-        <ini name="error_reporting" value="-1"/>
-        <env name="APP_ENV" value="test"/>
-        <env name="SHELL_VERBOSITY" value="-1"/>
-    </php>
-
-    <testsuites>
-        <testsuite name="unit">
-            <directory>tests/Unit</directory>
-        </testsuite>
-        <testsuite name="integration">
-            <directory>tests/Integration</directory>
-        </testsuite>
-        <testsuite name="performance">
-            <directory>tests/Performance</directory>
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>./src</directory>
-            <exclude>
-                <directory>./src/tests</directory>
-                <directory>./src/vendor</directory>
-            </exclude>
-        </whitelist>
-    </filter>
-
-    <logging>
-        <log type="coverage-clover" target="tests/_reports/logs/clover.xml"/>
-        <log type="coverage-html" target="tests/_reports/coverage" lowUpperBound="35" highLowerBound="70"/>
-        <log type="coverage-text" target="tests/_reports/coverage.txt" lowUpperBound="35" highLowerBound="70"/>
-        <log type="testdox-text" target="tests/_reports/testdox/executed.txt"/>
-    </logging>
+  <coverage>
+    <report>
+      <clover outputFile="tests/_reports/logs/clover.xml"/>
+      <html outputDirectory="tests/_reports/coverage" lowUpperBound="35" highLowerBound="70"/>
+      <text outputFile="tests/_reports/coverage.txt"/>
+    </report>
+  </coverage>
+  <php>
+    <ini name="error_reporting" value="-1"/>
+    <env name="APP_ENV" value="test"/>
+    <env name="SHELL_VERBOSITY" value="-1"/>
+  </php>
+  <testsuites>
+    <testsuite name="unit">
+      <directory>tests/Unit</directory>
+    </testsuite>
+    <testsuite name="integration">
+      <directory>tests/Integration</directory>
+    </testsuite>
+    <testsuite name="performance">
+      <directory>tests/Performance</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <testdoxText outputFile="tests/_reports/testdox/executed.txt"/>
+  </logging>
+  <source>
+    <include>
+      <directory>./src</directory>
+    </include>
+    <exclude>
+      <directory>./src/tests</directory>
+      <directory>./src/vendor</directory>
+    </exclude>
+  </source>
 </phpunit>

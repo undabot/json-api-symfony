@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Responder;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
@@ -15,10 +17,13 @@ use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResponderTest extends TestCase
 {
     /** @var TestClass */
@@ -38,7 +43,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resource($this->testObject);
 
-        static::assertInstanceOf(ResourceResponse::class, $result);
+        self::assertInstanceOf(ResourceResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceCollectionResponse(): void
@@ -50,7 +55,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceCollection([$this->testObject]);
 
-        static::assertInstanceOf(ResourceCollectionResponse::class, $result);
+        self::assertInstanceOf(ResourceCollectionResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceUpdatedResponse(): void
@@ -62,7 +67,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceUpdated($this->testObject);
 
-        static::assertInstanceOf(ResourceUpdatedResponse::class, $result);
+        self::assertInstanceOf(ResourceUpdatedResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceCreatedResponse(): void
@@ -74,7 +79,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceCreated($this->testObject);
 
-        static::assertInstanceOf(ResourceCreatedResponse::class, $result);
+        self::assertInstanceOf(ResourceCreatedResponse::class, $result);
     }
 
     public function testReturnInstanceOfResourceDeletedResponse(): void
@@ -86,7 +91,7 @@ final class ResponderTest extends TestCase
 
         $result = $responder->resourceDeleted();
 
-        static::assertInstanceOf(ResourceDeletedResponse::class, $result);
+        self::assertInstanceOf(ResourceDeletedResponse::class, $result);
     }
 
     public function testItThrowsExceptionIfNoMapDefined(): void

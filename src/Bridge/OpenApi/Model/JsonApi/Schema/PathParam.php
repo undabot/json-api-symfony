@@ -8,25 +8,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class PathParam implements Schema
 {
-    /** @var string */
-    private $name;
-
-    /** @var bool */
-    private $required;
-
-    /** @var string */
-    private $description;
-
-    /** @var Schema */
-    private $schema;
-
-    public function __construct(string $name, bool $required, string $description, Schema $schema)
-    {
-        $this->name = $name;
-        $this->required = $required;
-        $this->description = $description;
-        $this->schema = $schema;
-    }
+    public function __construct(private string $name, private bool $required, private string $description, private Schema $schema) {}
 
     public function toOpenApi(): array
     {

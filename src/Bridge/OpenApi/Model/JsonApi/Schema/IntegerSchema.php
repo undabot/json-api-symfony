@@ -8,17 +8,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\Schema;
 
 class IntegerSchema implements Schema
 {
-    /** @var null|int */
-    private $example;
-
-    /** @var null|string */
-    private $description;
-
-    public function __construct(?int $example, ?string $description)
-    {
-        $this->example = $example;
-        $this->description = $description;
-    }
+    public function __construct(private ?int $example, private ?string $description) {}
 
     public function toOpenApi(): array
     {

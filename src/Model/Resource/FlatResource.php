@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Resource;
 
-use RuntimeException;
 use Undabot\JsonApi\Definition\Model\Resource\Attribute\AttributeInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToManyRelationshipDataInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Relationship\Data\ToOneRelationshipDataInterface;
@@ -93,7 +92,13 @@ class FlatResource
             }
 
             if ($relationshipData instanceof ToManyRelationshipDataInterface && false === $relationshipData->isEmpty()) {
-                $flatData = array_map(static function (ResourceIdentifierInterface $resourceIdentifier) {
+                $flatData = array_map(static function ($resourceIdentifier) {
+                    if (!\is_object($resourceIdentifier) || !$resourceIdentifier instanceof ResourceIdentifierInterface) {
+                        $receivedType = get_debug_type($resourceIdentifier);
+
+                        throw new \InvalidArgumentException(sprintf('Expected instance of %s, got %s', ResourceIdentifierInterface::class, $receivedType));
+                    }
+
                     return $resourceIdentifier->getId();
                 }, iterator_to_array($relationshipData->getData()));
 
@@ -102,7 +107,7 @@ class FlatResource
                 continue;
             }
 
-            throw new RuntimeException('Couldn\'t flatten the relationships');
+            throw new \RuntimeException('Couldn\'t flatten the relationships');
         }
 
         return $flatRelationships;

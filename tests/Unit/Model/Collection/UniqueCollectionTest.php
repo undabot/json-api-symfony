@@ -2,17 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Model\Collection;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Collection;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection
+ *
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Model\Collection\UniqueCollection')]
+#[Small]
 final class UniqueCollectionTest extends TestCase
 {
     public function testConstructingUniqueCollectionWillSilentlyIgnoreDuplicatesGivenArrayWithDuplicateItems(): void
@@ -24,7 +29,7 @@ final class UniqueCollectionTest extends TestCase
         $collection = [$class1, $class2, $class3, $class4, $class1, $class1, $class2, $class3, $class4];
         $uniqueCollection = new UniqueCollection($collection);
 
-        static::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
+        self::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
     }
 
     public function testAddObjectsWillNotStoreObjectAlreadyAddedWhileConstructingClassGivenArrayOfObjects(): void
@@ -37,6 +42,6 @@ final class UniqueCollectionTest extends TestCase
         $uniqueCollection = new UniqueCollection($collection);
         $uniqueCollection->addObjects([$class1, $class2, $class1, $class1, $class1, $class2, $class3, $class3, $class4]);
 
-        static::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
+        self::assertEquals([$class1, $class2, $class3, $class4], array_values($uniqueCollection->getItems()));
     }
 }

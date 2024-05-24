@@ -4,21 +4,26 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Schema;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\AttributeSchema;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class AttributeSchemaTest extends TestCase
 {
     public function testItCanBeConstructedWithMinimalData(): void
     {
         $schema = new AttributeSchema('name', 'type', false, null, null, null);
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -28,7 +33,7 @@ final class AttributeSchemaTest extends TestCase
         );
 
         $schema2 = new AttributeSchema('name', 'type', true, null, null, null);
-        static::assertSame(
+        self::assertSame(
             $schema2->toOpenApi(),
             [
                 'title' => 'name',
@@ -49,7 +54,7 @@ final class AttributeSchemaTest extends TestCase
             null
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -71,7 +76,7 @@ final class AttributeSchemaTest extends TestCase
             null
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -94,7 +99,7 @@ final class AttributeSchemaTest extends TestCase
             'example'
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',
@@ -118,7 +123,7 @@ final class AttributeSchemaTest extends TestCase
             'example'
         );
 
-        static::assertSame(
+        self::assertSame(
             $schema->toOpenApi(),
             [
                 'title' => 'name',

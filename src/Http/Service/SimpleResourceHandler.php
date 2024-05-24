@@ -12,17 +12,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 final class SimpleResourceHandler
 {
-    /** @var ResourceValidator */
-    private $validator;
-
-    /** @var ResourceDenormalizer */
-    private $denormalizer;
-
-    public function __construct(ResourceValidator $validator, ResourceDenormalizer $denormalizer)
-    {
-        $this->validator = $validator;
-        $this->denormalizer = $denormalizer;
-    }
+    public function __construct(private ResourceValidator $validator, private ResourceDenormalizer $denormalizer) {}
 
     public function getModelFromRequest(ResourcePayloadRequest $request, string $class): ApiModel
     {

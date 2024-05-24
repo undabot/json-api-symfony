@@ -8,17 +8,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract;
 
 class Server implements Contract\Server
 {
-    /** @var string */
-    private $url;
-
-    /** @var null|string */
-    private $description;
-
-    public function __construct(string $url, ?string $description = null)
-    {
-        $this->url = $url;
-        $this->description = $description;
-    }
+    public function __construct(private string $url, private ?string $description = null) {}
 
     public function toOpenApi(): array
     {

@@ -6,20 +6,13 @@ namespace Undabot\SymfonyJsonApi\Http\Service\ModelEncoder;
 
 use Assert\Assertion;
 use Assert\AssertionFailedException;
-use Exception;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
 final class ApiModelEncoder implements EncoderInterface
 {
-    /** @var ResourceFactory */
-    private $resourceFactory;
-
-    public function __construct(ResourceFactory $resourceFactory)
-    {
-        $this->resourceFactory = $resourceFactory;
-    }
+    public function __construct(private ResourceFactory $resourceFactory) {}
 
     /**
      * Converts given entity first to the JSON:API resource model class by using provided $modelTransformer callable,
@@ -27,7 +20,7 @@ final class ApiModelEncoder implements EncoderInterface
      *
      * @param mixed $data
      *
-     * @throws Exception
+     * @throws \Exception
      * @throws AssertionFailedException
      */
     public function encodeData($data, callable $modelTransformer): ResourceInterface
@@ -36,7 +29,7 @@ final class ApiModelEncoder implements EncoderInterface
         Assertion::isInstanceOf(
             $apiModel,
             ApiModel::class,
-            sprintf('Invalid data conversion occurred. Expected instance of ApiModel, got %s', \get_class($apiModel))
+            sprintf('Invalid data conversion occurred. Expected instance of ApiModel, got %s', $apiModel::class)
         );
 
         return $this->resourceFactory->make($apiModel);
@@ -53,9 +46,7 @@ final class ApiModelEncoder implements EncoderInterface
     public function encodeDataset(array $dataset, callable $modelTransformer): array
     {
         return array_map(
-            function ($resource) use ($modelTransformer) {
-                return $this->encodeData($resource, $modelTransformer);
-            },
+            fn ($resource) => $this->encodeData($resource, $modelTransformer),
             $dataset
         );
     }

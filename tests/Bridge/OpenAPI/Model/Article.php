@@ -6,79 +6,44 @@ namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Model;
 
 use Symfony\Component\Validator\Constraints as Assert;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
-use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Attribute;
-use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToMany;
-use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToOne;
+use Undabot\SymfonyJsonApi\Model\Resource\Attribute\Attribute;
+use Undabot\SymfonyJsonApi\Model\Resource\Attribute\ToMany;
+use Undabot\SymfonyJsonApi\Model\Resource\Attribute\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
-/** @ResourceType(type="article") */
+#[ResourceType('article')]
 class Article implements ApiModel
 {
-    /**
-     * @var string
-     */
-    private $id;
+    private string $id;
 
-    /**
-     * @var string
-     * @Attribute(nullable=false)
-     */
-    private $slug;
+    #[Attribute('slug')]
+    private string $slug;
 
-    /**
-     * @var string
-     * @Attribute
-     */
-    private $title;
+    #[Attribute('titlw')]
+    private string $title;
 
-    /**
-     * @var string
-     * @Attribute(name="eventAddress")
-     */
-    private $address;
+    #[Attribute('eventAddress')]
+    private string $address;
 
-    /**
-     * @var string
-     * @Attribute(name="eventDate")
-     */
-    private $date;
+    #[Attribute('eventDate')]
+    private string $date;
 
-    /**
-     * @var bool
-     * @Attribute
-     */
-    private $enabled;
+    #[Attribute('enabled')]
+    private bool $enabled;
 
-    /**
-     * @var null|string
-     * @Attribute
-     */
-    private $description;
+    #[Attribute('description', null, null, null, true)]
+    private ?string $description;
 
-    /**
-     * @var string
-     * @ToOne(name="category", type="category", nullable=true)
-     * @Assert\Type(type="string")
-     */
-    private $categoryId;
+    #[ToOne('category', 'category', null, true)]
+    private string $categoryId;
 
-    /**
-     * @var string[]
-     * @ToMany(name="tags", type="tag", nullable=false)
-     * @Assert\Type(type="array")
-     */
-    private $tagIds;
+    #[ToMany('tags', 'tag')]
+    #[Assert\Type('array')]
+    private array $tagIds;
 
-    /**
-     * @var string
-     * @Attribute(format="datetime", example="2001")
-     * @Assert\NotBlank
-     */
-    private $createdAt;
+    #[Attribute('createdAt', null, null, 'datetime')]
+    private string $createdAt;
 
-    /**
-     * @var null|string
-     * @Attribute
-     */
-    private $updatedAt;
+    #[Attribute('updatedAt')]
+    private ?string $updatedAt;
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiDefinition;
@@ -11,10 +13,13 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiGenerator;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class OpenApiGeneratorTest extends TestCase
 {
     private OpenApiGenerator $service;
@@ -33,12 +38,12 @@ final class OpenApiGeneratorTest extends TestCase
         );
         $openApiDefinition = $this->createMock(OpenApiDefinition::class);
         $openApiDefinition
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getApi')
             ->willReturn($api);
 
         $expectedApi = $this->service->generateApi($openApiDefinition);
-        static::assertInstanceOf(Api::class, $expectedApi);
-        static::assertEquals($api, $expectedApi);
+        self::assertInstanceOf(Api::class, $expectedApi);
+        self::assertEquals($api, $expectedApi);
     }
 }

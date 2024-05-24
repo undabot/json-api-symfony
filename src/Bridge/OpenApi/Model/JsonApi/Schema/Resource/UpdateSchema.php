@@ -11,25 +11,11 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\UuidSchema;
 
 class UpdateSchema implements ResourceSchema
 {
-    /** @var string */
-    private $resourceType;
-
-    /** @var AttributeSchema[] */
-    private $attributes;
-
-    /** @var RelationshipSchema[] */
-    private $relationships;
-
     /**
      * @param AttributeSchema[]    $attributes
      * @param RelationshipSchema[] $relationships
      */
-    public function __construct(string $resourceType, array $attributes, array $relationships)
-    {
-        $this->resourceType = $resourceType;
-        $this->attributes = $attributes;
-        $this->relationships = $relationships;
-    }
+    public function __construct(private string $resourceType, private array $attributes, private array $relationships) {}
 
     public function getName(): string
     {

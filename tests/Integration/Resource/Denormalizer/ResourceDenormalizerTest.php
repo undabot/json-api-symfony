@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Resource\Denormalizer;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Denormalizer;
 
 use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\SymfonyJsonApi\Model\ApiModel;
@@ -31,24 +30,28 @@ class ResourceDto implements ApiModel
 
     /**
      * @var string
+     *
      * @JsonApi\Attribute
      */
     private $title;
 
     /**
      * @var null|string
+     *
      * @JsonApi\Attribute
      */
     private $summary;
 
     /**
      * @var array
+     *
      * @JsonApi\ToMany(type="tag")
      */
     private $tags;
 
     /**
      * @var null|string
+     *
      * @JsonApi\ToOne(type="person")
      */
     private $owner;
@@ -88,12 +91,18 @@ class ResourceDto implements ApiModel
     }
 }
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
+
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceDenormalizerTest extends TestCase
 {
     /** @var ResourceDenormalizer */
@@ -102,11 +111,10 @@ final class ResourceDenormalizerTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        AnnotationRegistry::registerLoader('class_exists');
         $annotationReader = new AnnotationReader();
         $resourceMetadataFactory = new ResourceMetadataFactory($annotationReader);
 
-        $classMetadataFactory = new ClassMetadataFactory(new AnnotationLoader(new AnnotationReader()));
+        $classMetadataFactory = new ClassMetadataFactory(new AttributeLoader());
         $normalizer = new ObjectNormalizer($classMetadataFactory);
 
         $this->serializer = new ResourceDenormalizer($resourceMetadataFactory, $normalizer);
@@ -129,11 +137,11 @@ final class ResourceDenormalizerTest extends TestCase
 
         /** @var ResourceDto $dto */
         $dto = $this->serializer->denormalize($resource, ResourceDto::class);
-        static::assertInstanceOf(ResourceDto::class, $dto);
+        self::assertInstanceOf(ResourceDto::class, $dto);
 
-        static::assertSame('This is my title', $dto->getTitle());
-        static::assertSame('This is my summary', $dto->getSummary());
-        static::assertSame('p1', $dto->getOwner());
-        static::assertSame(['t1', 't2', 't3'], $dto->getTags());
+        self::assertSame('This is my title', $dto->getTitle());
+        self::assertSame('This is my summary', $dto->getSummary());
+        self::assertSame('p1', $dto->getOwner());
+        self::assertSame(['t1', 't2', 't3'], $dto->getTags());
     }
 }

@@ -10,7 +10,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\Resou
 /**
  * @Annotation
  */
-class ResourceType extends Constraint
+#[\Attribute] class ResourceType extends Constraint
 {
     /** @var string */
     public $type;
@@ -31,7 +31,7 @@ class ResourceType extends Constraint
         return $this->type;
     }
 
-    public function validatedBy()
+    public function validatedBy(): string
     {
         return ResourceTypeValidator::class;
     }

@@ -6,9 +6,7 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Proxy\Proxy;
-use Exception;
-use RuntimeException;
+use Doctrine\ORM\Proxy\ProxyFactory;
 use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Link\Link;
@@ -25,18 +23,7 @@ use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 abstract class AbstractResponder
 {
-    /** @var EntityManagerInterface */
-    private $entityManager;
-    /** @var EncoderInterface */
-    private $dataEncoder;
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        EncoderInterface $modelEncoder
-    ) {
-        $this->entityManager = $entityManager;
-        $this->dataEncoder = $modelEncoder;
-    }
+    public function __construct(private EntityManagerInterface $entityManager, private EncoderInterface $dataEncoder) {}
 
     /**
      * @param mixed[]                                 $primaryData
@@ -44,13 +31,13 @@ abstract class AbstractResponder
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceCollection(
         array $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceCollectionResponse {
         $primaryResources = $this->encodeDataset($primaryData);
 
@@ -68,16 +55,16 @@ abstract class AbstractResponder
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceObjectCollection(
         ObjectCollection $primaryModels,
-        array $included = null,
-        array $meta = null,
-        array $links = null
+        ?array $included = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceCollectionResponse {
         $primaryResources = $this->encodeDataset($primaryModels->getItems());
-        $meta = $meta ?? ['total' => $primaryModels->count()];
+        $meta ??= ['total' => $primaryModels->count()];
 
         return new ResourceCollectionResponse(
             new ResourceCollection($primaryResources),
@@ -91,15 +78,14 @@ abstract class AbstractResponder
      * @param null|mixed[]                            $includedData
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resource(
-        $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        mixed $primaryData,
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceResponse {
         /**
          * resource response can be single resource or null.
@@ -120,15 +106,14 @@ abstract class AbstractResponder
      * @param null|mixed[]                            $includedData
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceCreated(
-        $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        mixed $primaryData,
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceCreatedResponse {
         $resource = $this->encodeData($primaryData);
 
@@ -144,15 +129,14 @@ abstract class AbstractResponder
      * @param null|mixed[]                            $includedData
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
      *
-     * @throws Exception
+     * @throws \Exception
      */
     public function resourceUpdated(
-        $primaryData,
-        array $includedData = null,
-        array $meta = null,
-        array $links = null
+        mixed $primaryData,
+        ?array $includedData = null,
+        ?array $meta = null,
+        ?array $links = null
     ): ResourceUpdatedResponse {
         $resource = $this->encodeData($primaryData);
 
@@ -184,12 +168,14 @@ abstract class AbstractResponder
     abstract protected function getMap(): array;
 
     /**
-     * @param mixed $data
-     *
-     * @throws Exception
+     * @throws \Exception
      */
-    private function encodeData($data): ResourceInterface
+    private function encodeData(mixed $data): ResourceInterface
     {
+        if (false === \is_object($data)) {
+            throw new \InvalidArgumentException('Data must be an object.');
+        }
+
         $dataTransformer = $this->getDataTransformer($data);
 
         return $this->dataEncoder->encodeData($data, $dataTransformer);
@@ -241,11 +227,11 @@ abstract class AbstractResponder
      */
     private function getDataTransformer($data): callable
     {
-        $dataClass = \get_class($data);
+        $dataClass = $data::class;
 
         // Support Doctrine Entities that are usually represented as Proxy classes.
-        // Resolve exact class name before looking up in the encoders map.
-        if ($data instanceof Proxy) {
+        // Resolve exact class name before looking up in the encoder map.
+        if ($data instanceof ProxyFactory) {
             $dataClass = $this->entityManager->getClassMetadata($dataClass)->name;
         }
 
@@ -256,7 +242,7 @@ abstract class AbstractResponder
                 $dataClass
             );
 
-            throw new RuntimeException($message);
+            throw new \RuntimeException($message);
         }
 
         return $map[$dataClass];

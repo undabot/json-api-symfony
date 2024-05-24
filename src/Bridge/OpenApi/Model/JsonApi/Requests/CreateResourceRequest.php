@@ -9,17 +9,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Contract\ResourceSchema;
 
 class CreateResourceRequest implements Request
 {
-    /** @var string */
-    private $resourceType;
-
-    /** @var ResourceSchema */
-    private $schema;
-
-    public function __construct(string $resourceType, ResourceSchema $schema)
-    {
-        $this->resourceType = $resourceType;
-        $this->schema = $schema;
-    }
+    public function __construct(private string $resourceType, private ResourceSchema $schema) {}
 
     public function getContentType(): string
     {
@@ -29,5 +19,10 @@ class CreateResourceRequest implements Request
     public function getSchemaReference(): string
     {
         return $this->schema->getName();
+    }
+
+    public function getResourceType(): string
+    {
+        return $this->resourceType;
     }
 }

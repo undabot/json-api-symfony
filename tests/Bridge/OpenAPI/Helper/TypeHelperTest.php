@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Helper;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Helper\TypeHelper;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class TypeHelperTest extends TestCase
 {
     public function testItResolvesBoolToBoolean(): void
     {
-        static::assertSame(
+        self::assertSame(
             'boolean',
             TypeHelper::resolve('bool')
         );
@@ -25,7 +30,7 @@ final class TypeHelperTest extends TestCase
 
     public function testItResolvesIntToInteger(): void
     {
-        static::assertSame(
+        self::assertSame(
             'integer',
             TypeHelper::resolve('int')
         );
@@ -33,7 +38,7 @@ final class TypeHelperTest extends TestCase
 
     public function testItResolvesFloatToNumber(): void
     {
-        static::assertSame(
+        self::assertSame(
             'number',
             TypeHelper::resolve('float')
         );
@@ -41,7 +46,7 @@ final class TypeHelperTest extends TestCase
 
     public function testItReturnsPassedValueWhenUnsupported(): void
     {
-        static::assertSame(
+        self::assertSame(
             'somethingThatDoesntExist',
             TypeHelper::resolve('somethingThatDoesntExist')
         );

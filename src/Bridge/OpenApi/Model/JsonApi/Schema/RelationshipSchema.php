@@ -10,34 +10,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\Identifi
 
 class RelationshipSchema implements Schema
 {
-    /** @var string */
-    private $name;
-
-    /** @var null|string */
-    private $description;
-
-    /** @var bool */
-    private $nullable;
-
-    /** @var string */
-    private $targetResourceType;
-
-    /** @var bool */
-    private $isToMany;
-
-    public function __construct(
-        string $name,
-        ?string $description,
-        bool $nullable,
-        string $targetResourceType,
-        bool $isToMany
-    ) {
-        $this->name = $name;
-        $this->description = $description;
-        $this->nullable = $nullable;
-        $this->targetResourceType = $targetResourceType;
-        $this->isToMany = $isToMany;
-    }
+    public function __construct(private string $name, private ?string $description, private bool $nullable, private string $targetResourceType, private bool $isToMany) {}
 
     public function isNullable(): bool
     {
@@ -80,5 +53,10 @@ class RelationshipSchema implements Schema
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\ApiTransformer;
@@ -11,10 +13,13 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ApiTransformerTest extends TestCase
 {
     private ApiTransformer $service;
@@ -32,7 +37,7 @@ final class ApiTransformerTest extends TestCase
             'Example API documentation for JSON:API'
         );
         $result = $this->service->toJson($api);
-        static::assertJson($result);
+        self::assertJson($result);
     }
 
     public function testItTransformsToYaml(): void
@@ -44,6 +49,6 @@ final class ApiTransformerTest extends TestCase
         );
         $result = $this->service->toYaml($api);
         $array = Yaml::parse($result);
-        static::assertIsArray($array);
+        self::assertIsArray($array);
     }
 }

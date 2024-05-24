@@ -13,28 +13,41 @@ class SchemaCollection
      */
     private static array $schemas = [];
 
+    /**
+     * @throws SchemaCollectionException
+     */
     public static function add(string $resourceClass, ResourceSchemaSet $resourceSchemaSet): void
     {
-        $resourceClass = static::normalizeClassName($resourceClass);
+        $resourceClass = self::normalizeClassName($resourceClass);
         if (true === self::exists($resourceClass)) {
             throw SchemaCollectionException::resourceAlreadyExists();
         }
 
-        static::$schemas[$resourceClass] = $resourceSchemaSet;
+        self::$schemas[$resourceClass] = $resourceSchemaSet;
     }
 
     public static function exists(string $resourceClass): bool
     {
-        $resourceClass = static::normalizeClassName($resourceClass);
+        $resourceClass = self::normalizeClassName($resourceClass);
 
-        return isset(static::$schemas[$resourceClass]);
+        return isset(self::$schemas[$resourceClass]);
     }
 
     public static function get(string $className): ResourceSchemaSet
     {
-        $className = static::normalizeClassName($className);
+        $className = self::normalizeClassName($className);
 
-        return static::$schemas[$className];
+        if (!\array_key_exists($className, self::$schemas)) {
+            throw new \InvalidArgumentException("Schema not found for class {$className}");
+        }
+
+        $schemaSet = self::$schemas[$className];
+
+        if (!$schemaSet instanceof ResourceSchemaSet) {
+            throw new \UnexpectedValueException("Expected a ResourceSchemaSet, got something else for class {$className}");
+        }
+
+        return $schemaSet;
     }
 
     /**
@@ -45,7 +58,7 @@ class SchemaCollection
         $data = [];
 
         /** @var ResourceSchemaSet $schemaSet */
-        foreach (static::$schemas as $schemaSet) {
+        foreach (self::$schemas as $schemaSet) {
             if (null !== $schemaSet->getIdentifier()) {
                 $data[$schemaSet->getIdentifier()->getName()] = $schemaSet->getIdentifier()->toOpenApi();
             }

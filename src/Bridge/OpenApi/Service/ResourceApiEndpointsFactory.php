@@ -11,14 +11,12 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\CreateResourceE
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\GetResourceEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\ResourceCollectionEndpoint;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Endpoint\UpdateResourceEndpoint;
+use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Filter\Filter;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\OffsetBasedPaginationQueryParam;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\PageBasedPaginationQueryParam;
 
 class ResourceApiEndpointsFactory
 {
-    /** @var ResourceSchemaFactory */
-    private $schemaFactory;
-
     /** @var string */
     private $resourceClassName;
 
@@ -61,10 +59,7 @@ class ResourceApiEndpointsFactory
     /** @var null|Schema */
     private $paginationSchema;
 
-    public function __construct(ResourceSchemaFactory $schemaFactory)
-    {
-        $this->schemaFactory = $schemaFactory;
-    }
+    public function __construct(private ResourceSchemaFactory $schemaFactory) {}
 
     public function new(string $path, string $resource): self
     {
@@ -213,19 +208,25 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $collectionIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                function ($item) {
+                    if (!\is_string($item)) {
+                        throw new \InvalidArgumentException('Expected a string');
+                    }
+
+                    return $this->schemaFactory->readSchema($item);
+                },
                 $this->collectionIncludes
             );
 
             $getCollectionEndpoint = new ResourceCollectionEndpoint(
                 $readSchema,
                 $this->path,
-                $this->collectionFilters,
+                $this->prepareCollectionFilters(),
                 $this->collectionSorts,
                 $collectionIncludedSchemas,
                 $this->collectionFields,
                 $this->paginationSchema
-            // @todo Add error responses (e.g. validation errors)
+                // @todo Add error responses (e.g. validation errors)
             );
 
             $api->addSchemas($relationshipsIdentifiers);
@@ -242,7 +243,13 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $singleIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                function ($item) {
+                    if (!\is_string($item)) {
+                        throw new \InvalidArgumentException('Expected a string');
+                    }
+
+                    return $this->schemaFactory->readSchema($item);
+                },
                 $this->singleIncludes
             );
 
@@ -251,7 +258,7 @@ class ResourceApiEndpointsFactory
                 $this->path,
                 $singleIncludedSchemas,
                 $this->singleFields
-            // @todo error responses
+                // @todo error responses
             );
 
             $api->addEndpoint($getSingleResourceEndpoint);
@@ -280,5 +287,30 @@ class ResourceApiEndpointsFactory
             $api->addSchema($updateSchema);
             $api->addEndpoint($createResourceEndpoint);
         }
+    }
+
+    public function isDelete(): bool
+    {
+        return $this->delete;
+    }
+
+    /**
+     * Checks and prepares collection filters before using them in ResourceCollectionEndpoint.
+     *
+     * @throws \InvalidArgumentException if any filter is not of the expected type
+     */
+    private function prepareCollectionFilters(): array
+    {
+        $preparedFilters = [];
+
+        foreach ($this->collectionFilters as $filter) {
+            if (!$filter instanceof Filter) {
+                continue;
+            }
+
+            $preparedFilters[] = $filter;
+        }
+
+        return $preparedFilters;
     }
 }

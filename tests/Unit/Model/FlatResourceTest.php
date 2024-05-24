@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Model\Resource;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Resource;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Implementation\Factory\RelationshipDataFactory;
 use Undabot\JsonApi\Implementation\Model\Resource\Attribute\Attribute;
@@ -15,10 +17,13 @@ use Undabot\SymfonyJsonApi\Model\Resource\FlatResource;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class FlatResourceTest extends TestCase
 {
     public function testFlatResourceCorrectlyFlattensAttributes(): void
@@ -33,7 +38,7 @@ final class FlatResourceTest extends TestCase
 
         $flatResource = new FlatResource($resource);
 
-        static::assertSame([
+        self::assertSame([
             'attribute1' => 'string',
             'attribute2' => 1,
             'attribute3' => 2.0,
@@ -54,7 +59,7 @@ final class FlatResourceTest extends TestCase
 
         $flatResource = new FlatResource($resource);
 
-        static::assertSame([
+        self::assertSame([
             'empty2many' => [],
             'empty2one' => null,
             '2many' => ['1', '2', '3'],

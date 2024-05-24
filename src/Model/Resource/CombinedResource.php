@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Resource;
 
-use InvalidArgumentException;
 use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
 use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Definition\Model\Resource\Attribute\AttributeCollectionInterface;
@@ -19,11 +18,9 @@ use Undabot\SymfonyJsonApi\Model\Resource\Exception\ResourceTypeValueMismatch;
 
 class CombinedResource implements ResourceInterface
 {
-    /** @var ResourceInterface */
-    private $baseResource;
+    private ResourceInterface $baseResource;
 
-    /** @var ResourceInterface */
-    private $updateResource;
+    private ResourceInterface $updateResource;
 
     public function __construct(ResourceInterface $baseResource, ResourceInterface $updateResource)
     {
@@ -53,7 +50,7 @@ class CombinedResource implements ResourceInterface
         if (0 !== \count($unsupportedAttributes)) {
             $message = sprintf('Unsupported attributes found: `%s`', implode(', ', $unsupportedAttributes));
 
-            throw new InvalidArgumentException($message);
+            throw new \InvalidArgumentException($message);
         }
 
         $unsupportedRelationships = array_diff(
@@ -63,7 +60,7 @@ class CombinedResource implements ResourceInterface
         if (0 !== \count($unsupportedRelationships)) {
             $message = sprintf('Unsupported relationships found: `%s`', implode(', ', $unsupportedRelationships));
 
-            throw new InvalidArgumentException($message);
+            throw new \InvalidArgumentException($message);
         }
 
         $this->baseResource = $baseResource;

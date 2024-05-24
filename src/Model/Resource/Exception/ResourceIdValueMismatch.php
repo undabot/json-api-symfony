@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Resource\Exception;
 
-use Exception;
-
-class ResourceIdValueMismatch extends Exception
+class ResourceIdValueMismatch extends \Exception
 {
     private function __construct(string $errorMessage)
     {

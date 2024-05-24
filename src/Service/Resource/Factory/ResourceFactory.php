@@ -6,7 +6,6 @@ namespace Undabot\SymfonyJsonApi\Service\Resource\Factory;
 
 use Assert\Assertion;
 use Doctrine\Common\Annotations\AnnotationException;
-use ReflectionException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -19,6 +18,7 @@ use Undabot\SymfonyJsonApi\Model\Resource\Metadata\Exception\InvalidResourceMapp
 use Undabot\SymfonyJsonApi\Model\Resource\Metadata\ResourceMetadata;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceAttributesBuilder;
 use Undabot\SymfonyJsonApi\Service\Resource\Builder\ResourceRelationshipsBuilder;
+use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
 /**
@@ -31,13 +31,12 @@ class ResourceFactory
         private ResourceMetadataFactory $metadataFactory,
         private bool $shouldValidateReadModel,
         private ResourceValidator $validator,
-    ) {
-    }
+    ) {}
 
     /**
      * @throws AnnotationException
-     * @throws ReflectionException
-     * @throws InvalidResourceMappingException
+     * @throws \ReflectionException
+     * @throws InvalidResourceMappingException|ModelInvalid
      */
     public function make(ApiModel $apiModel): ResourceInterface
     {
@@ -48,6 +47,10 @@ class ResourceFactory
             ->getPropertyAccessor();
 
         $id = $propertyAccessor->getValue($apiModel, 'id');
+        if (false === \is_string($id)) {
+            throw new \InvalidArgumentException('ID must be a string.');
+        }
+
         $type = $metadata->getType();
 
         $attributes = $this->makeAttributeCollection($apiModel, $metadata);
@@ -55,7 +58,7 @@ class ResourceFactory
 
         $resource = new Resource($id, $type, $attributes, $relationships);
         if (true === $this->shouldValidateReadModel) {
-            $this->validator->assertValid($resource, \get_class($apiModel));
+            $this->validator->assertValid($resource, $apiModel::class);
         }
 
         return $resource;
@@ -66,7 +69,7 @@ class ResourceFactory
      *
      * @throws AnnotationException
      * @throws InvalidResourceMappingException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function makeCollection(array $apiModels): ResourceCollectionInterface
     {
@@ -82,7 +85,7 @@ class ResourceFactory
 
     private function makeAttributeCollection(ApiModel $apiModel, ResourceMetadata $metadata): ?AttributeCollection
     {
-        if (true === empty($metadata->getAttributesMetadata())) {
+        if (true === empty((array) $metadata->getAttributesMetadata())) {
             return null;
         }
 
@@ -106,7 +109,7 @@ class ResourceFactory
         ApiModel $apiModel,
         ResourceMetadata $metadata
     ): ?RelationshipCollection {
-        if (true === empty($metadata->getRelationshipsMetadata())) {
+        if (true === empty((array) $metadata->getRelationshipsMetadata())) {
             return null;
         }
 
@@ -117,17 +120,26 @@ class ResourceFactory
         $relationshipBuilder = ResourceRelationshipsBuilder::make();
 
         foreach ($metadata->getRelationshipsMetadata() as $relationshipsMetadatum) {
+            $propertyValue = $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath());
             if ($relationshipsMetadatum->isToMany()) {
+                if (!\is_array($propertyValue)) {
+                    continue;
+                }
+
                 $relationshipBuilder->toMany(
                     $relationshipsMetadatum->getName(),
                     $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
+                    array_map('strval', $propertyValue)
                 );
             } else {
+                if (!\is_string($propertyValue) && null !== $propertyValue) {
+                    continue;
+                }
+
                 $relationshipBuilder->toOne(
                     $relationshipsMetadatum->getName(),
                     $relationshipsMetadatum->getRelatedResourceType(),
-                    $propertyAccessor->getValue($apiModel, $relationshipsMetadatum->getPropertyPath())
+                    null !== $propertyValue ? (string) $propertyValue : null
                 );
             }
         }

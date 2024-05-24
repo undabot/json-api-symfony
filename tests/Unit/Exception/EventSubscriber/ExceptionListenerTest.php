@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Exception\EventSubscriber;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Exception\EventSubscriber;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -28,10 +30,12 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolati
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener
+ * @coversNothing
  *
- * @medium
+ * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener')]
+#[Medium]
 final class ExceptionListenerTest extends TestCase
 {
     private MockObject $documentToPhpArrayEncoderInterfaceMock;

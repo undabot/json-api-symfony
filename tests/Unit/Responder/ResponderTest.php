@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Unit\Responder;
 
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
@@ -20,6 +22,8 @@ use Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResponderTest extends TestCase
 {
     /** @var TestClass */

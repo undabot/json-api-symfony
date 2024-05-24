@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Request;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Request;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -21,6 +23,8 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class GetResourceCollectionRequestTest extends TestCase
 {
     private RequestFactory $requestFactory;

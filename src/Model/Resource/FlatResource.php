@@ -92,7 +92,13 @@ class FlatResource
             }
 
             if ($relationshipData instanceof ToManyRelationshipDataInterface && false === $relationshipData->isEmpty()) {
-                $flatData = array_map(static function (ResourceIdentifierInterface $resourceIdentifier) {
+                $flatData = array_map(static function ($resourceIdentifier) {
+                    if (!\is_object($resourceIdentifier) || !$resourceIdentifier instanceof ResourceIdentifierInterface) {
+                        $receivedType = get_debug_type($resourceIdentifier);
+
+                        throw new \InvalidArgumentException(sprintf('Expected instance of %s, got %s', ResourceIdentifierInterface::class, $receivedType));
+                    }
+
                     return $resourceIdentifier->getId();
                 }, iterator_to_array($relationshipData->getData()));
 

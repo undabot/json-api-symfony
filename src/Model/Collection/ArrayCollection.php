@@ -4,22 +4,19 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Collection;
 
+use Traversable;
+
 class ArrayCollection implements ObjectCollection
 {
-    /** @var array */
-    private $items;
-
-    /** @var int */
-    private $count;
+    private ?int $count;
 
     /**
      * @param mixed[] $items
      */
-    public function __construct(array $items, ?int $count = null)
+    public function __construct(private array $items, ?int $count = null)
     {
-        $this->items = $items;
         if (null === $count) {
-            $count = \count($items);
+            $count = \count($this->items);
         }
         $this->count = $count;
     }
@@ -34,9 +31,12 @@ class ArrayCollection implements ObjectCollection
 
     public function count(): int
     {
-        return $this->count;
+        return (int) $this->count;
     }
 
+    /**
+     * @return \Traversable<mixed, mixed> a traversable collection of items
+     */
     public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->getItems());

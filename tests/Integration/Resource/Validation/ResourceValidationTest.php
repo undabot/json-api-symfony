@@ -28,8 +28,11 @@ class ResourceDto
      * @var string
      *
      * @JsonApi\Attribute
+     *
      * @Assert\NotBlank
+     *
      * @Assert\Length(min=10, max=100)
+     *
      * @Assert\Type(type="string")
      */
     public $title;
@@ -38,7 +41,9 @@ class ResourceDto
      * @var string
      *
      * @JsonApi\Attribute
+     *
      * @Assert\Type(type="string")
+     *
      * @Assert\Regex(pattern="/^\d+-\d+-\d+$/")
      */
     public $date;
@@ -47,7 +52,9 @@ class ResourceDto
      * @var string
      *
      * @JsonApi\Attribute
+     *
      * @Assert\Type(type="string")
+     *
      * @Assert\NotNull
      */
     public $summary;
@@ -56,6 +63,7 @@ class ResourceDto
      * @var null|string
      *
      * @JsonApi\ToOne(type="people")
+     *
      * @Assert\NotBlank
      */
     public $author;
@@ -64,6 +72,7 @@ class ResourceDto
      * @var string[]
      *
      * @JsonApi\ToMany(type="tags")
+     *
      * @Assert\NotBlank
      */
     public $tags = [];
@@ -76,6 +85,9 @@ class ResourceDto
     public $comments = [];
 }
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
+
 /**
  * @internal
  *
@@ -83,6 +95,8 @@ class ResourceDto
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceValidationTest extends KernelTestCase
 {
     /** @var ResourceValidator */

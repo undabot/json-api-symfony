@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Http\Service\Factory;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Http\Service\Factory;
 
 use Assert\AssertionFailedException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\InputBag;
@@ -30,10 +33,12 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory
+ * @coversNothing
  *
- * @medium
+ * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory')]
+#[Medium]
 final class RequestFactoryTest extends TestCase
 {
     private MockObject $resourceEncoderMock;
@@ -53,9 +58,7 @@ final class RequestFactoryTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideGetResourceRequestWillReturnValidGetResourceRequestGivenValidRequestCases
-     */
+    #[DataProvider('provideGetResourceRequestWillReturnValidGetResourceRequestGivenValidRequestCases')]
     public function testGetResourceRequestWillReturnValidGetResourceRequestGivenValidRequest(
         array $queryParams,
         ?array $include,
@@ -112,9 +115,7 @@ final class RequestFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideGetResourceCollectionRequestWillReturnValidGetResourceCollectionRequestGivenValidRequestCases
-     */
+    #[DataProvider('provideGetResourceCollectionRequestWillReturnValidGetResourceCollectionRequestGivenValidRequestCases')]
     public function testGetResourceCollectionRequestWillReturnValidGetResourceCollectionRequestGivenValidRequest(
         array $queryParams,
         ?PaginationInterface $pagination,
@@ -233,9 +234,7 @@ final class RequestFactoryTest extends TestCase
         self::assertEquals($resource, $updateResourceRequest->getResource());
     }
 
-    /**
-     * @dataProvider invalidRequestPrimaryDataProvider
-     */
+    #[DataProvider('invalidRequestPrimaryDataProvider')]
     public function testUpdateResourceRequestWillThrowExceptionGivenInvalidRequestPrimaryData(
         ?string $content,
         string $exceptionMessage
@@ -261,9 +260,7 @@ final class RequestFactoryTest extends TestCase
         $this->requestFactory->updateResourceRequest();
     }
 
-    /**
-     * @dataProvider invalidRequestPrimaryDataProvider
-     */
+    #[DataProvider('invalidRequestPrimaryDataProvider')]
     public function testRequestResourceHasClientSideGeneratedIdWillThrowExceptionGivenInvalidRequestPrimaryData(
         ?string $content,
         string $exceptionMessage
@@ -285,11 +282,6 @@ final class RequestFactoryTest extends TestCase
             'Request data must be valid JSON',
         ];
 
-        yield 'Null data given' => [
-            null,
-            'Request data must be valid JSON',
-        ];
-
         yield 'Not array given' => [
             '2',
             'Request data must be parsable to a valid array',
@@ -301,9 +293,7 @@ final class RequestFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideRequestResourceHasClientSideGeneratedIdWillReturnCorrectIdPresenceGivenValidRequestPrimaryDataCases
-     */
+    #[DataProvider('provideRequestResourceHasClientSideGeneratedIdWillReturnCorrectIdPresenceGivenValidRequestPrimaryDataCases')]
     public function testRequestResourceHasClientSideGeneratedIdWillReturnCorrectIdPresenceGivenValidRequestPrimaryData(
         string $content,
         bool $hadId

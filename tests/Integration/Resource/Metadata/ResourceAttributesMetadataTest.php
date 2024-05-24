@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Resource\Metadata;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Metadata;
 
-use Doctrine\Common\Annotations\Annotation\IgnoreAnnotation;
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -20,12 +21,12 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 /**
  * @internal
  *
- * @IgnoreAnnotation("Assert\NotBlank")
- *
  * @coversNothing
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceAttributesMetadataTest extends TestCase
 {
     /** @var ResourceMetadataFactory */
@@ -200,8 +201,11 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var string
              *
              * @JsonApi\Attribute
+             *
              * @Assert\NotBlank
+             *
              * @Assert\Length(min=100, max=200)
+             *
              * @Assert\Type(type="string")
              */
             public $name;
@@ -210,6 +214,7 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var null|string
              *
              * @JsonApi\Attribute
+             *
              * @Assert\Type(type="string")
              */
             public $summary;
@@ -218,7 +223,9 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var \DateTimeImmutable
              *
              * @JsonApi\Attribute
+             *
              * @Assert\NotBlank
+             *
              * @Assert\Type(type="datetime")
              */
             public $publishedAt;
@@ -227,7 +234,9 @@ final class ResourceAttributesMetadataTest extends TestCase
              * @var bool
              *
              * @JsonApi\Attribute
+             *
              * @Assert\NotBlank
+             *
              * @Assert\Type(type="bool")
              */
             public $active;

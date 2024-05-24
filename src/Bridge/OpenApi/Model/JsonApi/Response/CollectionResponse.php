@@ -11,18 +11,14 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSche
 
 class CollectionResponse implements Response
 {
-    /** @var ReadSchema */
-    private $schema;
-
     /** @var array<string, ReadSchema> */
-    private $includes;
+    private array $includes;
 
     /**
      * @param array<string, ReadSchema> $includes
      */
-    public function __construct(ReadSchema $schema, array $includes)
+    public function __construct(private ReadSchema $schema, array $includes)
     {
-        $this->schema = $schema;
         Assertion::allIsInstanceOf($includes, ReadSchema::class);
         $this->includes = $includes;
     }
@@ -61,9 +57,7 @@ class CollectionResponse implements Response
 
         if (false === empty($this->includes)) {
             $includedSchema = new IncludedSchema($this->includes);
-            if (false === empty($includedSchema)) {
-                $responseContentSchema['schema']['properties']['included'] = $includedSchema->toOpenApi();
-            }
+            $responseContentSchema['schema']['properties']['included'] = $includedSchema->toOpenApi();
         }
 
         return [

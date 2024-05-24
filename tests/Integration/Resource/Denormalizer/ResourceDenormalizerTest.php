@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Resource\Denormalizer;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Denormalizer;
 
 use Doctrine\Common\Annotations\AnnotationReader;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
@@ -92,6 +91,9 @@ class ResourceDto implements ApiModel
     }
 }
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
+
 /**
  * @internal
  *
@@ -99,6 +101,8 @@ class ResourceDto implements ApiModel
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class ResourceDenormalizerTest extends TestCase
 {
     /** @var ResourceDenormalizer */

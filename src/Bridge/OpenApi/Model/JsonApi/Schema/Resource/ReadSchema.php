@@ -12,27 +12,23 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\StringSchema;
 
 class ReadSchema implements ResourceSchema
 {
-    /** @var string */
-    private $resourceType;
-
     /** @var AttributeSchema[] */
-    private $attributes;
+    private array $attributes;
 
     /** @var RelationshipSchema[] */
-    private $relationships;
+    private array $relationships;
 
     /**
      * @param AttributeSchema[]    $attributes
      * @param RelationshipSchema[] $relationships
      */
     public function __construct(
-        string $resourceType,
+        private string $resourceType,
         array $attributes,
         array $relationships
     ) {
         Assertion::allIsInstanceOf($attributes, AttributeSchema::class);
         Assertion::allIsInstanceOf($relationships, RelationshipSchema::class);
-        $this->resourceType = $resourceType;
         $this->attributes = $attributes;
         $this->relationships = $relationships;
     }

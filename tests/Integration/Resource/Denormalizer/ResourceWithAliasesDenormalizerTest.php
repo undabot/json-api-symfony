@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Integration\Resource\Denormalizer;
+namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Denormalizer;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
-use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
 use Symfony\Component\Serializer\Mapping\Loader\AttributeLoader;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
@@ -41,10 +42,12 @@ class AliasedResourceDto implements ApiModel
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\ResourceDenormalizer')]
+#[Small]
 final class ResourceWithAliasesDenormalizerTest extends TestCase
 {
     private ResourceDenormalizer $serializer;

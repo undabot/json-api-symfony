@@ -6,7 +6,7 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Responder;
 
 use Assert\Assertion;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Proxy\Proxy;
+use Doctrine\ORM\Proxy\ProxyFactory;
 use Undabot\JsonApi\Definition\Model\Link\LinkMemberInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Link\Link;
@@ -23,19 +23,7 @@ use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 abstract class AbstractResponder
 {
-    /** @var EntityManagerInterface */
-    private $entityManager;
-
-    /** @var EncoderInterface */
-    private $dataEncoder;
-
-    public function __construct(
-        EntityManagerInterface $entityManager,
-        EncoderInterface $modelEncoder
-    ) {
-        $this->entityManager = $entityManager;
-        $this->dataEncoder = $modelEncoder;
-    }
+    public function __construct(private EntityManagerInterface $entityManager, private EncoderInterface $dataEncoder) {}
 
     /**
      * @param mixed[]                                 $primaryData
@@ -76,7 +64,7 @@ abstract class AbstractResponder
         ?array $links = null
     ): ResourceCollectionResponse {
         $primaryResources = $this->encodeDataset($primaryModels->getItems());
-        $meta = $meta ?? ['total' => $primaryModels->count()];
+        $meta ??= ['total' => $primaryModels->count()];
 
         return new ResourceCollectionResponse(
             new ResourceCollection($primaryResources),
@@ -90,12 +78,11 @@ abstract class AbstractResponder
      * @param null|mixed[]                            $includedData
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
      *
      * @throws \Exception
      */
     public function resource(
-        $primaryData,
+        mixed $primaryData,
         ?array $includedData = null,
         ?array $meta = null,
         ?array $links = null
@@ -119,12 +106,11 @@ abstract class AbstractResponder
      * @param null|mixed[]                            $includedData
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
      *
      * @throws \Exception
      */
     public function resourceCreated(
-        $primaryData,
+        mixed $primaryData,
         ?array $includedData = null,
         ?array $meta = null,
         ?array $links = null
@@ -143,12 +129,11 @@ abstract class AbstractResponder
      * @param null|mixed[]                            $includedData
      * @param null|array<string, mixed>               $meta
      * @param null|array<string, LinkMemberInterface> $links
-     * @param mixed                                   $primaryData
      *
      * @throws \Exception
      */
     public function resourceUpdated(
-        $primaryData,
+        mixed $primaryData,
         ?array $includedData = null,
         ?array $meta = null,
         ?array $links = null
@@ -183,12 +168,14 @@ abstract class AbstractResponder
     abstract protected function getMap(): array;
 
     /**
-     * @param mixed $data
-     *
      * @throws \Exception
      */
-    private function encodeData($data): ResourceInterface
+    private function encodeData(mixed $data): ResourceInterface
     {
+        if (false === \is_object($data)) {
+            throw new \InvalidArgumentException('Data must be an object.');
+        }
+
         $dataTransformer = $this->getDataTransformer($data);
 
         return $this->dataEncoder->encodeData($data, $dataTransformer);
@@ -240,11 +227,11 @@ abstract class AbstractResponder
      */
     private function getDataTransformer($data): callable
     {
-        $dataClass = \get_class($data);
+        $dataClass = $data::class;
 
         // Support Doctrine Entities that are usually represented as Proxy classes.
-        // Resolve exact class name before looking up in the encoders map.
-        if ($data instanceof Proxy) {
+        // Resolve exact class name before looking up in the encoder map.
+        if ($data instanceof ProxyFactory) {
             $dataClass = $this->entityManager->getClassMetadata($dataClass)->name;
         }
 

@@ -21,34 +21,7 @@ class GetResourceCollectionRequest implements GetResourceCollectionRequestInterf
     public const INCLUDE_KEY = 'include';
     public const FIELDS_KEY = 'fields';
 
-    /** @var null|PaginationInterface */
-    private $pagination;
-
-    /** @var null|FilterSet */
-    private $filterSet;
-
-    /** @var null|SortSet */
-    private $sortSet;
-
-    /** @var null|array */
-    private $includes;
-
-    /** @var null|array */
-    private $fields;
-
-    public function __construct(
-        ?PaginationInterface $pagination,
-        ?FilterSet $filterSet,
-        ?SortSet $sortSet,
-        ?array $include,
-        ?array $fields
-    ) {
-        $this->pagination = $pagination;
-        $this->filterSet = $filterSet;
-        $this->sortSet = $sortSet;
-        $this->includes = $include;
-        $this->fields = $fields;
-    }
+    public function __construct(private ?PaginationInterface $pagination, private ?FilterSet $filterSet, private ?SortSet $sortSet, private ?array $includes, private ?array $fields) {}
 
     public function getPagination(): ?PaginationInterface
     {

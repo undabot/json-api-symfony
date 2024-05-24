@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Http\Service\Factory;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Http\Service\Factory;
 
 use Assert\AssertionFailedException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Link\LinkCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
@@ -21,10 +23,12 @@ use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse
+ * @coversNothing
  *
- * @medium
+ * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse')]
+#[Medium]
 final class ResourceCollectionResponseTest extends TestCase
 {
     public function testFromObjectCollectionCanCreateValidResourceCollectionResponseGivenAllArgumentsPresent(): void
@@ -147,7 +151,7 @@ final class ResourceCollectionResponseTest extends TestCase
         $resourceMocks = [];
         $includeMocks = [];
         foreach ($resources as $resource) {
-            if (true === is_string($resource)) {
+            if (true === \is_string($resource)) {
                 $resourceMocks[] = $this->createMock($resource);
             } else {
                 $resourceMocks[] = $resource;
@@ -155,7 +159,7 @@ final class ResourceCollectionResponseTest extends TestCase
         }
 
         foreach ($included as $include) {
-            if (true === is_string($include)) {
+            if (true === \is_string($include)) {
                 $includeMocks[] = $this->createMock($include);
             } else {
                 $includeMocks[] = $include;
@@ -176,7 +180,7 @@ final class ResourceCollectionResponseTest extends TestCase
 
         yield 'Resource array not valid type' => [
             [$objectCollection, ResourceInterface::class],
-            null,
+            [],
             null,
             null,
             'Class "' . \get_class($objectCollection) . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Resource\ResourceInterface" but is not.',

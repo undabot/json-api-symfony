@@ -2,8 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Model\Error;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Error;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Ramsey\Uuid\Uuid;
@@ -13,10 +16,12 @@ use Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError')]
+#[Small]
 final class ValidationViolationErrorTest extends TestCase
 {
     private MockObject $violation;
@@ -29,13 +34,9 @@ final class ValidationViolationErrorTest extends TestCase
         $this->validationViolationError = new ValidationViolationError($this->violation);
     }
 
-    /**
-     * @dataProvider provideGetDetailWillReturnValidResponseGivenSupportedInvalidValueCases
-     *
-     * @param mixed $invalidValue
-     */
+    #[DataProvider('provideGetDetailWillReturnValidResponseGivenSupportedInvalidValueCases')]
     public function testGetDetailWillReturnValidResponseGivenSupportedInvalidValue(
-        $invalidValue,
+        mixed $invalidValue,
         ?string $expectedReturnValue
     ): void {
         $this->violation->expects(self::once())->method('getInvalidValue')->willReturn($invalidValue);

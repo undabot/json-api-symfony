@@ -2,18 +2,22 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Model\Collection;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Model\Collection;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Model\Collection\ArrayCollection;
 
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Model\Collection\ArrayCollection
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Model\Collection\ArrayCollection')]
+#[Small]
 final class ArrayCollectionTest extends TestCase
 {
     public function testConstructWillCountItemsGivenNoCount(): void

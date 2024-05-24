@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Factory;
 
 use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -28,10 +30,12 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory')]
+#[Small]
 final class ResourceFactoryTest extends TestCase
 {
     private ResourceFactory $resourceFactory;
@@ -275,6 +279,7 @@ final class ResourceDto implements ApiModel
 
     /**
      * @JsonApi\Attribute
+     *
      * @Assert\NotBlank
      */
     public string $title;
@@ -292,8 +297,11 @@ final class ResourceDto implements ApiModel
      * @var array<int,string>
      *
      * @JsonApi\ToMany(type="tags")
+     *
      * @Assert\All({
+     *
      *     @Assert\NotBlank,
+     *
      *     @Assert\Type("string")
      * })
      */
@@ -303,8 +311,11 @@ final class ResourceDto implements ApiModel
      * @var array<int,string>
      *
      * @JsonApi\ToMany(type="comments")
+     *
      * @Assert\All({
+     *
      *     @Assert\NotBlank,
+     *
      *     @Assert\Type("string")
      * })
      */

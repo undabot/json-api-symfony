@@ -124,4 +124,9 @@ class RequestValidator implements RequestValidatorInterface
             Assertion::string($requestPrimaryData['lid']);
         }
     }
+
+    public function getSupportedQueryParamNames(): array
+    {
+        return $this->supportedQueryParamNames;
+    }
 }

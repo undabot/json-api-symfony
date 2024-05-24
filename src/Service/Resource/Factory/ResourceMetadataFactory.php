@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Service\Resource\Factory;
 
+use Assert\AssertionFailedException;
 use Doctrine\Common\Annotations\AnnotationException;
 use Doctrine\Common\Annotations\Reader;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,18 +20,13 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint as JsonApiCons
 
 class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 {
-    private Reader $reader;
-
-    public function __construct(Reader $reader)
-    {
-        $this->reader = $reader;
-    }
+    public function __construct(private Reader $reader) {}
 
     /**
-     * @throws AnnotationException
      * @throws \ReflectionException
      * @throws InvalidResourceMappingException
      * @throws \InvalidArgumentException
+     * @throws AssertionFailedException
      */
     public function getClassMetadata(string $class): ResourceMetadata
     {
@@ -40,8 +36,16 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
         $reflection = new \ReflectionClass($class);
 
+        /**
+         * @var array $attributeMetadata
+         * @var array $relationshipMetadata
+         * @var array $resourceConstraints
+         */
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
 
+        if (!\is_array($attributeMetadata) || !$this->isArrayOfTypeAttributeMetadata($attributeMetadata)) {
+            throw new \InvalidArgumentException('Expected an array of AttributeMetadata objects');
+        }
         $this->validate($attributeMetadata, $relationshipMetadata);
 
         return new ResourceMetadata($resourceConstraints, $attributeMetadata, $relationshipMetadata);
@@ -51,11 +55,17 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
      * @throws AnnotationException
      * @throws \ReflectionException
      * @throws InvalidResourceMappingException
+     * @throws AssertionFailedException
      */
     public function getInstanceMetadata(ApiModel $apiModel): ResourceMetadata
     {
         $reflection = new \ReflectionClass($apiModel);
 
+        /**
+         * @var array $resourceConstraints
+         * @var array $attributeMetadata
+         * @var array $relationshipMetadata
+         */
         [$resourceConstraints, $attributeMetadata, $relationshipMetadata] = $this->loadMetadata($reflection);
 
         $this->validate($attributeMetadata, $relationshipMetadata);
@@ -77,9 +87,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
         $classAnnotations = $this->reader->getClassAnnotations($reflection);
         $classAnnotations = new ArrayCollection($classAnnotations);
-        $resourceConstraints = $classAnnotations->filter(static function ($annotation) {
-            return $annotation instanceof Constraint;
-        })->getValues();
+        $resourceConstraints = $classAnnotations->filter(static fn ($annotation) => $annotation instanceof Constraint)->getValues();
 
         /** @var \ReflectionProperty $property */
         foreach ($properties as $property) {
@@ -87,17 +95,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
             $propertyAnnotations = new ArrayCollection($propertyAnnotations);
 
             /** @var array<int,Constraint> $constraintAnnotations */
-            $constraintAnnotations = $propertyAnnotations->filter(static function ($annotation) {
-                return $annotation instanceof Constraint;
-            })->getValues();
+            $constraintAnnotations = $propertyAnnotations->filter(static fn ($annotation) => $annotation instanceof Constraint)->getValues();
 
-            $attributeAnnotations = $propertyAnnotations->filter(static function ($annotation) {
-                return $annotation instanceof Annotation\Attribute;
-            });
+            $attributeAnnotations = $propertyAnnotations->filter(static fn ($annotation) => $annotation instanceof Annotation\Attribute);
 
-            $relationshipAnnotations = $propertyAnnotations->filter(static function ($annotation) {
-                return $annotation instanceof Annotation\Relationship;
-            });
+            $relationshipAnnotations = $propertyAnnotations->filter(static fn ($annotation) => $annotation instanceof Annotation\Relationship);
 
             if (false === $attributeAnnotations->isEmpty() && false === $relationshipAnnotations->isEmpty()) {
                 $message = sprintf(
@@ -156,7 +158,7 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         Annotation\Attribute $attributeAnnotation,
         array $constraintAnnotations
     ): AttributeMetadata {
-        // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
+        /** @phpstan-ignore-next-line */
         $name = $attributeAnnotation->name ?? $property->getName();
 
         // @todo should we infer nullability from typehint?
@@ -188,11 +190,11 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
         Annotation\Relationship $relationshipAnnotation,
         array $constraintAnnotations
     ): RelationshipMetadata {
-        // Allow name to be overridden by the annotation attribute `name`, with fallback to the property name
-        $name = $relationshipAnnotation->name ?? $property->getName();
-
         /** @var null|string $relatedResourceType */
         $relatedResourceType = $relationshipAnnotation->type;
+
+        /** @phpstan-ignore-next-line */
+        $name = $relationshipAnnotation->name ?? $property->getName();
 
         if (null === $relatedResourceType) {
             /**
@@ -253,5 +255,21 @@ class ResourceMetadataFactory implements ResourceMetadataFactoryInterface
 
             $names[] = $name;
         }
+    }
+
+    // Checks if an array contains only instances of AttributeMetadata.
+    private function isArrayOfTypeAttributeMetadata(mixed $array): bool
+    {
+        if (!\is_array($array)) {
+            return false;
+        }
+
+        foreach ($array as $item) {
+            if (!$item instanceof AttributeMetadata) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

@@ -10,43 +10,21 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Relationship;
 
 class RelationshipMetadata
 {
-    /** @var bool */
-    protected $isToMany;
-
-    /** @var string */
-    private $name;
-
-    /** @var string */
-    private $relatedResourceType;
-
-    /** @var string */
-    private $propertyPath;
-
-    /** @var array */
-    private $constraints;
-
-    /** @var Relationship */
-    private $relationshipAnnotation;
+    private array $constraints;
 
     /**
      * @param Constraint[] $constraints
      */
     public function __construct(
-        string $name,
-        string $relatedResourceType,
-        string $propertyPath,
+        private string $name,
+        private string $relatedResourceType,
+        private string $propertyPath,
         array $constraints,
-        bool $isToMany,
-        Relationship $relationshipAnnotation
+        protected bool $isToMany,
+        private Relationship $relationshipAnnotation
     ) {
         Assertion::allIsInstanceOf($constraints, Constraint::class);
-
-        $this->name = $name;
-        $this->relatedResourceType = $relatedResourceType;
-        $this->propertyPath = $propertyPath;
         $this->constraints = $constraints;
-        $this->isToMany = $isToMany;
-        $this->relationshipAnnotation = $relationshipAnnotation;
     }
 
     public function getName(): string

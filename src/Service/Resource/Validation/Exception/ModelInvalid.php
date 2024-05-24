@@ -9,19 +9,11 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolati
 
 class ModelInvalid extends \Exception
 {
-    /** @var ResourceInterface */
-    private $resource;
-
-    /** @var ResourceValidationViolations */
-    private $violations;
-
     public function __construct(
-        ResourceInterface $resource,
-        ResourceValidationViolations $violations
+        private ResourceInterface $resource,
+        private ResourceValidationViolations $violations
     ) {
         parent::__construct();
-        $this->resource = $resource;
-        $this->violations = $violations;
     }
 
     public function getResource(): ResourceInterface

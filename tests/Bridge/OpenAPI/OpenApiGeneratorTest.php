@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI;
 
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiDefinition;
@@ -16,6 +18,8 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiGenerator;
  *
  * @small
  */
+#[CoversNothing]
+#[Small]
 final class OpenApiGeneratorTest extends TestCase
 {
     private OpenApiGenerator $service;

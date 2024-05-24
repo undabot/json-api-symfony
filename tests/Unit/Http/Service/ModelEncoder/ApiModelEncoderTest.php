@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Undabot\JsonApi\Tests\Unit\Http\Service\ModelEncoder;
+namespace Undabot\SymfonyJsonApi\Tests\Unit\Http\Service\ModelEncoder;
 
 use Assert\AssertionFailedException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -16,10 +18,12 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 /**
  * @internal
  *
- * @covers \Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder
+ * @coversNothing
  *
  * @small
  */
+#[CoversClass('\Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder')]
+#[Small]
 final class ApiModelEncoderTest extends TestCase
 {
     /** @var MockObject */

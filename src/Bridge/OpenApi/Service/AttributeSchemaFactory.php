@@ -18,6 +18,7 @@ class AttributeSchemaFactory
         $type = 'string';
 
         $attributeAnnotation = $metadata->getAttributeAnnotation();
+
         /** @var null|bool $nullable */
         $nullable = $attributeAnnotation->nullable;
 

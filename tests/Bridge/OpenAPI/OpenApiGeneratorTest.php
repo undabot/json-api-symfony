@@ -11,6 +11,7 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\OpenApiGenerator;
 
 /**
  * @internal
+ *
  * @coversNothing
  *
  * @small
@@ -33,12 +34,12 @@ final class OpenApiGeneratorTest extends TestCase
         );
         $openApiDefinition = $this->createMock(OpenApiDefinition::class);
         $openApiDefinition
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('getApi')
             ->willReturn($api);
 
         $expectedApi = $this->service->generateApi($openApiDefinition);
-        static::assertInstanceOf(Api::class, $expectedApi);
-        static::assertEquals($api, $expectedApi);
+        self::assertInstanceOf(Api::class, $expectedApi);
+        self::assertEquals($api, $expectedApi);
     }
 }

@@ -6,7 +6,9 @@ namespace Undabot\SymfonyJsonApi\Http\Service\Factory;
 
 use Assert\Assertion;
 use Assert\AssertionFailedException;
+use Ramsey\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Undabot\JsonApi\Definition\Encoding\PhpArrayToResourceEncoderInterface;
 use Undabot\JsonApi\Definition\Exception\Request\RequestException;
 use Undabot\JsonApi\Implementation\Encoding\Exception\JsonApiEncodingException;
@@ -19,20 +21,15 @@ use Undabot\SymfonyJsonApi\Http\Model\Request\GetResourceRequest;
 use Undabot\SymfonyJsonApi\Http\Model\Request\UpdateResourceRequest;
 use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
-class RequestFactory
+final class RequestFactory
 {
-    private PhpArrayToResourceEncoderInterface$resourceEncoder;
-    private RequestValidator$requestValidator;
-    /** @var array<string, mixed> */
-    private array $requestData = [];
+    private array $requestData;
 
     public function __construct(
-        PhpArrayToResourceEncoderInterface $resourceEncoder,
-        RequestValidator $requestValidator
-    ) {
-        $this->resourceEncoder = $resourceEncoder;
-        $this->requestValidator = $requestValidator;
-    }
+        private PhpArrayToResourceEncoderInterface $resourceEncoder,
+        private RequestValidator $requestValidator,
+        private RequestStack $requestStack,
+    ) {}
 
     /**
      * @see https://jsonapi.org/format/#crud-creating
@@ -40,28 +37,40 @@ class RequestFactory
      * @throws RequestException
      * @throws JsonApiEncodingException
      */
-    public function createResourceRequest(
-        Request $request,
-        string $id = null
-    ): CreateResourceRequest {
+    public function createResourceRequest(): CreateResourceRequest
+    {
+        $request = $this->requestStack->getMainRequest();
+        Assertion::isInstanceOf($request, Request::class);
+        $id = $request->attributes->get('id');
         $this->requestValidator->assertValidRequest($request);
-        $requestPrimaryData = $this->getRequestPrimaryData($request);
+        $requestPrimaryData = $this->getRequestPrimaryData();
 
-        /** If the server-side ID is passed as argument, we don't expect the Client to generate ID
+        /** If the server-side ID is passed as argument, we don't expect the Client to generate ID.
          * @see https://jsonapi.org/format/#crud-creating-client-ids
          */
         if (null !== $id) {
             $this->requestValidator->assertResourceIsWithoutClientGeneratedId($requestPrimaryData);
             $requestPrimaryData['id'] = $id;
         }
+
         /**
-         * If we have lid sent as id we will pass it as resource id
+         * If we have lid sent as id we will pass it as resource id.
+         *
          * @see https://jsonapi.org/format/#document-resource-object-identification
          */
-        $lid = $this->getResourceLid($request);
+        $lid = $this->getResourceLid();
         if (null !== $lid) {
             $requestPrimaryData['id'] = $lid;
             unset($requestPrimaryData['lid']);
+        }
+
+        /**
+         * If no ID is already generated create new one so the write model
+         * can already have ID as a property. Consider having ID strategy
+         * set through configuration.
+         */
+        if (false === array_key_exists('id', $requestPrimaryData)) {
+            $requestPrimaryData['id'] = (string) Uuid::uuid4();
         }
 
         $resource = $this->resourceEncoder->decode($requestPrimaryData);
@@ -69,9 +78,9 @@ class RequestFactory
         return new CreateResourceRequest($resource);
     }
 
-    public function requestResourceHasClientSideGeneratedId(Request $request): bool
+    public function requestResourceHasClientSideGeneratedId(): bool
     {
-        $requestPrimaryData = $this->getRequestPrimaryData($request);
+        $requestPrimaryData = $this->getRequestPrimaryData();
 
         return \array_key_exists('id', $requestPrimaryData);
     }
@@ -79,8 +88,11 @@ class RequestFactory
     /**
      * @throws RequestException
      */
-    public function getResourceRequest(Request $request, string $id): GetResourceRequest
+    public function getResourceRequest(): GetResourceRequest
     {
+        $request = $this->requestStack->getMainRequest();
+        Assertion::isInstanceOf($request, Request::class);
+        $id = $request->attributes->get('id');
         $this->requestValidator->assertValidRequest($request);
 
         $includeString = $request->query->all()[GetResourceRequest::INCLUDE_KEY] ?? null;
@@ -98,8 +110,10 @@ class RequestFactory
     /**
      * @throws RequestException
      */
-    public function getResourceCollectionRequest(Request $request): GetResourceCollectionRequest
+    public function getResourceCollectionRequest(): GetResourceCollectionRequest
     {
+        $request = $this->requestStack->getMainRequest();
+        Assertion::isInstanceOf($request, Request::class);
         $this->requestValidator->assertValidRequest($request);
 
         $sortFromRequest = $request->query->all()[GetResourceCollectionRequest::SORT_KEY] ?? '';
@@ -131,10 +145,13 @@ class RequestFactory
      * @throws JsonApiEncodingException
      * @throws AssertionFailedException
      */
-    public function updateResourceRequest(Request $request, string $id): UpdateResourceRequest
+    public function updateResourceRequest(): UpdateResourceRequest
     {
+        $request = $this->requestStack->getMainRequest();
+        Assertion::isInstanceOf($request, Request::class);
+        $id = $request->attributes->get('id');
         $this->requestValidator->assertValidRequest($request);
-        $requestPrimaryData = $this->getRequestPrimaryData($request);
+        $requestPrimaryData = $this->getRequestPrimaryData();
         $this->requestValidator->assertValidUpdateRequestData($requestPrimaryData, $id);
         $resource = $this->resourceEncoder->decode($requestPrimaryData);
 
@@ -142,12 +159,14 @@ class RequestFactory
     }
 
     /**
-     * @throws AssertionFailedException
-     *
      * @return array<string, mixed>
+     *
+     * @throws AssertionFailedException
      */
-    private function getRequestPrimaryData(Request $request): array
+    private function getRequestPrimaryData(): array
     {
+        $request = $this->requestStack->getMainRequest();
+        Assertion::isInstanceOf($request, Request::class);
         if (false === empty($this->requestData)) {
             return $this->requestData;
         }
@@ -165,9 +184,11 @@ class RequestFactory
         return $requestData['data'];
     }
 
-    private function getResourceLid(Request $request): ?string
+    private function getResourceLid(): ?string
     {
-        $requestPrimaryData = $this->getRequestPrimaryData($request);
+        $request = $this->requestStack->getMainRequest();
+        Assertion::isInstanceOf($request, Request::class);
+        $requestPrimaryData = $this->getRequestPrimaryData();
         $this->requestValidator->assertResourceLidIsValid($requestPrimaryData);
 
         return $requestPrimaryData['lid'] ?? null;

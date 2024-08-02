@@ -225,7 +225,7 @@ class ResourceApiEndpointsFactory
                 $collectionIncludedSchemas,
                 $this->collectionFields,
                 $this->paginationSchema
-            // @todo Add error responses (e.g. validation errors)
+                // @todo Add error responses (e.g. validation errors)
             );
 
             $api->addSchemas($relationshipsIdentifiers);
@@ -251,7 +251,7 @@ class ResourceApiEndpointsFactory
                 $this->path,
                 $singleIncludedSchemas,
                 $this->singleFields
-            // @todo error responses
+                // @todo error responses
             );
 
             $api->addEndpoint($getSingleResourceEndpoint);

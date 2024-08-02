@@ -7,6 +7,4 @@ namespace Undabot\SymfonyJsonApi\Model;
 /**
  * @psalm-immutable
  */
-interface ApiModel
-{
-}
+interface ApiModel {}

@@ -6,7 +6,7 @@
     "require": {
         "php": "^8",
         "ext-json": "*",
-        "undabot/json-api-core": "2.1.7",
+        "undabot/json-api-core": "2.1.8",
         "symfony/http-kernel": "^7.0",
         "symfony/validator": "^6.0",
         "symfony/orm-pack": "^2.4",

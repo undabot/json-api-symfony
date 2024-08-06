@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da773d7e8f5bc2a5137b237495fb212f",
+    "content-hash": "c67f523f42f42836b97f7c2bbfeaf3f8",
     "packages": [
         {
             "name": "beberlei/assert",
@@ -4587,16 +4587,16 @@
         },
         {
             "name": "undabot/json-api-core",
-            "version": "v2.1.5",
+            "version": "v2.1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/undabot/json-api-core.git",
-                "reference": "bb99e846c8c223c0fabeb18f02f6a2aa33307cab"
+                "reference": "8a85d5456277e81e4087a2c82099bb82a56407dc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/undabot/json-api-core/zipball/bb99e846c8c223c0fabeb18f02f6a2aa33307cab",
-                "reference": "bb99e846c8c223c0fabeb18f02f6a2aa33307cab",
+                "url": "https://api.github.com/repos/undabot/json-api-core/zipball/8a85d5456277e81e4087a2c82099bb82a56407dc",
+                "reference": "8a85d5456277e81e4087a2c82099bb82a56407dc",
                 "shasum": ""
             },
             "require": {
@@ -4624,9 +4624,9 @@
             ],
             "support": {
                 "issues": "https://github.com/undabot/json-api-core/issues",
-                "source": "https://github.com/undabot/json-api-core/tree/v2.1.5"
+                "source": "https://github.com/undabot/json-api-core/tree/v2.1.8"
             },
-            "time": "2024-04-23T22:36:32+00:00"
+            "time": "2024-08-06T07:17:01+00:00"
         }
     ],
     "packages-dev": [

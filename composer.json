@@ -4,29 +4,32 @@
     "type": "symfony-bundle",
     "license": "MIT",
     "require": {
-        "php": "^8",
+        "php": "^8.4",
         "ext-json": "*",
-        "undabot/json-api-core": "2.1.7",
-        "symfony/http-kernel": "^5.0 || ^6.0",
-        "symfony/validator": "^5.0 || ^6.0",
-        "symfony/orm-pack": "^2.1",
-        "doctrine/annotations": "^1.12",
-        "symfony/property-access": "^5.0 || ^6.0",
-        "symfony/yaml": "^5.0 || ^6.0",
-        "ramsey/uuid": "^4.1",
         "beberlei/assert": "^3.3",
-        "sensio/framework-extra-bundle": "^6.1",
-        "symfony/serializer": "^5.0 || ^6.0"
+        "doctrine/collections": "^2.2",
+        "doctrine/orm": "^2.16 || ^3.0",
+        "doctrine/persistence": "^3.1 || ^4.0",
+        "ramsey/uuid": "^4.7",
+        "symfony/config": "^6.4 || ^7.0",
+        "symfony/dependency-injection": "^6.4 || ^7.0",
+        "symfony/http-foundation": "^6.4 || ^7.0",
+        "symfony/http-kernel": "^6.4 || ^7.0",
+        "symfony/property-access": "^6.4 || ^7.0",
+        "symfony/serializer": "^6.4 || ^7.0",
+        "symfony/validator": "^6.4 || ^7.0",
+        "symfony/yaml": "^6.4 || ^7.0",
+        "undabot/json-api-core": "^3.0"
     },
     "require-dev": {
-        "roave/security-advisories": "dev-latest",
-        "phpstan/phpstan-phpunit": "^0.12",
-        "phpunit/phpunit": "^9.5",
-        "friendsofphp/php-cs-fixer": "^2.18",
-        "phpstan/extension-installer": "^1.1",
-        "phpstan/phpstan": "^0.12",
-        "phpstan/phpstan-beberlei-assert": "^0.12",
-        "thecodingmachine/phpstan-strict-rules": "^0.12"
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "phpstan/extension-installer": "^1.4",
+        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan-beberlei-assert": "^2.0",
+        "phpstan/phpstan-phpunit": "^2.0",
+        "phpunit/phpunit": "^12.0",
+        "rector/rector": "^2.4",
+        "roave/security-advisories": "dev-latest"
     },
     "autoload": {
         "psr-4": {
@@ -38,9 +41,15 @@
             "Undabot\\SymfonyJsonApi\\Tests\\": "tests/"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "phpstan/extension-installer": true
+        },
+        "sort-packages": true
+    },
     "scripts": {
         "lint": [
-            "PHP_CS_FIXER_IGNORE_ENV=1 php-cs-fixer fix --diff --ansi --dry-run"
+            "php-cs-fixer fix --diff --ansi --dry-run"
         ],
         "phpstan": [
             "php -d memory_limit=-1 vendor/bin/phpstan analyse -n --ansi --no-progress"
@@ -53,10 +62,5 @@
             "@phpstan",
             "@test"
         ]
-    },
-    "config": {
-        "allow-plugins": {
-            "phpstan/extension-installer": true
-        }
     }
 }

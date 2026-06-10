@@ -1,0 +1,721 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Helper\\TypeHelper\:\:resolve\(\) should return string but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Bridge/OpenApi/Helper/TypeHelper.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Contract\\ResourceSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Contract\\\\ResourceSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/Api.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\Api\:\:\$email is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Bridge/OpenApi/Model/Api.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\Resource\\\\ReadSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/GetResourceEndpoint.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Endpoint\\GetResourceEndpoint\:\:getParams\(\) should return array\<int, array\<string, mixed\>\>\|null but returns array\<int, array\<mixed\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/GetResourceEndpoint.php
+
+		-
+			message: '#^Parameter \#2 \$includes of class Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Response\\ResourceResponse constructor expects array\<string, Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema\>, array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/GetResourceEndpoint.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Endpoint\\GetResourceEndpoint\:\:\$responses \(array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Contract\\Response\>\) does not accept array\<mixed\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/GetResourceEndpoint.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Endpoint\\ResourceCollectionEndpoint\:\:getParams\(\) should return array\<int, array\<string, mixed\>\> but returns list\<array\<mixed\>\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/ResourceCollectionEndpoint.php
+
+		-
+			message: '#^Parameter \#2 \$filters of class Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Filter\\FilterSetQueryParam constructor expects array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Filter\\Filter\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/ResourceCollectionEndpoint.php
+
+		-
+			message: '#^Parameter \#2 \$includes of class Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Response\\CollectionResponse constructor expects array\<string, Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/ResourceCollectionEndpoint.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Endpoint\\ResourceCollectionEndpoint\:\:\$responses \(array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Contract\\Response\>\) does not accept array\<mixed\>\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/ResourceCollectionEndpoint.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Endpoint\\ResourceCollectionEndpoint\:\:\$sorts is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/ResourceCollectionEndpoint.php
+
+		-
+			message: '#^Strict comparison using \!\=\= between null and array\<mixed\> will always evaluate to true\.$#'
+			identifier: notIdentical.alwaysTrue
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Endpoint/ResourceCollectionEndpoint.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Requests\\CreateResourceRequest\:\:\$resourceType is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Requests/CreateResourceRequest.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Requests\\UpdateResourceRequest\:\:\$resourceType is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Requests/UpdateResourceRequest.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<string, Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\Resource\\\\ReadSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Response/CollectionResponse.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between false and false will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Response/CollectionResponse.php
+
+		-
+			message: '#^Variable \$includedSchema in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Response/CollectionResponse.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<string, Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\Resource\\\\ReadSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Response/IncludedSchema.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<string, Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\Resource\\\\ReadSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Response/ResourceResponse.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between false and false will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Response/ResourceResponse.php
+
+		-
+			message: '#^Variable \$includedSchema in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Response/ResourceResponse.php
+
+		-
+			message: '#^Parameter \#2 \$array of function implode expects array\<string\>, array\<mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Query/IncludeQueryParam.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema\:\:\$description is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/RelationshipSchema.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\AttributeSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\AttributeSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/AttributesSchema.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\AttributeSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\AttributeSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/CreateSchema.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\RelationshipSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/CreateSchema.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between false and false will always evaluate to true\.$#'
+			identifier: identical.alwaysTrue
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/CreateSchema.php
+
+		-
+			message: '#^Variable \$required in empty\(\) always exists and is not falsy\.$#'
+			identifier: empty.variable
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/CreateSchema.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\AttributeSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\AttributeSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/ReadSchema.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\RelationshipSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/ReadSchema.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema\> and ''Undabot\\\\SymfonyJsonApi\\\\Bridge\\\\OpenApi\\\\Model\\\\JsonApi\\\\Schema\\\\RelationshipSchema'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/Resource/RelationshipsSchema.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\SchemaCollection\:\:get\(\) should return Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ResourceSchemaSet but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/SchemaCollection.php
+
+		-
+			message: '#^Unsafe access to private property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\SchemaCollection\:\:\$schemas through static\:\:\.$#'
+			identifier: staticClassAccess.privateProperty
+			count: 4
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/SchemaCollection.php
+
+		-
+			message: '#^Unsafe call to private method Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\SchemaCollection\:\:normalizeClassName\(\) through static\:\:\.$#'
+			identifier: staticClassAccess.privateMethod
+			count: 3
+			path: src/Bridge/OpenApi/Model/JsonApi/Schema/SchemaCollection.php
+
+		-
+			message: '#^Parameter \#2 \$type of class Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\AttributeSchema constructor expects string, array\|string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Service/AttributeSchemaFactory.php
+
+		-
+			message: '#^Parameter \#4 \$targetResourceType of class Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema constructor expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Service/RelationshipSchemaFactory.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, Closure\(string\)\: Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\Resource\\ReadSchema given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Bridge/OpenApi/Service/ResourceApiEndpointsFactory.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Service\\ResourceApiEndpointsFactory\:\:\$delete is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Bridge/OpenApi/Service/ResourceApiEndpointsFactory.php
+
+		-
+			message: '#^Parameter \#1 \$func of method Doctrine\\Common\\Collections\\Collection\<\(int\|string\),mixed\>\:\:map\(\) expects Closure\(mixed\)\: Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\AttributeSchema, Closure\(Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\)\: Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\AttributeSchema given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Service/ResourceSchemaFactory.php
+
+		-
+			message: '#^Parameter \#1 \$func of method Doctrine\\Common\\Collections\\Collection\<\(int\|string\),mixed\>\:\:map\(\) expects Closure\(mixed\)\: Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema, Closure\(Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\)\: Undabot\\SymfonyJsonApi\\Bridge\\OpenApi\\Model\\JsonApi\\Schema\\RelationshipSchema given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Bridge/OpenApi/Service/ResourceSchemaFactory.php
+
+		-
+			message: '#^Using nullsafe method call on non\-nullable type Symfony\\Component\\Config\\Definition\\Builder\\NodeBuilder\<Symfony\\Component\\Config\\Definition\\Builder\\ArrayNodeDefinition\<Symfony\\Component\\Config\\Definition\\Builder\\TreeBuilder\<string\>\>\>\. Use \-\> instead\.$#'
+			identifier: nullsafe.neverNull
+			count: 1
+			path: src/DependencyInjection/Configuration.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Symfony\\Component\\DependencyInjection\\Container\:\:setParameter\(\) expects array\|bool\|float\|int\|string\|UnitEnum\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/DependencyInjection/JsonApiSymfonyExtension.php
+
+		-
+			message: '#^Parameter \#1 \$data of static method Undabot\\SymfonyJsonApi\\Http\\Model\\Response\\JsonApiHttpResponse\:\:badRequest\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Exception/EventSubscriber/ExceptionListener.php
+
+		-
+			message: '#^Parameter \#1 \$data of static method Undabot\\SymfonyJsonApi\\Http\\Model\\Response\\JsonApiHttpResponse\:\:conflict\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Exception/EventSubscriber/ExceptionListener.php
+
+		-
+			message: '#^Parameter \#1 \$data of static method Undabot\\SymfonyJsonApi\\Http\\Model\\Response\\JsonApiHttpResponse\:\:fromSymfonyHttpException\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Exception/EventSubscriber/ExceptionListener.php
+
+		-
+			message: '#^Parameter \#1 \$data of static method Undabot\\SymfonyJsonApi\\Http\\Model\\Response\\JsonApiHttpResponse\:\:serverError\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Exception/EventSubscriber/ExceptionListener.php
+
+		-
+			message: '#^Parameter \#1 \$data of static method Undabot\\SymfonyJsonApi\\Http\\Model\\Response\\JsonApiHttpResponse\:\:validationError\(\) expects array\<string, mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Exception/EventSubscriber/ExceptionListener.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_diff expects an array of values castable to string, array given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Http/Model/Request/GetResourceCollectionRequest.php
+
+		-
+			message: '#^Parameter \#2 \$arrays of function array_diff expects an array of values castable to string, array given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Model/Request/GetResourceCollectionRequest.php
+
+		-
+			message: '#^Parameter \#1 \$array of function array_diff expects an array of values castable to string, array given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Http/Model/Request/GetResourceRequest.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\JsonApi\\Definition\\Model\\Link\\LinkInterface\> and ''Undabot\\\\JsonApi\\\\Definition\\\\Model\\\\Link\\\\LinkInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Http/Model/Response/ResourceCollectionResponse.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\JsonApi\\Definition\\Model\\Resource\\ResourceInterface\> and ''Undabot\\\\JsonApi\\\\Definition\\\\Model\\\\Resource\\\\ResourceInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: src/Http/Model/Response/ResourceCollectionResponse.php
+
+		-
+			message: '#^Cannot access offset string on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Http/Service/ArgumentResolver/JsonApiRequestValueResolver.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Http\\Service\\ArgumentResolver\\JsonApiRequestValueResolver\:\:getResourceId\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Http/Service/ArgumentResolver/JsonApiRequestValueResolver.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:string\(\) with string and ''Request data must…'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Http/Service/Factory/RequestFactory.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Http\\Service\\Factory\\RequestFactory\:\:getRequestPrimaryData\(\) should return array\<string, mixed\> but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Http/Service/Factory/RequestFactory.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Http\\Service\\Factory\\RequestFactory\:\:getResourceLid\(\) should return string\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Http/Service/Factory/RequestFactory.php
+
+		-
+			message: '#^Parameter \#2 \$filterSet of class Undabot\\SymfonyJsonApi\\Http\\Model\\Request\\GetResourceCollectionRequest constructor expects Undabot\\JsonApi\\Implementation\\Model\\Request\\Filter\\FilterSet\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Service/Factory/RequestFactory.php
+
+		-
+			message: '#^Parameter \#2 \$string of function explode expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Service/Factory/RequestFactory.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Http\\Service\\Factory\\RequestFactory\:\:\$requestData \(array\<string, mixed\>\) does not accept mixed\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Http/Service/Factory/RequestFactory.php
+
+		-
+			message: '#^Cannot access constant class on mixed\.$#'
+			identifier: classConstant.nonObject
+			count: 1
+			path: src/Http/Service/ModelEncoder/ApiModelEncoder.php
+
+		-
+			message: '#^Parameter \#2 \.\.\.\$values of function sprintf expects bool\|float\|int\|string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Service/ModelEncoder/ApiModelEncoder.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<string, Undabot\\JsonApi\\Definition\\Model\\Link\\LinkMemberInterface\> and ''Undabot\\\\JsonApi\\\\Definition\\\\Model\\\\Link\\\\LinkMemberInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Http/Service/Responder/AbstractResponder.php
+
+		-
+			message: '#^Parameter \#1 \$data of method Undabot\\SymfonyJsonApi\\Http\\Service\\Responder\\AbstractResponder\:\:getDataTransformer\(\) expects object, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Http/Service/Responder/AbstractResponder.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Http\\Service\\Validation\\RequestValidator\:\:\$supportedQueryParamNames is never read, only written\.$#'
+			identifier: property.onlyWritten
+			count: 1
+			path: src/Http/Service/Validation/RequestValidator.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Collection\\ArrayCollection\:\:count\(\) should return int\<0, max\> but returns int\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Collection/ArrayCollection.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Collection\\ArrayCollection\:\:getIterator\(\) should return Traversable\<mixed, array\<mixed\>\> but returns ArrayIterator\<\(int\|string\), mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Collection/ArrayCollection.php
+
+		-
+			message: '#^Parameter \#1 \$items of class Undabot\\SymfonyJsonApi\\Model\\Collection\\PaginatedArrayCollection constructor expects array\<mixed\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Model/Collection/PaginatedArrayCollection.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\JsonApi\\Definition\\Model\\Resource\\ResourceInterface\> and ''Undabot\\\\JsonApi\\\\Definition\\\\Model\\\\Resource\\\\ResourceInterface'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 2
+			path: src/Model/Collection/UniqueResourceCollection.php
+
+		-
+			message: '#^Offset 1 on array\{list\<string\>, list\<string\>\} in isset\(\) always exists and is not nullable\.$#'
+			identifier: isset.offset
+			count: 1
+			path: src/Model/Error/ValidationViolationError.php
+
+		-
+			message: '#^PHPDoc tag @var with type string\|null is not subtype of native type string\.$#'
+			identifier: varTag.nativeType
+			count: 1
+			path: src/Model/Error/ValidationViolationError.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Resource\\FlatResource\:\:getAttributes\(\) should return array\<string, string\|null\> but returns array\<string, mixed\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Resource/FlatResource.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, Closure\(Undabot\\JsonApi\\Definition\\Model\\Resource\\ResourceIdentifierInterface\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Model/Resource/FlatResource.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Symfony\\Component\\Validator\\Constraint\> and ''Symfony\\\\Component\\\\Validator\\\\Constraint'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Model/Resource/Metadata/AttributeMetadata.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\:\:getConstraints\(\) should return array\<Symfony\\Component\\Validator\\Constraint\> but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Resource/Metadata/AttributeMetadata.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Symfony\\Component\\Validator\\Constraint\> and ''Symfony\\\\Component\\\\Validator\\\\Constraint'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Model/Resource/Metadata/RelationshipMetadata.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\:\:getConstraints\(\) should return array\<Symfony\\Component\\Validator\\Constraint\> but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Resource/Metadata/RelationshipMetadata.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Symfony\\Component\\Validator\\Constraint\> and ''Symfony\\\\Component\\\\Validator\\\\Constraint'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\> and ''Undabot\\\\SymfonyJsonApi\\\\Model\\\\Resource\\\\Metadata\\\\AttributeMetadata'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\> and ''Undabot\\\\SymfonyJsonApi\\\\Model\\\\Resource\\\\Metadata\\\\RelationshipMetadata'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\ResourceMetadata\:\:getAttributeMetadata\(\) should return Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\ResourceMetadata\:\:getRelationshipMetadata\(\) should return Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\|null but returns mixed\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\ResourceMetadata\:\:getResourceConstraints\(\) should return array\<Symfony\\Component\\Validator\\Constraint\> but returns array\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Parameter \#1 \$func of method Doctrine\\Common\\Collections\\Collection\<\(int\|string\),mixed\>\:\:map\(\) expects Closure\(mixed\)\: Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata, Closure\(Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\)\: Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Parameter \#1 \$func of method Doctrine\\Common\\Collections\\Collection\<\(int\|string\),mixed\>\:\:map\(\) expects Closure\(mixed\)\: Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata, Closure\(Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\)\: Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Parameter \#1 \$p of method Doctrine\\Common\\Collections\\Collection\<\(int\|string\),mixed\>\:\:filter\(\) expects Closure\(mixed, int\|string\)\: bool, Closure\(Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\)\: bool given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Parameter \#1 \$p of method Doctrine\\Common\\Collections\\Collection\<\(int\|string\),mixed\>\:\:filter\(\) expects Closure\(mixed, int\|string\)\: bool, Closure\(Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\)\: bool given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Property Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\ResourceMetadata\:\:\$type \(string\) does not accept string\|null\.$#'
+			identifier: assign.propertyType
+			count: 1
+			path: src/Model/Resource/Metadata/ResourceMetadata.php
+
+		-
+			message: '#^Binary operation "\+\=" between mixed and int results in an error\.$#'
+			identifier: assignOp.invalid
+			count: 2
+			path: src/Service/Pagination/PaginationLinkBuilder.php
+
+		-
+			message: '#^Cannot access offset string on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 4
+			path: src/Service/Pagination/PaginationLinkBuilder.php
+
+		-
+			message: '#^Parameter \#1 \$paginationParams of method Undabot\\JsonApi\\Implementation\\Factory\\PaginationFactory\:\:fromArray\(\) expects array\<string, int\|string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Pagination/PaginationLinkBuilder.php
+
+		-
+			message: '#^Parameter \#2 \$total of method Undabot\\SymfonyJsonApi\\Service\\Pagination\\Creator\\OffsetBasedPaginationLinkParametersFactory\:\:createLinks\(\) expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Pagination/PaginationLinkBuilder.php
+
+		-
+			message: '#^Parameter \#2 \$total of method Undabot\\SymfonyJsonApi\\Service\\Pagination\\Creator\\PageBasedPaginationLinkParametersFactory\:\:createLinks\(\) expects int\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Pagination/PaginationLinkBuilder.php
+
+		-
+			message: '#^Parameter \#3 \$queryParams of method Undabot\\SymfonyJsonApi\\Service\\Pagination\\PaginationLinkBuilder\:\:buildLink\(\) expects array\<string, string\>, array\<string, mixed\> given\.$#'
+			identifier: argument.type
+			count: 4
+			path: src/Service/Pagination/PaginationLinkBuilder.php
+
+		-
+			message: '#^Cannot access an offset on mixed\.$#'
+			identifier: offsetAccess.nonOffsetAccessible
+			count: 1
+			path: src/Service/Resource/Builder/ResourceRelationshipsBuilder.php
+
+		-
+			message: '#^Parameter \#1 \$resourceIdentifiers of class Undabot\\JsonApi\\Implementation\\Model\\Resource\\ResourceIdentifierCollection constructor expects array, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Builder/ResourceRelationshipsBuilder.php
+
+		-
+			message: '#^Parameter \#2 \$resourceIdentifier of method Undabot\\SymfonyJsonApi\\Service\\Resource\\Builder\\ResourceRelationshipsBuilder\:\:makeToOneRelationship\(\) expects Undabot\\JsonApi\\Definition\\Model\\Resource\\ResourceIdentifierInterface\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Builder/ResourceRelationshipsBuilder.php
+
+		-
+			message: '#^Method Undabot\\SymfonyJsonApi\\Service\\Resource\\Denormalizer\\ResourceDenormalizer\:\:prepareData\(\) should return array\<string, array\<string\>\|string\|null\> but returns array\<string, array\<mixed\>\|string\|null\>\.$#'
+			identifier: return.type
+			count: 1
+			path: src/Service/Resource/Denormalizer/ResourceDenormalizer.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:allIsInstanceOf\(\) with array\<Undabot\\SymfonyJsonApi\\Model\\ApiModel\> and ''Undabot\\\\SymfonyJsonApi\\\\Model\\\\ApiModel'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Service/Resource/Factory/ResourceFactory.php
+
+		-
+			message: '#^Expression in empty\(\) is not falsy\.$#'
+			identifier: empty.expr
+			count: 2
+			path: src/Service/Resource/Factory/ResourceFactory.php
+
+		-
+			message: '#^Parameter \#1 \$id of class Undabot\\JsonApi\\Implementation\\Model\\Resource\\Resource constructor expects string, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Factory/ResourceFactory.php
+
+		-
+			message: '#^Parameter \#3 \$id of method Undabot\\SymfonyJsonApi\\Service\\Resource\\Builder\\ResourceRelationshipsBuilder\:\:toOne\(\) expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Factory/ResourceFactory.php
+
+		-
+			message: '#^Parameter \#3 \$ids of method Undabot\\SymfonyJsonApi\\Service\\Resource\\Builder\\ResourceRelationshipsBuilder\:\:toMany\(\) expects array\<string\>, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Factory/ResourceFactory.php
+
+		-
+			message: '#^Strict comparison using \=\=\= between true and false will always evaluate to false\.$#'
+			identifier: identical.alwaysFalse
+			count: 2
+			path: src/Service/Resource/Factory/ResourceFactory.php
+
+		-
+			message: '#^Parameter \#1 \$attributeMetadata of method Undabot\\SymfonyJsonApi\\Service\\Resource\\Factory\\ResourceMetadataFactory\:\:validate\(\) expects array\<Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/Resource/Factory/ResourceMetadataFactory.php
+
+		-
+			message: '#^Parameter \#1 \$reflection of method Undabot\\SymfonyJsonApi\\Service\\Resource\\Factory\\ResourceMetadataFactory\:\:loadMetadata\(\) expects ReflectionClass\<object\>, ReflectionClass\<Undabot\\SymfonyJsonApi\\Model\\ApiModel\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Factory/ResourceMetadataFactory.php
+
+		-
+			message: '#^Parameter \#1 \$resourceConstraints of class Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\ResourceMetadata constructor expects array\<Symfony\\Component\\Validator\\Constraint\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/Resource/Factory/ResourceMetadataFactory.php
+
+		-
+			message: '#^Parameter \#2 \$attributesMetadata of class Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\ResourceMetadata constructor expects array\<Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\AttributeMetadata\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/Resource/Factory/ResourceMetadataFactory.php
+
+		-
+			message: '#^Parameter \#2 \$relationshipMetadata of method Undabot\\SymfonyJsonApi\\Service\\Resource\\Factory\\ResourceMetadataFactory\:\:validate\(\) expects array\<Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/Resource/Factory/ResourceMetadataFactory.php
+
+		-
+			message: '#^Parameter \#3 \$relationshipsMetadata of class Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\ResourceMetadata constructor expects array\<Undabot\\SymfonyJsonApi\\Model\\Resource\\Metadata\\RelationshipMetadata\>, mixed given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/Resource/Factory/ResourceMetadataFactory.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:isInstanceOf\(\) with Undabot\\SymfonyJsonApi\\Service\\Resource\\Validation\\Constraint\\ResourceType and ''Undabot\\\\SymfonyJsonApi\\\\Service\\\\Resource\\\\Validation\\\\Constraint\\\\ResourceType'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Service/Resource/Validation/ConstraintValidator/ResourceTypeValidator.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, Closure\(Undabot\\JsonApi\\Definition\\Model\\Resource\\ResourceIdentifierInterface\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Validation/ConstraintValidator/ResourceTypeValidator.php
+
+		-
+			message: '#^Parameter \#1 \$callback of function array_map expects \(callable\(mixed\)\: mixed\)\|null, Closure\(Undabot\\JsonApi\\Definition\\Model\\Resource\\ResourceInterface\)\: string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Validation/ConstraintValidator/ResourceTypeValidator.php
+
+		-
+			message: '#^Parameter \#1 \$types of method Undabot\\SymfonyJsonApi\\Service\\Resource\\Validation\\ConstraintValidator\\ResourceTypeValidator\:\:validateArrayOfTypes\(\) expects array\<string\>, array\<mixed, mixed\> given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Validation/ConstraintValidator/ResourceTypeValidator.php
+
+		-
+			message: '#^Parameter \#2 \$value of method Symfony\\Component\\Validator\\Violation\\ConstraintViolationBuilderInterface\:\:setParameter\(\) expects string, string\|null given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/Resource/Validation/ConstraintValidator/ResourceTypeValidator.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:isInstanceOf\(\) with Undabot\\SymfonyJsonApi\\Service\\Resource\\Validation\\Constraint\\ToMany and ''Undabot\\\\SymfonyJsonApi\\\\Service\\\\Resource\\\\Validation\\\\Constraint\\\\ToMany'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Service/Resource/Validation/ConstraintValidator/ToManyValidator.php
+
+		-
+			message: '#^Call to static method Assert\\Assertion\:\:isInstanceOf\(\) with Undabot\\SymfonyJsonApi\\Service\\Resource\\Validation\\Constraint\\ToOne and ''Undabot\\\\SymfonyJsonApi\\\\Service\\\\Resource\\\\Validation\\\\Constraint\\\\ToOne'' will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: src/Service/Resource/Validation/ConstraintValidator/ToOneValidator.php
+
+		-
+			message: '#^Parameter \#1 \$fields of class Symfony\\Component\\Validator\\Constraints\\Collection constructor expects array\<string, list\<Symfony\\Component\\Validator\\Constraint\>\|Symfony\\Component\\Validator\\Constraint\>\|null, array\{allowMissingFields\: false, allowExtraFields\: true, fields\: array\<string, array\<Symfony\\Component\\Validator\\Constraint\>\>\} given\.$#'
+			identifier: argument.type
+			count: 2
+			path: src/Service/Resource/Validation/ResourceValidator.php
+
+		-
+			message: '#^Parameter \#1 \$fields of class Symfony\\Component\\Validator\\Constraints\\Collection constructor expects array\<string, list\<Symfony\\Component\\Validator\\Constraint\>\|Symfony\\Component\\Validator\\Constraint\>\|null, array\{allowMissingFields\: true, allowExtraFields\: true, fields\: array\<string, array\<Symfony\\Component\\Validator\\Constraint\>\>\} given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Service/Resource/Validation/ResourceValidator.php

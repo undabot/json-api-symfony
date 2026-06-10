@@ -13,6 +13,5 @@ final class ResponsePaginationLink
         public int $previousSet,
         public int $firstPageKey,
         public ?int $lastPageKey
-    ) {
-    }
+    ) {}
 }

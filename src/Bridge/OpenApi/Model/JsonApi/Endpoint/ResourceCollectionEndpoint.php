@@ -14,29 +14,8 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\ReadSche
 
 class ResourceCollectionEndpoint implements Endpoint
 {
-    /** @var ReadSchema */
-    private $schema;
-
-    /** @var string */
-    private $path;
-
     /** @var Response[] */
     private $responses;
-
-    /** @var mixed[] */
-    private $filters;
-
-    /** @var mixed[] */
-    private $includes;
-
-    /** @var mixed[] */
-    private $fields;
-
-    /** @var mixed[] */
-    private $sorts;
-
-    /** @var null|Schema */
-    private $pagination;
 
     /**
      * @param mixed[] $filters
@@ -46,30 +25,21 @@ class ResourceCollectionEndpoint implements Endpoint
      * @param mixed[] $errorResponses
      */
     public function __construct(
-        ReadSchema $schema,
-        string $path,
-        array $filters = [],
-        array $sorts = [],
-        array $includes = [],
-        array $fields = [],
-        ?Schema $pagination = null,
+        private readonly ReadSchema $schema,
+        private readonly string $path,
+        private readonly array $filters = [],
+        private readonly array $sorts = [],
+        private readonly array $includes = [],
+        private readonly array $fields = [],
+        private readonly ?Schema $pagination = null,
         array $errorResponses = []
     ) {
-        $this->schema = $schema;
-        $this->path = $path;
-        $this->includes = $includes;
-
         $this->responses = array_merge(
             [
                 new CollectionResponse($this->schema, $this->includes),
             ],
             $errorResponses
         );
-
-        $this->filters = $filters;
-        $this->sorts = $sorts;
-        $this->fields = $fields;
-        $this->pagination = $pagination;
     }
 
     public function getMethod(): string

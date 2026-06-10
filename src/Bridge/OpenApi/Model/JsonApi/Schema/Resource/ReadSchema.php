@@ -12,9 +12,6 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\StringSchema;
 
 class ReadSchema implements ResourceSchema
 {
-    /** @var string */
-    private $resourceType;
-
     /** @var AttributeSchema[] */
     private $attributes;
 
@@ -26,13 +23,12 @@ class ReadSchema implements ResourceSchema
      * @param RelationshipSchema[] $relationships
      */
     public function __construct(
-        string $resourceType,
+        private readonly string $resourceType,
         array $attributes,
         array $relationships
     ) {
         Assertion::allIsInstanceOf($attributes, AttributeSchema::class);
         Assertion::allIsInstanceOf($relationships, RelationshipSchema::class);
-        $this->resourceType = $resourceType;
         $this->attributes = $attributes;
         $this->relationships = $relationships;
     }
@@ -66,7 +62,7 @@ class ReadSchema implements ResourceSchema
             'type' => 'object',
             'required' => $required,
             'properties' => [
-                'id' => (new StringSchema())->toOpenApi(),
+                'id' => new StringSchema()->toOpenApi(),
                 'type' => [
                     'type' => 'string',
                     'example' => $this->resourceType,

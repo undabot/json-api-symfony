@@ -4,26 +4,14 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Model\Resource\Annotation;
 
-use Doctrine\Common\Annotations\Annotation;
-
-/**
- * @Annotation
- * @Target("PROPERTY")
- */
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
 class Attribute
 {
-    /** @var string */
-    public $name;
-
-    /** @var string */
-    public $description;
-
-    /** @var string */
-    public $example;
-
-    /** @var string */
-    public $format;
-
-    /** @var bool */
-    public $nullable;
+    public function __construct(
+        public ?string $name = null,
+        public ?string $description = null,
+        public mixed $example = null,
+        public ?string $format = null,
+        public ?bool $nullable = null,
+    ) {}
 }

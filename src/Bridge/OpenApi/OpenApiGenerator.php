@@ -10,12 +10,13 @@ final class OpenApiGenerator
 {
     /** @var array<OpenApiDefinition> */
     private array $definitions = [];
+
     /** @var array<string,array<ResourceApiInterface>> */
     private array $resources = [];
 
     public function addDefinition(OpenApiDefinition $definition): void
     {
-        $this->definitions[\get_class($definition)] = $definition;
+        $this->definitions[$definition::class] = $definition;
     }
 
     public function addResource(ResourceApiInterface $resource): void
@@ -32,9 +33,9 @@ final class OpenApiGenerator
     public function generateApi(OpenApiDefinition $definition): Api
     {
         $api = $definition->getApi();
-        if (isset($this->resources[\get_class($definition)])) {
+        if (isset($this->resources[$definition::class])) {
             /** @var ResourceApiInterface $resource */
-            foreach ($this->resources[\get_class($definition)] as $resource) {
+            foreach ($this->resources[$definition::class] as $resource) {
                 $resourceApiEndpoint = $resource->generateResourceApiEndpoints();
                 $resourceApiEndpoint->addToApi($api);
             }

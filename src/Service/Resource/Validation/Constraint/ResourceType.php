@@ -7,32 +7,41 @@ namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint;
 use Symfony\Component\Validator\Constraint;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\ResourceTypeValidator;
 
-/**
- * @Annotation
- */
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_PROPERTY)]
 class ResourceType extends Constraint
 {
-    /** @var string */
-    public $type;
+    public string $message = 'Invalid resource type `{{ given }}` given; `{{ expected }}` expected.';
 
-    /** @var string */
-    public $message = 'Invalid resource type `{{ given }}` given; `{{ expected }}` expected.';
+    /**
+     * @param null|string[] $groups
+     */
+    public function __construct(
+        public ?string $type = null,
+        ?array $groups = null,
+        mixed $payload = null,
+    ) {
+        parent::__construct(null, $groups, $payload);
+    }
 
     public static function make(string $type): self
     {
-        $resourceType = new self();
-        $resourceType->type = $type;
-
-        return $resourceType;
+        return new self($type);
     }
 
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
 
-    public function validatedBy()
+    #[\Override]
+    public function validatedBy(): string
     {
         return ResourceTypeValidator::class;
+    }
+
+    #[\Override]
+    public function getTargets(): array|string
+    {
+        return [self::CLASS_CONSTRAINT, self::PROPERTY_CONSTRAINT];
     }
 }

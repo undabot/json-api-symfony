@@ -41,16 +41,12 @@ class ResourceTypeValidator extends ConstraintValidator
 
         // If the given value is ResourceCollectionInterface, validate array of its types
         if ($value instanceof ResourceCollectionInterface) {
-            $value = array_map(static function (ResourceInterface $resource) {
-                return $resource->getType();
-            }, iterator_to_array($value));
+            $value = array_map(static fn (ResourceInterface $resource) => $resource->getType(), iterator_to_array($value));
         }
 
         // If the given value is ResourceIdentifierCollectionInterface, validate array of its types
         if ($value instanceof ResourceIdentifierCollectionInterface) {
-            $value = array_map(static function (ResourceIdentifierInterface $resource) {
-                return $resource->getType();
-            }, iterator_to_array($value));
+            $value = array_map(static fn (ResourceIdentifierInterface $resource) => $resource->getType(), iterator_to_array($value));
         }
 
         // If array of values is given, validate that all elements in the array are of the same type.

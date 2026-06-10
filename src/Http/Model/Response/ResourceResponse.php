@@ -9,31 +9,9 @@ use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 
-final class ResourceResponse
+final readonly class ResourceResponse
 {
-    /** @var null|ResourceInterface */
-    private $primaryResource;
-
-    /** @var null|ResourceCollectionInterface */
-    private $includedResources;
-
-    /** @var null|MetaInterface */
-    private $meta;
-
-    /** @var null|LinkCollectionInterface */
-    private $links;
-
-    public function __construct(
-        ?ResourceInterface $primaryResource,
-        ?ResourceCollectionInterface $includedResources = null,
-        ?MetaInterface $meta = null,
-        ?LinkCollectionInterface $links = null
-    ) {
-        $this->primaryResource = $primaryResource;
-        $this->includedResources = $includedResources;
-        $this->meta = $meta;
-        $this->links = $links;
-    }
+    public function __construct(private ?ResourceInterface $primaryResource, private ?ResourceCollectionInterface $includedResources = null, private ?MetaInterface $meta = null, private ?LinkCollectionInterface $links = null) {}
 
     public function getPrimaryResource(): ?ResourceInterface
     {

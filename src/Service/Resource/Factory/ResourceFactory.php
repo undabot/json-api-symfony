@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Undabot\SymfonyJsonApi\Service\Resource\Factory;
 
 use Assert\Assertion;
-use Doctrine\Common\Annotations\AnnotationException;
-use ReflectionException;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -28,15 +26,13 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 class ResourceFactory
 {
     public function __construct(
-        private ResourceMetadataFactory $metadataFactory,
-        private bool $shouldValidateReadModel,
-        private ResourceValidator $validator,
-    ) {
-    }
+        private readonly ResourceMetadataFactory $metadataFactory,
+        private readonly bool $shouldValidateReadModel,
+        private readonly ResourceValidator $validator,
+    ) {}
 
     /**
-     * @throws AnnotationException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws InvalidResourceMappingException
      */
     public function make(ApiModel $apiModel): ResourceInterface
@@ -55,7 +51,7 @@ class ResourceFactory
 
         $resource = new Resource($id, $type, $attributes, $relationships);
         if (true === $this->shouldValidateReadModel) {
-            $this->validator->assertValid($resource, \get_class($apiModel));
+            $this->validator->assertValid($resource, $apiModel::class);
         }
 
         return $resource;
@@ -64,9 +60,8 @@ class ResourceFactory
     /**
      * @param ApiModel[] $apiModels
      *
-     * @throws AnnotationException
      * @throws InvalidResourceMappingException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      */
     public function makeCollection(array $apiModels): ResourceCollectionInterface
     {

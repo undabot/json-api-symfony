@@ -15,31 +15,9 @@ use Undabot\JsonApi\Implementation\Model\Meta\Meta;
 use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
-final class ResourceCollectionResponse
+final readonly class ResourceCollectionResponse
 {
-    /** @var ResourceCollectionInterface */
-    private $primaryResources;
-
-    /** @var null|ResourceCollectionInterface */
-    private $includedResources;
-
-    /** @var null|MetaInterface */
-    private $meta;
-
-    /** @var null|LinkCollectionInterface */
-    private $links;
-
-    public function __construct(
-        ResourceCollectionInterface $primaryResources,
-        ?ResourceCollectionInterface $includedResources = null,
-        ?MetaInterface $meta = null,
-        ?LinkCollectionInterface $links = null
-    ) {
-        $this->primaryResources = $primaryResources;
-        $this->includedResources = $includedResources;
-        $this->meta = $meta;
-        $this->links = $links;
-    }
+    public function __construct(private ResourceCollectionInterface $primaryResources, private ?ResourceCollectionInterface $includedResources = null, private ?MetaInterface $meta = null, private ?LinkCollectionInterface $links = null) {}
 
     public static function fromObjectCollection(
         ObjectCollection $primaryResources,

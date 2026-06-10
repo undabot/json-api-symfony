@@ -9,7 +9,7 @@ use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class JsonApiHttpResponse extends Response
 {
-    private const CONTENT_TYPE = 'application/vnd.api+json';
+    private const string CONTENT_TYPE = 'application/vnd.api+json';
 
     /**
      * @param array<string, mixed> $data

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\Api;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Filter\Filter;
@@ -20,17 +21,16 @@ use Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\Model\Tag;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory
- *
- * @small
  */
+#[CoversClass(ResourceSchemaFactory::class)]
+#[Small]
 final class ResourceApiDocumentationTest extends TestCase
 {
     private ResourceSchemaFactory $resourceSchemaFactory;
 
     protected function setUp(): void
     {
-        $metadataFactory = new ResourceMetadataFactory(new AnnotationReader());
+        $metadataFactory = new ResourceMetadataFactory();
         $attributeSchemaFactory = new AttributeSchemaFactory();
         $relationshipSchemaFactory = new RelationshipSchemaFactory();
         $this->resourceSchemaFactory = new ResourceSchemaFactory(
@@ -81,25 +81,25 @@ final class ResourceApiDocumentationTest extends TestCase
 
         $documentation = $api->toOpenApi();
 
-        static::assertIsArray($documentation);
-        static::assertArrayHasKey('openapi', $documentation);
-        static::assertSame('3.0.0', $documentation['openapi']);
-        static::assertArrayHasKey('info', $documentation);
-        static::assertArrayHasKey('description', $documentation['info']);
-        static::assertArrayHasKey('version', $documentation['info']);
-        static::assertArrayHasKey('title', $documentation['info']);
-        static::assertSame('Example API documentation for JSON:API', $documentation['info']['description']);
-        static::assertSame('1.0.0', $documentation['info']['version']);
-        static::assertSame('Test API', $documentation['info']['title']);
-        static::assertArrayHasKey('paths', $documentation);
-        static::assertArrayHasKey('/articles', $documentation['paths']);
-        static::assertArrayHasKey('get', $documentation['paths']['/articles']);
-        static::assertArrayHasKey('summary', $documentation['paths']['/articles']['get']);
-        static::assertSame('List article', $documentation['paths']['/articles']['get']['summary']);
-        static::assertArrayHasKey('operationId', $documentation['paths']['/articles']['get']);
-        static::assertSame('listArticleCollection', $documentation['paths']['/articles']['get']['operationId']);
-        static::assertArrayHasKey('description', $documentation['paths']['/articles']['get']);
-        static::assertSame('List collection of article', $documentation['paths']['/articles']['get']['description']);
-        static::assertArrayHasKey('parameters', $documentation['paths']['/articles']['get']);
+        self::assertIsArray($documentation);
+        self::assertArrayHasKey('openapi', $documentation);
+        self::assertSame('3.0.0', $documentation['openapi']);
+        self::assertArrayHasKey('info', $documentation);
+        self::assertArrayHasKey('description', $documentation['info']);
+        self::assertArrayHasKey('version', $documentation['info']);
+        self::assertArrayHasKey('title', $documentation['info']);
+        self::assertSame('Example API documentation for JSON:API', $documentation['info']['description']);
+        self::assertSame('1.0.0', $documentation['info']['version']);
+        self::assertSame('Test API', $documentation['info']['title']);
+        self::assertArrayHasKey('paths', $documentation);
+        self::assertArrayHasKey('/articles', $documentation['paths']);
+        self::assertArrayHasKey('get', $documentation['paths']['/articles']);
+        self::assertArrayHasKey('summary', $documentation['paths']['/articles']['get']);
+        self::assertSame('List article', $documentation['paths']['/articles']['get']['summary']);
+        self::assertArrayHasKey('operationId', $documentation['paths']['/articles']['get']);
+        self::assertSame('listArticleCollection', $documentation['paths']['/articles']['get']['operationId']);
+        self::assertArrayHasKey('description', $documentation['paths']['/articles']['get']);
+        self::assertSame('List collection of article', $documentation['paths']['/articles']['get']['description']);
+        self::assertArrayHasKey('parameters', $documentation['paths']['/articles']['get']);
     }
 }

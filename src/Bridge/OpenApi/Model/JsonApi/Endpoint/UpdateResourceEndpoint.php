@@ -14,12 +14,6 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Resource\UpdateSc
 
 class UpdateResourceEndpoint implements Endpoint
 {
-    /** @var UpdateSchema */
-    private $resourceUpdateSchema;
-
-    /** @var string */
-    private $path;
-
     /** @var Response[] */
     private $responses;
 
@@ -28,13 +22,10 @@ class UpdateResourceEndpoint implements Endpoint
      */
     public function __construct(
         ReadSchema $resourceReadSchema,
-        UpdateSchema $resourceUpdateSchema,
-        string $path,
+        private readonly UpdateSchema $resourceUpdateSchema,
+        private readonly string $path,
         array $errorResponses = []
     ) {
-        $this->resourceUpdateSchema = $resourceUpdateSchema;
-        $this->path = $path;
-
         $this->responses = array_merge(
             [new ResourceUpdatedResponse($resourceReadSchema)],
             $errorResponses

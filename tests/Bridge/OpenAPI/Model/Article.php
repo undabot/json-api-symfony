@@ -11,7 +11,7 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToMany;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
-/** @ResourceType(type="article") */
+#[ResourceType(type: 'article')]
 class Article implements ApiModel
 {
     /**
@@ -21,64 +21,64 @@ class Article implements ApiModel
 
     /**
      * @var string
-     * @Attribute(nullable=false)
      */
+    #[Attribute(nullable: false)]
     private $slug;
 
     /**
      * @var string
-     * @Attribute
      */
+    #[Attribute]
     private $title;
 
     /**
      * @var string
-     * @Attribute(name="eventAddress")
      */
+    #[Attribute(name: 'eventAddress')]
     private $address;
 
     /**
      * @var string
-     * @Attribute(name="eventDate")
      */
+    #[Attribute(name: 'eventDate')]
     private $date;
 
     /**
      * @var bool
-     * @Attribute
      */
+    #[Attribute]
     private $enabled;
 
     /**
      * @var null|string
-     * @Attribute
      */
+    #[Attribute]
     private $description;
 
     /**
      * @var string
-     * @ToOne(name="category", type="category", nullable=true)
-     * @Assert\Type(type="string")
      */
+    #[ToOne(name: 'category', type: 'category', nullable: true)]
+    #[Assert\Type(type: 'string')]
     private $categoryId;
 
     /**
      * @var string[]
-     * @ToMany(name="tags", type="tag", nullable=false)
-     * @Assert\Type(type="array")
      */
+    #[ToMany(name: 'tags', type: 'tag', nullable: false)]
+    #[Assert\Type(type: 'array')]
     private $tagIds;
 
     /**
      * @var string
-     * @Attribute(format="datetime", example="2001")
-     * @Assert\NotBlank
      */
+    #[Attribute(format: 'datetime', example: 2001)]
+    #[Assert\NotBlank]
     private $createdAt;
 
     /**
      * @var null|string
-     * @Attribute
      */
+    #[Attribute]
     private $updatedAt;
 }

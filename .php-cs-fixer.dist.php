@@ -3,38 +3,31 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->exclude('vendor')
-    ->in(__DIR__);
+    ->in(__DIR__ . '/src')
+    ->in(__DIR__ . '/tests');
 
-return PhpCsFixer\Config::create()
+return (new PhpCsFixer\Config())
     ->setRiskyAllowed(true)
     ->setUsingCache(false)
+    ->setParallelConfig(PhpCsFixer\Runner\Parallel\ParallelConfigFactory::detect())
     ->setRules(
         [
-            '@DoctrineAnnotation' => true,
-            '@PHP73Migration' => true,
-            '@PHP71Migration:risky' => true,
-            '@PHP70Migration:risky' => true,
-            '@PHPUnit75Migration:risky' => true,
+            '@PHP84Migration' => true,
+            '@PHP80Migration:risky' => true,
+            '@PHPUnit100Migration:risky' => true,
             '@Symfony' => true,
             '@Symfony:risky' => true,
-            '@PSR2' => true,
             '@PhpCsFixer' => true,
             '@PhpCsFixer:risky' => true,
-            '@PHP70Migration' => true,
-            '@PHP71Migration' => true,
             'declare_strict_types' => true,
             'random_api_migration' => true,
             'dir_constant' => true,
             'modernize_types_casting' => true,
             'php_unit_construct' => true,
-            'psr4' => true,
+            'psr_autoloading' => true,
             'final_internal_class' => true,
             'php_unit_strict' => [
                 'assertions' => [
-                    'assertAttributeEquals',
-                    'assertAttributeNotEquals',
-//                    'assertEquals', // This will replace all assertEquals with assertSame that can affect array comparisons
                     'assertNotEquals',
                 ],
             ],
@@ -44,7 +37,7 @@ return PhpCsFixer\Config::create()
             'date_time_immutable' => true,
             'general_phpdoc_annotation_remove' => true,
             'mb_str_functions' => true,
-            'no_multiline_whitespace_before_semicolons' => true,
+            'multiline_whitespace_before_semicolons' => true,
             'no_php4_constructor' => true,
             'no_superfluous_phpdoc_tags' => [
                 'allow_mixed' => true,

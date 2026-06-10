@@ -4,6 +4,11 @@ This library was created with the idea of returning JSON:API compliant responses
 
 The library itself is a wrapper around the Symfony framework, and it uses [json-api-core](https://github.com/undabot/json-api-core) library to do the heavy lifting when creating JSON:API compliant requests and responses.
 
+## Requirements
+
+* PHP 8.4 or higher
+* Symfony 6.4 or 7.x
+
 This document covers following sections:
 - [Usage](#usage)
   - [How to return the JSON:API compliant response?](#return-response)
@@ -36,37 +41,33 @@ To return JSON:API compliant response, you have to go through a couple of steps 
 
 Responder serves as a glue, mapping the entities to models.
 
-Before going deeper into the read and write models, responders and controllers, it's a good idea to describe how we distinguish attributes from relations in our models. To recognise which property is attribute and which one is relation we use annotations. Each model should have one "main" annotation that determines its type, a top-level member for any resource object. This annotation is placed just above the class declaration, and it looks like this:
+Before going deeper into the read and write models, responders and controllers, it's a good idea to describe how we distinguish attributes from relations in our models. To recognise which property is attribute and which one is relation we use native PHP attributes. Each model should have one "main" attribute that determines its type, a top-level member for any resource object. This attribute is placed just above the class declaration, and it looks like this:
 
 ```php
-/** @ResourceType(type="articles") */
+#[ResourceType(type: 'articles')]
 final class ArticleWriteModel implements ApiModel
 ```
 
-Apart from `@ResourceType` annotation, there are three more - `@Attribute`, `@ToOne` and `@ToMany`.
+Apart from `#[ResourceType]` attribute, there are three more - `#[Attribute]`, `#[ToOne]` and `#[ToMany]`.
 
-`@Attribute` annotation says that the property is considered an attribute.
+`#[Attribute]` attribute says that the property is considered an attribute.
 
-`@ToOne` and `@ToMany` annotations say that the property is a relationship. Relations must consist of name and type value inside ToOne and ToMany annotations, e.g.
+`#[ToOne]` and `#[ToMany]` attributes say that the property is a relationship. Relations must consist of name and type value inside ToOne and ToMany attributes, e.g.
 
 ```php
-/**
-  * @var array<int,string>
-  * @ToMany(name="article_comments", type="comments")
- */
+/** @var array<int,string> */
+#[ToMany(name: 'article_comments', type: 'comments')]
 public readonly array $commentIds,
 ```
 
-**Name** value is what we want to show in response. For this example, `article_comments` is the name for this relationship that will be returned in the response. If no name is defined in the annotation the relationship will inherit the property name.\
+**Name** value is what we want to show in response. For this example, `article_comments` is the name for this relationship that will be returned in the response. If no name is defined in the attribute the relationship will inherit the property name.\
 **Type** value is the resource type of relation to which we're referring. Here, we're referring to comments, meaning that a model of type comments related to this model is part of the codebase. Keep in mind that the library links only types of the exact name, so if your model is of type `comment`, and you make a mistake and write plural library will throw an error.
 
-Relationships can be nullable, and to add a nullable relationship to the model, you just need to assign a bool value to `nullable` property inside the annotation, like in the following example. Don't forget to null safe type-hint your property in that case, and remember - relationships are not nullable by default.
+Relationships can be nullable, and to add a nullable relationship to the model, you just need to assign a bool value to `nullable` property inside the attribute, like in the following example. Don't forget to null safe type-hint your property in that case, and remember - relationships are not nullable by default.
 
 ```php
-/**
-  * @var array<int,string>
-  * @ToOne(name="article_author", type="authors", nullable=true)
- */
+/** @var array<int,string> */
+#[ToOne(name: 'article_author', type: 'authors', nullable: true)]
 public readonly ?string $authorId,
 ```
 
@@ -79,7 +80,7 @@ The request and response lifecycle consists of receiving the data from the clien
 
 #### Create
 
-The write model consists of the annotated properties that build the resource we are about to create. So if we're about to create article with id, title and some related comments this is how the create (write) model would look like. 
+The write model consists of the properties marked with attributes that build the resource we are about to create. So if we're about to create article with id, title and some related comments this is how the create (write) model would look like. 
 
 ```php
 <?php
@@ -94,26 +95,24 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToMany;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
-/** @ResourceType(type="articles") */
+#[ResourceType(type: 'articles')]
 final class ArticleWriteModel implements ApiModel
 {
     public function __construct(
         public readonly string $id,
-        /** @Attribute */
+        #[Attribute]
         public readonly string $title,
-        /** @ToOne(name="author", type="authors") */
+        #[ToOne(name: 'author', type: 'authors')]
         public readonly string $authorId,
-        /**
-         * @var array<int,string>
-         * @ToMany(name="comments", type="comments")
-         */
+        /** @var array<int,string> */
+        #[ToMany(name: 'comments', type: 'comments')]
         public readonly array $commentIds,
     ) {
     }
 }
 ```
 
-This class is created entirely from request data, not from another class, so it has only constructor. Each property has an annotation stating whether it is a relation or an attribute. It is important that each relation has its name and type value inside `ToOne` and `ToMany` annotation.\
+This class is created entirely from request data, not from another class, so it has only constructor. Each property has an attribute stating whether it is a relation or an attribute. It is important that each relation has its name and type value inside `ToOne` and `ToMany` attribute.\
 As you will see later in the read model, we will usually have the same properties in the read and write model. So if you have that case, you can combine them in the same model and have, e.g. `ArticleModel`. Also, if your update model is the same as the write model, you can combine them into one and have one write model (for create and update), and one read model.
 
 Now when you know how to create a model for your write side, let's see what else we need. Suppose you already have an article entity what we're missing here is a controller.\
@@ -206,19 +205,17 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToMany;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
-/** @ResourceType(type="articles") */
+#[ResourceType(type: 'articles')]
 final class ArticleModel implements ApiModel
 {
     public function __construct(
         public readonly string $id,
-        /** @Attribute */
+        #[Attribute]
         public readonly string $title,
-        /** @ToOne(name="author", type="authors") */
+        #[ToOne(name: 'author', type: 'authors')]
         public readonly string $authorId,
-        /**
-         * @var array<int,string>
-         * @ToMany(name="comments", type="comments")
-         */
+        /** @var array<int,string> */
+        #[ToMany(name: 'comments', type: 'comments')]
         public readonly array $commentIds,
     ) {
     }
@@ -255,7 +252,7 @@ public static function fromEntity(Article $article): self
 
 ### <a name='read-side'></a>Read side
 
-Like the write model, the read model is a class with annotated properties that you want to return to the client. E.g. if you need to return this JSON:API response:
+Like the write model, the read model is a class with properties marked with attributes that you want to return to the client. E.g. if you need to return this JSON:API response:
 
 ```json
 {
@@ -321,19 +318,17 @@ use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToMany;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\ToOne;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
-/** @ResourceType(type="articles") */
+#[ResourceType(type: 'articles')]
 final class ArticleReadModel implements ApiModel
 {
     public function __construct(
         public readonly string $id,
-        /** @Attribute */
+        #[Attribute]
         public readonly string $title,
-        /** @ToOne(name="author", type="authors") */
+        #[ToOne(name: 'author', type: 'authors')]
         public readonly string $authorId,
-        /**
-         * @var array<int,string>
-         * @ToMany(name="comments", type="comments")
-         */
+        /** @var array<int,string> */
+        #[ToMany(name: 'comments', type: 'comments')]
         public readonly array $commentIds,
     ) {
     }
@@ -352,7 +347,7 @@ final class ArticleReadModel implements ApiModel
 }
 ```
 
-Same as in create and/or update model, read model consists of properties with annotations. Each property has annotation that states whether is it a relation or attribute. 
+Same as in create and/or update model, read model consists of properties with attributes. Each property has an attribute that states whether is it a relation or attribute. 
 
 Another part of this class is the static method `fromSomething` used when creating the read model. As previously mentioned, we often use `fromEntity` naming. In addition, we often use other namings for this method, such as `fromValueObject` or `fromAggregate`.
 The data flow that we usually use is similar to this:

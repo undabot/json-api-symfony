@@ -4,8 +4,4 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Service\Resource\Denormalizer\Exception;
 
-use Exception;
-
-class ResourceDenormalizationException extends Exception
-{
-}
+class ResourceDenormalizationException extends \Exception {}

@@ -1,4 +1,4 @@
-FROM php:8.1.0-fpm as build-stage
+FROM php:8.4-fpm AS build-stage
 
 RUN apt-get update && apt-get install --no-install-recommends -y \
     git \
@@ -29,7 +29,7 @@ RUN composer outdated --strict
 RUN composer install --optimize-autoloader
 
 # Test stage
-FROM build-stage as test-stage
+FROM build-stage AS test-stage
 
 WORKDIR /opt/app
 RUN composer install --optimize-autoloader

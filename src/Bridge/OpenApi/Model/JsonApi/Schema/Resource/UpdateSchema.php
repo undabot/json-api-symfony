@@ -11,25 +11,11 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\UuidSchema;
 
 class UpdateSchema implements ResourceSchema
 {
-    /** @var string */
-    private $resourceType;
-
-    /** @var AttributeSchema[] */
-    private $attributes;
-
-    /** @var RelationshipSchema[] */
-    private $relationships;
-
     /**
      * @param AttributeSchema[]    $attributes
      * @param RelationshipSchema[] $relationships
      */
-    public function __construct(string $resourceType, array $attributes, array $relationships)
-    {
-        $this->resourceType = $resourceType;
-        $this->attributes = $attributes;
-        $this->relationships = $relationships;
-    }
+    public function __construct(private readonly string $resourceType, private readonly array $attributes, private readonly array $relationships) {}
 
     public function getName(): string
     {
@@ -52,7 +38,7 @@ class UpdateSchema implements ResourceSchema
             'type' => 'object',
             'required' => $required,
             'properties' => [
-                'id' => (new UuidSchema())->toOpenApi(),
+                'id' => new UuidSchema()->toOpenApi(),
                 'type' => [
                     'type' => 'string',
                     'example' => $this->resourceType,
@@ -62,11 +48,11 @@ class UpdateSchema implements ResourceSchema
         ];
 
         if (false === empty($this->attributes)) {
-            $attributesSchema = (new AttributesSchema($this->attributes))->toOpenApi();
+            $attributesSchema = new AttributesSchema($this->attributes)->toOpenApi();
         }
 
         if (false === empty($this->relationships)) {
-            $relationshipsSchema = (new RelationshipsSchema($this->relationships))->toOpenApi();
+            $relationshipsSchema = new RelationshipsSchema($this->relationships)->toOpenApi();
         }
 
         if (false === empty($attributesSchema)) {

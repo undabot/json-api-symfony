@@ -33,11 +33,11 @@ final class PaginationLinkBuilder
             $total = $response->getMeta()->getData()['total'] ?? null;
         }
         $responsePaginationLink = (true === ($pagination instanceof OffsetBasedPagination))
-            ? (new OffsetBasedPaginationLinkParametersFactory())->createLinks(
+            ? new OffsetBasedPaginationLinkParametersFactory()->createLinks(
                 $pagination,
                 $total,
             )
-            : (new PageBasedPaginationLinkParametersFactory())->createLinks(
+            : new PageBasedPaginationLinkParametersFactory()->createLinks(
                 $pagination,
                 $total,
             );
@@ -81,7 +81,7 @@ final class PaginationLinkBuilder
             return null;
         }
 
-        return (new PaginationFactory())
+        return new PaginationFactory()
             ->fromArray($request->query->all()[GetResourceCollectionRequest::PAGINATION_KEY] ?? null);
     }
 }

@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace Undabot\JsonApi\Tests\Unit\Http\Service\EventSubscriber;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Undabot\JsonApi\Definition\Encoding\DocumentToPhpArrayEncoderInterface;
-use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
-use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
 use Undabot\JsonApi\Implementation\Model\Error\ErrorCollection;
+use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCreatedResponse;
@@ -28,14 +29,13 @@ use Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Http\Service\EventSubscriber\ViewResponseSubscriber
- *
- * @medium
  */
+#[CoversClass(ViewResponseSubscriber::class)]
+#[Medium]
 final class ViewResponseSubscriberTest extends TestCase
 {
     private MockObject $documentEncoderMock;
-    private ViewResponseSubscriber$viewResponseSubscriber;
+    private ViewResponseSubscriber $viewResponseSubscriber;
 
     protected function setUp(): void
     {
@@ -43,9 +43,7 @@ final class ViewResponseSubscriberTest extends TestCase
         $this->viewResponseSubscriber = new ViewResponseSubscriber($this->documentEncoderMock);
     }
 
-    /**
-     * @dataProvider controllerResultProvider
-     */
+    #[DataProvider('provideBuildViewWillSetCorrectResponseInEventGivenValidControllerResultCases')]
     public function testBuildViewWillSetCorrectResponseInEventGivenValidControllerResult(
         object $controllerResult,
         bool $shouldEncode
@@ -57,28 +55,28 @@ final class ViewResponseSubscriberTest extends TestCase
             $controllerResult,
         );
         if ($shouldEncode) {
-            $this->documentEncoderMock->expects(static::once())->method('encode')->willReturn(['foo' => 'bar']);
+            $this->documentEncoderMock->expects(self::once())->method('encode')->willReturn(['foo' => 'bar']);
         } else {
-            $this->documentEncoderMock->expects(static::never())->method('encode');
+            $this->documentEncoderMock->expects(self::never())->method('encode');
         }
 
         $this->viewResponseSubscriber->buildView($event);
     }
 
-    public function controllerResultProvider(): \Generator
+    public static function provideBuildViewWillSetCorrectResponseInEventGivenValidControllerResultCases(): iterable
     {
         yield 'ResourceCollectionResponse returned by controller' => [
-            new ResourceCollectionResponse($this->createMock(ResourceCollectionInterface::class)),
+            new ResourceCollectionResponse(new ResourceCollection([])),
             true,
         ];
 
         yield 'ResourceCreatedResponse returned by controller' => [
-            new ResourceCreatedResponse($this->createMock(ResourceInterface::class)),
+            new ResourceCreatedResponse(new Resource('1', 'resource')),
             true,
         ];
 
         yield 'ResourceUpdatedResponse returned by controller' => [
-            new ResourceUpdatedResponse($this->createMock(ResourceInterface::class)),
+            new ResourceUpdatedResponse(new Resource('1', 'resource')),
             true,
         ];
 
@@ -88,7 +86,7 @@ final class ViewResponseSubscriberTest extends TestCase
         ];
 
         yield 'ResourceResponse returned by controller' => [
-            new ResourceResponse($this->createMock(ResourceInterface::class)),
+            new ResourceResponse(new Resource('1', 'resource')),
             true,
         ];
 
@@ -111,7 +109,7 @@ final class ViewResponseSubscriberTest extends TestCase
             HttpKernelInterface::MAIN_REQUEST,
             new ResourceCollection([]),
         );
-        $this->documentEncoderMock->expects(static::never())->method('encode');
+        $this->documentEncoderMock->expects(self::never())->method('encode');
 
         $this->viewResponseSubscriber->buildView($event);
     }

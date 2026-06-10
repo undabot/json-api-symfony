@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Undabot\JsonApi\Tests\Unit\Http\Service\ModelEncoder;
 
 use Assert\AssertionFailedException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
@@ -15,10 +18,10 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceFactory;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder
- *
- * @small
  */
+#[CoversClass(ApiModelEncoder::class)]
+#[Small]
+#[AllowMockObjectsWithoutExpectations]
 final class ApiModelEncoderTest extends TestCase
 {
     /** @var MockObject */
@@ -40,11 +43,9 @@ final class ApiModelEncoderTest extends TestCase
         $data->id = '1244323242';
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Invalid data conversion occurred. Expected instance of ApiModel, got ' . \get_class(new ArrayCollection([])));
+        $this->expectExceptionMessage('Invalid data conversion occurred. Expected instance of ApiModel, got ' . new ArrayCollection([])::class);
 
-        $this->apiModelEncoder->encodeData($data, static function ($data) {
-            return new ArrayCollection([$data]);
-        });
+        $this->apiModelEncoder->encodeData($data, static fn ($data) => new ArrayCollection([$data]));
     }
 
     public function testEncodeDataWillReturnResourceInterfaceGivenCallableReturnsApiModelClass(): void
@@ -52,15 +53,13 @@ final class ApiModelEncoderTest extends TestCase
         $data = new \stdClass();
         $data->id = '1244323242';
 
-        $resourceInterface = $this->createMock(ResourceInterface::class);
+        $resourceInterface = self::createStub(ResourceInterface::class);
 
-        $this->resourceFactory->expects(static::once())->method('make')->willReturn($resourceInterface);
+        $this->resourceFactory->expects(self::once())->method('make')->willReturn($resourceInterface);
 
-        $encodedData = $this->apiModelEncoder->encodeData($data, static function ($data) {
-            return new DummyApiModel($data->id);
-        });
+        $encodedData = $this->apiModelEncoder->encodeData($data, static fn ($data) => new DummyApiModel($data->id));
 
-        static::assertEquals($resourceInterface, $encodedData);
+        self::assertEquals($resourceInterface, $encodedData);
     }
 
     public function testEncodeDatasetWillThrowExceptionGivenModelTransformerDoNotReturnApiModel(): void
@@ -69,11 +68,9 @@ final class ApiModelEncoderTest extends TestCase
         $data->id = '1244323242';
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Invalid data conversion occurred. Expected instance of ApiModel, got ' . \get_class(new ArrayCollection([])));
+        $this->expectExceptionMessage('Invalid data conversion occurred. Expected instance of ApiModel, got ' . new ArrayCollection([])::class);
 
-        $this->apiModelEncoder->encodeDataset([$data], static function ($data) {
-            return new ArrayCollection([$data]);
-        });
+        $this->apiModelEncoder->encodeDataset([$data], static fn ($data) => new ArrayCollection([$data]));
     }
 
     public function testEncodeDatasetWillReturnArrayOfResourceInterfacesGivenCallableReturnsApiModelClasses(): void
@@ -84,26 +81,19 @@ final class ApiModelEncoderTest extends TestCase
         $data2 = new \stdClass();
         $data2->id = '67658856';
 
-        $resourceInterface = $this->createMock(ResourceInterface::class);
+        $resourceInterface = self::createStub(ResourceInterface::class);
 
-        $this->resourceFactory->expects(static::exactly(2))->method('make')->willReturn($resourceInterface);
+        $this->resourceFactory->expects(self::exactly(2))->method('make')->willReturn($resourceInterface);
 
-        $encodedDataset = $this->apiModelEncoder->encodeDataset([$data1, $data2], static function ($data) {
-            return new DummyApiModel($data->id);
-        });
+        $encodedDataset = $this->apiModelEncoder->encodeDataset([$data1, $data2], static fn ($data) => new DummyApiModel($data->id));
 
-        static::assertContainsOnlyInstancesOf(ResourceInterface::class, $encodedDataset);
+        self::assertContainsOnlyInstancesOf(ResourceInterface::class, $encodedDataset);
     }
 }
 
 class DummyApiModel implements ApiModel
 {
-    private $id;
-
-    public function __construct(string $id)
-    {
-        $this->id = $id;
-    }
+    public function __construct(private readonly string $id) {}
 
     public function getId(): string
     {

@@ -21,18 +21,10 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
 class RequestFactory
 {
-    private PhpArrayToResourceEncoderInterface$resourceEncoder;
-    private RequestValidator$requestValidator;
     /** @var array<string, mixed> */
     private array $requestData = [];
 
-    public function __construct(
-        PhpArrayToResourceEncoderInterface $resourceEncoder,
-        RequestValidator $requestValidator
-    ) {
-        $this->resourceEncoder = $resourceEncoder;
-        $this->requestValidator = $requestValidator;
-    }
+    public function __construct(private readonly PhpArrayToResourceEncoderInterface $resourceEncoder, private readonly RequestValidator $requestValidator) {}
 
     /**
      * @see https://jsonapi.org/format/#crud-creating
@@ -42,20 +34,22 @@ class RequestFactory
      */
     public function createResourceRequest(
         Request $request,
-        string $id = null
+        ?string $id = null
     ): CreateResourceRequest {
         $this->requestValidator->assertValidRequest($request);
         $requestPrimaryData = $this->getRequestPrimaryData($request);
 
-        /** If the server-side ID is passed as argument, we don't expect the Client to generate ID
+        /** If the server-side ID is passed as argument, we don't expect the Client to generate ID.
          * @see https://jsonapi.org/format/#crud-creating-client-ids
          */
         if (null !== $id) {
             $this->requestValidator->assertResourceIsWithoutClientGeneratedId($requestPrimaryData);
             $requestPrimaryData['id'] = $id;
         }
+
         /**
-         * If we have lid sent as id we will pass it as resource id
+         * If we have lid sent as id we will pass it as resource id.
+         *
          * @see https://jsonapi.org/format/#document-resource-object-identification
          */
         $lid = $this->getResourceLid($request);
@@ -108,7 +102,7 @@ class RequestFactory
         /** @var array<string,int> $paginationFromRequest */
         $paginationFromRequest = $request->query->all()[GetResourceCollectionRequest::PAGINATION_KEY] ?? [];
         $pagination = false === empty($paginationFromRequest)
-            ? (new PaginationFactory())->fromArray($paginationFromRequest)
+            ? new PaginationFactory()->fromArray($paginationFromRequest)
             : null;
 
         /** @var null|array<string,string> $filterFromRequest */
@@ -142,9 +136,9 @@ class RequestFactory
     }
 
     /**
-     * @throws AssertionFailedException
-     *
      * @return array<string, mixed>
+     *
+     * @throws AssertionFailedException
      */
     private function getRequestPrimaryData(Request $request): array
     {
@@ -152,8 +146,8 @@ class RequestFactory
             return $this->requestData;
         }
 
-        /** @var string $rawRequestData */
         $rawRequestData = $request->getContent();
+        Assertion::string($rawRequestData, 'Request data must be valid JSON');
         Assertion::isJsonString($rawRequestData, 'Request data must be valid JSON');
         $requestData = json_decode($rawRequestData, true);
 

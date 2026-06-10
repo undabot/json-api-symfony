@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\JsonApi\Tests\Unit\Exception\EventSubscriber;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -26,10 +29,9 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidationViolati
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Exception\EventSubscriber\ExceptionListener
- *
- * @medium
  */
+#[CoversClass(ExceptionListener::class)]
+#[Medium]
 final class ExceptionListenerTest extends TestCase
 {
     private MockObject $documentToPhpArrayEncoderInterfaceMock;
@@ -41,9 +43,7 @@ final class ExceptionListenerTest extends TestCase
         $this->exceptionListener = new ExceptionListener($this->documentToPhpArrayEncoderInterfaceMock);
     }
 
-    /**
-     * @dataProvider exceptionProvider
-     */
+    #[DataProvider('provideOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupportedCases')]
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupported(\Exception $exception): void
     {
         $event = new ExceptionEvent(
@@ -54,18 +54,18 @@ final class ExceptionListenerTest extends TestCase
         );
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('encode')
             ->willReturn($data);
 
         $this->exceptionListener->onKernelException($event);
     }
 
-    public function exceptionProvider(): \Generator
+    public static function provideOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupportedCases(): iterable
     {
         yield 'Exception is ModelInvalid instance' => [
             new ModelInvalid(
-                $this->createMock(Resource::class),
+                new Resource('1', 'resource'),
                 new ResourceValidationViolations(
                     new ConstraintViolationList(),
                     new ConstraintViolationList(),
@@ -90,19 +90,19 @@ final class ExceptionListenerTest extends TestCase
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenExceptionIsSupportedAndEventHaveThrowableMethod(): void
     {
         $event = new ExceptionEvent(
-            $this->createMock(KernelInterface::class),
-            $this->createMock(Request::class),
+            self::createStub(KernelInterface::class),
+            self::createStub(Request::class),
             KernelInterface::MAIN_REQUEST,
             new \LogicException()
         );
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('encode')
             ->willReturn($data);
 
         $this->exceptionListener->onKernelException($event);
-        static::assertEquals(
+        self::assertEquals(
             new JsonApiHttpResponse(
                 json_encode($data),
                 500,
@@ -117,19 +117,19 @@ final class ExceptionListenerTest extends TestCase
     public function testOnKernelExceptionWillSetCorrectEventResponseGivenGivenSymfonyHttpException(): void
     {
         $event = new ExceptionEvent(
-            $this->createMock(KernelInterface::class),
-            $this->createMock(Request::class),
+            self::createStub(KernelInterface::class),
+            self::createStub(Request::class),
             KernelInterface::MAIN_REQUEST,
             $e = new AccessDeniedHttpException()
         );
         $data = [];
         $this->documentToPhpArrayEncoderInterfaceMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('encode')
             ->willReturn($data);
 
         $this->exceptionListener->onKernelException($event);
-        static::assertEquals(
+        self::assertEquals(
             new JsonApiHttpResponse(
                 json_encode($data),
                 $e->getStatusCode(),

@@ -7,15 +7,13 @@ namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint;
 use Symfony\Component\Validator\Constraint;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\ToManyValidator;
 
-/**
- * @Annotation
- * @Target({"PROPERTY"})
- */
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
 class ToMany extends Constraint
 {
     public const MESSAGE = 'This value must be an array.';
 
-    public function validatedBy()
+    #[\Override]
+    public function validatedBy(): string
     {
         return ToManyValidator::class;
     }

@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Bridge\OpenAPI\ResourceReadSchema;
 
-use Doctrine\Common\Annotations\AnnotationReader;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints as Assert;
 use Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\AttributeSchemaFactory;
@@ -17,17 +18,16 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Bridge\OpenApi\Service\ResourceSchemaFactory
- *
- * @small
  */
+#[CoversClass(ResourceSchemaFactory::class)]
+#[Small]
 final class ResourceReadSchemaTest extends TestCase
 {
     private ResourceSchemaFactory $resourceSchemaFactory;
 
     protected function setUp(): void
     {
-        $metadataFactory = new ResourceMetadataFactory(new AnnotationReader());
+        $metadataFactory = new ResourceMetadataFactory();
         $attributeSchemaFactory = new AttributeSchemaFactory();
         $relationshipSchemaFactory = new RelationshipSchemaFactory();
         $this->resourceSchemaFactory = new ResourceSchemaFactory(
@@ -39,66 +39,51 @@ final class ResourceReadSchemaTest extends TestCase
 
     public function testResourceAttributesAreCorrectlyConverted(): void
     {
-        /** @ResourceType(type="testResource") */
-        $resource = new class() implements ApiModel {
-            /**
-             * @JsonApi\Attribute(name="name", description="The name", format="NAME", example="My Name")
-             */
+        $resource = new #[ResourceType(type: 'testResource')] class() implements ApiModel {
+            #[JsonApi\Attribute(name: 'name', description: 'The name', format: 'NAME', example: 'My Name')]
             public string $nameProperty;
 
-            /**
-             * @JsonApi\Attribute(name="nullableName", description="The name", format="NAME", example="My Name", nullable=true)
-             */
-            public ?string $nullableNameProperty;
+            #[JsonApi\Attribute(name: 'nullableName', description: 'The name', format: 'NAME', example: 'My Name', nullable: true)]
+            public ?string $nullableNameProperty = null;
 
-            /**
-             * @JsonApi\Attribute
-             * @Assert\Type(type="integer")
-             */
+            #[JsonApi\Attribute]
+            #[Assert\Type(type: 'integer')]
             public int $integerProperty;
 
-            /**
-             * @JsonApi\Attribute(nullable=true)
-             * @Assert\Type(type="integer")
-             */
-            public ?int $nullableIntegerProperty;
+            #[JsonApi\Attribute(nullable: true)]
+            #[Assert\Type(type: 'integer')]
+            public ?int $nullableIntegerProperty = null;
 
-            /**
-             * @JsonApi\Attribute
-             * @Assert\Type(type="boolean")
-             */
+            #[JsonApi\Attribute]
+            #[Assert\Type(type: 'boolean')]
             public bool $booleanProperty1;
 
-            /**
-             * @JsonApi\Attribute
-             * @Assert\Type(type="bool")
-             */
+            #[JsonApi\Attribute]
+            #[Assert\Type(type: 'bool')]
             public bool $booleanProperty2;
 
-            /**
-             * @JsonApi\Attribute
-             * @Assert\Type(type="float")
-             */
+            #[JsonApi\Attribute]
+            #[Assert\Type(type: 'float')]
             public float $floatProperty;
         };
-        $className = \get_class($resource);
+        $className = $resource::class;
 
         $resourceReadSchema = $this->resourceSchemaFactory->readSchema($className);
 
         $resourceSchema = $resourceReadSchema->toOpenApi();
-        static::assertIsArray($resourceSchema);
-        static::assertSame($resourceSchema['type'], 'object');
-        static::assertSame(
+        self::assertIsArray($resourceSchema);
+        self::assertSame($resourceSchema['type'], 'object');
+        self::assertSame(
             ['id', 'type', 'attributes'],
             $resourceSchema['required']
         );
 
-        static::assertSame(
+        self::assertSame(
             ['type' => 'string'],
             $resourceSchema['properties']['id']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'name',
                 'type' => 'string',
@@ -110,7 +95,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['name']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'nullableName',
                 'type' => 'string',
@@ -122,7 +107,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['nullableName']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'integerProperty',
                 'type' => 'integer',
@@ -131,7 +116,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['integerProperty']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'nullableIntegerProperty',
                 'type' => 'integer',
@@ -140,7 +125,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['nullableIntegerProperty']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'booleanProperty1',
                 'type' => 'boolean',
@@ -149,7 +134,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['booleanProperty1']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'booleanProperty2',
                 'type' => 'boolean',
@@ -158,7 +143,7 @@ final class ResourceReadSchemaTest extends TestCase
             $resourceSchema['properties']['attributes']['properties']['booleanProperty2']
         );
 
-        static::assertSame(
+        self::assertSame(
             [
                 'title' => 'floatProperty',
                 'type' => 'number',

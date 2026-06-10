@@ -20,9 +20,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
 class ExceptionListener
 {
-    public function __construct(private DocumentToPhpArrayEncoderInterface $documentToPhpArrayEncoderInterface)
-    {
-    }
+    public function __construct(private readonly DocumentToPhpArrayEncoderInterface $documentToPhpArrayEncoderInterface) {}
 
     public function onKernelException(ExceptionEvent $event): void
     {
@@ -99,9 +97,9 @@ class ExceptionListener
             null,
             null,
             $exception->getMessage(),
-            sprintf(
+            \sprintf(
                 'Exception %s: "%s"',
-                \get_class($exception),
+                $exception::class,
                 $exception->getMessage()
             )
         );

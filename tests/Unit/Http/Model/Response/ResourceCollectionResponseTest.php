@@ -5,32 +5,35 @@ declare(strict_types=1);
 namespace Undabot\JsonApi\Tests\Unit\Http\Service\Factory;
 
 use Assert\AssertionFailedException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\TestCase;
 use Undabot\JsonApi\Definition\Model\Link\LinkCollectionInterface;
-use Undabot\JsonApi\Definition\Model\Link\LinkInterface;
 use Undabot\JsonApi\Definition\Model\Meta\MetaInterface;
 use Undabot\JsonApi\Definition\Model\Resource\ResourceCollectionInterface;
-use Undabot\JsonApi\Definition\Model\Resource\ResourceInterface;
+use Undabot\JsonApi\Implementation\Model\Link\Link;
+use Undabot\JsonApi\Implementation\Model\Link\LinkUrl;
 use Undabot\JsonApi\Implementation\Model\Meta\Meta;
+use Undabot\JsonApi\Implementation\Model\Resource\Resource;
 use Undabot\JsonApi\Implementation\Model\Resource\ResourceCollection;
 use Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse;
 use Undabot\SymfonyJsonApi\Model\Collection\ObjectCollection;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Http\Model\Response\ResourceCollectionResponse
- *
- * @medium
  */
+#[CoversClass(ResourceCollectionResponse::class)]
+#[Medium]
 final class ResourceCollectionResponseTest extends TestCase
 {
     public function testFromObjectCollectionCanCreateValidResourceCollectionResponseGivenAllArgumentsPresent(): void
     {
         $objectCollection = $this->createMock(ObjectCollection::class);
-        $objectCollection->expects(static::once())->method('getItems')->willReturn([]);
-        $includedResources = $this->createMock(ResourceCollectionInterface::class);
-        $meta = $this->createMock(MetaInterface::class);
-        $links = $this->createMock(LinkCollectionInterface::class);
+        $objectCollection->expects(self::once())->method('getItems')->willReturn([]);
+        $includedResources = self::createStub(ResourceCollectionInterface::class);
+        $meta = self::createStub(MetaInterface::class);
+        $links = self::createStub(LinkCollectionInterface::class);
 
         $resourceCollectionResponse = ResourceCollectionResponse::fromObjectCollection(
             $objectCollection,
@@ -39,30 +42,28 @@ final class ResourceCollectionResponseTest extends TestCase
             $links
         );
 
-        static::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
-        static::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
-        static::assertEquals($includedResources, $resourceCollectionResponse->getIncludedResources());
-        static::assertEquals($meta, $resourceCollectionResponse->getMeta());
-        static::assertEquals($links, $resourceCollectionResponse->getLinks());
+        self::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
+        self::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
+        self::assertEquals($includedResources, $resourceCollectionResponse->getIncludedResources());
+        self::assertEquals($meta, $resourceCollectionResponse->getMeta());
+        self::assertEquals($links, $resourceCollectionResponse->getLinks());
     }
 
     public function testFromObjectCollectionCanCreateValidResourceCollectionResponseGivenOnlyObjectCollectionArg(): void
     {
         $objectCollection = $this->createMock(ObjectCollection::class);
-        $objectCollection->expects(static::once())->method('getItems')->willReturn([]);
+        $objectCollection->expects(self::once())->method('getItems')->willReturn([]);
 
         $resourceCollectionResponse = ResourceCollectionResponse::fromObjectCollection($objectCollection);
 
-        static::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
-        static::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
-        static::assertNull($resourceCollectionResponse->getIncludedResources());
-        static::assertEquals(new Meta(['total' => 0]), $resourceCollectionResponse->getMeta());
-        static::assertNull($resourceCollectionResponse->getLinks());
+        self::assertInstanceOf(ResourceCollection::class, $resourceCollectionResponse->getPrimaryResources());
+        self::assertEquals([], $resourceCollectionResponse->getPrimaryResources()->getResources());
+        self::assertNull($resourceCollectionResponse->getIncludedResources());
+        self::assertEquals(new Meta(['total' => 0]), $resourceCollectionResponse->getMeta());
+        self::assertNull($resourceCollectionResponse->getLinks());
     }
 
-    /**
-     * @dataProvider validResourceCollectionArrayArguments
-     */
+    #[DataProvider('provideFromArrayCanCreateValidResourceCollectionResponseGivenValidArgumentsPresentCases')]
     public function testFromArrayCanCreateValidResourceCollectionResponseGivenValidArgumentsPresent(
         array $resources,
         ?array $included,
@@ -76,20 +77,20 @@ final class ResourceCollectionResponseTest extends TestCase
             $links
         );
 
-        static::assertEquals($resources, $resourceCollectionResponse->getPrimaryResources()->getResources());
-        static::assertEquals(
+        self::assertEquals($resources, $resourceCollectionResponse->getPrimaryResources()->getResources());
+        self::assertEquals(
             $included,
             $resourceCollectionResponse->getIncludedResources()
                 ? $resourceCollectionResponse->getIncludedResources()->getResources()
                 : $resourceCollectionResponse->getIncludedResources()
         );
-        static::assertEquals(
+        self::assertEquals(
             $meta,
             $resourceCollectionResponse->getMeta()
                 ? $resourceCollectionResponse->getMeta()->getData()
                 : $resourceCollectionResponse->getMeta()
         );
-        static::assertEquals(
+        self::assertEquals(
             $links,
             $resourceCollectionResponse->getLinks()
                 ? $resourceCollectionResponse->getLinks()->getLinks()
@@ -97,26 +98,24 @@ final class ResourceCollectionResponseTest extends TestCase
         );
     }
 
-    public function validResourceCollectionArrayArguments(): \Generator
+    public static function provideFromArrayCanCreateValidResourceCollectionResponseGivenValidArgumentsPresentCases(): iterable
     {
         yield 'Only resources present' => [
-            [$this->createMock(ResourceInterface::class), $this->createMock(ResourceInterface::class)],
+            [new Resource('1', 'resource'), new Resource('2', 'resource')],
             null,
             null,
             null,
         ];
 
         yield 'All arguments present' => [
-            [$this->createMock(ResourceInterface::class), $this->createMock(ResourceInterface::class)],
-            [$this->createMock(ResourceInterface::class), $this->createMock(ResourceInterface::class)],
+            [new Resource('1', 'resource'), new Resource('2', 'resource')],
+            [new Resource('1', 'resource'), new Resource('2', 'resource')],
             ['total' => 0],
-            [$this->createMock(LinkInterface::class), $this->createMock(LinkInterface::class)],
+            [new Link('self', new LinkUrl('https://example.com/resource/1')), new Link('related', new LinkUrl('https://example.com/resource/2'))],
         ];
     }
 
-    /**
-     * @dataProvider invalidResourceCollectionArrayArguments
-     */
+    #[DataProvider('provideFromArrayWillThrowExceptionGivenInvalidArgumentsPresentCases')]
     public function testFromArrayWillThrowExceptionGivenInvalidArgumentsPresent(
         array $resources,
         ?array $included,
@@ -135,31 +134,32 @@ final class ResourceCollectionResponseTest extends TestCase
         );
     }
 
-    public function invalidResourceCollectionArrayArguments(): \Generator
+    public static function provideFromArrayWillThrowExceptionGivenInvalidArgumentsPresentCases(): iterable
     {
-        $objectCollection = $this->createMock(ObjectCollection::class);
+        $invalidItem = new \stdClass();
+
         yield 'Resource array not valid type' => [
-            [$objectCollection, $this->createMock(ResourceInterface::class)],
+            [$invalidItem, new Resource('1', 'resource')],
             null,
             null,
             null,
-            'Class "' . \get_class($objectCollection) . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Resource\ResourceInterface" but is not.',
+            'Class "' . $invalidItem::class . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Resource\ResourceInterface" but is not.',
         ];
 
         yield 'Included array not valid type' => [
-            [$this->createMock(ResourceInterface::class), $this->createMock(ResourceInterface::class)],
-            [$objectCollection, $this->createMock(ResourceInterface::class)],
+            [new Resource('1', 'resource'), new Resource('2', 'resource')],
+            [$invalidItem, new Resource('1', 'resource')],
             null,
             null,
-            'Class "' . \get_class($objectCollection) . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Resource\ResourceInterface" but is not.',
+            'Class "' . $invalidItem::class . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Resource\ResourceInterface" but is not.',
         ];
 
         yield 'Links array not valid type' => [
-            [$this->createMock(ResourceInterface::class), $this->createMock(ResourceInterface::class)],
-            [$this->createMock(ResourceInterface::class), $this->createMock(ResourceInterface::class)],
+            [new Resource('1', 'resource'), new Resource('2', 'resource')],
+            [new Resource('1', 'resource'), new Resource('2', 'resource')],
             null,
-            [$objectCollection, $this->createMock(LinkInterface::class)],
-            'Class "' . \get_class($objectCollection) . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Link\LinkInterface" but is not.',
+            [$invalidItem, new Link('self', new LinkUrl('https://example.com/resource/1'))],
+            'Class "' . $invalidItem::class . '" was expected to be instanceof of "Undabot\JsonApi\Definition\Model\Link\LinkInterface" but is not.',
         ];
     }
 }

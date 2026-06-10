@@ -9,15 +9,9 @@ use Undabot\JsonApi\Implementation\Model\Error\ErrorCollection;
 use Undabot\SymfonyJsonApi\Model\Error\ValidationViolationError;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
-final class ResourceValidationErrorsResponse
+final readonly class ResourceValidationErrorsResponse
 {
-    /** @var ErrorCollection */
-    private $errorCollection;
-
-    public function __construct(ErrorCollection $errorCollection)
-    {
-        $this->errorCollection = $errorCollection;
-    }
+    public function __construct(private ErrorCollection $errorCollection) {}
 
     public static function fromException(ModelInvalid $exception): self
     {

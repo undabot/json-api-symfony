@@ -16,9 +16,6 @@ use Undabot\SymfonyJsonApi\Bridge\OpenApi\Model\JsonApi\Schema\Query\PageBasedPa
 
 class ResourceApiEndpointsFactory
 {
-    /** @var ResourceSchemaFactory */
-    private $schemaFactory;
-
     /** @var string */
     private $resourceClassName;
 
@@ -61,10 +58,7 @@ class ResourceApiEndpointsFactory
     /** @var null|Schema */
     private $paginationSchema;
 
-    public function __construct(ResourceSchemaFactory $schemaFactory)
-    {
-        $this->schemaFactory = $schemaFactory;
-    }
+    public function __construct(private readonly ResourceSchemaFactory $schemaFactory) {}
 
     public function new(string $path, string $resource): self
     {
@@ -213,7 +207,7 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $collectionIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                $this->schemaFactory->readSchema(...),
                 $this->collectionIncludes
             );
 
@@ -225,7 +219,7 @@ class ResourceApiEndpointsFactory
                 $collectionIncludedSchemas,
                 $this->collectionFields,
                 $this->paginationSchema
-            // @todo Add error responses (e.g. validation errors)
+                // @todo Add error responses (e.g. validation errors)
             );
 
             $api->addSchemas($relationshipsIdentifiers);
@@ -242,7 +236,7 @@ class ResourceApiEndpointsFactory
              * CollectionResponse response proper `anyOf` schema is generated, referencing these schemas.
              */
             $singleIncludedSchemas = array_map(
-                [$this->schemaFactory, 'readSchema'],
+                $this->schemaFactory->readSchema(...),
                 $this->singleIncludes
             );
 
@@ -251,7 +245,7 @@ class ResourceApiEndpointsFactory
                 $this->path,
                 $singleIncludedSchemas,
                 $this->singleFields
-            // @todo error responses
+                // @todo error responses
             );
 
             $api->addEndpoint($getSingleResourceEndpoint);

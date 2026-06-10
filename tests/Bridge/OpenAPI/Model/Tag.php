@@ -8,7 +8,7 @@ use Undabot\SymfonyJsonApi\Model\ApiModel;
 use Undabot\SymfonyJsonApi\Model\Resource\Annotation\Attribute;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 
-/** @ResourceType(type="tag") */
+#[ResourceType(type: 'tag')]
 class Tag implements ApiModel
 {
     /**
@@ -18,7 +18,7 @@ class Tag implements ApiModel
 
     /**
      * @var string
-     * @Attribute
      */
+    #[Attribute]
     private $name;
 }

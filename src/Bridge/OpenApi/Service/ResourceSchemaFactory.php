@@ -17,24 +17,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 
 class ResourceSchemaFactory
 {
-    /** @var ResourceMetadataFactory */
-    private $resourceMetadataFactory;
-
-    /** @var AttributeSchemaFactory */
-    private $attributeSchemaFactory;
-
-    /** @var RelationshipSchemaFactory */
-    private $relationshipSchemaFactory;
-
-    public function __construct(
-        ResourceMetadataFactory $resourceMetadataFactory,
-        AttributeSchemaFactory $attributeSchemaFactory,
-        RelationshipSchemaFactory $relationshipSchemaFactory
-    ) {
-        $this->resourceMetadataFactory = $resourceMetadataFactory;
-        $this->attributeSchemaFactory = $attributeSchemaFactory;
-        $this->relationshipSchemaFactory = $relationshipSchemaFactory;
-    }
+    public function __construct(private readonly ResourceMetadataFactory $resourceMetadataFactory, private readonly AttributeSchemaFactory $attributeSchemaFactory, private readonly RelationshipSchemaFactory $relationshipSchemaFactory) {}
 
     /**
      * @throws \Exception
@@ -63,9 +46,9 @@ class ResourceSchemaFactory
     /**
      * Returns array of schemas representing each resource identifier contained in the relationship.
      *
-     * @throws \Exception
-     *
      * @return IdentifierSchema[]
+     *
+     * @throws \Exception
      */
     public function relationshipsIdentifiers(string $resourceClass): array
     {
@@ -75,6 +58,7 @@ class ResourceSchemaFactory
         $relationshipsMetadata = $resourceMetadata->getRelationshipsMetadata()->toArray();
 
         $identifierSchemas = [];
+
         /** @var RelationshipMetadata $relationshipMetadata */
         foreach ($relationshipsMetadata as $relationshipMetadata) {
             $identifierSchemas[] = new IdentifierSchema($relationshipMetadata->getRelatedResourceType());
@@ -117,9 +101,7 @@ class ResourceSchemaFactory
     private function getAttributes(ResourceMetadata $metadata): array
     {
         return $metadata->getAttributesMetadata()
-            ->map(function (AttributeMetadata $attributeMetadata) {
-                return $this->attributeSchemaFactory->make($attributeMetadata);
-            })
+            ->map(fn (AttributeMetadata $attributeMetadata) => $this->attributeSchemaFactory->make($attributeMetadata))
             ->toArray();
     }
 
@@ -129,9 +111,7 @@ class ResourceSchemaFactory
     private function getRelationships(ResourceMetadata $metadata): array
     {
         return $metadata->getRelationshipsMetadata()
-            ->map(function (RelationshipMetadata $relationshipMetadata) {
-                return $this->relationshipSchemaFactory->make($relationshipMetadata);
-            })
+            ->map(fn (RelationshipMetadata $relationshipMetadata) => $this->relationshipSchemaFactory->make($relationshipMetadata))
             ->toArray();
     }
 }

@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace Undabot\JsonApi\Tests\Unit\Http\Service\Factory;
 
 use Assert\AssertionFailedException;
+use PHPUnit\Framework\Attributes\AllowMockObjectsWithoutExpectations;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Medium;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\InputBag;
 use Symfony\Component\HttpFoundation\Request;
 use Undabot\JsonApi\Definition\Encoding\PhpArrayToResourceEncoderInterface;
 use Undabot\JsonApi\Definition\Model\Request\Pagination\PaginationInterface;
@@ -27,10 +31,10 @@ use Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator;
 
 /**
  * @internal
- * @covers \Undabot\SymfonyJsonApi\Http\Service\Factory\RequestFactory
- *
- * @medium
  */
+#[CoversClass(RequestFactory::class)]
+#[Medium]
+#[AllowMockObjectsWithoutExpectations]
 final class RequestFactoryTest extends TestCase
 {
     private MockObject $resourceEncoderMock;
@@ -44,9 +48,7 @@ final class RequestFactoryTest extends TestCase
         $this->requestFactory = new RequestFactory($this->resourceEncoderMock, $this->requestValidatorMock);
     }
 
-    /**
-     * @dataProvider requestParamsProvider
-     */
+    #[DataProvider('provideGetResourceRequestWillReturnValidGetResourceRequestGivenValidRequestCases')]
     public function testGetResourceRequestWillReturnValidGetResourceRequestGivenValidRequest(
         array $queryParams,
         ?array $include,
@@ -56,17 +58,17 @@ final class RequestFactoryTest extends TestCase
 
         $resourceRequest = new GetResourceRequest($id, $include, $fields);
 
-        $request = $this->createMock(Request::class);
-        $query = new ParameterBag($queryParams);
+        $request = self::createStub(Request::class);
+        $query = new InputBag($queryParams);
         $request->query = $query;
-        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(self::once())->method('assertValidRequest');
 
         $getResourceRequest = $this->requestFactory->getResourceRequest($request, $id);
 
-        static::assertEquals($resourceRequest, $getResourceRequest);
+        self::assertEquals($resourceRequest, $getResourceRequest);
     }
 
-    public function requestParamsProvider(): \Generator
+    public static function provideGetResourceRequestWillReturnValidGetResourceRequestGivenValidRequestCases(): iterable
     {
         yield 'No include and no fields in request get params' => [
             [],
@@ -99,9 +101,7 @@ final class RequestFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider resourceCollectionRequestGetParamsProvider
-     */
+    #[DataProvider('provideGetResourceCollectionRequestWillReturnValidGetResourceCollectionRequestGivenValidRequestCases')]
     public function testGetResourceCollectionRequestWillReturnValidGetResourceCollectionRequestGivenValidRequest(
         array $queryParams,
         ?PaginationInterface $pagination,
@@ -112,17 +112,17 @@ final class RequestFactoryTest extends TestCase
     ): void {
         $resourceCollectionRequest = new GetResourceCollectionRequest($pagination, $filterSet, $sortSet, $include, $fields);
 
-        $request = $this->createMock(Request::class);
-        $query = new ParameterBag($queryParams);
+        $request = self::createStub(Request::class);
+        $query = new InputBag($queryParams);
         $request->query = $query;
-        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(self::once())->method('assertValidRequest');
 
         $getResourceCollectionRequest = $this->requestFactory->getResourceCollectionRequest($request);
 
-        static::assertEquals($resourceCollectionRequest, $getResourceCollectionRequest);
+        self::assertEquals($resourceCollectionRequest, $getResourceCollectionRequest);
     }
 
-    public function resourceCollectionRequestGetParamsProvider(): \Generator
+    public static function provideGetResourceCollectionRequestWillReturnValidGetResourceCollectionRequestGivenValidRequestCases(): iterable
     {
         yield 'No params provided' => [
             [],
@@ -199,25 +199,23 @@ final class RequestFactoryTest extends TestCase
         $id = '123';
 
         $request = $this->createMock(Request::class);
-        $request->expects(static::once())->method('getContent')->willReturn('{"data": {"foo": "bar"}}');
+        $request->expects(self::once())->method('getContent')->willReturn('{"data": {"foo": "bar"}}');
 
         $resource = new Resource($id, 'type', new AttributeCollection([new Attribute('foo', 'bar')]), null, null, null);
-        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
-        $this->requestValidatorMock->expects(static::once())->method('assertValidUpdateRequestData');
+        $this->requestValidatorMock->expects(self::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(self::once())->method('assertValidUpdateRequestData');
         $this->resourceEncoderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('decode')
             ->willReturn($resource);
 
         $updateResourceRequest = $this->requestFactory->updateResourceRequest($request, $id);
 
-        static::assertInstanceOf(UpdateResourceRequest::class, $updateResourceRequest);
-        static::assertEquals($resource, $updateResourceRequest->getResource());
+        self::assertInstanceOf(UpdateResourceRequest::class, $updateResourceRequest);
+        self::assertEquals($resource, $updateResourceRequest->getResource());
     }
 
-    /**
-     * @dataProvider invalidRequestPrimaryDataProvider
-     */
+    #[DataProvider('invalidRequestPrimaryDataProvider')]
     public function testUpdateResourceRequestWillThrowExceptionGivenInvalidRequestPrimaryData(
         ?string $content,
         string $exceptionMessage
@@ -225,12 +223,12 @@ final class RequestFactoryTest extends TestCase
         $id = '123';
 
         $request = $this->createMock(Request::class);
-        $request->expects(static::once())->method('getContent')->willReturn($content);
+        $request->expects(self::once())->method('getContent')->willReturn($content);
 
-        $this->requestValidatorMock->expects(static::once())->method('assertValidRequest');
-        $this->requestValidatorMock->expects(static::never())->method('assertValidUpdateRequestData');
+        $this->requestValidatorMock->expects(self::once())->method('assertValidRequest');
+        $this->requestValidatorMock->expects(self::never())->method('assertValidUpdateRequestData');
         $this->resourceEncoderMock
-            ->expects(static::never())
+            ->expects(self::never())
             ->method('decode');
 
         $this->expectException(AssertionFailedException::class);
@@ -239,15 +237,13 @@ final class RequestFactoryTest extends TestCase
         $this->requestFactory->updateResourceRequest($request, $id);
     }
 
-    /**
-     * @dataProvider invalidRequestPrimaryDataProvider
-     */
+    #[DataProvider('invalidRequestPrimaryDataProvider')]
     public function testRequestResourceHasClientSideGeneratedIdWillThrowExceptionGivenInvalidRequestPrimaryData(
         ?string $content,
         string $exceptionMessage
     ): void {
         $request = $this->createMock(Request::class);
-        $request->expects(static::once())->method('getContent')->willReturn($content);
+        $request->expects(self::once())->method('getContent')->willReturn($content);
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage($exceptionMessage);
@@ -255,7 +251,7 @@ final class RequestFactoryTest extends TestCase
         $this->requestFactory->requestResourceHasClientSideGeneratedId($request);
     }
 
-    public function invalidRequestPrimaryDataProvider(): \Generator
+    public static function invalidRequestPrimaryDataProvider(): iterable
     {
         yield 'Invalid json string' => [
             '{"foo": "bar"]}',
@@ -278,20 +274,18 @@ final class RequestFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider validRequestPrimaryDataProvider
-     */
+    #[DataProvider('provideRequestResourceHasClientSideGeneratedIdWillReturnCorrectIdPresenceGivenValidRequestPrimaryDataCases')]
     public function testRequestResourceHasClientSideGeneratedIdWillReturnCorrectIdPresenceGivenValidRequestPrimaryData(
         string $content,
         bool $hadId
     ): void {
         $request = $this->createMock(Request::class);
-        $request->expects(static::once())->method('getContent')->willReturn($content);
+        $request->expects(self::once())->method('getContent')->willReturn($content);
 
-        static::assertEquals($hadId, $this->requestFactory->requestResourceHasClientSideGeneratedId($request));
+        self::assertEquals($hadId, $this->requestFactory->requestResourceHasClientSideGeneratedId($request));
     }
 
-    public function validRequestPrimaryDataProvider(): \Generator
+    public static function provideRequestResourceHasClientSideGeneratedIdWillReturnCorrectIdPresenceGivenValidRequestPrimaryDataCases(): iterable
     {
         yield 'Create request does not have client generated id' => [
             '{"data": {"id": "123", "foo": "bar"}}',
@@ -313,13 +307,13 @@ final class RequestFactoryTest extends TestCase
     {
         $lid = '123';
         $request = $this->createMock(Request::class);
-        $request->expects(static::once())->method('getContent')->willReturn('{"data": {"lid": "123", "foo": "bar"}}');
+        $request->expects(self::once())->method('getContent')->willReturn('{"data": {"lid": "123", "foo": "bar"}}');
         $resource = new Resource($lid, 'type', new AttributeCollection([new Attribute('foo', 'bar')]));
         $this->resourceEncoderMock
-            ->expects(static::once())
+            ->expects(self::once())
             ->method('decode')
             ->willReturn($resource);
 
-        static::assertEquals($lid, $this->requestFactory->createResourceRequest($request)->getResource()->getId());
+        self::assertEquals($lid, $this->requestFactory->createResourceRequest($request)->getResource()->getId());
     }
 }

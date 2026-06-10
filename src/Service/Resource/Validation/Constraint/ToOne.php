@@ -7,15 +7,13 @@ namespace Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint;
 use Symfony\Component\Validator\Constraint;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ConstraintValidator\ToOneValidator;
 
-/**
- * @Annotation
- * @Target({"PROPERTY"})
- */
+#[\Attribute(\Attribute::TARGET_PROPERTY)]
 class ToOne extends Constraint
 {
     public const MESSAGE = 'This value must be string or null.';
 
-    public function validatedBy()
+    #[\Override]
+    public function validatedBy(): string
     {
         return ToOneValidator::class;
     }

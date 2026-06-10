@@ -57,6 +57,7 @@ services:
 
     Undabot\SymfonyJsonApi\Http\Service\:
         resource: '../../Http/Service/*'
+        exclude: '../../Http/Service/ArgumentResolver/JsonApiRequestOptions.php'
 
     Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidatorInterface: '@Undabot\SymfonyJsonApi\Http\Service\Validation\RequestValidator'
     Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\EncoderInterface: '@Undabot\SymfonyJsonApi\Http\Service\ModelEncoder\ApiModelEncoder'

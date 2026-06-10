@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Service\Resource\Validation;
 
-use Doctrine\Common\Annotations\AnnotationException;
-use ReflectionException;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -19,19 +17,10 @@ use Undabot\SymfonyJsonApi\Service\Resource\Validation\Exception\ModelInvalid;
 
 class ResourceValidator
 {
-    private ResourceMetadataFactory $metadataFactory;
-
-    private ValidatorInterface $validator;
-
-    public function __construct(ResourceMetadataFactory $metadataFactory, ValidatorInterface $validator)
-    {
-        $this->metadataFactory = $metadataFactory;
-        $this->validator = $validator;
-    }
+    public function __construct(private readonly ResourceMetadataFactory $metadataFactory, private readonly ValidatorInterface $validator) {}
 
     /**
-     * @throws AnnotationException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws InvalidResourceMappingException
      */
     public function validate(ResourceInterface $resource, string $class): ResourceValidationViolations
@@ -51,8 +40,7 @@ class ResourceValidator
     }
 
     /**
-     * @throws AnnotationException
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws InvalidResourceMappingException
      * @throws ModelInvalid
      */

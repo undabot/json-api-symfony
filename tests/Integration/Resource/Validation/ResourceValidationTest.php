@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Undabot\SymfonyJsonApi\Tests\Integration\Resource\Validation;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use PHPUnit\Framework\Attributes\CoversNothing;
+use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Validation;
 use Undabot\JsonApi\Implementation\Model\Resource\Resource;
@@ -17,9 +17,7 @@ use Undabot\SymfonyJsonApi\Service\Resource\Factory\ResourceMetadataFactory;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\Constraint\ResourceType;
 use Undabot\SymfonyJsonApi\Service\Resource\Validation\ResourceValidator;
 
-/**
- * @ResourceType(type="articles")
- */
+#[ResourceType(type: 'articles')]
 class ResourceDto
 {
     /** @var string */
@@ -27,57 +25,56 @@ class ResourceDto
 
     /**
      * @var string
-     * @JsonApi\Attribute
-     * @Assert\NotBlank
-     * @Assert\Length(min=10, max=100)
-     * @Assert\Type(type="string")
      */
+    #[JsonApi\Attribute]
+    #[Assert\NotBlank]
+    #[Assert\Length(min: 10, max: 100)]
+    #[Assert\Type(type: 'string')]
     public $title;
 
     /**
      * @var string
-     * @JsonApi\Attribute
-     * @Assert\Type(type="string")
-     * @Assert\Regex(pattern="/^\d+-\d+-\d+$/")
      */
+    #[JsonApi\Attribute]
+    #[Assert\Type(type: 'string')]
+    #[Assert\Regex(pattern: '/^\d+-\d+-\d+$/')]
     public $date;
 
     /**
      * @var string
-     * @JsonApi\Attribute
-     * @Assert\Type(type="string")
-     * @Assert\NotNull
      */
+    #[JsonApi\Attribute]
+    #[Assert\Type(type: 'string')]
+    #[Assert\NotNull]
     public $summary;
 
     /**
      * @var null|string
-     * @JsonApi\ToOne(type="people")
-     * @Assert\NotBlank
      */
+    #[JsonApi\ToOne(type: 'people')]
+    #[Assert\NotBlank]
     public $author;
 
     /**
      * @var string[]
-     * @JsonApi\ToMany(type="tags")
-     * @Assert\NotBlank
      */
+    #[JsonApi\ToMany(type: 'tags')]
+    #[Assert\NotBlank]
     public $tags = [];
 
     /**
      * @var string[]
-     * @JsonApi\ToMany(type="comments")
      */
+    #[JsonApi\ToMany(type: 'comments')]
     public $comments = [];
 }
 
 /**
  * @internal
- * @coversNothing
- *
- * @small
  */
-final class ResourceValidationTest extends KernelTestCase
+#[CoversNothing]
+#[Small]
+final class ResourceValidationTest extends TestCase
 {
     /** @var ResourceValidator */
     private $validator;
@@ -87,12 +84,10 @@ final class ResourceValidationTest extends KernelTestCase
         parent::setUp();
 
         $validator = Validation::createValidatorBuilder()
-            ->enableAnnotationMapping()
+            ->enableAttributeMapping()
             ->getValidator();
 
-        AnnotationRegistry::registerLoader('class_exists');
-        $annotationReader = new AnnotationReader();
-        $metadataFactory = new ResourceMetadataFactory($annotationReader);
+        $metadataFactory = new ResourceMetadataFactory();
 
         $this->validator = new ResourceValidator($metadataFactory, $validator);
     }
@@ -109,7 +104,7 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(0, $violations->count());
+        self::assertSame(0, $violations->count());
     }
 
     public function testValidatorRecognizesMissingAttributesAndRelationshipsAsInvalid(): void
@@ -117,7 +112,7 @@ final class ResourceValidationTest extends KernelTestCase
         $resource = new Resource('1', 'articles');
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(6, $violations->count());
+        self::assertSame(6, $violations->count());
     }
 
     public function testValidatorRecognizesEmptyTitleStringAsInvalid(): void
@@ -132,10 +127,10 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(2, $violations->count());
+        self::assertSame(2, $violations->count());
 
-        static::assertSame('This value should not be blank.', $violations[0]->getMessage());
-        static::assertSame('[data][attributes][title]', $violations[0]->getPropertyPath());
+        self::assertSame('This value should not be blank.', $violations[0]->getMessage());
+        self::assertSame('[data][attributes][title]', $violations[0]->getPropertyPath());
     }
 
     public function testValidatorRecognizesNullTitleAsInvalid(): void
@@ -150,10 +145,10 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(1, $violations->count());
+        self::assertSame(1, $violations->count());
 
-        static::assertSame('This value should not be blank.', $violations[0]->getMessage());
-        static::assertSame('[data][attributes][title]', $violations[0]->getPropertyPath());
+        self::assertSame('This value should not be blank.', $violations[0]->getMessage());
+        self::assertSame('[data][attributes][title]', $violations[0]->getPropertyPath());
     }
 
     public function testValidatorRecognizesTooShortTitleAsInvalid(): void
@@ -168,13 +163,13 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(1, $violations->count());
+        self::assertSame(1, $violations->count());
 
-        static::assertSame(
+        self::assertSame(
             'This value is too short. It should have 10 characters or more.',
             $violations[0]->getMessage()
         );
-        static::assertSame('[data][attributes][title]', $violations[0]->getPropertyPath());
+        self::assertSame('[data][attributes][title]', $violations[0]->getPropertyPath());
     }
 
     public function testValidatorRecognizesMissingAuthorIdAsInvalid(): void
@@ -189,13 +184,13 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(1, $violations->count());
+        self::assertSame(1, $violations->count());
 
-        static::assertSame(
+        self::assertSame(
             'This value should not be blank.',
             $violations[0]->getMessage()
         );
-        static::assertSame('[data][relationships][author]', $violations[0]->getPropertyPath());
+        self::assertSame('[data][relationships][author]', $violations[0]->getPropertyPath());
     }
 
     public function testValidatorRecognizesEmptyArrayAsValidValueForOptionalToManyRelationshipComments(): void
@@ -210,7 +205,7 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(0, $violations->count());
+        self::assertSame(0, $violations->count());
     }
 
     public function testValidatorRecognizesEmptyArrayAsInvalidValueForNonOptionalToManyRelationshipTags(): void
@@ -225,12 +220,12 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(1, $violations->count());
-        static::assertSame(
+        self::assertSame(1, $violations->count());
+        self::assertSame(
             'This value should not be blank.',
             $violations[0]->getMessage()
         );
-        static::assertSame('[data][relationships][tags]', $violations[0]->getPropertyPath());
+        self::assertSame('[data][relationships][tags]', $violations[0]->getPropertyPath());
     }
 
     public function testValidatorRecognizesNullAsValidValueForOptionalAttributeDate(): void
@@ -245,7 +240,7 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(0, $violations->count());
+        self::assertSame(0, $violations->count());
     }
 
     public function testValidatorRecognizesInvalidDateString(): void
@@ -260,12 +255,12 @@ final class ResourceValidationTest extends KernelTestCase
         ]);
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(1, $violations->count());
-        static::assertSame(
+        self::assertSame(1, $violations->count());
+        self::assertSame(
             'This value is not valid.',
             $violations[0]->getMessage()
         );
-        static::assertSame('[data][attributes][date]', $violations[0]->getPropertyPath());
+        self::assertSame('[data][attributes][date]', $violations[0]->getPropertyPath());
     }
 
     public function testValidatorRecognizeInvalidResourceTypeAsInvalid(): void
@@ -280,13 +275,13 @@ final class ResourceValidationTest extends KernelTestCase
         ], '1', 'invalidTypes');
 
         $violations = $this->validator->validate($resource, ResourceDto::class);
-        static::assertSame(1, $violations->count());
+        self::assertSame(1, $violations->count());
 
-        static::assertSame(
+        self::assertSame(
             'Invalid resource type `invalidTypes` given; `articles` expected.',
             $violations[0]->getMessage()
         );
-        static::assertSame('', $violations[0]->getPropertyPath());
+        self::assertSame('', $violations[0]->getPropertyPath());
     }
 
     private function buildResource(array $data, $id = '1', $type = 'articles')
